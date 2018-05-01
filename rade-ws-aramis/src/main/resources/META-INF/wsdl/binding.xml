@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!--/*
+ *  This file is part of the Rade project (https://github.com/mgimpel/rade).
+ *  Copyright (C) 2018 Marc Gimpel
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */-->
+<!-- $Id$ --><jaxws:bindings xmlns:jaxws="http://java.sun.com/xml/ns/jaxws"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                xmlns:jxb="http://java.sun.com/xml/ns/jaxb"
+                xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                wsdlLocation="GeoAdminServiceExterneImpl.wsdl">
+    <!-- <jaxws:enableAsyncMapping>true</jaxws:enableAsyncMapping> -->
+    <jaxws:bindings node="wsdl:definitions/wsdl:types/xs:schema">
+        <jxb:globalBindings>
+            <!--
+            <jxb:javaType name="java.util.Date" xmlType="xs:dateTime"
+                          parseMethod="org.apache.cxf.xjc.runtime.DataTypeAdapter.parseDateTime"
+                          printMethod="org.apache.cxf.xjc.runtime.DataTypeAdapter.printDateTime"/>
+            <jxb:javaType name="java.util.Date" xmlType="xs:date"
+                          parseMethod="org.apache.cxf.xjc.runtime.DataTypeAdapter.parseDate"
+                          printMethod="org.apache.cxf.xjc.runtime.DataTypeAdapter.printDate"/>
+            -->
+        </jxb:globalBindings>
+    </jaxws:bindings>
+</jaxws:bindings>

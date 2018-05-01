@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://services.externes.aramis.com/v1/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" name="GeoAdminServiceExterneImplService" targetNamespace="http://services.externes.aramis.com/v1/">
+  <wsdl:types>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://services.externes.aramis.com/v1/" elementFormDefault="unqualified" targetNamespace="http://services.externes.aramis.com/v1/" version="1.0">
+
+  <xs:element name="findAllCommunes" type="tns:findAllCommunes"/>
+
+  <xs:element name="findAllCommunesResponse" type="tns:findAllCommunesResponse"/>
+
+  <xs:element name="findAllDelegations" type="tns:findAllDelegations"/>
+
+  <xs:element name="findAllDelegationsResponse" type="tns:findAllDelegationsResponse"/>
+
+  <xs:element name="findAllDepartements" type="tns:findAllDepartements"/>
+
+  <xs:element name="findAllDepartementsResponse" type="tns:findAllDepartementsResponse"/>
+
+  <xs:complexType name="findAllDepartements">
+    <xs:sequence/>
+  </xs:complexType>
+
+  <xs:complexType name="findAllDepartementsResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="Departement" type="tns:departementVO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="departementVO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="nom" type="xs:string"/>
+      <xs:element minOccurs="0" name="numero" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="findAllCommunes">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="annee" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="findAllCommunesResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="Commune" type="tns:communeVO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="communeVO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="bassin" type="xs:string"/>
+      <xs:element minOccurs="0" name="horsBassin" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="nomCommune" type="xs:string"/>
+      <xs:element minOccurs="0" name="nomCourt" type="xs:string"/>
+      <xs:element minOccurs="0" name="numInsee" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="findAllDelegations">
+    <xs:sequence/>
+  </xs:complexType>
+
+  <xs:complexType name="findAllDelegationsResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="Delegation" type="tns:delegationVO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="delegationVO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="acheminement" type="xs:string"/>
+      <xs:element minOccurs="0" name="adresse1" type="xs:string"/>
+      <xs:element minOccurs="0" name="adresse2" type="xs:string"/>
+      <xs:element minOccurs="0" name="adresse3" type="xs:string"/>
+      <xs:element minOccurs="0" name="adresse4" type="xs:string"/>
+      <xs:element minOccurs="0" name="adresse5" type="xs:string"/>
+      <xs:element minOccurs="0" name="code" type="xs:string"/>
+      <xs:element minOccurs="0" name="codePostal" type="xs:string"/>
+      <xs:element minOccurs="0" name="email" type="xs:string"/>
+      <xs:element minOccurs="0" name="fax" type="xs:string"/>
+      <xs:element minOccurs="0" name="libelle" type="xs:string"/>
+      <xs:element minOccurs="0" name="siteWeb" type="xs:string"/>
+      <xs:element minOccurs="0" name="telephone" type="xs:string"/>
+      <xs:element minOccurs="0" name="telephone2" type="xs:string"/>
+      <xs:element minOccurs="0" name="telephone3" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="findAllDelegationsResponse">
+    <wsdl:part element="tns:findAllDelegationsResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="findAllDepartementsResponse">
+    <wsdl:part element="tns:findAllDepartementsResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="findAllDepartements">
+    <wsdl:part element="tns:findAllDepartements" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="findAllCommunesResponse">
+    <wsdl:part element="tns:findAllCommunesResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="findAllCommunes">
+    <wsdl:part element="tns:findAllCommunes" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="findAllDelegations">
+    <wsdl:part element="tns:findAllDelegations" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="GeoAdminServiceExterneImpl">
+    <wsdl:operation name="findAllDepartements">
+      <wsdl:input message="tns:findAllDepartements" name="findAllDepartements">
+    </wsdl:input>
+      <wsdl:output message="tns:findAllDepartementsResponse" name="findAllDepartementsResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="findAllCommunes">
+      <wsdl:input message="tns:findAllCommunes" name="findAllCommunes">
+    </wsdl:input>
+      <wsdl:output message="tns:findAllCommunesResponse" name="findAllCommunesResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="findAllDelegations">
+      <wsdl:input message="tns:findAllDelegations" name="findAllDelegations">
+    </wsdl:input>
+      <wsdl:output message="tns:findAllDelegationsResponse" name="findAllDelegationsResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="GeoAdminServiceExterneImplServiceSoapBinding" type="tns:GeoAdminServiceExterneImpl">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="findAllDepartements">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="findAllDepartements">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="findAllDepartementsResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="findAllCommunes">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="findAllCommunes">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="findAllCommunesResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="findAllDelegations">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="findAllDelegations">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="findAllDelegationsResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="GeoAdminServiceExterneImplService">
+    <wsdl:port binding="tns:GeoAdminServiceExterneImplServiceSoapBinding" name="GeoAdminServiceExternePort">
+      <soap:address location="http://localhost:8080/ref-geoadmin/GeoAdminServiceExterneImpl"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,19 @@
+# Windows #
+Thumbs.db
+[Dd]esktop.ini
+$RECYCLE.BIN/
+
+# Java #
+*.class
+*.jar
+*.war
+*.ear
+
+# Maven #
+target/
+
+# Eclispe #
+.settings/
+.classpath
+.project
+

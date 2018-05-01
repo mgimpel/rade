@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--/*
+ *  This file is part of the Rade project (https://github.com/mgimpel/rade).
+ *  Copyright (C) 2018 Marc Gimpel
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */-->
+<!-- $Id$ -->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>fr.aesn.rade</groupId>
+    <artifactId>rade</artifactId>
+    <version>0.1-SNAPSHOT</version>
+  </parent>
+  <artifactId>rade-ws-aramis</artifactId>
+  <packaging>jar</packaging>
+
+  <name>Rade Web Services for Aramis</name>
+
+  <dependencies>
+    <dependency>
+      <groupId>fr.aesn.rade</groupId>
+      <artifactId>rade-service</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <!-- Apache CXF -->
+    <dependency>
+      <groupId>org.apache.cxf</groupId>
+      <artifactId>cxf-rt-frontend-jaxws</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.cxf</groupId>
+      <artifactId>cxf-rt-transports-http</artifactId>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <finalName>rade-ws-aramis</finalName>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.cxf</groupId>
+        <artifactId>cxf-codegen-plugin</artifactId>
+        <version>${cxf.version}</version>
+        <executions>
+          <execution>
+            <id>generate-sources</id>
+            <phase>generate-sources</phase>
+            <configuration>
+              <wsdlOptions>
+                <wsdlOption>
+                  <wsdl>${basedir}/src/main/resources/META-INF/wsdl/GeoAdminServiceExterneImpl.wsdl</wsdl>
+                  <bindingFiles>
+                    <bindingFile>src/main/resources/META-INF/wsdl/binding.xml</bindingFile>
+                  </bindingFiles>
+                  <extraargs>
+                    <!-- <extraarg>-impl</extraarg> --><!-- Generates Implementation Stub (copy to /src/main/java and fill in) -->
+                    <extraarg>-verbose</extraarg>
+                    <extraarg>-p</extraarg>
+                    <extraarg>http://services.externes.aramis.com/v1/=fr.aesn.rade.ws.aramis.impl</extraarg>
+                  </extraargs>
+                </wsdlOption>
+              </wsdlOptions>
+            </configuration>
+            <goals>
+              <goal>wsdl2java</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <distributionManagement>
+    <site>
+      <id>site</id>
+      <name>Project Website</name>
+      <url>file:///var/www/html/projects/rade/rade-ws-aramis</url>
+    </site>
+  </distributionManagement>
+</project>
