@@ -173,7 +173,7 @@ public class TestCommune extends AbstractTestEntity {
     assertEquals("Hibernate returned a Commune, but a field doesn't match",
                  "O", com.getIndicateurUrbain());
     assertEquals("Hibernate returned a Commune, but a field doesn't match",
-                 "01", com.getCirconscriptionBassin().getCode());
+                 "07", com.getCirconscriptionBassin().getCode());
     assertEquals("Hibernate returned a Commune, but a field doesn't match",
                  "971", com.getDepartement());
   }
