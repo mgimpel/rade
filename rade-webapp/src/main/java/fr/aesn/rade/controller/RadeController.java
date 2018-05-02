@@ -42,7 +42,7 @@ import fr.aesn.rade.service.CommuneService;
 @Controller
 public class RadeController extends AbstractController {
   /** SLF4J Logger. */
-  private static final Logger logger =
+  private static final Logger log =
     LoggerFactory.getLogger(RadeController.class);
   /** Service. */
   @Autowired
@@ -64,9 +64,8 @@ public class RadeController extends AbstractController {
    * @throws IOException if the is an IOException.
    */
   @RequestMapping(value = "/login")
-  public String login()
-    throws IOException {
-    logger.debug("Requesting /login");
+  public String login() {
+    log.debug("Requesting /login");
     return "login";
   }
 
@@ -79,11 +78,10 @@ public class RadeController extends AbstractController {
    */
   @RequestMapping(value = "/logout")
   public String logoutPage(final HttpServletRequest request,
-                           final HttpServletResponse response)
-      throws IOException {
+                           final HttpServletResponse response) {
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     if (auth != null) {
-      logger.debug("Requesting /logout for user: {}", auth.getName());
+      log.debug("Requesting /logout for user: {}", auth.getName());
       new SecurityContextLogoutHandler().logout(request, response, auth);
     }
     // Redirect user to Login page

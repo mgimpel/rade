@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
  */
 public class Version {
   /** SLF4J Logger. */
-  private static final Logger logger = LoggerFactory.getLogger(Version.class);
+  private static final Logger log = LoggerFactory.getLogger(Version.class);
   /** Singleton instance. */
   private static final Version instance = new Version();
   /** Properties containing the values loaded from the Version file. */
@@ -57,12 +57,12 @@ public class Version {
     try {
       versionProperties.load(is);
     } catch (IOException ex) {
-      logger.warn("Could not load Version information.", ex);
+      log.warn("Could not load Version information.", ex);
     } finally {
       try {
         is.close();
       } catch (IOException ex) {
-        logger.error("This should never happen.", ex);
+        log.error("This should never happen.", ex);
       }
     }
     PROJECT_VERSION = versionProperties
@@ -71,7 +71,7 @@ public class Version {
         .getProperty(REPOSITORY_REVISION_PROPERTY);
     BUILD_TIMESTAMP = versionProperties
         .getProperty(BUILD_TIMESTAMP_PROPERTY);
-    logger.info("Project Version {}, "
+    log.info("Project Version {}, "
               + "Repository revision {}, "
               + "Build timestamp {}",
                 PROJECT_VERSION,

@@ -18,6 +18,7 @@
 package fr.aesn.rade.ws.aramis.impl;
 
 import java.util.Calendar;
+import java.util.Collections;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import fr.aesn.rade.service.CommuneService;
 import fr.aesn.rade.service.DelegationService;
 import fr.aesn.rade.service.DepartementService;
+import lombok.Setter;
 
 /**
  * Concrete Implementation of GeoAdminServiceExterneImpl WSDL for Aramis.
@@ -36,11 +38,13 @@ import fr.aesn.rade.service.DepartementService;
  *       META-INF/wsdl/GeoAdminServiceExterneImpl.wsdl</li>
  *   <li>The logging framework was changes from java.util.logging to SLF4J
  *       (a logging facade compatible with the applications underlying logging
- *       implementation), and log levels were adapted (severe to error)</li>
- *   <li>The various services needed were added (CommuneService, ...) as well
- *       as there respective setters so that Spring can populate them</li>
+ *       implementation). Log levels and messages were adapted</li>
+ *   <li>The various business services needed were added (CommuneService, ...)
+ *       as well as there respective setters (via Lombok) so that Spring can
+ *       populate them</li>
  *   <li>The core of the service methods (findAllDepartements, ...) were completed,
  *       and use the above mentioned services to recover the reference data</li>
+ *   <li>PrintStackTraces were replaced with Error Logging</li>
  *   <li>The imports were cleaned up to remove useless entries</li>
  *   <li>This javadoc and a Copyright header were added</li>
  * </ul>
@@ -60,52 +64,31 @@ import fr.aesn.rade.service.DepartementService;
                       endpointInterface = "fr.aesn.rade.ws.aramis.impl.GeoAdminServiceExterneImpl")
 public class GeoAdminServiceExternePortImpl implements GeoAdminServiceExterneImpl {
     /** SLF4J Logger. */
-    private static final Logger LOG =
+    private static final Logger log =
       LoggerFactory.getLogger(GeoAdminServiceExternePortImpl.class);
     /** Departement Service. */
+    @Setter
     private DepartementService departementService;
     /** Commune Service. */
+    @Setter
     private CommuneService communeService;
     /** Delegation Service. */
+    @Setter
     private DelegationService delegationService;
-
-    /**
-     * Setter for DepartementService.
-     * @param departementService the service implementation.
-     */
-    public void setDepartementService(DepartementService departementService) {
-        this.departementService = departementService;
-    }
-
-    /**
-     * Setter for CommuneService.
-     * @param communeService the service implementation.
-     */
-    public void setCommuneService(CommuneService communeService) {
-        this.communeService = communeService;
-    }
-
-    /**
-     * Setter for DelegationService.
-     * @param delegationService the service implementation.
-     */
-    public void setDelegationService(DelegationService delegationService) {
-        this.delegationService = delegationService;
-    }
 
     /* (non-Javadoc)
      * @see fr.aesn.rade.ws.aramis.impl.GeoAdminServiceExterneImpl#findAllDepartements()*
      */
     public java.util.List<fr.aesn.rade.ws.aramis.impl.DepartementVO> findAllDepartements() {
-        LOG.info("Executing operation findAllDepartements");
+        log.info("Processing WebService findAllDepartements");
         try {
             if (departementService == null) {
-                LOG.error("Could not findAllDepartements, service was null");
-                return null;
+                log.error("Could not findAllDepartements, service was null (configuration error)");
+                return Collections.<fr.aesn.rade.ws.aramis.impl.DepartementVO>emptyList();
             }
             return Entity2VoMapper.departementEntity2VoList(departementService.getAllDepartement());
         } catch (java.lang.Exception ex) {
-            ex.printStackTrace();
+            log.error("Unexpected Exception while processing WebService Request (this should never happen)", ex);
             throw new RuntimeException(ex);
         }
     }
@@ -114,17 +97,17 @@ public class GeoAdminServiceExternePortImpl implements GeoAdminServiceExterneImp
      * @see fr.aesn.rade.ws.aramis.impl.GeoAdminServiceExterneImpl#findAllCommunes(java.lang.Integer annee)*
      */
     public java.util.List<fr.aesn.rade.ws.aramis.impl.CommuneVO> findAllCommunes(java.lang.Integer annee) {
-        LOG.info("Executing operation findAllCommunes for year " + annee);
+        log.info("Processing WebService findAllCommunes for year {}", annee);
         try {
             if (communeService == null) {
-                LOG.error("Could not findAllCommunes, service was null");
-                return null;
+                log.error("Could not findAllCommunes, service was null (configuration error)");
+                return Collections.<fr.aesn.rade.ws.aramis.impl.CommuneVO>emptyList();
             }
             Calendar cal = Calendar.getInstance();
             cal.set(annee, 1, 2, 12, 0, 0); // January 2nd, 12:00
             return Entity2VoMapper.communeEntity2VoList(communeService.getAllCommune(cal.getTime()));
         } catch (java.lang.Exception ex) {
-            ex.printStackTrace();
+            log.error("Unexpected Exception while processing WebService Request (this should never happen)", ex);
             throw new RuntimeException(ex);
         }
     }
@@ -133,15 +116,15 @@ public class GeoAdminServiceExternePortImpl implements GeoAdminServiceExterneImp
      * @see fr.aesn.rade.ws.aramis.impl.GeoAdminServiceExterneImpl#findAllDelegations()*
      */
     public java.util.List<fr.aesn.rade.ws.aramis.impl.DelegationVO> findAllDelegations() {
-        LOG.info("Executing operation findAllDelegations");
+        log.info("Processing WebService findAllDelegations");
         try {
             if (delegationService == null) {
-                LOG.error("Could not findAllDelegations, service was null");
-                return null;
+                log.error("Could not findAllDelegations, service was null (configuration error)");
+                return Collections.<fr.aesn.rade.ws.aramis.impl.DelegationVO>emptyList();
             }
             return Entity2VoMapper.delegationEntity2VoList(delegationService.getAllDelegation());
         } catch (java.lang.Exception ex) {
-            ex.printStackTrace();
+            log.error("Unexpected Exception while processing WebService Request (this should never happen)", ex);
             throw new RuntimeException(ex);
         }
     }

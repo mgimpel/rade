@@ -40,7 +40,7 @@ import fr.aesn.rade.service.DelegationService;
 public class DelegationServiceImpl
   implements DelegationService {
   /** SLF4J Logger. */
-  private static final Logger logger =
+  private static final Logger log =
     LoggerFactory.getLogger(DelegationServiceImpl.class);
   /** Data Access Object for Delegation. */
   private DelegationJpaDao delegationJpaDao;
@@ -74,7 +74,7 @@ public class DelegationServiceImpl
    */
   @Override
   public void addDelegation(final Delegation delegation) {
-    logger.info("Delegation to be saved: Details={}", delegation);
+    log.debug("Delegation to be saved: Details={}", delegation);
     delegationJpaDao.save(delegation);
   }
 
@@ -84,7 +84,7 @@ public class DelegationServiceImpl
    */
   @Override
   public void updateDelegation(final Delegation delegation) {
-    logger.info("Delegation to be updated: Details={}", delegation);
+    log.debug("Delegation to be updated: Details={}", delegation);
     delegationJpaDao.save(delegation);
   }
 
@@ -95,7 +95,7 @@ public class DelegationServiceImpl
   @Override
   @Transactional(readOnly = true)
   public List<Delegation> getAllDelegation() {
-    logger.info("Delegation list requested");
+    log.debug("Delegation list requested");
     return delegationJpaDao.findAll();
   }
 
@@ -106,9 +106,9 @@ public class DelegationServiceImpl
   @Override
   @Transactional(readOnly = true)
   public Map<String, Delegation> getDelegationMap() {
-    logger.info("Delegation map requested");
+    log.debug("Delegation map requested");
     List<Delegation> list = getAllDelegation();
-    HashMap<String, Delegation> map = new HashMap<String, Delegation>(list.size());
+    HashMap<String, Delegation> map = new HashMap<>(list.size());
     for (Delegation item : list) {
       map.put(item.getCode(), item);
     }
@@ -123,7 +123,7 @@ public class DelegationServiceImpl
   @Override
   @Transactional(readOnly = true)
   public Delegation getDelegationById(final String code) {
-    logger.info("Delegation requested by ID: ID={}", code);
+    log.debug("Delegation requested by ID: ID={}", code);
     Optional<Delegation> result = delegationJpaDao.findById(code);
     if (result.isPresent()) {
       return result.get();
@@ -139,7 +139,7 @@ public class DelegationServiceImpl
    */
   @Override
   public void removeDelegation(final String code) {
-    logger.info("Delegation to be deleted: ID={}", code);
+    log.debug("Delegation to be deleted: ID={}", code);
     delegationJpaDao.deleteById(code);
   }
 }

@@ -43,7 +43,7 @@ import fr.aesn.rade.service.RegionService;
 public class RegionServiceImpl
   implements RegionService {
   /** SLF4J Logger. */
-  private static final Logger logger =
+  private static final Logger log =
     LoggerFactory.getLogger(RegionServiceImpl.class);
   /** Data Access Object for Delegation. */
   private RegionJpaDao regionJpaDao;
@@ -78,7 +78,7 @@ public class RegionServiceImpl
   @Override
   @Transactional(readOnly = true)
   public List<Region> getAllRegion() {
-    logger.info("Region list requested");
+    log.debug("Region list requested");
     return regionJpaDao.findAll();
   }
 
@@ -88,7 +88,7 @@ public class RegionServiceImpl
    * @return a List of all the Region.
    */
   public List<Region> getAllRegion(final Date date) {
-    logger.info("Region list requested for Date: date={}", date);
+    log.debug("Region list requested for Date: date={}", date);
     List<Region> list = regionJpaDao.findAll();
     list.removeIf(e -> !SharedBusinessRules.isEntiteAdministrativeValid(e, date));
     return list;
@@ -101,9 +101,9 @@ public class RegionServiceImpl
   @Override
   @Transactional(readOnly = true)
   public Map<Integer, Region> getRegionMap() {
-    logger.info("Region map requested");
+    log.debug("Region map requested");
     List<Region> list = getAllRegion();
-    HashMap<Integer, Region> map = new HashMap<Integer, Region>(list.size());
+    HashMap<Integer, Region> map = new HashMap<>(list.size());
     for (Region item : list) {
       map.put(item.getId(), item);
     }
@@ -118,7 +118,7 @@ public class RegionServiceImpl
   @Override
   @Transactional(readOnly = true)
   public Region getRegionById(final int id) {
-    logger.info("Region requested by ID: ID={}", id);
+    log.debug("Region requested by ID: ID={}", id);
     Optional<Region> result = regionJpaDao.findById(id);
     if (result.isPresent()) {
       return result.get();
@@ -134,7 +134,7 @@ public class RegionServiceImpl
    * @return list of Regions that have historically had the given code.
    */
   public List<Region> getRegionByCode(final String code) {
-    logger.info("Region requested by code: code={}", code);
+    log.debug("Region requested by code: code={}", code);
     return regionJpaDao.findByCodeInsee(code);
     /*
     // Can also be done by using an Example:
@@ -152,7 +152,7 @@ public class RegionServiceImpl
    * @return the Region with the given code at the given date.
    */
   public Region getRegionByCode(final String code, final Date date) {
-    logger.info("Region requested by code and date: code={}, date={}", code, date);
+    log.debug("Region requested by code and date: code={}, date={}", code, date);
     List<Region> list = getRegionByCode(code);
     if (list == null) {
       return null;
@@ -174,13 +174,13 @@ public class RegionServiceImpl
    * @return the Region with the given code at the given date.
    */
   public Region getRegionByCode(final String code, final String date) {
-    logger.info("Region requested by code and date: code={}, date={}", code, date);
+    log.debug("Region requested by code and date: code={}, date={}", code, date);
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     try {
       return getRegionByCode(code, sdf.parse(date));
     }
     catch (ParseException e) {
-      logger.warn("Region requested by code and date: Exception parsing date", e);
+      log.warn("Region requested by code and date: Exception parsing date {}", date, e);
       return null;
     }
   }

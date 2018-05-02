@@ -43,7 +43,7 @@ import fr.aesn.rade.service.CommuneService;
 public class CommuneServiceImpl
   implements CommuneService {
   /** SLF4J Logger. */
-  private static final Logger logger =
+  private static final Logger log =
     LoggerFactory.getLogger(CommuneServiceImpl.class);
   /** Data Access Object for Delegation. */
   private CommuneJpaDao communeJpaDao;
@@ -57,18 +57,18 @@ public class CommuneServiceImpl
 
   /**
    * Standard Constructor.
-   * @param CommuneJpaDao Data Access Object for Commune.
+   * @param communeJpaDao Data Access Object for Commune.
    */
-  public CommuneServiceImpl(final CommuneJpaDao CommuneJpaDao) {
-    setCommuneJpaDao(CommuneJpaDao);
+  public CommuneServiceImpl(final CommuneJpaDao communeJpaDao) {
+    setCommuneJpaDao(communeJpaDao);
   }
 
   /**
    * Sets the Data Access Object for Commune.
-   * @param CommuneJpaDao Data Access Object for Commune.
+   * @param communeJpaDao Data Access Object for Commune.
    */
-  public void setCommuneJpaDao(final CommuneJpaDao CommuneJpaDao) {
-    this.communeJpaDao = CommuneJpaDao;
+  public void setCommuneJpaDao(final CommuneJpaDao communeJpaDao) {
+    this.communeJpaDao = communeJpaDao;
   }
 
   /**
@@ -78,7 +78,7 @@ public class CommuneServiceImpl
   @Override
   @Transactional(readOnly = true)
   public List<Commune> getAllCommune() {
-    logger.info("Commune list requested");
+    log.debug("Commune list requested");
     return communeJpaDao.findAll();
   }
 
@@ -90,7 +90,7 @@ public class CommuneServiceImpl
   @Override
   @Transactional(readOnly = true)
   public List<Commune> getAllCommune(final Date date) {
-    logger.info("Commune list requested for Date: date={}", date);
+    log.debug("Commune list requested for Date: date={}", date);
     List<Commune> list = communeJpaDao.findAll();
     list.removeIf(e -> !SharedBusinessRules.isEntiteAdministrativeValid(e, date));
     return list;
@@ -103,9 +103,9 @@ public class CommuneServiceImpl
   @Override
   @Transactional(readOnly = true)
   public Map<Integer, Commune> getCommuneMap() {
-    logger.info("Commune map requested");
+    log.debug("Commune map requested");
     List<Commune> list = getAllCommune();
-    HashMap<Integer, Commune> map = new HashMap<Integer, Commune>(list.size());
+    HashMap<Integer, Commune> map = new HashMap<>(list.size());
     for (Commune item : list) {
       map.put(item.getId(), item);
     }
@@ -120,7 +120,7 @@ public class CommuneServiceImpl
   @Override
   @Transactional(readOnly = true)
   public Commune getCommuneById(final int id) {
-    logger.info("Commune requested by ID: ID={}", id);
+    log.debug("Commune requested by ID: ID={}", id);
     Optional<Commune> result = communeJpaDao.findById(id);
     if (result.isPresent()) {
       return result.get();
@@ -138,7 +138,7 @@ public class CommuneServiceImpl
   @Override
   @Transactional(readOnly = true)
   public List<Commune> getCommuneByCode(final String code) {
-    logger.info("Commune requested by code: code={}", code);
+    log.debug("Commune requested by code: code={}", code);
     return communeJpaDao.findByCodeInsee(code);
     /*
     // Can also be done by using an Example:
@@ -158,7 +158,7 @@ public class CommuneServiceImpl
   @Override
   @Transactional(readOnly = true)
   public Commune getCommuneByCode(final String code, final Date date) {
-    logger.info("Commune requested by code and date: code={}, date={}", code, date);
+    log.debug("Commune requested by code and date: code={}, date={}", code, date);
     List<Commune> list = getCommuneByCode(code);
     if (list == null) {
       return null;
@@ -182,13 +182,13 @@ public class CommuneServiceImpl
   @Override
   @Transactional(readOnly = true)
   public Commune getCommuneByCode(final String code, final String date) {
-    logger.info("Commune requested by code and date: code={}, date={}", code, date);
+    log.debug("Commune requested by code and date: code={}, date={}", code, date);
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     try {
       return getCommuneByCode(code, sdf.parse(date));
     }
     catch (ParseException e) {
-      logger.warn("Commune requested by code and date: Exception parsing date", e);
+      log.warn("Commune requested by code and date: Exception parsing date {}", date, e);
       return null;
     }
   }

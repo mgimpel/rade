@@ -43,7 +43,7 @@ import fr.aesn.rade.service.DepartementService;
 public class DepartementServiceImpl
   implements DepartementService {
   /** SLF4J Logger. */
-  private static final Logger logger =
+  private static final Logger log =
     LoggerFactory.getLogger(DepartementServiceImpl.class);
   /** Data Access Object for Delegation. */
   private DepartementJpaDao departementJpaDao;
@@ -57,18 +57,18 @@ public class DepartementServiceImpl
 
   /**
    * Standard Constructor.
-   * @param DepartementJpaDao Data Access Object for Departement.
+   * @param departementJpaDao Data Access Object for Departement.
    */
-  public DepartementServiceImpl(final DepartementJpaDao DepartementJpaDao) {
-    setDepartementJpaDao(DepartementJpaDao);
+  public DepartementServiceImpl(final DepartementJpaDao departementJpaDao) {
+    setDepartementJpaDao(departementJpaDao);
   }
 
   /**
    * Sets the Data Access Object for Departement.
-   * @param DepartementJpaDao Data Access Object for Departement.
+   * @param departementJpaDao Data Access Object for Departement.
    */
-  public void setDepartementJpaDao(final DepartementJpaDao DepartementJpaDao) {
-    this.departementJpaDao = DepartementJpaDao;
+  public void setDepartementJpaDao(final DepartementJpaDao departementJpaDao) {
+    this.departementJpaDao = departementJpaDao;
   }
 
   /**
@@ -78,7 +78,7 @@ public class DepartementServiceImpl
   @Override
   @Transactional(readOnly = true)
   public List<Departement> getAllDepartement() {
-    logger.info("Departement list requested");
+    log.debug("Departement list requested");
     return departementJpaDao.findAll();
   }
 
@@ -88,7 +88,7 @@ public class DepartementServiceImpl
    * @return a List of all the Departement.
    */
   public List<Departement> getAllDepartement(final Date date) {
-    logger.info("Departement list requested for Date: date={}", date);
+    log.debug("Departement list requested for Date: date={}", date);
     List<Departement> list = departementJpaDao.findAll();
     list.removeIf(e -> !SharedBusinessRules.isEntiteAdministrativeValid(e, date));
     return list;
@@ -101,9 +101,9 @@ public class DepartementServiceImpl
   @Override
   @Transactional(readOnly = true)
   public Map<Integer, Departement> getDepartementMap() {
-    logger.info("Departement map requested");
+    log.debug("Departement map requested");
     List<Departement> list = getAllDepartement();
-    HashMap<Integer, Departement> map = new HashMap<Integer, Departement>(list.size());
+    HashMap<Integer, Departement> map = new HashMap<>(list.size());
     for (Departement item : list) {
       map.put(item.getId(), item);
     }
@@ -118,7 +118,7 @@ public class DepartementServiceImpl
   @Override
   @Transactional(readOnly = true)
   public Departement getDepartementById(final int id) {
-    logger.info("Departement requested by ID: ID={}", id);
+    log.debug("Departement requested by ID: ID={}", id);
     Optional<Departement> result = departementJpaDao.findById(id);
     if (result.isPresent()) {
       return result.get();
@@ -134,7 +134,7 @@ public class DepartementServiceImpl
    * @return list of Departements that have historically had the given code.
    */
   public List<Departement> getDepartementByCode(final String code) {
-    logger.info("Departement requested by code: code={}", code);
+    log.debug("Departement requested by code: code={}", code);
     return departementJpaDao.findByCodeInsee(code);
     /*
     // Can also be done by using an Example:
@@ -152,7 +152,7 @@ public class DepartementServiceImpl
    * @return the Departement with the given code at the given date.
    */
   public Departement getDepartementByCode(final String code, final Date date) {
-    logger.info("Departement requested by code and date: code={}, date={}", code, date);
+    log.debug("Departement requested by code and date: code={}, date={}", code, date);
     List<Departement> list = getDepartementByCode(code);
     if (list == null) {
       return null;
@@ -174,13 +174,13 @@ public class DepartementServiceImpl
    * @return the Departement with the given code at the given date.
    */
   public Departement getDepartementByCode(final String code, final String date) {
-    logger.info("Departement requested by code and date: code={}, date={}", code, date);
+    log.debug("Departement requested by code and date: code={}, date={}", code, date);
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     try {
       return getDepartementByCode(code, sdf.parse(date));
     }
     catch (ParseException e) {
-      logger.warn("Departement requested by code and date: Exception parsing date", e);
+      log.warn("Departement requested by code and date: Exception parsing date {}", date, e);
       return null;
     }
   }

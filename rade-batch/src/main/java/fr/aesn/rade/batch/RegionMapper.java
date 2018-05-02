@@ -39,7 +39,7 @@ import fr.aesn.rade.service.MetadataService;
  */
 public class RegionMapper implements FieldSetMapper<Region> {
   /** SLF4J Logger. */
-  private static final Logger logger =
+  private static final Logger log =
     LoggerFactory.getLogger(RegionMapper.class);
   /** Service for Metadata. */
   @Autowired
@@ -51,7 +51,7 @@ public class RegionMapper implements FieldSetMapper<Region> {
 
   @Override
   public Region mapFieldSet(FieldSet fieldSet) throws BindException {
-    logger.debug("Importing line: " + fieldSet.toString());
+    log.debug("Importing line: {}", fieldSet.toString());
     Map<String, TypeNomClair> tncc = metadataService.getTypeNomClairMap();
     Map<String, TypeEntiteAdmin> tea = metadataService.getTypeEntiteAdminMap();
     Date debutValidite = new Date();

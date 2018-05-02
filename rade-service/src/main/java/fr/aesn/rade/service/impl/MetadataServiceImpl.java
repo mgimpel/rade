@@ -43,7 +43,7 @@ import fr.aesn.rade.service.MetadataService;
 public class MetadataServiceImpl
   implements MetadataService {
   /** SLF4J Logger. */
-  private static final Logger logger =
+  private static final Logger log =
     LoggerFactory.getLogger(MetadataServiceImpl.class);
   /** Entity Manager. */
   private final EntityManager em;
@@ -77,7 +77,7 @@ public class MetadataServiceImpl
    * @return a list of all the TypeNomClair.
    */
   public List<TypeNomClair> getTypeNomClairList() {
-    logger.info("TypeNomClair list requested");
+    log.debug("TypeNomClair list requested");
     return em.createQuery("FROM TypeNomClair", TypeNomClair.class).getResultList();
   }
 
@@ -86,7 +86,7 @@ public class MetadataServiceImpl
    * @return a map of all the TypeNomClair indexed by the code.
    */
   public Map<String, TypeNomClair> getTypeNomClairMap() {
-    logger.info("TypeNomClair map requested");
+    log.debug("TypeNomClair map requested");
     List<TypeNomClair> list = getTypeNomClairList();
     HashMap<String, TypeNomClair> map = new HashMap<>(list.size());
     for (TypeNomClair tncc : list) {
@@ -109,7 +109,7 @@ public class MetadataServiceImpl
    * @return a list of all the TypeEntiteAdmin.
    */
   public List<TypeEntiteAdmin> getTypeEntiteAdminList() {
-    logger.info("TypeEntiteAdmin list requested");
+    log.debug("TypeEntiteAdmin list requested");
     return em.createQuery("FROM TypeEntiteAdmin", TypeEntiteAdmin.class).getResultList();
   }
 
@@ -118,7 +118,7 @@ public class MetadataServiceImpl
    * @return a map of all the TypeEntiteAdmin indexed by the code.
    */
   public Map<String, TypeEntiteAdmin> getTypeEntiteAdminMap() {
-    logger.info("TypeEntiteAdmin map requested");
+    log.debug("TypeEntiteAdmin map requested");
     List<TypeEntiteAdmin> list = getTypeEntiteAdminList();
     HashMap<String, TypeEntiteAdmin> map = new HashMap<>(list.size());
     for (TypeEntiteAdmin tea : list) {
@@ -141,7 +141,7 @@ public class MetadataServiceImpl
    * @return a list of all the TypeGenealogieEntiteAdmin.
    */
   public List<TypeGenealogieEntiteAdmin> getTypeGenealogieEntiteAdminList() {
-    logger.info("TypeGenealogieEntiteAdmin list requested");
+    log.debug("TypeGenealogieEntiteAdmin list requested");
     return em.createQuery("FROM TypeGenealogieEntiteAdmin", TypeGenealogieEntiteAdmin.class).getResultList();
   }
 
@@ -150,7 +150,7 @@ public class MetadataServiceImpl
    * @return a map of all the TypeGenealogieEntiteAdmin indexed by the code.
    */
   public Map<String, TypeGenealogieEntiteAdmin> getTypeGenealogieEntiteAdminMap() {
-    logger.info("TypeGenealogieEntiteAdmin map requested");
+    log.debug("TypeGenealogieEntiteAdmin map requested");
     List<TypeGenealogieEntiteAdmin> list = getTypeGenealogieEntiteAdminList();
     HashMap<String, TypeGenealogieEntiteAdmin> map = new HashMap<>(list.size());
     for (TypeGenealogieEntiteAdmin tgea : list) {
@@ -173,7 +173,7 @@ public class MetadataServiceImpl
    * @return a list of all the StatutModification.
    */
   public List<StatutModification> getStatutModificationList() {
-    logger.info("StatutModification list requested");
+    log.debug("StatutModification list requested");
     return em.createQuery("FROM StatutModification", StatutModification.class).getResultList();
   }
 
@@ -182,7 +182,7 @@ public class MetadataServiceImpl
    * @return a map of all the StatutModification indexed by the code.
    */
   public Map<String, StatutModification> getStatutModificationMap() {
-    logger.info("StatutModification map requested");
+    log.debug("StatutModification map requested");
     List<StatutModification> list = getStatutModificationList();
     HashMap<String, StatutModification> map = new HashMap<>(list.size());
     for (StatutModification sm : list) {

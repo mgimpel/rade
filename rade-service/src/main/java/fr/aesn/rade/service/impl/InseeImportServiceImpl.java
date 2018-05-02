@@ -51,7 +51,7 @@ import lombok.Cleanup;
 public class InseeImportServiceImpl
   implements InseeImportService {
   /** SLF4J Logger. */
-  private static final Logger logger =
+  private static final Logger log =
     LoggerFactory.getLogger(InseeImportServiceImpl.class);
   /** Data Access Object for Region. */
   private RegionJpaDao regionJpaDao;
@@ -101,7 +101,7 @@ public class InseeImportServiceImpl
         "TNCC".equals(line[2]) ||     // Type de nom en clair
         "NCC".equals(line[3]) ||      // Nom en clair (majuscules)
         "NCCENR".equals(line[4])) {   // Nom en clair (typographie riche)
-      logger.warn("File does not seem to correspond to INSEE region file");
+      log.warn("File does not seem to correspond to INSEE region file");
     }
     Map<String, TypeNomClair> tncc = metadataService.getTypeNomClairMap();
     Map<String, TypeEntiteAdmin> tea = metadataService.getTypeEntiteAdminMap();
@@ -126,24 +126,24 @@ public class InseeImportServiceImpl
     }
   }
 
-  public static List<String[]> TabSeparatedValueToList(final byte[] bytes) {
+  public static List<String[]> tabSeparatedValueToList(final byte[] bytes) {
     String str = new String(bytes, StandardCharsets.UTF_8);
     List<String[]> list = null;
     try {
       @Cleanup StringReader sr = new StringReader(str);
       @Cleanup BufferedReader br = new BufferedReader(sr);
-      list = TabSeparatedValueToList(br);
+      list = tabSeparatedValueToList(br);
     }     
     catch (IOException e) {
-        logger.warn("Should never happen", e);
+        log.warn("Should never happen", e);
     }
     return list;
   }
 
-  public static List<String[]> TabSeparatedValueToList(final BufferedReader reader)
+  public static List<String[]> tabSeparatedValueToList(final BufferedReader reader)
     throws IOException {
     String line;
-    List<String[]> list = new ArrayList<String[]>();
+    List<String[]> list = new ArrayList<>();
     while ((line = reader.readLine()) != null ) {
       list.add(line.split("\t", -1));
     }

@@ -68,7 +68,7 @@ public class StatutModification implements Serializable {
   @Column(name = "LIBELLE_COURT", length = 25, nullable = false)
   private String libelleCourt;
 
-  /** Libellé court du Statut de Modification. */
+  /** Libellé long du Statut de Modification. */
   @Size(max = 250)
   @Column(name = "LIBELLE_LONG", length = 250, nullable = false)
   private String libelleLong;

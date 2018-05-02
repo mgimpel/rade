@@ -19,8 +19,9 @@ package fr.aesn.rade.ws.aramis.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import fr.aesn.rade.persist.model.Commune;
 import fr.aesn.rade.persist.model.Delegation;
@@ -31,8 +32,9 @@ import fr.aesn.rade.persist.model.Departement;
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
 public class Entity2VoMapper {
-  /** Logger */
-  private static final Logger logger = Logger.getLogger(Entity2VoMapper.class.getName());
+  /** SLF4J Logger. */
+  private static final Logger log =
+    LoggerFactory.getLogger(Entity2VoMapper.class);
   /** Singleton instance. */
   private static final Entity2VoMapper instance = new Entity2VoMapper();
 
@@ -59,7 +61,7 @@ public class Entity2VoMapper {
    * @return VO mapped by Entity.
    */
   public static final DepartementVO departementEntity2Vo(Departement source) {
-    logger.log(Level.FINE,"Mapping {}", source); // Debug
+    log.debug("Mapping {}", source); // Debug
     if (source == null) {
       return null;
     }
@@ -75,11 +77,11 @@ public class Entity2VoMapper {
    * @return VO List mapped by Entity.
    */
   public static final List<DepartementVO> departementEntity2VoList(List<Departement> sources) {
-    logger.log(Level.FINE,"Mapping List {}", sources); // Debug
+    log.debug("Mapping List {}", sources); // Debug
     if (sources == null) {
       return null;
     }
-    List<DepartementVO> dest = new ArrayList<DepartementVO>(sources.size());
+    List<DepartementVO> dest = new ArrayList<>(sources.size());
     for (Departement source : sources) {
       dest.add(departementEntity2Vo(source));
     }
@@ -92,7 +94,7 @@ public class Entity2VoMapper {
    * @return VO mapped by Entity.
    */
   public static final CommuneVO communeEntity2Vo(Commune source) {
-    logger.log(Level.FINE,"Mapping {}", source); // Debug
+    log.debug("Mapping {}", source); // Debug
     if (source == null) {
       return null;
     }
@@ -112,11 +114,11 @@ public class Entity2VoMapper {
    * @return VO List mapped by Entity.
    */
   public static final List<CommuneVO> communeEntity2VoList(List<Commune> sources) {
-    logger.log(Level.FINE,"Mapping List {}", sources); // Debug
+    log.debug("Mapping List {}", sources); // Debug
     if (sources == null) {
       return null;
     }
-    List<CommuneVO> dest = new ArrayList<CommuneVO>(sources.size());
+    List<CommuneVO> dest = new ArrayList<>(sources.size());
     for (Commune source : sources) {
       dest.add(communeEntity2Vo(source));
     }
@@ -129,7 +131,7 @@ public class Entity2VoMapper {
    * @return VO mapped by Entity.
    */
   public static final DelegationVO delegationEntity2Vo(Delegation source) {
-    logger.log(Level.FINE,"Mapping {}", source); // Debug
+    log.debug("Mapping {}", source); // Debug
     if (source == null) {
       return null;
     }
@@ -158,7 +160,7 @@ public class Entity2VoMapper {
    * @return Entity mapped by VO.
    */
   public static final Delegation delegationVo2Entity(DelegationVO source) {
-    logger.log(Level.FINE,"Mapping {}", source); // Debug
+    log.debug("Mapping {}", source); // Debug
     if (source == null) {
       return null;
     }
@@ -187,11 +189,11 @@ public class Entity2VoMapper {
    * @return VO List mapped by Entity.
    */
   public static final List<DelegationVO> delegationEntity2VoList(List<Delegation> sources) {
-    logger.log(Level.FINE,"Mapping List {}", sources); // Debug
+    log.debug("Mapping List {}", sources); // Debug
     if (sources == null) {
       return null;
     }
-    List<DelegationVO> dest = new ArrayList<DelegationVO>(sources.size());
+    List<DelegationVO> dest = new ArrayList<>(sources.size());
     for (Delegation source : sources) {
       dest.add(delegationEntity2Vo(source));
     }

@@ -17,6 +17,8 @@
 /* $Id$ */
 package fr.aesn.rade.batch;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobExecutionException;
@@ -30,6 +32,10 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
 public class Main {
+  /** SLF4J Logger. */
+  private static final Logger log =
+    LoggerFactory.getLogger(Main.class);
+
   public static void main(String[] args) {
     ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
 
@@ -38,11 +44,9 @@ public class Main {
 
     try {
       JobExecution execution = jobLauncher.run(job, new JobParameters());
-      System.out.println("Job Exit Status : " + execution.getStatus());
-
+      log.info("Job Exit Status : {}", execution.getStatus());
     } catch (JobExecutionException e) {
-      System.out.println("Job ExamResult failed");
-      e.printStackTrace();
+      log.error("Job failed", e);
     }
   }
 }

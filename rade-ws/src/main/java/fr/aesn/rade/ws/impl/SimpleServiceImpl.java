@@ -33,7 +33,7 @@ import fr.aesn.rade.ws.SimpleService;
 public class SimpleServiceImpl
   implements SimpleService {
     /** SLF4J Logger. */
-    private static final Logger LOG =
+    private static final Logger log =
       LoggerFactory.getLogger(SimpleServiceImpl.class);
   /**
    * Say Hello World
@@ -41,7 +41,7 @@ public class SimpleServiceImpl
    */
   @Override
   public String helloWorld() {
-    LOG.info("Executing operation helloWorld");
+    log.info("Executing operation helloWorld");
     return "Hello World";
   }
 
@@ -53,7 +53,7 @@ public class SimpleServiceImpl
    */
   @Override
   public int addInteger(int a, int b) {
-    LOG.info("Executing operation addInteger for " + a + " and " + b);
+    log.info("Executing operation addInteger for {} and {}", a, b);
     return a + b;
   }
 }

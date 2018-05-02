@@ -96,7 +96,7 @@ public class TestInseeImportService
   public void testParseInseeFile(String file, int rows, int cols) throws IOException {
     ClassLoader cl = getClass().getClassLoader();
     BufferedReader br = new BufferedReader(new InputStreamReader(cl.getResourceAsStream(file)));
-    List<String[]> list = InseeImportServiceImpl.TabSeparatedValueToList(br);
+    List<String[]> list = InseeImportServiceImpl.tabSeparatedValueToList(br);
     assertNotNull("Couldn't find INSEE file " + file, list);
     assertEquals("Wrong number of rows for file " + file, rows, list.size());
     for (String[] line : list) {
