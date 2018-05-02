@@ -48,11 +48,6 @@
       <artifactId>rade-ws-aramis</artifactId>
       <version>${project.version}</version>
     </dependency>
-    <dependency>
-      <groupId>fr.aesn.rade</groupId>
-      <artifactId>rade-rs</artifactId>
-      <version>${project.version}</version>
-    </dependency>
 
     <!-- Spring Core & MVC -->
     <dependency>
