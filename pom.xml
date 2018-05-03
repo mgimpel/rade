@@ -37,6 +37,7 @@
     <module>rade-webapp</module>
     <module>rade-ws</module>
     <module>rade-ws-aramis</module>
+    <module>rade-rs</module>
     <module>rade-batch</module>
   </modules>
 

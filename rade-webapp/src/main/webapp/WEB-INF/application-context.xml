@@ -122,6 +122,10 @@
         class="fr.aesn.rade.service.impl.DelegationServiceImpl">
     <property name="delegationJpaDao" ref="delegationJpaDao"/>
   </bean>
+  <bean id="bassinService" 
+        class="fr.aesn.rade.service.impl.BassinServiceImpl">
+    <property name="circonscriptionBassinJpaDao" ref="circonscriptionBassinJpaDao"/>
+  </bean>
 
   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
   <!-- CXF Web Services -->
@@ -148,13 +152,13 @@
                   implementor="#geoAdminService"
                   address="/GeoAdminService"/>
 
-<!--
   <bean id="restService"
         class="fr.aesn.rade.rs.RestService">
     <property name="delegationService" ref="delegationService"/>
     <property name="communeService" ref="communeService"/>
     <property name="departementService" ref="departementService"/>
     <property name="regionService" ref="regionService"/>
+    <property name="bassinService" ref="bassinService"/>
   </bean>
   <jaxrs:server id="RestService"
                 address="/rest">
@@ -165,7 +169,6 @@
       <bean class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider"/>
     </jaxrs:providers>
   </jaxrs:server>
--->
 
   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
   <!-- Spring Security -->

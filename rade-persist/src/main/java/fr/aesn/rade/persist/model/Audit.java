@@ -61,7 +61,6 @@ public class Audit implements Serializable {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "AUDIT_ID", nullable = false)
-  // TODO generate sequence
   private Integer id;
 
   /** Auteur de la modification. */

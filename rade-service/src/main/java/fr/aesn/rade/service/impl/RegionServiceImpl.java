@@ -45,7 +45,7 @@ public class RegionServiceImpl
   /** SLF4J Logger. */
   private static final Logger log =
     LoggerFactory.getLogger(RegionServiceImpl.class);
-  /** Data Access Object for Delegation. */
+  /** Data Access Object for Region. */
   private RegionJpaDao regionJpaDao;
 
   /**

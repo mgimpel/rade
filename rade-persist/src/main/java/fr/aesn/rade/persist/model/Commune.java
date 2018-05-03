@@ -71,7 +71,7 @@ public class Commune extends EntiteAdministrative {
 
   /** Bassin auquel appartient la Commune. */
   @Size(max = 2)
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "BASSIN", nullable = true)
   private CirconscriptionBassin circonscriptionBassin;
 

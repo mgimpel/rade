@@ -45,7 +45,7 @@ public class CommuneServiceImpl
   /** SLF4J Logger. */
   private static final Logger log =
     LoggerFactory.getLogger(CommuneServiceImpl.class);
-  /** Data Access Object for Delegation. */
+  /** Data Access Object for Commune. */
   private CommuneJpaDao communeJpaDao;
 
   /**

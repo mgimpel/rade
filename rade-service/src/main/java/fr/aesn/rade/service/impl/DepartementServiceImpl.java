@@ -45,7 +45,7 @@ public class DepartementServiceImpl
   /** SLF4J Logger. */
   private static final Logger log =
     LoggerFactory.getLogger(DepartementServiceImpl.class);
-  /** Data Access Object for Delegation. */
+  /** Data Access Object for Departement. */
   private DepartementJpaDao departementJpaDao;
 
   /**

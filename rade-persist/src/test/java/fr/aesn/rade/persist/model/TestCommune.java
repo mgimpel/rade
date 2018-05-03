@@ -122,7 +122,6 @@ public class TestCommune extends AbstractTestEntity {
     assertTrue("String should contain value", obj1.toString().contains(obj1.getNomEnrichi()));
     assertTrue("String should contain value", obj1.toString().contains(obj1.getCommentaire()));
     assertTrue("String should contain value", obj1.toString().contains(obj1.getTypeNomClair().getCode()));
-    assertTrue("String should contain value", obj1.toString().contains(obj1.getTypeEntiteAdmin().getCode()));
     assertTrue("String should contain value", obj1.toString().contains(obj1.getAudit().getAuteur()));
     assertTrue("String should contain value", obj1.toString().contains(obj1.getCodeInsee()));
     assertTrue("String should contain value", obj1.toString().contains(obj1.getIndicateurUrbain()));

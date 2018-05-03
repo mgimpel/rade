@@ -68,7 +68,8 @@ import lombok.ToString;
 @Table(name = "ZR_ENTITEADMIN")
 @Inheritance(strategy = InheritanceType.JOINED)
 @Getter @Setter @NoArgsConstructor
-@ToString @EqualsAndHashCode
+@ToString(exclude = {"typeEntiteAdmin", "parents", "enfants"})
+@EqualsAndHashCode
 public class EntiteAdministrative implements Serializable {
   /** Unique Identifier for Serializable Class. */
   private static final long serialVersionUID = 3168273278242785797L;
@@ -111,7 +112,7 @@ public class EntiteAdministrative implements Serializable {
 
   /** Type de Nom Clair (TNCC) de l'entité. */
   @Size(max = 1)
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "TYPE_NOM_CLAIR", nullable = true)
   private TypeNomClair typeNomClair;
 
@@ -122,7 +123,7 @@ public class EntiteAdministrative implements Serializable {
   private TypeEntiteAdmin typeEntiteAdmin;
 
   /** Détails de Modification de l'entité. */
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "AUDIT_ID", nullable = false)
   private Audit audit;
 
