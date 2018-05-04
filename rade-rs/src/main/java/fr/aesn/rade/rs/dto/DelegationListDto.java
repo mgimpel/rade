@@ -38,6 +38,11 @@ public class DelegationListDto {
   @XmlElement(name = "delegations")
   private List<DelegationDto> delegations;
 
+  /**
+   * Static factory for building DTO List from it's associated Entity List.
+   * @param delegations Entity List used to build DTO.
+   * @return new DTO List built from it's associated Entity List.
+   */
   public static DelegationListDto fromEntityList(List<Delegation> delegations) {
     List<DelegationDto> dtos = new ArrayList<>(delegations.size());
     for (Delegation delegation : delegations) {

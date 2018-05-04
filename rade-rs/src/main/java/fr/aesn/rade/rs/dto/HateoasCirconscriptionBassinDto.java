@@ -37,6 +37,12 @@ public class HateoasCirconscriptionBassinDto
   extends CirconscriptionBassinDto {
   private List<Link> links;
 
+  /**
+   * Static factory for building DTO from it's associated Entity.
+   * @param bassin Entity used to build DTO.
+   * @param basePath base URI for REST Service, used to build HATEOAS links.
+   * @return new DTO built from it's associated Entity.
+   */
   public static HateoasCirconscriptionBassinDto fromEntity(CirconscriptionBassin bassin, String basePath) {
     HateoasCirconscriptionBassinDto dto = new HateoasCirconscriptionBassinDto();
     dto.setAllfromEntity(bassin);

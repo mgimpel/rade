@@ -38,6 +38,11 @@ public class CirconscriptionBassinListDto {
   @XmlElement(name = "bassins")
   private List<CirconscriptionBassinDto> bassins;
 
+  /**
+   * Static factory for building DTO List from it's associated Entity List.
+   * @param bassins Entity List used to build DTO.
+   * @return new DTO List built from it's associated Entity List.
+   */
   public static CirconscriptionBassinListDto fromEntityList(List<CirconscriptionBassin> bassins) {
     List<CirconscriptionBassinDto> dtos = new ArrayList<>(bassins.size());
     for (CirconscriptionBassin bassin : bassins) {

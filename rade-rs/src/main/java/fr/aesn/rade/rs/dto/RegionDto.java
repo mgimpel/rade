@@ -35,6 +35,10 @@ public class RegionDto
   private String codeInsee;
   private String chefLieu;
 
+  /**
+   * Set all the variables in this DTO with values from the given Entity.
+   * @param region Entity used to initialize DTO.
+   */
   protected void setAllfromEntity(Region region) {
     if (region == null) {
       return;
@@ -44,6 +48,11 @@ public class RegionDto
     this.setChefLieu(region.getChefLieu());
   }
 
+  /**
+   * Static factory for building DTO from it's associated Entity.
+   * @param region Entity used to build DTO.
+   * @return new DTO built from it's associated Entity.
+   */
   public static RegionDto fromEntity(Region region) {
     RegionDto dto = new RegionDto();
     dto.setAllfromEntity(region);

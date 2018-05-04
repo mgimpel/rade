@@ -37,6 +37,12 @@ public class HateoasDelegationDto
   extends DelegationDto {
   private List<Link> links;
 
+  /**
+   * Static factory for building DTO from it's associated Entity.
+   * @param delegation Entity used to build DTO.
+   * @param basePath base URI for REST Service, used to build HATEOAS links.
+   * @return new DTO built from it's associated Entity.
+   */
   public static HateoasDelegationDto fromEntity(Delegation delegation, String basePath) {
     HateoasDelegationDto dto = new HateoasDelegationDto();
     dto.setAllfromEntity(delegation);

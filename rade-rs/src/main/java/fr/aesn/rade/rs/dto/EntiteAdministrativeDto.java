@@ -40,6 +40,10 @@ public abstract class EntiteAdministrativeDto {
   private String commentaire;
   private TypeNomClairDto typeNomClair;
 
+  /**
+   * Set all the variables in this DTO with values from the given Entity.
+   * @param entity Entity used to initialize DTO.
+   */
   protected void setAllfromEntity(EntiteAdministrative entity) {
     if (entity == null) {
       return;

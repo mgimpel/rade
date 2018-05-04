@@ -38,10 +38,15 @@ public class RegionListDto {
   @XmlElement(name = "regions")
   private List<RegionDto> regions;
 
-  public static RegionListDto fromEntityList(List<Region> regs) {
-    List<RegionDto> dtos = new ArrayList<>(regs.size());
-    for (Region reg : regs) {
-      dtos.add(RegionDto.fromEntity(reg));
+  /**
+   * Static factory for building DTO List from it's associated Entity List.
+   * @param regions Entity List used to build DTO.
+   * @return new DTO List built from it's associated Entity List.
+   */
+  public static RegionListDto fromEntityList(List<Region> regions) {
+    List<RegionDto> dtos = new ArrayList<>(regions.size());
+    for (Region region : regions) {
+      dtos.add(RegionDto.fromEntity(region));
     }
     RegionListDto dto = new RegionListDto();
     dto.setRegions(dtos);

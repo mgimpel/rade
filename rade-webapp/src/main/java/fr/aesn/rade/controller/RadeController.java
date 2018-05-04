@@ -61,7 +61,6 @@ public class RadeController extends AbstractController {
   /**
    * Login mapping.
    * @return ModelAndView for the Application Root.
-   * @throws IOException if the is an IOException.
    */
   @RequestMapping(value = "/login")
   public String login() {
@@ -74,7 +73,6 @@ public class RadeController extends AbstractController {
    * @param request HTTP Servlet Request.
    * @param response HTTP Servlet Response.
    * @return the View (the login page).
-   * @throws IOException if the is an IOException.
    */
   @RequestMapping(value = "/logout")
   public String logoutPage(final HttpServletRequest request,

@@ -37,6 +37,12 @@ public class HateoasRegionDto
   extends RegionDto {
   private List<Link> links;
 
+  /**
+   * Static factory for building DTO from it's associated Entity.
+   * @param region Entity used to build DTO.
+   * @param basePath base URI for REST Service, used to build HATEOAS links.
+   * @return new DTO built from it's associated Entity.
+   */
   public static HateoasRegionDto fromEntity(Region region, String basePath) {
     HateoasRegionDto dto = new HateoasRegionDto();
     dto.setAllfromEntity(region);

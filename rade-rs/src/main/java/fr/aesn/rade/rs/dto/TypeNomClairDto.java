@@ -36,6 +36,10 @@ public class TypeNomClairDto {
   private String charniere;
   private String articleMaj;
 
+  /**
+   * Set all the variables in this DTO with values from the given Entity.
+   * @param tncc Entity used to initialize DTO.
+   */
   protected void setAllfromEntity(TypeNomClair tncc) {
     if (tncc == null) {
       return;
@@ -46,6 +50,11 @@ public class TypeNomClairDto {
     this.setArticleMaj(tncc.getArticleMaj());
   }
 
+  /**
+   * Static factory for building DTO from it's associated Entity.
+   * @param tncc Entity used to build DTO.
+   * @return new DTO built from it's associated Entity.
+   */
   public static TypeNomClairDto fromEntity(TypeNomClair tncc) {
     TypeNomClairDto dto = new TypeNomClairDto();
     dto.setAllfromEntity(tncc);

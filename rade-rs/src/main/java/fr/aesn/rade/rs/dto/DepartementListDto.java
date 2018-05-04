@@ -38,6 +38,11 @@ public class DepartementListDto {
   @XmlElement(name = "departments")
   private List<DepartementDto> departments;
 
+  /**
+   * Static factory for building DTO List from it's associated Entity List.
+   * @param depts Entity List used to build DTO.
+   * @return new DTO List built from it's associated Entity List.
+   */
   public static DepartementListDto fromEntityList(List<Departement> depts) {
     List<DepartementDto> dtos = new ArrayList<>(depts.size());
     for (Departement dept : depts) {

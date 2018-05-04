@@ -28,7 +28,7 @@
   <packaging>pom</packaging>
 
   <name>Rade Project</name>
-  <url>http://ulo-colab.aesn.fr/projects/tiers2/</url>
+  <url>http://ulo-colab.aesn.fr/projects/rade/</url>
 
   <modules>
     <module>rade-common</module>

@@ -38,6 +38,10 @@ public class CommuneDto
   private CirconscriptionBassinDto circonscriptionBassin;
   private String indicateurUrbain;
 
+  /**
+   * Set all the variables in this DTO with values from the given Entity.
+   * @param commune Entity used to initialize DTO.
+   */
   protected void setAllfromEntity(Commune commune) {
     if (commune == null) {
       return;
@@ -50,6 +54,11 @@ public class CommuneDto
     this.setIndicateurUrbain(commune.getIndicateurUrbain());
   }
 
+  /**
+   * Static factory for building DTO from it's associated Entity.
+   * @param commune Entity used to build DTO.
+   * @return new DTO built from it's associated Entity.
+   */
   public static CommuneDto fromEntity(Commune commune) {
     CommuneDto dto = new CommuneDto();
     dto.setAllfromEntity(commune);

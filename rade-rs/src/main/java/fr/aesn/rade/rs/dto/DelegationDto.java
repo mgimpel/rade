@@ -47,6 +47,10 @@ public class DelegationDto {
   private String telephone2;
   private String telephone3;
 
+  /**
+   * Set all the variables in this DTO with values from the given Entity.
+   * @param delegation Entity used to initialize DTO.
+   */
   protected void setAllfromEntity(Delegation delegation) {
     if (delegation == null) {
       return;
@@ -68,6 +72,11 @@ public class DelegationDto {
     this.setTelephone3(delegation.getTelephone3());
   }
 
+  /**
+   * Static factory for building DTO from it's associated Entity.
+   * @param delegation Entity used to build DTO.
+   * @return new DTO built from it's associated Entity.
+   */
   public static DelegationDto fromEntity(Delegation delegation) {
     DelegationDto dto = new DelegationDto();
     dto.setAllfromEntity(delegation);

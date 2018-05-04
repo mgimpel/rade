@@ -37,6 +37,12 @@ public class HateoasDepartementDto
   extends DepartementDto {
   private List<Link> links;
 
+  /**
+   * Static factory for building DTO from it's associated Entity.
+   * @param dept Entity used to build DTO.
+   * @param basePath base URI for REST Service, used to build HATEOAS links.
+   * @return new DTO built from it's associated Entity.
+   */
   public static HateoasDepartementDto fromEntity(Departement dept, String basePath) {
     HateoasDepartementDto dto = new HateoasDepartementDto();
     dto.setAllfromEntity(dept);

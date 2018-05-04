@@ -37,6 +37,12 @@ public class Link {
   private String rel;
   private URI href;
 
+  /**
+   * Static factory for building Link.
+   * @param rel name of the link.
+   * @param href URI of the link.
+   * @return new Link.
+   */
   public static Link fromData(String rel, URI href) {
     Link link = new Link();
     link.setRel(rel);

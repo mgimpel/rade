@@ -36,6 +36,10 @@ public class DepartementDto
   private String chefLieu;
   private String region;
 
+  /**
+   * Set all the variables in this DTO with values from the given Entity.
+   * @param dept Entity used to initialize DTO.
+   */
   protected void setAllfromEntity(Departement dept) {
     if (dept == null) {
       return;
@@ -46,6 +50,11 @@ public class DepartementDto
     this.setRegion(dept.getRegion());
   }
 
+  /**
+   * Static factory for building DTO from it's associated Entity.
+   * @param dept Entity used to build DTO.
+   * @return new DTO built from it's associated Entity.
+   */
   public static DepartementDto fromEntity(Departement dept) {
     DepartementDto dto = new DepartementDto();
     dto.setAllfromEntity(dept);

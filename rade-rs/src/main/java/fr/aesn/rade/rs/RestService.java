@@ -96,6 +96,12 @@ public class RestService {
   /** Relative path of the REST Service for Circonscription Bassin. */
   public static final String REST_PATH_CIRCONSCRIPTION_BASSIN  = "bassin/";
 
+  /**
+   * Get all Region.
+   * @param req HTTP Request (for determining base path of Rest Service).
+   * @param rawdate the date at which the returned data is valid.
+   * @return list of all Region.
+   */
   @GET
   @Path(REST_PATH_REGION)
   @Produces(MediaType.APPLICATION_JSON)
@@ -105,11 +111,11 @@ public class RestService {
     try {
       Date date = checkDate(rawdate);
       List<Region> regions = regionService.getAllRegion(date);
-      if (regions.size() > 0) {
-        return Response.ok(RegionListDto.fromEntityList(regions))
+      if (regions.isEmpty()) {
+        return Response.status(Response.Status.NOT_FOUND)
                        .build();
       } else {
-        return Response.status(Response.Status.NOT_FOUND)
+        return Response.ok(RegionListDto.fromEntityList(regions))
                        .build();
       }
     }
@@ -121,6 +127,13 @@ public class RestService {
     }
   }
 
+  /**
+   * Get the Region with the given INSEE code.
+   * @param req HTTP Request (for determining base path of Rest Service).
+   * @param rawcode the INSEE code of the Region.
+   * @param rawdate the date at which the returned data is valid.
+   * @return the Region with the given INSEE code.
+   */
   @GET
   @Path(REST_PATH_REGION + "{code}")
   @Produces(MediaType.APPLICATION_JSON)
@@ -132,11 +145,11 @@ public class RestService {
       String code = checkCode(rawcode);
       Date date = checkDate(rawdate);
       Region region = regionService.getRegionByCode(code, date);
-      if (region != null) {
-        return Response.ok(HateoasRegionDto.fromEntity(region, getRestBasePath(req, REST_PATH_REGION)))
+      if (region == null) {
+        return Response.status(Response.Status.NOT_FOUND)
                        .build();
       } else {
-        return Response.status(Response.Status.NOT_FOUND)
+        return Response.ok(HateoasRegionDto.fromEntity(region, getRestBasePath(req, REST_PATH_REGION)))
                        .build();
       }
     }
@@ -148,6 +161,12 @@ public class RestService {
     }
   }
 
+  /**
+   * Get all Departement.
+   * @param req HTTP Request (for determining base path of Rest Service).
+   * @param rawdate the date at which the returned data is valid.
+   * @return list of all Departement.
+   */
   @GET
   @Path(REST_PATH_DEPARTEMENT)
   @Produces(MediaType.APPLICATION_JSON)
@@ -157,11 +176,11 @@ public class RestService {
     try {
       Date date = checkDate(rawdate);
       List<Departement> depts = departementService.getAllDepartement(date);
-      if (depts.size() > 0) {
-        return Response.ok(DepartementListDto.fromEntityList(depts))
+      if (depts.isEmpty()) {
+        return Response.status(Response.Status.NOT_FOUND)
                        .build();
       } else {
-        return Response.status(Response.Status.NOT_FOUND)
+        return Response.ok(DepartementListDto.fromEntityList(depts))
                        .build();
       }
     }
@@ -173,6 +192,13 @@ public class RestService {
     }
   }
 
+  /**
+   * Get the Departement with the given INSEE code.
+   * @param req HTTP Request (for determining base path of Rest Service).
+   * @param rawcode the INSEE code of the Departement.
+   * @param rawdate the date at which the returned data is valid.
+   * @return the Departement with the given INSEE code.
+   */
   @GET
   @Path(REST_PATH_DEPARTEMENT + "{code}")
   @Produces(MediaType.APPLICATION_JSON)
@@ -184,11 +210,11 @@ public class RestService {
       String code = checkCode(rawcode);
       Date date = checkDate(rawdate);
       Departement dept = departementService.getDepartementByCode(code, date);
-      if (dept != null) {
-        return Response.ok(HateoasDepartementDto.fromEntity(dept, getRestBasePath(req, REST_PATH_DEPARTEMENT)))
+      if (dept == null) {
+        return Response.status(Response.Status.NOT_FOUND)
                        .build();
       } else {
-        return Response.status(Response.Status.NOT_FOUND)
+        return Response.ok(HateoasDepartementDto.fromEntity(dept, getRestBasePath(req, REST_PATH_DEPARTEMENT)))
                        .build();
       }
     }
@@ -200,6 +226,12 @@ public class RestService {
     }
   }
 
+  /**
+   * Get all Commune.
+   * @param req HTTP Request (for determining base path of Rest Service).
+   * @param rawdate the date at which the returned data is valid.
+   * @return list of all Commune.
+   */
   @GET
   @Path(REST_PATH_COMMUNE)
   @Produces(MediaType.APPLICATION_JSON)
@@ -209,11 +241,11 @@ public class RestService {
     try {
       Date date = checkDate(rawdate);
       List<Commune> communes = communeService.getAllCommune(date);
-      if (communes.size() > 0) {
-        return Response.ok(CommuneListDto.fromEntityList(communes))
+      if (communes.isEmpty()) {
+        return Response.status(Response.Status.NOT_FOUND)
                        .build();
       } else {
-        return Response.status(Response.Status.NOT_FOUND)
+        return Response.ok(CommuneListDto.fromEntityList(communes))
                        .build();
       }
     }
@@ -225,6 +257,13 @@ public class RestService {
     }
   }
 
+  /**
+   * Get the Commune with the given INSEE code.
+   * @param req HTTP Request (for determining base path of Rest Service).
+   * @param rawcode the INSEE code of the Commune.
+   * @param rawdate the date at which the returned data is valid.
+   * @return the Commune with the given INSEE code.
+   */
   @GET
   @Path(REST_PATH_COMMUNE + "{code}")
   @Produces(MediaType.APPLICATION_JSON)
@@ -236,11 +275,11 @@ public class RestService {
       String code = checkCode(rawcode);
       Date date = checkDate(rawdate);
       Commune commune = communeService.getCommuneByCode(code, date);
-      if (commune != null) {
-        return Response.ok(HateoasCommuneDto.fromEntity(commune, getRestBasePath(req, REST_PATH_COMMUNE)))
+      if (commune == null) {
+        return Response.status(Response.Status.NOT_FOUND)
                        .build();
       } else {
-        return Response.status(Response.Status.NOT_FOUND)
+        return Response.ok(HateoasCommuneDto.fromEntity(commune, getRestBasePath(req, REST_PATH_COMMUNE)))
                        .build();
       }
     }
@@ -252,21 +291,32 @@ public class RestService {
     }
   }
 
+  /**
+   * Get all Delegation.
+   * @param req HTTP Request (for determining base path of Rest Service).
+   * @return list of all Delegation.
+   */
   @GET
   @Path(REST_PATH_DELEGATION)
   @Produces(MediaType.APPLICATION_JSON)
   public Response getAllDelegation(@Context final HttpServletRequest req) {
   log.info("Executing operation getAllDelegation");
     List<Delegation> delegations = delegationService.getAllDelegation();
-    if (delegations.size() > 0) {
-      return Response.ok(DelegationListDto.fromEntityList(delegations))
+    if (delegations.isEmpty()) {
+      return Response.status(Response.Status.NOT_FOUND)
                      .build();
     } else {
-      return Response.status(Response.Status.NOT_FOUND)
+      return Response.ok(DelegationListDto.fromEntityList(delegations))
                      .build();
     }
   }
 
+  /**
+   * Get the Delegation with the given code.
+   * @param req HTTP Request (for determining base path of Rest Service).
+   * @param rawcode the code of the Delegation.
+   * @return the Delegation with the given code.
+   */
   @GET
   @Path(REST_PATH_DELEGATION + "{code}")
   @Produces(MediaType.APPLICATION_JSON)
@@ -276,11 +326,11 @@ public class RestService {
     try {
       String code = checkCode(rawcode);
       Delegation delegation = delegationService.getDelegationById(code);
-      if (delegation != null) {
-        return Response.ok(HateoasDelegationDto.fromEntity(delegation, getRestBasePath(req, REST_PATH_DELEGATION)))
+      if (delegation == null) {
+        return Response.status(Response.Status.NOT_FOUND)
                        .build();
       } else {
-        return Response.status(Response.Status.NOT_FOUND)
+        return Response.ok(HateoasDelegationDto.fromEntity(delegation, getRestBasePath(req, REST_PATH_DELEGATION)))
                        .build();
       }
     }
@@ -292,21 +342,32 @@ public class RestService {
     }
   }
 
+  /**
+   * Get all CirconscriptionBassin.
+   * @param req HTTP Request (for determining base path of Rest Service).
+   * @return list of all CirconscriptionBassin.
+   */
   @GET
   @Path(REST_PATH_CIRCONSCRIPTION_BASSIN)
   @Produces(MediaType.APPLICATION_JSON)
   public Response getAllBassin(@Context final HttpServletRequest req) {
   log.info("Executing operation getAllBassin");
     List<CirconscriptionBassin> bassins = bassinService.getAllBassin();
-    if (bassins.size() > 0) {
-      return Response.ok(CirconscriptionBassinListDto.fromEntityList(bassins))
+    if (bassins.isEmpty()) {
+      return Response.status(Response.Status.NOT_FOUND)
                      .build();
     } else {
-      return Response.status(Response.Status.NOT_FOUND)
+      return Response.ok(CirconscriptionBassinListDto.fromEntityList(bassins))
                      .build();
     }
   }
 
+  /**
+   * Get the CirconscriptionBassin with the given code.
+   * @param req HTTP Request (for determining base path of Rest Service).
+   * @param rawcode the code of the CirconscriptionBassin.
+   * @return the CirconscriptionBassin with the given code.
+   */
   @GET
   @Path(REST_PATH_CIRCONSCRIPTION_BASSIN + "{code}")
   @Produces(MediaType.APPLICATION_JSON)
@@ -316,11 +377,11 @@ public class RestService {
     try {
       String code = checkCode(rawcode);
       CirconscriptionBassin bassin = bassinService.getBassinByCode(code);
-      if (bassin != null) {
-        return Response.ok(HateoasCirconscriptionBassinDto.fromEntity(bassin, getRestBasePath(req, REST_PATH_CIRCONSCRIPTION_BASSIN)))
+      if (bassin == null) {
+        return Response.status(Response.Status.NOT_FOUND)
                        .build();
       } else {
-        return Response.status(Response.Status.NOT_FOUND)
+        return Response.ok(HateoasCirconscriptionBassinDto.fromEntity(bassin, getRestBasePath(req, REST_PATH_CIRCONSCRIPTION_BASSIN)))
                        .build();
       }
     }
@@ -332,6 +393,12 @@ public class RestService {
     }
   }
 
+  /**
+   * Check and decode the given String.
+   * @param rawcode the String to check and decode.
+   * @return the decoded String.
+   * @throws RestRequestException if the String could not be decoded.
+   */
   private static final String checkCode(final String rawcode)
     throws RestRequestException {
     String code = null;
@@ -343,6 +410,12 @@ public class RestService {
     return code;
   }
 
+  /**
+   * Check and parse the given date String.
+   * @param rawdate the date String to check and parse.
+   * @return the parsed date String.
+   * @throws RestRequestException if the date String could not be parsed.
+   */
   private static final Date checkDate(final String rawdate)
     throws RestRequestException {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -360,24 +433,12 @@ public class RestService {
     return date;
   }
 
-/*
-  private static final String getPathFromAnnotation() {
-    try {
-      String caller = Thread.currentThread().getStackTrace()[2].getMethodName();
-      Method m = RestService.class.getMethod(caller);
-      Path a = m.getAnnotation(Path.class);
-      if (a == null) {
-        log.error("Called from a method without the @Path annotation.");
-        return null;
-      }
-      return a.value();
-    }
-    catch (NoSuchMethodException e) {
-      log.error("This should never happen (private function so caller method should exist in class)");
-      return null;
-    }
-  }
-*/
+  /**
+   * Extracts the REST Services base path from the given HTTP Request and the Service Path
+   * @param req HTTP Request (for determining base path of Rest Service).
+   * @param servicePath the path of REST query used by the request.
+   * @return the REST Services base path.
+   */
   private static final String getRestBasePath(final HttpServletRequest req, final String servicePath) {
     String url = req.getRequestURL().toString();
     int index = url.indexOf(servicePath);

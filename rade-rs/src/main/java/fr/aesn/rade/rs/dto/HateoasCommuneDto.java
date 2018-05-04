@@ -37,6 +37,12 @@ public class HateoasCommuneDto
   extends CommuneDto {
   private List<Link> links;
 
+  /**
+   * Static factory for building DTO from it's associated Entity.
+   * @param commune Entity used to build DTO.
+   * @param basePath base URI for REST Service, used to build HATEOAS links.
+   * @return new DTO built from it's associated Entity.
+   */
   public static HateoasCommuneDto fromEntity(Commune commune, String basePath) {
     HateoasCommuneDto dto = new HateoasCommuneDto();
     dto.setAllfromEntity(commune);

@@ -38,6 +38,11 @@ public class CommuneListDto {
   @XmlElement(name = "communes")
   private List<CommuneDto> communes;
 
+  /**
+   * Static factory for building DTO List from it's associated Entity List.
+   * @param communes Entity List used to build DTO.
+   * @return new DTO List built from it's associated Entity List.
+   */
   public static CommuneListDto fromEntityList(List<Commune> communes) {
     List<CommuneDto> dtos = new ArrayList<>(communes.size());
     for (Commune commune : communes) {

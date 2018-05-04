@@ -35,6 +35,10 @@ public class CirconscriptionBassinDto {
   private String libelleCourt;
   private String libelleLong;
 
+  /**
+   * Set all the variables in this DTO with values from the given Entity.
+   * @param bassin Entity used to initialize DTO.
+   */
   protected void setAllfromEntity(CirconscriptionBassin bassin) {
     if (bassin == null) {
       return;
@@ -44,6 +48,11 @@ public class CirconscriptionBassinDto {
     this.setLibelleLong(bassin.getLibelleLong());
   }
 
+  /**
+   * Static factory for building DTO from it's associated Entity.
+   * @param bassin Entity used to build DTO.
+   * @return new DTO built from it's associated Entity.
+   */
   public static CirconscriptionBassinDto fromEntity(CirconscriptionBassin bassin) {
     CirconscriptionBassinDto dto = new CirconscriptionBassinDto();
     dto.setAllfromEntity(bassin);
