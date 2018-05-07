@@ -52,7 +52,7 @@
     <jdbc:script location="classpath:db/sql/insert-CirconscriptionBassin.sql" />
     <jdbc:script location="classpath:db/sql/insert-Region.sql" />
     <jdbc:script location="classpath:db/sql/insert-Departement.sql" />
-    <jdbc:script location="classpath:db/sql/insert-Commune.sql" />
+    <!--jdbc:script location="classpath:db/sql/insert-Commune.sql" /-->
     <jdbc:script location="classpath:db/sql/insert-Delegation.sql" />
   </jdbc:embedded-database>
 <!--
@@ -173,7 +173,6 @@
   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
   <!-- Spring Security -->
   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-
 <!--
   <sec:debug/>
   <sec:http pattern="/css/**" security="none"/>
@@ -187,7 +186,6 @@
     <sec:csrf/>
   </sec:http>
 -->
-
   <sec:authentication-manager>
     <sec:authentication-provider>
       <sec:user-service>

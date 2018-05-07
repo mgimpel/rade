@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--/*
+<%/*
  *  This file is part of the Rade project (https://github.com/mgimpel/rade).
  *  Copyright (C) 2018 Marc Gimpel
  *
@@ -15,23 +14,9 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
- */-->
-<!-- $Id$ --><beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="
-         http://www.springframework.org/schema/beans
-         http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
-
-  <bean id="viewResolver"
-        class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-    <property name="prefix">
-      <value>/WEB-INF/views/</value>
-    </property>
-    <property name="suffix">
-      <value>.jsp</value>
-    </property>
-  </bean>
-
-  <bean name="/welcome.htm" 
-        class="fr.aesn.rade.controller.RadeController" />
-</beans>
+ */%>
+<%/* $Id$ */%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<jsp:include page="aesn_header.jsp" />
+<jsp:include page="aesn_footer.jsp" />

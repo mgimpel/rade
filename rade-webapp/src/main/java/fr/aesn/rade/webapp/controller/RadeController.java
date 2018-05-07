@@ -15,7 +15,7 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 /* $Id$ */
-package fr.aesn.rade.controller;
+package fr.aesn.rade.webapp.controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -34,7 +34,7 @@ import org.springframework.web.servlet.mvc.AbstractController;
 import fr.aesn.rade.service.CommuneService;
 
 /**
- * 
+ * Spring MVC Controller fro Rade.
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
 @Controller
@@ -51,8 +51,7 @@ public class RadeController extends AbstractController {
                                                HttpServletResponse response)
     throws Exception
   {
-    ModelAndView model = new ModelAndView("HelloWorldPage");
-    model.addObject("msg", "hello world");
+    ModelAndView model = new ModelAndView("DefaultPage");
     return model;
   }
 
@@ -60,7 +59,7 @@ public class RadeController extends AbstractController {
    * Login mapping.
    * @return ModelAndView for the Application Root.
    */
-  @RequestMapping(value = "/login")
+  @RequestMapping("/login")
   public String login() {
     log.debug("Requesting /login");
     return "login";
@@ -72,7 +71,7 @@ public class RadeController extends AbstractController {
    * @param response HTTP Servlet Response.
    * @return the View (the login page).
    */
-  @RequestMapping(value = "/logout")
+  @RequestMapping("/logout")
   public String logoutPage(final HttpServletRequest request,
                            final HttpServletResponse response) {
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();

@@ -39,10 +39,14 @@
 </table>
 </form>
 <ul>
+<sec:authorize access="isAuthenticated()">
+<li>auth: true
 <li>user: <sec:authentication property="principal.username" />
-<li>auth: <sec:authorize access="isAuthenticated()">true</sec:authorize>
-<li>!auth: <sec:authorize access="!isAuthenticated()">true</sec:authorize>
-<li>user: <sec:authorize access="hasRole('ROLE_USER')">true</sec:authorize>
-<li>admin: <sec:authorize access="hasRole('ROLE_ADMIN')">true</sec:authorize>
+<li>user role: <sec:authorize access="hasRole('ROLE_USER')">true</sec:authorize>
+<li>admin role: <sec:authorize access="hasRole('ROLE_ADMIN')">true</sec:authorize>
+</sec:authorize>
+<sec:authorize access="!isAuthenticated()">
+<li>auth: false
+</sec:authorize>
 </ul>
 <jsp:include page="aesn_footer.jsp" />

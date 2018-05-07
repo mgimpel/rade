@@ -97,7 +97,7 @@
 		</td>
 	</tr>
 	<tr>
-		<td id="nom_log"><sec:authorize access="isAuthenticated()"><sec:authentication property="principal.username" /><br><a href='<%=request.getContextPath()%>/app/logout'>Se déconnecter</a></sec:authorize>
+		<td id="nom_log"><sec:authorize access="isAuthenticated()"><sec:authentication property="principal.username" /><br><a href='<%=request.getContextPath()%>/logout'>Se déconnecter</a></sec:authorize>
 						 <sec:authorize access="!isAuthenticated()"><br><a href='<%=request.getContextPath()%>/login'>Se connecter</a></sec:authorize></td>
 		<td id="titre_page">
 			<div id="picto">

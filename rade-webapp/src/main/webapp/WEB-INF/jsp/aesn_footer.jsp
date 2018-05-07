@@ -17,7 +17,7 @@
  */%>
 <%/* $Id$ */%>
 <%@ page import="java.text.*,java.util.*" %>
-<%@ page import="fr.aesn.rade.config.Version" %>
+<%@ page import="fr.aesn.rade.webapp.config.Version" %>
 		</td>
 	</tr>
 	<tr id="footer">

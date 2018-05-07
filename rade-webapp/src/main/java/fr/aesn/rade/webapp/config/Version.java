@@ -15,7 +15,7 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 /* $Id$ */
-package fr.aesn.rade.config;
+package fr.aesn.rade.webapp.config;
 
 import java.io.IOException;
 import java.io.InputStream;
