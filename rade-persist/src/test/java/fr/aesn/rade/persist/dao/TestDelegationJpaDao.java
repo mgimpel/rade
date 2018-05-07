@@ -63,7 +63,7 @@ public class TestDelegationJpaDao extends AbstractTestJpaDao {
   public void testGettingEntityList() {
     List<Delegation> list = jpaDao.findAll();
     assertNotNull("JpaDao returned a null list", list);
-    assertEquals(7, list.size());
+    assertEquals(10, list.size());
     for (Delegation obj : list) {
       assertNotNull("Hibernate returned a List but an Entity is null",
                     obj);
@@ -75,7 +75,7 @@ public class TestDelegationJpaDao extends AbstractTestJpaDao {
    */
   @Test
   public void testExistsEntity() {
-    assertTrue(jpaDao.existsById("0PPC_"));
+    assertTrue(jpaDao.existsById("PPC"));
     assertFalse(jpaDao.existsById("abcd"));
     assertFalse(jpaDao.existsById("1234"));
   }
@@ -86,27 +86,27 @@ public class TestDelegationJpaDao extends AbstractTestJpaDao {
    */
   @Test
   public void testGettingEntity() throws ParseException {
-    Optional<Delegation> result = jpaDao.findById("0PPC_");
+    Optional<Delegation> result = jpaDao.findById("PPC");
     assertTrue("Hibernate didn't return an Entity", result.isPresent());
     Delegation delegation = result.get();
     assertEquals("Hibernate returned a Delegation, but the ID doesn't match",
-                 "0PPC_", delegation.getCode());
+                 "PPC", delegation.getCode());
     assertEquals("Hibernate returned a Delegation, but the Libelle doesn't match",
-                 "DPPC", delegation.getLibelle());
+                 "DIRECTION DE PARIS PETITE COURONNE", delegation.getLibelle());
     assertEquals("Hibernate returned a Delegation, but the Acheminement doesn't match",
-                 "xxx", delegation.getAcheminement());
+                 "NANTERRE CEDEX", delegation.getAcheminement());
     assertEquals("Hibernate returned a Delegation, but the Addresse1 doesn't match",
-                 "xxx", delegation.getAdresse1());
+                 "AGENCE DE L'EAU SEINE NORMANDIE", delegation.getAdresse1());
     assertEquals("Hibernate returned a Delegation, but the Addresse2 doesn't match",
-                 "xxx", delegation.getAdresse2());
+                 "DIRECTION PARIS PETITE COURONNE", delegation.getAdresse2());
     assertEquals("Hibernate returned a Delegation, but the Addresse3 doesn't match",
-                 "xxx", delegation.getAdresse3());
+                 "51 RUE SALVADOR ALLENDE", delegation.getAdresse3());
     assertEquals("Hibernate returned a Delegation, but the Addresse4 doesn't match",
-                 "xxx", delegation.getAdresse4());
+                 "", delegation.getAdresse4());
     assertEquals("Hibernate returned a Delegation, but the Addresse5 doesn't match",
-                 "xxx", delegation.getAdresse5());
+                 "", delegation.getAdresse5());
     assertEquals("Hibernate returned a Delegation, but the Code Postal doesn't match",
-                 "xxx", delegation.getCodePostal());
+                 "92027", delegation.getCodePostal());
     assertEquals("Hibernate returned a Delegation, but the E-mail doesn't match",
                  "xxx", delegation.getEmail());
     assertEquals("Hibernate returned a Delegation, but the Fax doesn't match",
@@ -126,7 +126,7 @@ public class TestDelegationJpaDao extends AbstractTestJpaDao {
   @Test
   public void testGettingEntitySearch() {
     Delegation criteria = new Delegation();
-    criteria.setCode("0PPC_");
+    criteria.setCode("PPC");
     List<Delegation> list = jpaDao.findAll(Example.of(criteria));
     assertEquals("", 1, list.size());
     Delegation resultat = list.get(0);

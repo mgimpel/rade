@@ -74,7 +74,7 @@ public class TestDelegationService
   public void testGettingDelegationList() {
     List<Delegation> list = delegationService.getAllDelegation();
     assertNotNull("delegationService returned a null list", list);
-    assertEquals(7, list.size());
+    assertEquals(10, list.size());
     for (Delegation delegation : list) {
       assertNotNull("Hibernate returned a List but an Entity is null",
                     delegation);
@@ -87,27 +87,27 @@ public class TestDelegationService
    */
   @Test
   public void testGettingDelegation() throws ParseException {
-    Delegation delegation = delegationService.getDelegationById("0PPC_");
+    Delegation delegation = delegationService.getDelegationById("PPC");
     assertNotNull("Hibernate didn't return a Delegation", delegation);
     // Test IdentiteTiers fields
     assertEquals("Hibernate returned a Delegation, but the ID doesn't match",
-                 "0PPC_", delegation.getCode());
+                 "PPC", delegation.getCode());
     assertEquals("Hibernate returned a Delegation, but the Libelle doesn't match",
-                 "DPPC", delegation.getLibelle());
+                 "DIRECTION DE PARIS PETITE COURONNE", delegation.getLibelle());
     assertEquals("Hibernate returned a Delegation, but the Acheminement doesn't match",
-                 "xxx", delegation.getAcheminement());
+                 "NANTERRE CEDEX", delegation.getAcheminement());
     assertEquals("Hibernate returned a Delegation, but the Addresse1 doesn't match",
-                 "xxx", delegation.getAdresse1());
+                 "AGENCE DE L'EAU SEINE NORMANDIE", delegation.getAdresse1());
     assertEquals("Hibernate returned a Delegation, but the Addresse2 doesn't match",
-                 "xxx", delegation.getAdresse2());
+                 "DIRECTION PARIS PETITE COURONNE", delegation.getAdresse2());
     assertEquals("Hibernate returned a Delegation, but the Addresse3 doesn't match",
-                 "xxx", delegation.getAdresse3());
+                 "51 RUE SALVADOR ALLENDE", delegation.getAdresse3());
     assertEquals("Hibernate returned a Delegation, but the Addresse4 doesn't match",
-                 "xxx", delegation.getAdresse4());
+                 "", delegation.getAdresse4());
     assertEquals("Hibernate returned a Delegation, but the Addresse5 doesn't match",
-                 "xxx", delegation.getAdresse5());
+                 "", delegation.getAdresse5());
     assertEquals("Hibernate returned a Delegation, but the Code Postal doesn't match",
-                 "xxx", delegation.getCodePostal());
+                 "92027", delegation.getCodePostal());
     assertEquals("Hibernate returned a Delegation, but the E-mail doesn't match",
                  "xxx", delegation.getEmail());
     assertEquals("Hibernate returned a Delegation, but the Fax doesn't match",
