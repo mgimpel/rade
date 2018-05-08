@@ -44,6 +44,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
       http.csrf().disable()
           .authorizeRequests()
               .antMatchers("/services/**").permitAll()
+              .antMatchers("/actuator/health", "/actuator/info").permitAll()
               .antMatchers("/css/**", "/img/**", "/resources/**").permitAll()
               .antMatchers("/admin/**").hasAnyRole("ADMIN")
               .antMatchers("/user/**").hasAnyRole("USER")
@@ -63,10 +64,11 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     // create two users, admin and user
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         auth.inMemoryAuthentication()
-                .passwordEncoder(new BCryptPasswordEncoder())
-                .withUser("user").password("123456").roles("USER")
+                .passwordEncoder(encoder)
+                .withUser("user").password(encoder.encode("123456")).roles("USER")
                 .and()
-                .withUser("admin").password("123456").roles("ADMIN");
+                .withUser("admin").password(encoder.encode("123456")).roles("ADMIN");
     }
 }
