@@ -19,11 +19,11 @@ package fr.aesn.rade.webapp.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 /**
  * Spring Security configuration
@@ -31,7 +31,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
  */
 @Configuration
 @EnableWebSecurity
-public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
+public class SpringSecurityConfig
+  extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    private AuthenticationProvider authenticationProvider;
 
 //    @Autowired
 //    private AccessDeniedHandler accessDeniedHandler;
@@ -46,8 +50,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
               .antMatchers("/services/**").permitAll()
               .antMatchers("/actuator/health", "/actuator/info").permitAll()
               .antMatchers("/css/**", "/img/**", "/resources/**").permitAll()
-              .antMatchers("/admin/**").hasAnyRole("ADMIN")
-              .antMatchers("/user/**").hasAnyRole("USER")
+              .antMatchers("/admin/**").hasAnyRole("ROLE_ADMIN")
+              .antMatchers("/user/**").hasAnyRole("ROLE_USER")
               .anyRequest().authenticated()
               .and()
           .formLogin()
@@ -64,11 +68,6 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     // create two users, admin and user
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        auth.inMemoryAuthentication()
-                .passwordEncoder(encoder)
-                .withUser("user").password(encoder.encode("123456")).roles("USER")
-                .and()
-                .withUser("admin").password(encoder.encode("123456")).roles("ADMIN");
+        auth.authenticationProvider(authenticationProvider);
     }
 }
