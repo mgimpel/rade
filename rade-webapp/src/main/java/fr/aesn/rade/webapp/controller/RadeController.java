@@ -34,7 +34,7 @@ import org.springframework.web.servlet.mvc.AbstractController;
 import fr.aesn.rade.service.CommuneService;
 
 /**
- * Spring MVC Controller fro Rade.
+ * Spring MVC Controller for Rade.
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
 @Controller

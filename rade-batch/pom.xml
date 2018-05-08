@@ -100,6 +100,11 @@
       <artifactId>jaxb-api</artifactId>
       <scope>runtime</scope>
     </dependency>
+    <!-- Logging -->
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+    </dependency>
     <!-- Database -->
     <dependency>
       <groupId>org.postgresql</groupId>
