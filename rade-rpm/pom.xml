@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--/*
+      *  This file is part of the Rade project (https://github.com/mgimpel/rade).
+ *  Copyright (C) 2018 Marc Gimpel
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */-->
+<!-- $Id$ -->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>fr.aesn.rade</groupId>
+    <artifactId>rade</artifactId>
+    <version>0.1-SNAPSHOT</version>
+  </parent>
+  <artifactId>rade-rpm</artifactId>
+  <packaging>rpm</packaging>
+
+  <name>Rade (Referentiel Administrative)</name>
+  <description>
+Rade (le Referentiel Administrative) met a disposition dans le SI le
+referentiel INSEE des communes, départements et regions en mettant en avant
+la fonctionnalité d'hisorisation des changements.
+
+L'application fourni ces données de plusieurs facons dont une interface web,
+des services REST et des service SOAP (dont le service pour Aramis).
+  </description>
+
+  <dependencies>
+    <dependency>
+      <groupId>fr.aesn.rade</groupId>
+      <artifactId>rade-webapp</artifactId>
+      <version>${project.version}</version>
+      <type>war</type>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <finalName>rade-rpm</finalName>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>rpm-maven-plugin</artifactId>
+        <version>2.2.0</version>
+        <extensions>true</extensions>
+        <executions>
+          <execution>
+            <id>generate-rpm</id>
+            <goals>
+              <goal>rpm</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <name>rade</name>
+          <license>GPLv3</license>
+          <distribution></distribution>
+          <group>Application/Internet</group>
+          <icon></icon>
+          <packager>AESN</packager>
+          <prefix>/usr/local</prefix>
+          <defineStatements>
+            <defineStatement>_unpackaged_files_terminate_build 0</defineStatement>
+            <defineStatement>rade_home /etc/rade</defineStatement>
+            <defineStatement>rade_group rade</defineStatement>
+            <defineStatement>rade_user rade</defineStatement>
+          </defineStatements>
+          <mappings>
+            <mapping>
+              <directory>/usr/lib/rade</directory>
+              <filemode>755</filemode>
+              <username>rade</username>
+              <groupname>rade</groupname>
+            </mapping>
+            <mapping>
+              <directory>/etc/rade</directory>
+              <filemode>755</filemode>
+              <username>rade</username>
+              <groupname>rade</groupname>
+            </mapping>
+            <mapping>
+              <directory>/var/log/rade</directory>
+              <filemode>755</filemode>
+              <username>rade</username>
+              <groupname>rade</groupname>
+            </mapping>
+            <mapping>
+              <directory>%{_unitdir}</directory>
+              <filemode>644</filemode>
+              <username>root</username>
+              <groupname>root</groupname>
+              <configuration>noreplace</configuration>
+              <directoryIncluded>false</directoryIncluded>
+              <sources>
+                <source>
+                  <location>src/main/resources/systemd/rade.service</location>
+                </source>
+              </sources>
+            </mapping>
+            <mapping>
+              <directory>/usr/lib/rade</directory>
+              <filemode>644</filemode>
+              <username>rade</username>
+              <groupname>rade</groupname>
+              <directoryIncluded>false</directoryIncluded>
+              <dependency>
+                <includes>
+                  <include>fr.aesn.rade:rade-webapp</include>
+                </includes>
+                <stripVersion>true</stripVersion>
+              </dependency>
+            </mapping>
+            <mapping>
+              <directory>/etc/rade</directory>
+              <filemode>644</filemode>
+              <username>rade</username>
+              <groupname>rade</groupname>
+              <configuration>noreplace</configuration>
+              <directoryIncluded>false</directoryIncluded>
+              <sources>
+                <source>
+                  <location>src/main/resources/etc</location>
+                </source>
+              </sources>
+            </mapping>
+          </mappings>
+          <requires>
+            <require>java-1.8.0</require>
+          </requires>
+          <buildRequires>
+            <buildRequire>systemd</buildRequire>
+          </buildRequires>
+          <preinstallScriptlet>
+            <scriptFile>src/main/scripts/preinstall.sh</scriptFile>
+            <fileEncoding>utf-8</fileEncoding>
+          </preinstallScriptlet>
+          <postinstallScriptlet>
+            <script>%systemd_post rade.service</script>
+          </postinstallScriptlet>
+          <preremoveScriptlet>
+            <script>%systemd_preun rade.service</script>
+          </preremoveScriptlet>
+          <postremoveScriptlet>
+            <script>%systemd_postun_with_restart rade.service</script>
+          </postremoveScriptlet>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>

@@ -47,16 +47,15 @@
     <timestamp>${maven.build.timestamp}</timestamp>
     <!-- Major dependency versions to ensure coherence among subprojects -->
     <java.version>1.8</java.version>
-    <spring.version>5.0.5.RELEASE</spring.version>
+    <spring.version>5.0.6.RELEASE</spring.version>
     <spring-boot.version>2.0.1.RELEASE</spring-boot.version>
-    <spring-data.version>2.0.6.RELEASE</spring-data.version>
-    <spring-security.version>5.0.4.RELEASE</spring-security.version>
+    <spring-data.version>2.0.7.RELEASE</spring-data.version>
+    <spring-security.version>5.0.5.RELEASE</spring-security.version>
     <spring-batch.version>4.0.1.RELEASE</spring-batch.version>
     <hibernate.version>5.2.16.Final</hibernate.version>
     <cxf.version>3.2.4</cxf.version>
     <cglib.version>3.2.6</cglib.version>
     <slf4j.version>1.7.25</slf4j.version>
-    <log4j.version>2.11.0</log4j.version>
     <!-- Other properties -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
@@ -473,7 +472,7 @@
   </issueManagement>
   <ciManagement>
     <system>Jenkins</system>
-    <url>https://jenkins/jenkins/job/rade/</url>
+    <url>https://jenkins.aesn.fr/jenkins/job/Rade_(master)/</url>
   </ciManagement>
   <scm>
     <connection>scm:git:git://github.com/mgimpel/rade/</connection>

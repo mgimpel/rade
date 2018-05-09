@@ -34,40 +34,55 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 public class SpringSecurityConfig
   extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private AuthenticationProvider authenticationProvider;
+  /**
+   * Authentication Provider defined in Application Context configuration file.
+   */
+  @Autowired
+  private AuthenticationProvider authenticationProvider;
 
-//    @Autowired
-//    private AccessDeniedHandler accessDeniedHandler;
+//  @Autowired
+//  private AccessDeniedHandler accessDeniedHandler;
 
-    // roles admin allow to access /admin/**
-    // roles user allow to access /user/**
-    // custom 403 access denied handler
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-      http.csrf().disable()
-          .authorizeRequests()
-              .antMatchers("/services/**").permitAll()
-              .antMatchers("/actuator/health", "/actuator/info").permitAll()
-              .antMatchers("/css/**", "/img/**", "/resources/**").permitAll()
-              .antMatchers("/admin/**").hasAnyRole("ROLE_ADMIN")
-              .antMatchers("/user/**").hasAnyRole("ROLE_USER")
-              .anyRequest().authenticated()
-              .and()
-          .formLogin()
-              .loginPage("/login")
-              .defaultSuccessUrl("/")
-              .permitAll()
-              .and()
-          .logout()
-              .permitAll();
-//              .and()
-//          .exceptionHandling().accessDeniedHandler(accessDeniedHandler);
-    }
+  /**
+   * Configure Security Access
+   * @param http Spring HttpSecurity.
+   */
+  @Override
+  protected void configure(HttpSecurity http) throws Exception {
+    http.csrf().disable()
+        .authorizeRequests()
+          // SOAP & REST WebServices (CXF) : no restrictions
+          .antMatchers("/services/**").permitAll()
+          // Actuators (application information pages)
+          // - health & info Actuators : no restrictions
+          // - all other Actuators (logfile and metrics) : authenticated user
+          .antMatchers("/actuator/health", "/actuator/info").permitAll()
+          // Static resources (CSS, images, ...) : no restrictions
+          .antMatchers("/css/**", "/img/**", "/resources/**").permitAll()
+          // Admin files : require administrator role
+          .antMatchers("/admin/**").hasAnyRole("ROLE_ADMIN")
+          // User files : require user role
+          .antMatchers("/user/**").hasAnyRole("ROLE_USER")
+          // All other files : authenticated user
+          .anyRequest().authenticated()
+          .and()
+        .formLogin()
+          .loginPage("/login")
+          .defaultSuccessUrl("/")
+          .permitAll()
+          .and()
+        .logout()
+          .permitAll();
+//          .and()
+//        .exceptionHandling().accessDeniedHandler(accessDeniedHandler);
+  }
 
-    // create two users, admin and user
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.authenticationProvider(authenticationProvider);
-    }
+  /**
+   * Set the Authentication Provider for the Bean in the Application Context.
+   * @param auth Spring AuthenticationManagerBuilder.
+   */
+  @Autowired
+  public void configureGlobal(AuthenticationManagerBuilder auth) {
+    auth.authenticationProvider(authenticationProvider);
+  }
 }
