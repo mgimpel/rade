@@ -30,7 +30,8 @@ import org.springframework.context.annotation.ImportResource;
  */
 @SpringBootApplication
 @ImportResource("classpath:application-context.xml")
-@ComponentScan("fr.aesn.rade.webapp.config")
+@ComponentScan({"fr.aesn.rade.webapp.config",
+                "fr.aesn.rade.webapp.controller"})
 public class SpringBootWebApplication
   extends SpringBootServletInitializer {
   @Override

@@ -203,12 +203,6 @@ table.result_rech tr td {
 	color: #2C6C98;
 	font-size: 24px;
 }
-#headerOnema h1 {
-	background: url(../_img/bandeauNAIADES.jpg) no-repeat 0 0;
-	color: #0365AB;
-        text-align: right;
-}
-
 
 #f_acces_rap .btn_ok {
 	background-color: #FFFFFF;
@@ -236,14 +230,9 @@ table.result_rech tr td {
 
 }
 #nom_appli {
-	background: #E0EDF6 url(../_img/bg_top_6.gif) repeat-y 0 0;
+	background: #E0EDF6 url(../img/bg_top_6.gif) repeat-y 0 0;
 	padding: 0;
 	height: 40px;
-}
-
-#nom_appliOnema {
-	background: url(../_img/bandeauNAIADES.jpg) no-repeat 0 0;
-        text-transform: uppercase;
 }
 
 #chemin_nav .en_cours {
@@ -257,33 +246,13 @@ table.result_rech tr td {
 }
 #nav li {
 	border-bottom: 1px solid #0365AB;
-	background: url(../_img/bg_nav_6.gif) no-repeat 0px 0px;
+	background: url(../img/bg_nav_6.gif) no-repeat 0px 0px;
 }
 #nav li li {
 	border: 1px solid #0365AB;
 	border-top: none;
 }
 #nav li ul li:hover, #nav li ul li.sfhover {
-	background-color: #E0EDF6;
-}
-#navOnema {
-	background-color: #0365AB;
-        width: 736px;
-        height: 22px;
-        float: right;
-}
-#navOnema a:hover {
-	color: #0365AB;
-}
-#navOnema li {
-	border-bottom: 1px solid #0365AB;
-	background: url(../_img/bg_nav_6.gif) no-repeat 0px 0px;
-}
-#navOnema li li {
-	border: 1px solid #0365AB;
-	border-top: none;
-}
-#navOnema li ul li:hover, #nav li ul li.sfhover {
 	background-color: #E0EDF6;
 }
 

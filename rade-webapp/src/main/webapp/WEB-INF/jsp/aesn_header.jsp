@@ -17,6 +17,7 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */%>
 <%/* $Id$ */%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -25,8 +26,8 @@
 	<title>RADE AESN - ${titre}</title>
 	<link rel="icon" href="<%=request.getContextPath()%>/img/favicon.ico" type="image/x-icon">
 	<link rel="shortcut icon" href="<%=request.getContextPath()%>/img/favicon.ico" type="image/x-icon">
-	<link rel="stylesheet" href="<%=request.getContextPath()%>/css/aesn-tiers-styles.css" type="text/css">
-	<link rel="stylesheet" href="<%=request.getContextPath()%>/css/aesn-tiers-coul_06.css" type="text/css">
+	<link rel="stylesheet" href="<%=request.getContextPath()%>/css/aesn-styles.css" type="text/css">
+	<link rel="stylesheet" href="<%=request.getContextPath()%>/css/aesn-coul_06.css" type="text/css">
 	<script type="text/javascript">
 	function accederRapidement() {
 		var select = document.getElementById('sel_acces_rapide');
@@ -39,23 +40,9 @@
 			}
 		}
 	}
-	function goMenuGauche(act, menu)
-	{
-		document.myForm.BAF_ACTION_DEM.value = act;
-		if(isNaN(act) && act.indexOf('HAB') != -1)
-			document.myForm.action = "/refTiers/HAB_routeur";
-		document.myForm.submit();
-		SUBMITTED = true;
-	}
-	function goMenuHaut(act, menu)
-	{
-		document.myForm.HAB_BAF_ACTION_DEM.value = act;
-		document.myForm.BAF_ACTION_DEM.value = act;
-		document.myForm.submit();
-		SUBMITTED = true;
-	}
 	</script>
 </head>
+<body>
 <table id="contenant">
 	<tbody><tr>
 		<td width="171"><a href="#"><img src="<%=request.getContextPath()%>/img/logo.png" alt="Eau Seine Normandie" height="90" width="171"></a></td>
@@ -66,17 +53,9 @@
 					<form id="f_acces_rap" action="#" method="post">
 						<select name="sel_acces_rapide" id="sel_acces_rapide">
 							<option value="" selected>Accès rapide</option>
-							<option value="http://nanselx2:8080/Redevances/RE04E40_Emission_recherche_certificat_titreAction.do?methode=init">Recherche certificats / titres</option>
-							<option value="http://nanselx4:8280/ComptaProgramme/rechCompteProgrammeAction02.do?actions=affRechercherComptesProgrammes">C2P Consultation</option>
-							<option value="http://nanselx4:8880/Dequado/Dq01e23rechercheAnalysesAction.do?actions=init">Recherche d'analyses</option>
-							<option value="http://nanselx4:8280/ComptaProgramme/rechCompteAction07.do?actions=affEcranRecherche">C2P Plan Comptable</option>
-							<option value="http://gs58slli113:80/HabilitationsExtranet/menu.do?actions=Recherche_agent">Recherche d'un extranaute</option>
-							<option value="http://nanselx2:8080/Redevances/RE02E01_Interro_RNPU_rechercheAction.do?methode=init&amp;codeMenuAppel=CU_RECHERCHE_RNPU">Recherche de RN_PU</option>
-							<option value="http://nanselx4:8080/Aides/menu.do?actions=init&amp;code=recherche_dossiers_aides">Aides recherche dossiers</option>
-							<option value="http://nanselx4:8880/Dequado/Dq02e01ReseauInfosAction.do?actions=init">Visualiser les informations d'un réseau</option>
-							<option value="http://nanselx4:8580/SitouRef/Ov02e01rechercheSitouAction.do?actions=init">Recherche d'un Sitou</option>
-							<option value="http://nanselx4:8880/Dequado/Dq01e18RechercheDepotAction.do?actions=init">Recherche de dépôts</option>
-							<option value="http://nanselx2:8080/Redevances/RE01E01_GestionSRPS_rechercheAction.do?methode=init">Gestion SRP</option>
+<c:forEach var="menuitem" items="${headermenu}">
+							<option value="${menuitem.value}">${menuitem.key}</option>
+</c:forEach>
 						</select>
 						<input class="btn_ok" onclick="javascript:accederRapidement();" value="OK" type="button">
 					</form>
@@ -85,12 +64,12 @@
 			</div>
 			<div id="chemin_nav">Vous êtes ici : &nbsp;${titre}&nbsp;</div>
 			<ul id="nav">
-				<li><a href='javascript:goMenuGauche("3",%20"rechTiers")'>Tiers</a>
+				<li><a href='<%=request.getContextPath()%>/'>Rade</a>
 					<ul>
-						<li><a href='javascript:goMenuGauche("3",%20"rechTiers")'>Recherche</a></li>
-						<li><a href='javascript:goMenuGauche("26",%20"create")'>Création</a></li>
-						<li><a href='javascript:goMenuGauche("10500",%20"createAssiste")'>Création assistée</a></li>
-						<li><a href='javascript:goMenuGauche("200",%20"validTiers")'>Validation d'un tiers juridique</a></li>
+						<li><a href='<%=request.getContextPath()%>/actuator/info'>Info Rade</a></li>
+						<li><a href='<%=request.getContextPath()%>/actuator/health'>Etat Rade</a></li>
+						<li><a href='<%=request.getContextPath()%>/actuator/logfile'>Log Rade</a></li>
+						<li><a href='<%=request.getContextPath()%>/services/'>Services</a></li>
 					</ul>
 				</li>
 			</ul>

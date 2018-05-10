@@ -17,16 +17,21 @@
 /* $Id$ */
 package fr.aesn.rade.webapp.controller;
 
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractController;
@@ -45,6 +50,22 @@ public class RadeController extends AbstractController {
   /** Service. */
   @Autowired
   private CommuneService communeService;
+  /** Menu in the web page header */
+  @Value("#{${rade.view.header.menu}}")
+  private Map<String,String> headermenu;
+  /** Menu in the web page footer */
+  @Value("#{${rade.view.footer.menu}}")
+  private Map<String,String> footermenu;
+
+  /**
+   * Set some attributes for all Views.
+   * @param model Spring MVC Model
+   */
+  @ModelAttribute
+  private void addAttributes(Model model) {
+    model.addAttribute("headermenu", headermenu);
+    model.addAttribute("footermenu", footermenu);
+  }
 
   @Override
   protected ModelAndView handleRequestInternal(HttpServletRequest request,
