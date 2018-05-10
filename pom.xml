@@ -429,11 +429,13 @@
         <artifactId>jdepend-maven-plugin</artifactId>
         <version>2.0</version>
       </plugin>
+<!-- Problems due to lambda functions in Java 8
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>javancss-maven-plugin</artifactId>
         <version>2.1</version>
       </plugin>
+-->
 <!-- Problems due to SLF4J conflict
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
