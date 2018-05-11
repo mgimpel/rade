@@ -57,11 +57,13 @@
     <jdbc:script location="classpath:db/sql/insert-Delegation.sql" />
   </jdbc:embedded-database>
 <!--
-  <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close"
-        p:driverClassName="org.postgresql.Driver"
-        p:url="jdbc:postgresql://RAD-DB-DEV.aesn.fr/RADE_DEV"
-        p:username="username"
-        p:password="********"/>
+  <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
+    <property name="driverClassName" value="${db.driver}"/>
+    <property name="url" value="${db.jdbcurl}"/>
+    <property name="username" value="${db.username}"/>
+    <property name="password" value="${db.password}"/>
+    <property name="initialSize" value="3"/>
+  </bean>
 -->
 
   <!-- Create default configuration for Hibernate -->
@@ -75,6 +77,8 @@
     <property name="jpaVendorAdapter" ref="hibernateJpaVendorAdapter"/>
     <property name="jpaProperties">
       <props>
+        <!--prop key="hibernate.dialect">org.hibernate.dialect.Oracle10gDialect</prop-->
+        <!--prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</prop-->
         <prop key="hibernate.dialect">org.hibernate.dialect.DerbyTenSevenDialect</prop>
         <prop key="hibernate.hbm2ddl.auto">update</prop>
         <prop key="hibernate.show_sql">false</prop>
@@ -84,8 +88,8 @@
   </bean>
 
   <!-- Configure the transaction manager bean -->
-  <bean id="transactionManager" 
-    class="org.springframework.orm.jpa.JpaTransactionManager">
+  <bean id="transactionManager"
+        class="org.springframework.orm.jpa.JpaTransactionManager">
     <property name="entityManagerFactory" ref="entityManagerFactory"/>
   </bean>
 

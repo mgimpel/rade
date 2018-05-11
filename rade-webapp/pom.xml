@@ -179,7 +179,7 @@
       <scope>runtime</scope>
     </dependency>
 
-    <!-- Apache Derby for default database -->
+    <!-- Database drivers -->
     <dependency>
       <groupId>org.apache.derby</groupId>
       <artifactId>derby</artifactId>
@@ -190,11 +190,16 @@
       <artifactId>postgresql</artifactId>
       <scope>runtime</scope>
     </dependency>
-      <dependency>
-        <groupId>com.oracle</groupId>
-        <artifactId>ojdbc6</artifactId>
-        <scope>runtime</scope>
-      </dependency>
+    <dependency>
+      <groupId>com.oracle</groupId>
+      <artifactId>ojdbc6</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-dbcp2</artifactId>
+      <scope>runtime</scope>
+    </dependency>
 
     <!-- Servlet -->
     <dependency>
