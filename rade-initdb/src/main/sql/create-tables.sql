@@ -145,11 +145,11 @@ CREATE TABLE ZR_BASSIN (
 /*
 COMMENT ON TABLE ZR_BASSIN IS
   'Entité [CIRCONSCRIPTION  DE BASSIN]';
-COMMENT ON COLUMN ZR_BASSIN.ZR_CAEAU IS
+COMMENT ON COLUMN ZR_BASSIN.CODE IS
   '[code INSEE bassin] de l''entité [CIRCONSCRIPTION  DE BASSIN]';
-COMMENT ON COLUMN ZR_BASSIN.ZR_LCBASSIN IS
+COMMENT ON COLUMN ZR_BASSIN.LIBELLE_COURT IS
   '[Libellé court bassin] de l''entité [CIRCONSCRIPTION  DE BASSIN]';
-COMMENT ON COLUMN ZR_BASSIN.ZR_LLBASSIN IS
+COMMENT ON COLUMN ZR_BASSIN.LIBELLE_LONG IS
   '[Libellé  long bassin] de l''entité [CIRCONSCRIPTION  DE BASSIN]';
 */
 -- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - --
@@ -173,12 +173,6 @@ CREATE TABLE ZR_ENTITEADMIN (
 /*
 COMMENT ON TABLE ZR_ENTITEADMIN IS
   'Entité [ENTITE ADMINISTRATIVE]';
-COMMENT ON COLUMN ZR_ENTITEADMIN.ZR_NVERSEADM IS
-  '';
-COMMENT ON COLUMN ZR_ENTITEADMIN.ZR_DFINVALEADM IS
-  'Renseigné manuellement lors d''une mise à jour sinon mis à jour automatiquement';
-COMMENT ON COLUMN ZR_ENTITEADMIN.ZR_DATECREA IS
-  'Date à laquelle l''entité a été créée (différent de la date de création de la version). Cette date est la date de début de validité de la première version de l''entité.';
 */
 -- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - --
 -- ZR_REGION : Region
@@ -246,8 +240,6 @@ COMMENT ON COLUMN ZR_COMMUNE.DEPT IS
   '[Identifiant entité administrative] vers l''entité [DEPARTEMENT] par l''association [COMMUNE APPARTIENT A DEPARTEMENT]';
 COMMENT ON COLUMN ZR_COMMUNE.BASSIN IS
   '[Code INSEE bassin] vers l''entité [CIRCONSCRIPTION DE BASSIN] par l''association [APPARTENANCE COMMUNE BASSIN]';
-COMMENT ON COLUMN ZR_COMMUNE.ZR_DDEBVALI IS
-  '[Date de début de validité] vers l''entité [DISTRICT DE BASSIN DCE] par l''association [COMMUNE APPARTIENT AU DISTRICT]';
 COMMENT ON COLUMN ZR_COMMUNE.URBAIN_RURAL IS
   '[Indicateur Urbaine/Rurale] de l''entité [COMMUNE]';
 */
@@ -298,6 +290,4 @@ CREATE TABLE ZR_EVENEMENT (
 /*
 COMMENT ON TABLE ZR_EVENEMENT IS
   'Entité [EVENEMENT COMMUNE A CONTROLER]';
-COMMENT ON COLUMN ZR_EVENEMENT.ZR_DATECREA IS
-  'Date à laquelle l''entité a été créée (différent de la date de création de la version). Cette date est la date de début de validité de la première version de l''entité.';
 */
