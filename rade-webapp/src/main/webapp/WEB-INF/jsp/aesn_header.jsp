@@ -17,11 +17,12 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */%>
 <%/* $Id$ */%>
+<%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta http-equiv="Content-Language" content="fr">
 	<title>RADE AESN - ${titre}</title>
 	<link rel="icon" href="<%=request.getContextPath()%>/img/favicon.ico" type="image/x-icon">
@@ -52,7 +53,7 @@
 				<div id="acces_rap">
 					<form id="f_acces_rap" action="#" method="post">
 						<select name="sel_acces_rapide" id="sel_acces_rapide">
-							<option value="" selected>Acc�s rapide</option>
+							<option value="" selected>Accès rapide</option>
 <c:forEach var="menuitem" items="${headermenu}">
 							<option value="${menuitem.value}">${menuitem.key}</option>
 </c:forEach>
@@ -62,9 +63,24 @@
 				</div>
 				<h1>Rade</h1>
 			</div>
-			<div id="chemin_nav">Vous �tes ici : &nbsp;${titre}&nbsp;</div>
+			<div id="chemin_nav">Vous êtes ici : &nbsp;${titre}&nbsp;</div>
 			<ul id="nav">
-				<li><a href='<%=request.getContextPath()%>/'>Rade</a>
+				<li><a href='<%=request.getContextPath()%>/'>Référentiel</a>
+					<ul>
+						<li><a href='<%=request.getContextPath()%>/referentiel/region'>Recherche Région</a></li>
+						<li><a href='<%=request.getContextPath()%>/referentiel/departement'>Recherche Département</a></li>
+						<li><a href='<%=request.getContextPath()%>/referentiel/commune'>Recherche Commune</a></li>
+						<li><a href='<%=request.getContextPath()%>/referentiel/bassin'>Recherche Bassin</a></li>
+						<li><a href='<%=request.getContextPath()%>/referentiel/delegation'>Recherche Délégation</a></li>
+					</ul>
+				</li>
+				<li><a href='<%=request.getContextPath()%>/'>Historique</a>
+					<ul>
+						<li><a href='<%=request.getContextPath()%>/audit/search'>Recherche Audit</a></li>
+					</ul>
+				</li>
+				<sec:authorize access="hasRole('ROLE_ADMIN')">
+				<li><a href='<%=request.getContextPath()%>/'>Administration</a>
 					<ul>
 						<li><a href='<%=request.getContextPath()%>/actuator/info'>Info Rade</a></li>
 						<li><a href='<%=request.getContextPath()%>/actuator/health'>Etat Rade</a></li>
@@ -72,12 +88,15 @@
 						<li><a href='<%=request.getContextPath()%>/services/'>Services</a></li>
 					</ul>
 				</li>
+				</sec:authorize>
 			</ul>
 		</td>
 	</tr>
 	<tr>
-		<td id="nom_log"><sec:authorize access="isAuthenticated()"><sec:authentication property="principal.username" /><br><a href='<%=request.getContextPath()%>/logout'>Se d�connecter</a></sec:authorize>
-						 <sec:authorize access="!isAuthenticated()"><br><a href='<%=request.getContextPath()%>/login'>Se connecter</a></sec:authorize></td>
+		<td id="nom_log">
+			<sec:authorize access="isAuthenticated()"><sec:authentication property="principal.username" /><br><a href='<%=request.getContextPath()%>/logout'>Se déconnecter</a></sec:authorize>
+			<sec:authorize access="!isAuthenticated()"><br><a href='<%=request.getContextPath()%>/login'>Se connecter</a></sec:authorize>
+		</td>
 		<td id="titre_page">
 			<div id="picto">
 				<a href="#" style="display:none;" id="boutonImp"><img src="<%=request.getContextPath()%>/img/picto_print.gif" alt="Imprimer" title="Imprimer" height="25" width="25"></a>
