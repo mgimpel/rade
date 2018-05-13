@@ -17,8 +17,9 @@
 /* $Id$ */
 package fr.aesn.rade.ws.aramis.impl;
 
-import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -103,9 +104,8 @@ public class GeoAdminServiceExternePortImpl implements GeoAdminServiceExterneImp
                 log.error("Could not findAllCommunes, service was null (configuration error)");
                 return Collections.<fr.aesn.rade.ws.aramis.impl.CommuneVO>emptyList();
             }
-            Calendar cal = Calendar.getInstance();
-            cal.set(annee, 1, 2, 12, 0, 0); // January 2nd, 12:00
-            return Entity2VoMapper.communeEntity2VoList(communeService.getAllCommune(cal.getTime()));
+            Date date = new GregorianCalendar(annee, 1, 2, 12, 0, 0).getTime(); // January 2nd, 12:00
+            return Entity2VoMapper.communeEntity2VoList(communeService.getAllCommune(date));
         } catch (java.lang.Exception ex) {
             log.error("Unexpected Exception while processing WebService Request (this should never happen)", ex);
             throw new RuntimeException(ex);
