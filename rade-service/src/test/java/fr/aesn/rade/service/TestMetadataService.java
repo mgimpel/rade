@@ -23,9 +23,14 @@ import java.util.List;
 import java.util.Map;
 
 import org.junit.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 
+import fr.aesn.rade.persist.dao.StatutModificationJpaDao;
+import fr.aesn.rade.persist.dao.TypeEntiteAdminJpaDao;
+import fr.aesn.rade.persist.dao.TypeGenealogieEntiteAdminJpaDao;
+import fr.aesn.rade.persist.dao.TypeNomClairJpaDao;
 import fr.aesn.rade.persist.model.StatutModification;
 import fr.aesn.rade.persist.model.TypeEntiteAdmin;
 import fr.aesn.rade.persist.model.TypeGenealogieEntiteAdmin;
@@ -39,6 +44,18 @@ import fr.aesn.rade.service.impl.MetadataServiceImpl;
  */
 public class TestMetadataService
   extends AbstractTestService {
+  /** Data Access Object for TypeEntiteAdmin. */
+  @Autowired
+  private TypeEntiteAdminJpaDao typeEntiteAdminJpaDao;
+  /** Data Access Object for TypeGenealogieEntiteAdmin. */
+  @Autowired
+  private TypeGenealogieEntiteAdminJpaDao typeGenealogieEntiteAdminJpaDao;
+  /** Data Access Object for TypeNomClair. */
+  @Autowired
+  private TypeNomClairJpaDao typeNomClairJpaDao;
+  /** Data Access Object for StatutModification. */
+  @Autowired
+  private StatutModificationJpaDao statutModificationJpaDao;
   /** Service to be tested. */
   private MetadataService metadataService;
 
@@ -65,7 +82,11 @@ public class TestMetadataService
    */
   @Before
   public void setUp() {
-    metadataService = new MetadataServiceImpl(entityManager);
+    metadataService = new MetadataServiceImpl();
+    ((MetadataServiceImpl)metadataService).setTypeEntiteAdminJpaDao(typeEntiteAdminJpaDao);
+    ((MetadataServiceImpl)metadataService).setTypeGenealogieEntiteAdminJpaDao(typeGenealogieEntiteAdminJpaDao);
+    ((MetadataServiceImpl)metadataService).setTypeNomClairJpaDao(typeNomClairJpaDao);
+    ((MetadataServiceImpl)metadataService).setStatutModificationJpaDao(statutModificationJpaDao);
   }
 
   /**

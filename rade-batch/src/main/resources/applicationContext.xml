@@ -25,43 +25,55 @@
          http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
          http://www.springframework.org/schema/context
          http://www.springframework.org/schema/context/spring-context-3.0.xsd">
-
-  <import resource="classpath:META-INF/spring/batchContext.xml"/>
-
-  <context:component-scan base-package="fr.aesn.rade"/>
-
-  <!--This repository is only really intended for use in testing and rapid prototyping-->
-  <bean id="jobRepository" class="org.springframework.batch.core.repository.support.MapJobRepositoryFactoryBean"/>
-
-  <bean id="jobLauncher" class="org.springframework.batch.core.launch.support.SimpleJobLauncher"
-        p:jobRepository-ref="jobRepository"/>
-
-<!--
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+  <!-- Persistence (Database & Hibernate) & Service Layers -->
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
   <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close"
-        p:driverClassName="org.postgresql.Driver"
-        p:url="jdbc:postgresql://RAD-DB-DEV.aesn.fr/RADE_DEV"
-        p:username="username"
-        p:password="********"/>
--->
+        p:driverClassName="oracle.jdbc.OracleDriver"
+        p:url="jdbc:oracle:thin:@10.132.140.12:1521/AESNDEV"
+        p:username="RADE_DEV"
+        p:password="password"/>
+<!--
   <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close"
         p:driverClassName="org.postgresql.Driver"
         p:url="jdbc:postgresql://localhost/radedb"
         p:username="radeuser"
         p:password="password"/>
+-->
 
-  <!-- JPA EntityManagerFactory configuration -->
-  <bean id="jpaVendorAdapter" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
+  <!-- Create default configuration for Hibernate -->
+  <bean id="jpaVendorAdapter" 
+        class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
 
+  <!-- Configure the entity manager factory bean -->
   <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
         p:dataSource-ref="dataSource"
-        p:packagesToScan="fr.aesn.rade"
+        p:packagesToScan="fr.aesn.rade.persist.model"
         p:jpaVendorAdapter-ref="jpaVendorAdapter"/>
 
   <bean id="entityManager"
         factory-bean="entityManagerFactory"
         factory-method="createEntityManager"/>
 
-  <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager"/>
+  <!-- Configure the transaction manager bean -->
+  <bean id="transactionManager"
+        class="org.springframework.orm.jpa.JpaTransactionManager"
+        p:entityManagerFactory-ref="entityManagerFactory"/>
+
+  <!-- Service Layer -->
+  <context:component-scan base-package="fr.aesn.rade"/>
+
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+  <!-- Batch -->
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+  <import resource="classpath:META-INF/spring/batchContext.xml"/>
+
+  <!--This repository is only really intended for use in testing and rapid prototyping-->
+  <bean id="jobRepository" class="org.springframework.batch.core.repository.support.MapJobRepositoryFactoryBean"/>
+
+  <bean id="jobLauncher" class="org.springframework.batch.core.launch.support.SimpleJobLauncher"
+        p:jobRepository-ref="jobRepository"/>
 
   <!-- ItemReader which reads data from file -->
   <bean id="itemReader" class="org.springframework.batch.item.file.FlatFileItemReader">

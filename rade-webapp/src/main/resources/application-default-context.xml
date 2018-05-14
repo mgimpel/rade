@@ -19,6 +19,8 @@
 <!-- $Id$ -->
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
        xmlns:jdbc="http://www.springframework.org/schema/jdbc"
        xmlns:tx="http://www.springframework.org/schema/tx"
        xmlns:jpa="http://www.springframework.org/schema/data/jpa"
@@ -27,21 +29,23 @@
        xmlns:jaxrs="http://cxf.apache.org/jaxrs"
        xsi:schemaLocation="
          http://www.springframework.org/schema/beans
-         http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+         http://www.springframework.org/schema/beans/spring-beans.xsd
+         http://www.springframework.org/schema/context
+         http://www.springframework.org/schema/context/spring-context.xsd
          http://www.springframework.org/schema/jdbc
-         http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd
+         http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
          http://www.springframework.org/schema/tx
-         http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+         http://www.springframework.org/schema/tx/spring-tx.xsd
          http://www.springframework.org/schema/data/jpa 
-         http://www.springframework.org/schema/data/jpa/spring-jpa-1.8.xsd
+         http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
          http://www.springframework.org/schema/security
-         http://www.springframework.org/schema/security/spring-security-4.2.xsd
+         http://www.springframework.org/schema/security/spring-security.xsd
          http://cxf.apache.org/jaxws
          http://cxf.apache.org/schemas/jaxws.xsd
          http://cxf.apache.org/jaxrs
          http://cxf.apache.org/schemas/jaxrs.xsd">
   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-  <!-- Persistence Layer (Database & Hibernate) -->
+  <!-- Persistence (Database & Hibernate) & Service Layers -->
   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
   <!-- Configure the data source bean -->
@@ -57,80 +61,36 @@
     <jdbc:script location="classpath:db/sql/insert-Delegation.sql" />
   </jdbc:embedded-database>
 <!--
-  <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
-    <property name="driverClassName" value="${db.driver}"/>
-    <property name="url" value="${db.jdbcurl}"/>
-    <property name="username" value="${db.username}"/>
-    <property name="password" value="${db.password}"/>
-    <property name="initialSize" value="3"/>
-  </bean>
+  <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close"
+        p:driverClassName="${db.driver}"
+        p:url="${db.jdbcurl}"
+        p:username="${db.username}"
+        p:password="${db.password}"/>
 -->
 
   <!-- Create default configuration for Hibernate -->
-  <bean id="hibernateJpaVendorAdapter" 
+  <bean id="jpaVendorAdapter" 
         class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
 
   <!-- Configure the entity manager factory bean -->
-  <bean id="entityManagerFactory" 
-        class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-    <property name="dataSource" ref="dataSource"/>
-    <property name="jpaVendorAdapter" ref="hibernateJpaVendorAdapter"/>
-    <property name="jpaProperties">
-      <props>
-        <!--prop key="hibernate.dialect">org.hibernate.dialect.Oracle10gDialect</prop-->
-        <!--prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</prop-->
-        <prop key="hibernate.dialect">org.hibernate.dialect.DerbyTenSevenDialect</prop>
-        <prop key="hibernate.hbm2ddl.auto">update</prop>
-        <prop key="hibernate.show_sql">false</prop>
-      </props>
-    </property>
-    <property name="packagesToScan" value="fr.aesn.rade.persist"/>
-  </bean>
+  <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
+        p:dataSource-ref="dataSource"
+        p:packagesToScan="fr.aesn.rade.persist.model"
+        p:jpaVendorAdapter-ref="jpaVendorAdapter"/>
 
   <!-- Configure the transaction manager bean -->
   <bean id="transactionManager"
-        class="org.springframework.orm.jpa.JpaTransactionManager">
-    <property name="entityManagerFactory" ref="entityManagerFactory"/>
-  </bean>
+        class="org.springframework.orm.jpa.JpaTransactionManager"
+        p:entityManagerFactory-ref="entityManagerFactory"/>
 
   <!-- Enable annotation driven transaction management -->
   <tx:annotation-driven/>
 
   <!-- Configure Spring Data JPA -->
   <jpa:repositories base-package="fr.aesn.rade.persist.dao"/>
-
-  <bean id="entityManager"
-        factory-bean="entityManagerFactory"
-        factory-method="createEntityManager"/>
   
-  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
   <!-- Service Layer -->
-  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-
-  <bean id="metadataService" 
-        class="fr.aesn.rade.service.impl.MetadataServiceImpl">
-    <constructor-arg ref="entityManager"/>
-  </bean>
-  <bean id="communeService" 
-        class="fr.aesn.rade.service.impl.CommuneServiceImpl">
-    <property name="communeJpaDao" ref="communeJpaDao"/>
-  </bean>
-  <bean id="departementService" 
-        class="fr.aesn.rade.service.impl.DepartementServiceImpl">
-    <property name="departementJpaDao" ref="departementJpaDao"/>
-  </bean>
-  <bean id="regionService" 
-        class="fr.aesn.rade.service.impl.RegionServiceImpl">
-    <property name="regionJpaDao" ref="regionJpaDao"/>
-  </bean>
-  <bean id="delegationService" 
-        class="fr.aesn.rade.service.impl.DelegationServiceImpl">
-    <property name="delegationJpaDao" ref="delegationJpaDao"/>
-  </bean>
-  <bean id="bassinService" 
-        class="fr.aesn.rade.service.impl.BassinServiceImpl">
-    <property name="circonscriptionBassinJpaDao" ref="circonscriptionBassinJpaDao"/>
-  </bean>
+  <context:component-scan base-package="fr.aesn.rade.service"/>
 
   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
   <!-- CXF Web Services -->
@@ -139,32 +99,22 @@
   <import resource="classpath:META-INF/cxf/cxf.xml"/>
   <import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>
 
-<!--
-  <bean name="simpleService"
-        class="fr.aesn.rade.ws.impl.SimpleServiceImpl">
-  </bean>
-  <jaxws:endpoint id="SimpleService"
-                  implementor="#simpleService"
-                  address="/SimpleService"/>
--->
   <bean name="geoAdminService"
-        class="fr.aesn.rade.ws.aramis.impl.GeoAdminServiceExternePortImpl">
-    <property name="communeService" ref="communeService"/>
-    <property name="delegationService" ref="delegationService"/>
-    <property name="departementService" ref="departementService"/>
-  </bean>
+        class="fr.aesn.rade.ws.aramis.impl.GeoAdminServiceExternePortImpl"
+        p:communeService-ref="communeServiceImpl"
+        p:delegationService-ref="delegationServiceImpl"
+        p:departementService-ref="departementServiceImpl"/>
   <jaxws:endpoint id="GeoAdminService"
                   implementor="#geoAdminService"
                   address="/GeoAdminService"/>
 
   <bean id="restService"
-        class="fr.aesn.rade.rs.RestService">
-    <property name="delegationService" ref="delegationService"/>
-    <property name="communeService" ref="communeService"/>
-    <property name="departementService" ref="departementService"/>
-    <property name="regionService" ref="regionService"/>
-    <property name="bassinService" ref="bassinService"/>
-  </bean>
+        class="fr.aesn.rade.rs.RestService"
+        p:delegationService-ref="delegationServiceImpl"
+        p:communeService-ref="communeServiceImpl"
+        p:departementService-ref="departementServiceImpl"
+        p:regionService-ref="regionServiceImpl"
+        p:bassinService-ref="bassinServiceImpl"/>
   <jaxrs:server id="RestService"
                 address="/rest">
     <jaxrs:serviceBeans>
@@ -191,9 +141,8 @@
     </constructor-arg>
   </bean>
   <bean id="authenticationProvider"
-        class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
-    <property name="passwordEncoder" ref="bCryptPasswordEncoder"/>
-    <property name="userDetailsService" ref="inMemoryUserDetailsManager"/>
-  </bean>
+        class="org.springframework.security.authentication.dao.DaoAuthenticationProvider"
+        p:passwordEncoder-ref="bCryptPasswordEncoder"
+        p:userDetailsService-ref="inMemoryUserDetailsManager"/>
 
 </beans>

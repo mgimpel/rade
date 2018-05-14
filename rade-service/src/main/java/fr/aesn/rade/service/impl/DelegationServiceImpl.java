@@ -24,6 +24,7 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,6 +44,7 @@ public class DelegationServiceImpl
   private static final Logger log =
     LoggerFactory.getLogger(DelegationServiceImpl.class);
   /** Data Access Object for Delegation. */
+  @Autowired
   private DelegationJpaDao delegationJpaDao;
 
   /**
@@ -127,8 +129,7 @@ public class DelegationServiceImpl
     Optional<Delegation> result = delegationJpaDao.findById(code);
     if (result.isPresent()) {
       return result.get();
-    }
-    else {
+    } else {
       return null;
     }
   }

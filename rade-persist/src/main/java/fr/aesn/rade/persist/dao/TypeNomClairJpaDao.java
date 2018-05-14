@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--/*
- *  This file is part of the Rade project (https://github.com/mgimpel/rade).
+/*  This file is part of the Rade project (https://github.com/mgimpel/rade).
  *  Copyright (C) 2018 Marc Gimpel
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -15,14 +13,19 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
- */-->
-<!-- $Id$ -->
-<beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="
-         http://www.springframework.org/schema/beans
-         http://www.springframework.org/schema/beans/spring-beans.xsd">
+ */
+/* $Id$ */
+package fr.aesn.rade.persist.dao;
 
-  <import resource="${config.file.xml}"/>
+import org.springframework.data.jpa.repository.JpaRepository;
 
-</beans>
+import fr.aesn.rade.persist.model.TypeNomClair;
+
+/**
+ * JPA DataAccessObject for TypeNomClair.
+ * @author Marc Gimpel (mgimpel@gmail.com)
+ */
+public interface TypeNomClairJpaDao
+  extends JpaRepository<TypeNomClair, String> {
+  // Add new, specific methods here if necessary
+}

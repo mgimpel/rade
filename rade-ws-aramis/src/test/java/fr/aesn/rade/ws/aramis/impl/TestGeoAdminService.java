@@ -59,6 +59,7 @@ public class TestGeoAdminService {
   @AfterClass
   public static void tearDownClass() {
     server.stop();
+    server.destroy();
   }
 
   /**
