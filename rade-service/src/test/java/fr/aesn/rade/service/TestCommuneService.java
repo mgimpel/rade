@@ -22,6 +22,8 @@ import static org.junit.Assert.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.junit.*;
@@ -87,6 +89,32 @@ public class TestCommuneService
       assertNotNull("Hibernate returned a List but an Entity is null",
                     commune);
     }
+  }
+
+  /**
+   * Test getting a the list of all Communes.
+   */
+  @Test
+  public void testGettingCommuneList2018() {
+    Date year2018 = new GregorianCalendar(2018, 1, 1, 0, 0, 0).getTime();
+    List<Commune> list = communeService.getAllCommune(year2018);
+    assertNotNull("CommuneService returned a null list", list);
+    assertEquals(632, list.size());
+    for (Commune commune : list) {
+      assertNotNull("Hibernate returned a List but an Entity is null",
+                    commune);
+    }
+  }
+
+  /**
+   * Test getting a the list of all Communes.
+   */
+  @Test
+  public void testGettingCommuneList2017() {
+    Date year2017 = new GregorianCalendar(2017, 1, 1, 0, 0, 0).getTime();
+    List<Commune> list = communeService.getAllCommune(year2017);
+    assertNotNull("CommuneService returned a null list", list);
+    assertEquals(0, list.size());
   }
 
   /**

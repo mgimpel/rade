@@ -17,9 +17,11 @@
 /* $Id$ */
 package fr.aesn.rade.persist.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import fr.aesn.rade.persist.model.Commune;
 
@@ -36,4 +38,12 @@ public interface CommuneJpaDao
    * @return a List of Commune with the given CodeInsee.
    */
   public List<Commune> findByCodeInsee(String codeInsee);
+
+  /**
+   * Returns a List of all Commune valid at the given date.
+   * @param date the date at which the Commune was valid
+   * @return a List of all the valid Commune.
+   */
+  @Query("SELECT c FROM Commune c WHERE c.debutValidite <= ?1 AND (c.finValidite IS NULL OR c.finValidite > ?1)")
+  public List<Commune> findAllValidOnDate(Date date);
 }

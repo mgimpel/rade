@@ -93,8 +93,11 @@ public class CommuneServiceImpl
   @Transactional(readOnly = true)
   public List<Commune> getAllCommune(final Date date) {
     log.debug("Commune list requested for Date: date={}", date);
+    List<Commune> list = communeJpaDao.findAllValidOnDate(date);
+    /*
     List<Commune> list = communeJpaDao.findAll();
     list.removeIf(e -> !SharedBusinessRules.isEntiteAdministrativeValid(e, date));
+    */
     return list;
   }
 
