@@ -49,6 +49,7 @@ public class TestGeoAdminService {
    */
   @BeforeClass
   public static void setUpClass() {
+    createServiceMocks();
     server = createServerEndpoint();
     client = createClientProxy();
   }
@@ -63,11 +64,9 @@ public class TestGeoAdminService {
   }
 
   /**
-   * Use a CXF JaxWsServerFactoryBean to create JAX-WS endpoints.
+   * Build Service Mocks for use in the tests.
    */
-  private static Server createServerEndpoint() {
-    // Create Service Bean
-    GeoAdminServiceExternePortImpl implementor = new GeoAdminServiceExternePortImpl();
+  private static void createServiceMocks() {
     Delegation delegation = delegationBuilder("PPC", "DIRECTION DE PARIS PETITE COURONNE", "NANTERRE CEDEX", "AGENCE DE L'EAU SEINE NORMANDIE", "DIRECTION PARIS PETITE COURONNE", "51 RUE SALVADOR ALLENDE", "", "", "92027", "xxx", "xxx", "xxx", "xxx", "xxx", "xxx");
     when(delegationService.getAllDelegation()).thenReturn(Arrays.asList(delegation));
     List<Departement> depts = Arrays.asList(departementBuilder("971", "Guadeloupe"),
@@ -86,6 +85,14 @@ public class TestGeoAdminService {
       Date date = (Date) invocation.getArguments()[0];
       return date.after(year2018) ? communes : nocommunes;
     });
+  }
+
+  /**
+   * Use a CXF JaxWsServerFactoryBean to create JAX-WS endpoints.
+   * @return Server WebService Server.
+   */
+  private static Server createServerEndpoint() {
+    GeoAdminServiceExternePortImpl implementor = new GeoAdminServiceExternePortImpl();
     implementor.setDelegationService(delegationService);
     implementor.setDepartementService(departementService);
     implementor.setCommuneService(communeService);
@@ -99,7 +106,7 @@ public class TestGeoAdminService {
 
   /**
    * Create a CXF JaxWsProxyFactoryBean for creating JAX-WS proxies.
-   * @return GeoAdminService Client
+   * @return GeoAdminService WebService Client.
    */
   private static GeoAdminServiceExterneImpl createClientProxy() {
     JaxWsProxyFactoryBean jaxWsProxyFactoryBean =
@@ -109,21 +116,40 @@ public class TestGeoAdminService {
     return (GeoAdminServiceExterneImpl) jaxWsProxyFactoryBean.create();
   }
 
-  private static Delegation delegationBuilder(String code,
-                                              String libelle,
-                                              String acheminement,
-                                              String adresse1,
-                                              String adresse2,
-                                              String adresse3,
-                                              String adresse4,
-                                              String adresse5,
-                                              String codePostal,
-                                              String email,
-                                              String fax,
-                                              String siteWeb,
-                                              String telephone,
-                                              String telephone2,
-                                              String telephone3) {
+  /**
+   * Builds a Delegation with the given parameters.
+   * @param code Delegation code.
+   * @param libelle Delegation label.
+   * @param acheminement Delegation location.
+   * @param adresse1 Delegation address line 1.
+   * @param adresse2 Delegation address line 2.
+   * @param adresse3 Delegation address line 3.
+   * @param adresse4 Delegation address line 4.
+   * @param adresse5 Delegation address line 5.
+   * @param codePostal Delegation Post Code.
+   * @param email Delegation e-mail address.
+   * @param fax Delegation fax number.
+   * @param siteWeb Delegation web site.
+   * @param telephone Delegation phone number 1.
+   * @param telephone2 Delegation phone number 2.
+   * @param telephone3 Delegation phone number 3.
+   * @return a Delegation with the given parameters.
+   */
+  private static Delegation delegationBuilder(final String code,
+                                              final String libelle,
+                                              final String acheminement,
+                                              final String adresse1,
+                                              final String adresse2,
+                                              final String adresse3,
+                                              final String adresse4,
+                                              final String adresse5,
+                                              final String codePostal,
+                                              final String email,
+                                              final String fax,
+                                              final String siteWeb,
+                                              final String telephone,
+                                              final String telephone2,
+                                              final String telephone3) {
     Delegation obj = new Delegation();
     obj.setCode(code);
     obj.setLibelle(libelle);
@@ -143,14 +169,32 @@ public class TestGeoAdminService {
     return obj;
   }
 
-  private static Departement departementBuilder(String numero, String nom) {
+  /**
+   * Builds a Departement with the given parameters.
+   * @param numero Departement code.
+   * @param nom Departement name.
+   * @return Departement with the given parameters.
+   */
+  private static Departement departementBuilder(final String numero,
+                                                final String nom) {
     Departement obj = new Departement();
     obj.setCodeInsee(numero);
     obj.setNomEnrichi(nom);
     return obj;
   }
 
-  private static Commune communeBuilder(String nomCommune, String nomCourt, String numInsee, String bassin) {
+  /**
+   * Builds a Commune with the given parameters.
+   * @param nomCommune Commune name.
+   * @param nomCourt Commune short name.
+   * @param numInsee Commune code.
+   * @param bassin Commune bassin.
+   * @return a Commune with the given parameters.
+   */
+  private static Commune communeBuilder(final String nomCommune,
+                                        final String nomCourt,
+                                        final String numInsee,
+                                        final String bassin) {
     CirconscriptionBassin circonscriptionBassin = new CirconscriptionBassin();
     circonscriptionBassin.setCode(bassin);
     Commune obj = new Commune();
@@ -161,6 +205,9 @@ public class TestGeoAdminService {
     return obj;
   }
 
+  /**
+   * Test WebService FindAllDelegations.
+   */
   @Test
   public void testFindAllDelegations() {
     List<DelegationVO> delegations = client.findAllDelegations();
@@ -200,6 +247,9 @@ public class TestGeoAdminService {
                  "xxx", delegation.getTelephone3());
   }
 
+  /**
+   * Test WebService FindAllDepartements.
+   */
   @Test
   public void testFindAllDepartements() {
     List<DepartementVO> depts = client.findAllDepartements();
@@ -213,6 +263,9 @@ public class TestGeoAdminService {
                  "Guadeloupe", dept.getNom());
   }
 
+  /**
+   * Test WebService FindAllCommunes with year 2017.
+   */
   @Test
   public void testFindAllCommunes2017() {
     List<CommuneVO> communes = client.findAllCommunes(2017);
@@ -220,6 +273,9 @@ public class TestGeoAdminService {
     assertEquals("CXF returned a List, but the wrong size", 0, communes.size());
   }
 
+  /**
+   * Test WebService FindAllCommunes with year 2018.
+   */
   @Test
   public void testFindAllCommunes2018() {
     List<CommuneVO> communes = client.findAllCommunes(2018);

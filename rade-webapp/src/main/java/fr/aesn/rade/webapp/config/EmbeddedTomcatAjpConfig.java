@@ -49,11 +49,7 @@ public class EmbeddedTomcatAjpConfig {
    */
   @Bean
   public WebServerFactoryCustomizer<TomcatServletWebServerFactory> servletContainer() {
-    return server -> {
-      if (server instanceof TomcatServletWebServerFactory) {
-        ((TomcatServletWebServerFactory) server).addAdditionalTomcatConnectors(ajpConnector(ajpPort));
-      }
-    };
+    return server -> server.addAdditionalTomcatConnectors(ajpConnector(ajpPort));
   }
 
   /**
@@ -61,7 +57,7 @@ public class EmbeddedTomcatAjpConfig {
    * @param ajpPort the port for the Connector to use.
    * @return a Tomcat AJP Connector.
    */
-  private Connector ajpConnector(final int ajpPort) {
+  private final Connector ajpConnector(final int ajpPort) {
     Connector connector = new Connector("AJP/1.3");
     connector.setScheme("http");
     connector.setPort(ajpPort);

@@ -8,7 +8,7 @@ After=syslog.target network.target
 [Service]
 WorkingDirectory=/etc/rade
 Environment=BINARY="/usr/lib/rade/rade-webapp.war"
-Environment=JAVA_OPTS="-Xmx128m"
+Environment=JAVA_OPTS="-Xmx256m"
 Environment=RADE_OPTS="-Duser.timezone=UTC"
 Environment=LOGGING="-Dlogging.config=/etc/rade/logback.xml"
 User=rade

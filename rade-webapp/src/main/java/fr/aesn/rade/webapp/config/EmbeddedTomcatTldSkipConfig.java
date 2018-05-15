@@ -25,28 +25,26 @@ import org.springframework.context.annotation.Profile;
 
 /**
  * Configuration for Embedded Tomcat used by Java Boot.
- * In particular it adds an AJP Connector, allowing one to put a Apache HTTPD
- * reverse-proxy front end.
- * It can be activated by using the Spring Profile "ajp".
+ * In particular it defines the jars to ignore for TLD scanning
+ * (this is useful because for example Apache Derby defines multiple
+ * localisation jars in it's manifest, and when the are not all on the
+ * classpath, the logs are polluted with Stacktraces).
+ * It can be activated by using the Spring Profile "test".
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
 @Configuration
 @Profile("test")
 public class EmbeddedTomcatTldSkipConfig {
 
-//  @Value("${tldSkipPatterns}")
+//  @Value("${tomcat.tldSkipPatterns}")
   private String[] tldSkipPatterns = {"derbyLocale_*.jar"};
 
   /**
-   * Configures the Embedded Tomcat by adding an AJP Connector.
+   * Configures the Embedded Tomcat to ignore certain jars during scanning.
    * @return WebServerFactoryCustomizer for Tomcat.
    */
   @Bean
   public WebServerFactoryCustomizer<TomcatServletWebServerFactory> servletContainer() {
-    return server -> {
-      if (server instanceof TomcatServletWebServerFactory) {
-        ((TomcatServletWebServerFactory) server).addTldSkipPatterns(tldSkipPatterns);
-      }
-    };
+    return server -> server.addTldSkipPatterns(tldSkipPatterns);
   }
 }
