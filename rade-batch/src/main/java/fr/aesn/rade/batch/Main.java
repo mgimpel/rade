@@ -37,7 +37,7 @@ public class Main {
     LoggerFactory.getLogger(Main.class);
 
   public static void main(String[] args) {
-    ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+    ApplicationContext context = new ClassPathXmlApplicationContext("batch-context.xml");
 
     JobLauncher jobLauncher = context.getBean("jobLauncher", JobLauncher.class);
     Job job = context.getBean("radeJob", Job.class);

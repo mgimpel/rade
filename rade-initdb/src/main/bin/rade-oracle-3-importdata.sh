@@ -20,33 +20,44 @@
 
 . rade-db-init-parameters.sh
 cp ../sql/insert-*.sql $DUMP_DIR/rade-$DATE/
-sed -i -e "s/é/e/" $DUMP_DIR/rade-$DATE/insert-TypeGenealogieEntiteAdmin.sql
-sed -i -e "s/'2018-04-01'/TO_DATE\('2018-04-01', 'yyyy-mm-dd'\)/" $DUMP_DIR/rade-$DATE/insert-Audit.sql
-sed -i -e "s/'2018-01-01'/TO_DATE\('2018-01-01', 'yyyy-mm-dd'\)/" $DUMP_DIR/rade-$DATE/insert-Region.sql
-sed -i -e "s/'2018-01-01'/TO_DATE\('2018-01-01', 'yyyy-mm-dd'\)/" $DUMP_DIR/rade-$DATE/insert-Departement.sql
-sed -i -e "s/'2018-01-01'/TO_DATE\('2018-01-01', 'yyyy-mm-dd'\)/" $DUMP_DIR/rade-$DATE/insert-Commune.sql
-sed -i -e "s/ '', / '-', /" $DUMP_DIR/rade-$DATE/insert-Region.sql
-sed -i -e "s/ '', / '-', /" $DUMP_DIR/rade-$DATE/insert-Departement.sql
-sed -i -e "s/ '', / '-', /" $DUMP_DIR/rade-$DATE/insert-Commune.sql
-sed -i -e "/^ALTER TABLE/d" $DUMP_DIR/rade-$DATE/insert-Region.sql
-sed -i -e "/^ALTER TABLE/d" $DUMP_DIR/rade-$DATE/insert-Departement.sql
-sed -i -e "/^ALTER TABLE/d" $DUMP_DIR/rade-$DATE/insert-Commune.sql
-cat >> $DUMP_DIR/rade-$DATE/insert-Commune.sql << EOF
+iconv -f UTF-8 -t ISO_8859-15 -o $DUMP_DIR/rade-$DATE/insert-TypeEntiteAdmin-iso885915.sql $DUMP_DIR/rade-$DATE/insert-TypeEntiteAdmin.sql
+iconv -f UTF-8 -t ISO_8859-15 -o $DUMP_DIR/rade-$DATE/insert-TypeNomClair-iso885915.sql $DUMP_DIR/rade-$DATE/insert-TypeNomClair.sql
+iconv -f UTF-8 -t ISO_8859-15 -o $DUMP_DIR/rade-$DATE/insert-StatutModification-iso885915.sql $DUMP_DIR/rade-$DATE/insert-StatutModification.sql
+iconv -f UTF-8 -t ISO_8859-15 -o $DUMP_DIR/rade-$DATE/insert-TypeGenealogieEntiteAdmin-iso885915.sql $DUMP_DIR/rade-$DATE/insert-TypeGenealogieEntiteAdmin.sql
+iconv -f UTF-8 -t ISO_8859-15 -o $DUMP_DIR/rade-$DATE/insert-Audit-iso885915.sql $DUMP_DIR/rade-$DATE/insert-Audit.sql
+iconv -f UTF-8 -t ISO_8859-15 -o $DUMP_DIR/rade-$DATE/insert-CirconscriptionBassin-iso885915.sql $DUMP_DIR/rade-$DATE/insert-CirconscriptionBassin.sql
+iconv -f UTF-8 -t ISO_8859-15 -o $DUMP_DIR/rade-$DATE/insert-Region-iso885915.sql $DUMP_DIR/rade-$DATE/insert-Region.sql
+iconv -f UTF-8 -t ISO_8859-15 -o $DUMP_DIR/rade-$DATE/insert-Departement-iso885915.sql $DUMP_DIR/rade-$DATE/insert-Departement.sql
+iconv -f UTF-8 -t ISO_8859-15 -o $DUMP_DIR/rade-$DATE/insert-Commune-iso885915.sql $DUMP_DIR/rade-$DATE/insert-Commune.sql
+iconv -f UTF-8 -t ISO_8859-15 -o $DUMP_DIR/rade-$DATE/insert-Delegation-iso885915.sql $DUMP_DIR/rade-$DATE/insert-Delegation.sql
+
+sed -i -e "s/é/e/" $DUMP_DIR/rade-$DATE/insert-TypeGenealogieEntiteAdmin-iso885915.sql
+sed -i -e "s/'2018-04-01'/TO_DATE\('2018-04-01', 'yyyy-mm-dd'\)/" $DUMP_DIR/rade-$DATE/insert-Audit-iso885915.sql
+sed -i -e "s/'2018-01-01'/TO_DATE\('2018-01-01', 'yyyy-mm-dd'\)/" $DUMP_DIR/rade-$DATE/insert-Region-iso885915.sql
+sed -i -e "s/'2018-01-01'/TO_DATE\('2018-01-01', 'yyyy-mm-dd'\)/" $DUMP_DIR/rade-$DATE/insert-Departement-iso885915.sql
+sed -i -e "s/'2018-01-01'/TO_DATE\('2018-01-01', 'yyyy-mm-dd'\)/" $DUMP_DIR/rade-$DATE/insert-Commune-iso885915.sql
+sed -i -e "s/ '', / '-', /" $DUMP_DIR/rade-$DATE/insert-Region-iso885915.sql
+sed -i -e "s/ '', / '-', /" $DUMP_DIR/rade-$DATE/insert-Departement-iso885915.sql
+sed -i -e "s/ '', / '-', /" $DUMP_DIR/rade-$DATE/insert-Commune-iso885915.sql
+sed -i -e "/^ALTER TABLE/d" $DUMP_DIR/rade-$DATE/insert-Region-iso885915.sql
+sed -i -e "/^ALTER TABLE/d" $DUMP_DIR/rade-$DATE/insert-Departement-iso885915.sql
+sed -i -e "/^ALTER TABLE/d" $DUMP_DIR/rade-$DATE/insert-Commune-iso885915.sql
+cat >> $DUMP_DIR/rade-$DATE/insert-Commune-iso885915.sql << EOF
 ALTER SEQUENCE entiteadmin_seq INCREMENT BY 135500;
 SELECT entiteadmin_seq.NEXTVAL FROM dual;
 ALTER SEQUENCE entiteadmin_seq INCREMENT BY 1;
 EOF
 sqlplus RADE_DEV/password << EOF
 SPOOL $DUMP_DIR/rade-$DATE/import-data.log
-START $DUMP_DIR/rade-$DATE/insert-TypeEntiteAdmin.sql
-START $DUMP_DIR/rade-$DATE/insert-TypeNomClair.sql
-START $DUMP_DIR/rade-$DATE/insert-StatutModification.sql
-START $DUMP_DIR/rade-$DATE/insert-TypeGenealogieEntiteAdmin.sql
-START $DUMP_DIR/rade-$DATE/insert-Audit.sql
-START $DUMP_DIR/rade-$DATE/insert-CirconscriptionBassin.sql
-START $DUMP_DIR/rade-$DATE/insert-Region.sql
-START $DUMP_DIR/rade-$DATE/insert-Departement.sql
-START $DUMP_DIR/rade-$DATE/insert-Commune.sql
-START $DUMP_DIR/rade-$DATE/insert-Delegation.sql
+START $DUMP_DIR/rade-$DATE/insert-TypeEntiteAdmin-iso885915.sql
+START $DUMP_DIR/rade-$DATE/insert-TypeNomClair-iso885915.sql
+START $DUMP_DIR/rade-$DATE/insert-StatutModification-iso885915.sql
+START $DUMP_DIR/rade-$DATE/insert-TypeGenealogieEntiteAdmin-iso885915.sql
+START $DUMP_DIR/rade-$DATE/insert-Audit-iso885915.sql
+START $DUMP_DIR/rade-$DATE/insert-CirconscriptionBassin-iso885915.sql
+START $DUMP_DIR/rade-$DATE/insert-Region-iso885915.sql
+START $DUMP_DIR/rade-$DATE/insert-Departement-iso885915.sql
+START $DUMP_DIR/rade-$DATE/insert-Commune-iso885915.sql
+START $DUMP_DIR/rade-$DATE/insert-Delegation-iso885915.sql
 SPOOL OFF
 EXIT;
