@@ -32,7 +32,7 @@ iconv -f UTF-8 -t ISO_8859-15 -o $DUMP_DIR/rade-$DATE/insert-Commune-iso885915.s
 iconv -f UTF-8 -t ISO_8859-15 -o $DUMP_DIR/rade-$DATE/insert-Delegation-iso885915.sql $DUMP_DIR/rade-$DATE/insert-Delegation.sql
 
 sed -i -e "s/é/e/" $DUMP_DIR/rade-$DATE/insert-TypeGenealogieEntiteAdmin-iso885915.sql
-sed -i -e "s/'2018-04-01'/TO_DATE\('2018-04-01', 'yyyy-mm-dd'\)/" $DUMP_DIR/rade-$DATE/insert-Audit-iso885915.sql
+sed -i -e "s/'2018-04-01 00:00:00'/TO_TIMESTAMP\('2018-04-01 00:00:00', 'yyyy-mm-dd HH24:MI:SS'\)/" $DUMP_DIR/rade-$DATE/insert-Audit-iso885915.sql
 sed -i -e "s/'2018-01-01'/TO_DATE\('2018-01-01', 'yyyy-mm-dd'\)/" $DUMP_DIR/rade-$DATE/insert-Region-iso885915.sql
 sed -i -e "s/'2018-01-01'/TO_DATE\('2018-01-01', 'yyyy-mm-dd'\)/" $DUMP_DIR/rade-$DATE/insert-Departement-iso885915.sql
 sed -i -e "s/'2018-01-01'/TO_DATE\('2018-01-01', 'yyyy-mm-dd'\)/" $DUMP_DIR/rade-$DATE/insert-Commune-iso885915.sql

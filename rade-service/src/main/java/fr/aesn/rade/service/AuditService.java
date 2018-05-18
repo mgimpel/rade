@@ -15,4 +15,22 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 /* $Id$ */
-INSERT INTO ZR_AUDIT ("AUDIT_AUTEUR", "AUDIT_DATE", "AUDIT_NOTE") VALUES ('gimpelma', '2018-04-01 00:00:00', 'Import initial');
+package fr.aesn.rade.service;
+
+import java.util.List;
+
+import fr.aesn.rade.persist.model.Audit;
+
+/**
+ * Service Interface for Audit.
+ * @author Marc Gimpel (mgimpel@gmail.com)
+ */
+public interface AuditService {
+  /**
+   * List all Audit.
+   * @return a List of all the Audit.
+   */
+  public List<Audit> getAllAudit();
+
+  public Audit createAudit(Audit audit);
+}

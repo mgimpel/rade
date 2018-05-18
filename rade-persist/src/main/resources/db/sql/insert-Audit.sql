@@ -15,4 +15,4 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 /* $Id$ */
-INSERT INTO ZR_AUDIT ("AUDIT_AUTEUR", "AUDIT_DATE", "AUDIT_NOTE") VALUES ('gimpelma', '2018-04-01', 'Import initial');
+INSERT INTO ZR_AUDIT ("AUDIT_AUTEUR", "AUDIT_DATE", "AUDIT_NOTE") VALUES ('gimpelma', '2018-04-01 00:00:00', 'Import initial');

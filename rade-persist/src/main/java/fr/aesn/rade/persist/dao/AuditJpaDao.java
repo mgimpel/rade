@@ -15,4 +15,17 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 /* $Id$ */
-INSERT INTO ZR_AUDIT ("AUDIT_AUTEUR", "AUDIT_DATE", "AUDIT_NOTE") VALUES ('gimpelma', '2018-04-01 00:00:00', 'Import initial');
+package fr.aesn.rade.persist.dao;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import fr.aesn.rade.persist.model.Audit;
+
+/**
+ * JPA DataAccessObject for Audit.
+ * @author Marc Gimpel (mgimpel@gmail.com)
+ */
+public interface AuditJpaDao
+  extends JpaRepository<Audit, Integer> {
+  // Add new, specific methods here if necessary
+}
