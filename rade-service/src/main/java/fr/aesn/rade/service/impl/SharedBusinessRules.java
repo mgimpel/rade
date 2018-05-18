@@ -31,6 +31,7 @@ public class SharedBusinessRules {
    * Hidden private Constructor makes the class non-instantiable.
    */
   private SharedBusinessRules() {
+    // Empty Constructor.
   }
 
   /**

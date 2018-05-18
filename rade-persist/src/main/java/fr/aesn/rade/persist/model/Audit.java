@@ -26,6 +26,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -59,7 +60,8 @@ public class Audit implements Serializable {
 
   /** Identifiant de la modification. */
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "id_Sequence_Audit")
+  @SequenceGenerator(name = "id_Sequence_Audit", sequenceName = "audit_seq")
   @Column(name = "AUDIT_ID", nullable = false)
   private Integer id;
 

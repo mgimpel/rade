@@ -18,6 +18,7 @@
 package fr.aesn.rade.service.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +27,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import fr.aesn.rade.persist.dao.AuditJpaDao;
-import fr.aesn.rade.persist.dao.CirconscriptionBassinJpaDao;
 import fr.aesn.rade.persist.model.Audit;
 import fr.aesn.rade.service.AuditService;
 
@@ -79,6 +79,29 @@ public class AuditServiceImpl
     return auditJpaDao.findAll();
   }
 
+  /**
+   * Get the Audit with the given ID.
+   * @param id the Audit ID.
+   * @return the Audit with the given ID.
+   */
+  @Override
+  @Transactional(readOnly = true)
+  public Audit getAuditbyId(final int id) {
+    log.debug("Audit requested by ID: ID={}", id);
+    Optional<Audit> result = auditJpaDao.findById(id);
+    if (result.isPresent()) {
+      return result.get();
+    }
+    else {
+      return null;
+    }
+  }
+
+  /**
+   * Create Audit.
+   * @param audit the new Audit to persist. 
+   * @return the new Audit.
+   */
   @Override
   public Audit createAudit(Audit audit) {
     return auditJpaDao.save(audit);

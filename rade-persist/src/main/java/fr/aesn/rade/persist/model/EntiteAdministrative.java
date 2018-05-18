@@ -32,6 +32,7 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -76,7 +77,8 @@ public class EntiteAdministrative implements Serializable {
 
   /** Identifiant de l'Entité Administrative. */
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "id_Sequence_EntiteAdmin")
+  @SequenceGenerator(name = "id_Sequence_EntiteAdmin", sequenceName = "entiteadmin_seq")
   @Column(name = "ID", nullable = false)
   private Integer id;
 

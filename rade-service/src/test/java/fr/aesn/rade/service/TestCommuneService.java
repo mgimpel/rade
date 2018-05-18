@@ -118,7 +118,7 @@ public class TestCommuneService
   }
 
   /**
-   * Test getting a the list of all Communes.
+   * Test getting a Communes.
    * @throws ParseException failed to parse date.
    */
   @Test

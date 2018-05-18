@@ -20,6 +20,7 @@ package fr.aesn.rade.service;
 import static org.junit.Assert.*;
 
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.junit.*;
@@ -55,6 +56,7 @@ public class TestAuditService
         .setScriptEncoding("UTF-8")
         .setName("testdb")
         .addScript("db/sql/create-tables.sql")
+        .addScript("db/sql/insert-Audit.sql")
         .build();
   }
 
@@ -73,31 +75,43 @@ public class TestAuditService
   public void testGettingAuditList() {
     List<Audit> list = auditService.getAllAudit();
     assertNotNull("auditService returned a null list", list);
-    assertEquals(0, list.size());
+    assertEquals(1, list.size());
     for (Audit audit: list) {
       assertNotNull("Hibernate returned a List but an Entity is null",
                     audit);
     }
   }
 
+  /**
+   * Test getting an Audit.
+   */
+  @Test
+  public void testGettingCommuneById() {
+    Audit audit = auditService.getAuditbyId(1);
+    assertNotNull(audit);
+    assertEquals(1, audit.getId().intValue());
+    assertEquals("gimpelma", audit.getAuteur());
+    assertEquals(new GregorianCalendar(2018, 3, 1, 0, 0, 0).getTime(), audit.getDate());
+    assertEquals("Import initial", audit.getNote());
+  }
+
   @Test
   public void testCreatingAudit() {
     List<Audit> list = auditService.getAllAudit();
     assertNotNull("auditService returned a null list", list);
-    assertEquals(0, list.size());
+    assertEquals(1, list.size());
     Audit audit = new Audit();
     audit.setAuteur("Batch");
     audit.setDate(new Date());
     audit.setNote("Import Batch");
+    assertEquals(null, audit.getId());
     Audit created = auditService.createAudit(audit);
     assertNotNull(created);
-    assertEquals(1, created.getId().intValue());
-    assertEquals(audit.getAuteur(), created.getAuteur());
-    assertEquals(audit.getDate(), created.getDate());
-    assertEquals(audit.getNote(), created.getNote());
+    assertEquals(2, audit.getId().intValue());
+    assertEquals(audit, created);
     list = auditService.getAllAudit();
     assertNotNull("auditService returned a null list", list);
-    assertEquals(1, list.size());
-    assertEquals(created, list.get(0));
+    assertEquals(2, list.size());
+    assertEquals(created, auditService.getAuditbyId(2));
   }
 }

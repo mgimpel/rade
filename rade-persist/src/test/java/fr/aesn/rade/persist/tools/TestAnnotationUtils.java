@@ -15,34 +15,35 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 /* $Id$ */
-package fr.aesn.rade.service;
+package fr.aesn.rade.persist.tools;
 
-import java.util.List;
+import static org.junit.Assert.*;
+
+import java.lang.annotation.Annotation;
+import java.util.Map;
+
+import org.junit.*;
 
 import fr.aesn.rade.persist.model.Audit;
 
 /**
- * Service Interface for Audit.
+ * Test Annotation Utils.
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
-public interface AuditService {
-  /**
-   * List all Audit.
-   * @return a List of all the Audit.
-   */
-  public List<Audit> getAllAudit();
+public class TestAnnotationUtils {
+  @Test
+  public void TestGetFieldAnnotations()
+    throws NoSuchFieldException {
+    Map<Class<? extends Annotation>, Annotation> map =
+      AnnotationUtils.getFieldAnnotations(Audit.class, "id");
+    assertEquals(4, map.size());
+  }
 
-  /**
-   * Get the Audit with the given ID.
-   * @param id the Audit ID.
-   * @return the Audit with the given ID.
-   */
-  public Audit getAuditbyId(final int id);
-
-  /**
-   * Create Audit.
-   * @param audit the new Audit to persist. 
-   * @return the new Audit.
-   */
-  public Audit createAudit(Audit audit);
+  @Test
+  public void TestGetClassAnnotations()
+    throws Exception {
+    Map<Class<? extends Annotation>, Annotation> map =
+      AnnotationUtils.getClassAnnotations(Audit.class);
+    assertEquals(2, map.size());
+  }
 }

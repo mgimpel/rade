@@ -27,6 +27,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
@@ -68,7 +69,8 @@ public class Evenement implements Serializable {
 
   /** Identifiant de l'évenement. */
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "id_Sequence_Evenement")
+  @SequenceGenerator(name = "id_Sequence_Evenement", sequenceName = "evenement_seq")
   @Column(name = "ID", nullable = false)
   private Integer id;
 

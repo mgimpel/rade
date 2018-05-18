@@ -17,10 +17,13 @@
 /* $Id$ */
 package fr.aesn.rade.service;
 
+import java.lang.annotation.Annotation;
 import java.util.Properties;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.sql.DataSource;
 
 import org.junit.*;
@@ -41,6 +44,11 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
+import fr.aesn.rade.persist.model.Audit;
+import fr.aesn.rade.persist.model.EntiteAdministrative;
+import fr.aesn.rade.persist.model.Evenement;
+import fr.aesn.rade.persist.tools.AnnotationUtils;
+
 /**
  * Abstract JUnit Test Class for Services.
  * 
@@ -54,6 +62,29 @@ public abstract class AbstractTestService {
   @Configuration
   @EnableJpaRepositories(basePackages = "fr.aesn.rade.persist.dao")
   protected static class Config {
+    /** GeneratedValue Annotation of type Identity because Derby cannot do type Sequence. */
+    protected Annotation identity = new GeneratedValue() {
+      @Override public Class<? extends Annotation> annotationType() {
+        return GeneratedValue.class;
+      }
+      @Override public String generator() {
+        return "";
+      }
+      @Override public GenerationType strategy() {
+        return GenerationType.IDENTITY;
+      }
+    };
+    /** Modify Annotations on Entities because Derby cannot do Sequence GeneratedValue */
+    protected void overrideAnnotations() {
+      try {
+        AnnotationUtils.getFieldAnnotations(Audit.class, "id").put(identity.annotationType(), identity);
+        AnnotationUtils.getFieldAnnotations(EntiteAdministrative.class, "id").put(identity.annotationType(), identity);
+        AnnotationUtils.getFieldAnnotations(Evenement.class, "id").put(identity.annotationType(), identity);
+      } catch (NoSuchFieldException e) {
+        System.out.println("This Should never happen (unless the classes have been changed)");
+      }
+    }
+    /** In memory Derby Database */
     @Bean
     protected DataSource dataSource() {
       DriverManagerDataSource ds = new DriverManagerDataSource();
@@ -65,6 +96,7 @@ public abstract class AbstractTestService {
     }
     @Bean
     protected EntityManagerFactory entityManagerFactory() {
+      overrideAnnotations();
       LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
       entityManagerFactoryBean.setDataSource(dataSource());
       entityManagerFactoryBean.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
