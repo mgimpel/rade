@@ -23,34 +23,35 @@ import org.springframework.batch.item.file.mapping.FieldSetMapper;
 import org.springframework.batch.item.file.transform.FieldSet;
 import org.springframework.validation.BindException;
 
-import fr.aesn.rade.persist.model.Region;
+import fr.aesn.rade.persist.model.Departement;
 
 /**
- * FieldSetMapper that Maps INSEE Region file lines to Region Entities.
+ * FieldSetMapper that Maps INSEE Departement file lines to Departement Entities.
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
-public class RegionMapper
+public class DepartementMapper
   extends EntiteAdminMapper
-  implements FieldSetMapper<Region> {
+  implements FieldSetMapper<Departement> {
   /** SLF4J Logger. */
   private static final Logger log =
-    LoggerFactory.getLogger(RegionMapper.class);
+    LoggerFactory.getLogger(DepartementMapper.class);
 
   /**
-   * Maps INSEE Region file lines to Region Entities.
-   * @param fieldSet parsed line from INSEE Region file.
-   * @return the Region Entity.
+   * Maps INSEE Departement file lines to Departement Entities.
+   * @param fieldSet parsed line from INSEE Departement file.
+   * @return the Departement Entity.
    */
   @Override
-  public Region mapFieldSet(FieldSet fieldSet) throws BindException {
+  public Departement mapFieldSet(FieldSet fieldSet) throws BindException {
     log.debug("Importing line: {}", fieldSet.toString());
-    Region reg = new Region();
-    reg.setTypeEntiteAdmin(getTypeEntiteAdmin("REG"));
-    reg.setCodeInsee(fieldSet.readString(0));
-    reg.setChefLieu(fieldSet.readString(1));
-    reg.setTypeNomClair(getTypeNomClair(fieldSet.readString(2)));
-    reg.setNomMajuscule(fieldSet.readString(3));
-    reg.setNomEnrichi(fieldSet.readString(4));
-    return reg;
+    Departement dept = new Departement();
+    dept.setTypeEntiteAdmin(getTypeEntiteAdmin("DEP"));
+    dept.setRegion(fieldSet.readString(0));
+    dept.setCodeInsee(fieldSet.readString(1));
+    dept.setChefLieu(fieldSet.readString(2));
+    dept.setTypeNomClair(getTypeNomClair(fieldSet.readString(3)));
+    dept.setNomMajuscule(fieldSet.readString(4));
+    dept.setNomEnrichi(fieldSet.readString(5));
+    return dept;
   }
 }

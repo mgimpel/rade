@@ -28,7 +28,7 @@
     <batch:job id="radeJob">
         <batch:step id="step1">
             <batch:tasklet>
-                <batch:chunk reader="itemReader" writer="itemWriter" commit-interval="10"/>
+                <batch:chunk reader="itemReader" processor="itemProcessor" writer="itemWriter" commit-interval="10"/>
             </batch:tasklet>
         </batch:step>
     </batch:job>
