@@ -61,7 +61,7 @@ public class Audit implements Serializable {
   /** Identifiant de la modification. */
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "id_Sequence_Audit")
-  @SequenceGenerator(name = "id_Sequence_Audit", sequenceName = "audit_seq")
+  @SequenceGenerator(name = "id_Sequence_Audit", sequenceName = "audit_seq", allocationSize = 1)
   @Column(name = "AUDIT_ID", nullable = false)
   private Integer id;
 

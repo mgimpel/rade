@@ -22,13 +22,16 @@
        xmlns:p="http://www.springframework.org/schema/p"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+       xmlns:batch="http://www.springframework.org/schema/batch"
        xsi:schemaLocation="
          http://www.springframework.org/schema/beans
          http://www.springframework.org/schema/beans/spring-beans.xsd
          http://www.springframework.org/schema/context
          http://www.springframework.org/schema/context/spring-context.xsd
          http://www.springframework.org/schema/data/jpa 
-         http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
+         http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
+         http://www.springframework.org/schema/batch
+         http://www.springframework.org/schema/batch/spring-batch.xsd">
   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
   <!-- Persistence (Database & Hibernate) & Service Layers -->
   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
@@ -74,17 +77,16 @@
   <!-- Batch -->
   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
-  <import resource="classpath:META-INF/spring/batchContext.xml"/>
-
   <!--This repository is only really intended for use in testing and rapid prototyping-->
   <bean id="jobRepository" class="org.springframework.batch.core.repository.support.MapJobRepositoryFactoryBean"/>
 
   <bean id="jobLauncher" class="org.springframework.batch.core.launch.support.SimpleJobLauncher"
         p:jobRepository-ref="jobRepository"/>
 
-  <!-- ItemReader which reads data from file -->
-  <bean id="itemReader" class="org.springframework.batch.item.file.FlatFileItemReader">
-    <property name="resource" value="classpath:insee/reg2018.txt"/>
+  <!-- ItemReader which reads data from INSEE region file -->
+  <bean id="regionItemReader" scope="step"
+        class="org.springframework.batch.item.file.FlatFileItemReader">
+    <property name="resource" value="#{jobParameters['inputFile']}"/>
     <property name="linesToSkip" value="1"/>
     <property name="lineMapper">
       <bean class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
@@ -99,9 +101,46 @@
     </property>
   </bean>
 
+  <!-- ItemReader which reads data from INSEE departement file -->
+  <bean id="departementItemReader" scope="step"
+        class="org.springframework.batch.item.file.FlatFileItemReader">
+    <property name="resource" value="#{jobParameters['inputFile']}"/>
+    <property name="linesToSkip" value="1"/>
+    <property name="lineMapper">
+      <bean class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
+        <property name="fieldSetMapper">
+          <bean class="fr.aesn.rade.batch.DepartementMapper"/>
+        </property>
+        <property name="lineTokenizer">
+          <bean class="org.springframework.batch.item.file.transform.DelimitedLineTokenizer"
+                p:delimiter="&#9;"/> <!-- &#9; for TAB (ASCII code 09) -->
+        </property>
+      </bean>
+    </property>
+  </bean>
+
   <!-- ItemWriter which writes the data to the database -->
-  <bean id="itemWriter" class="org.springframework.batch.item.database.JpaItemWriter"
+  <bean id="jpaItemWriter" scope="step"
+        class="org.springframework.batch.item.database.JpaItemWriter"
         p:entityManagerFactory-ref="entityManagerFactory"/>
 
-  <bean id="itemProcessor" class="fr.aesn.rade.batch.EntiteAdminProcessor"/>
+  <bean id="entiteAdminItemProcessor" scope="step"
+        class="fr.aesn.rade.batch.EntiteAdminProcessor"/>
+
+  <batch:job id="importRegionJob">
+    <batch:step id="importRegionStep1">
+      <batch:tasklet>
+        <batch:chunk reader="regionItemReader" processor="entiteAdminItemProcessor" writer="jpaItemWriter" commit-interval="100"/>
+      </batch:tasklet>
+    </batch:step>
+  </batch:job>
+
+  <batch:job id="importDeptJob">
+    <batch:step id="importDeptStep1">
+      <batch:tasklet>
+        <batch:chunk reader="departementItemReader" processor="entiteAdminItemProcessor" writer="jpaItemWriter" commit-interval="100"/>
+      </batch:tasklet>
+    </batch:step>
+  </batch:job>
+
 </beans>

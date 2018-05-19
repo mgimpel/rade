@@ -78,7 +78,7 @@ public class EntiteAdministrative implements Serializable {
   /** Identifiant de l'Entité Administrative. */
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "id_Sequence_EntiteAdmin")
-  @SequenceGenerator(name = "id_Sequence_EntiteAdmin", sequenceName = "entiteadmin_seq")
+  @SequenceGenerator(name = "id_Sequence_EntiteAdmin", sequenceName = "entiteadmin_seq", allocationSize = 1)
   @Column(name = "ID", nullable = false)
   private Integer id;
 

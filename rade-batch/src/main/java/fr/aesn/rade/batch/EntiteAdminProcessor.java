@@ -41,17 +41,22 @@ public class EntiteAdminProcessor
   @Autowired @Setter
   private AuditService auditService;
 
+  /** Audit details to add to Entity */
   private Audit audit;
+  /** Date of beginning of Validity of Entity */
   private Date debutValidite;
 
   @BeforeStep
   public void beforeStep(StepExecution stepExecution) {
+    this.debutValidite = stepExecution.getJobParameters().getDate("debutValidite", new Date());
+    String auditAuteur = stepExecution.getJobParameters().getString("auditAuteur", "Batch");
+    Date auditDate = stepExecution.getJobParameters().getDate("auditDate", new Date());
+    String auditNote = stepExecution.getJobParameters().getString("auditNote", "Import Batch");
     Audit audit = new Audit();
-    audit.setAuteur("Batch");
-    audit.setDate(new Date());
-    audit.setNote("Import Batch");
+    audit.setAuteur(auditAuteur);
+    audit.setDate(auditDate);
+    audit.setNote(auditNote);
     this.audit = auditService.createAudit(audit);
-    this.debutValidite = new Date();
     log.info("Setting audit for step: {}", this.audit);
   }
 

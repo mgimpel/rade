@@ -17,12 +17,15 @@
 /* $Id$ */
 package fr.aesn.rade.batch;
 
+import java.util.Date;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobExecutionException;
 import org.springframework.batch.core.JobParameters;
+import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -39,11 +42,32 @@ public class Main {
   public static void main(String[] args) {
     ApplicationContext context = new ClassPathXmlApplicationContext("batch-context.xml");
 
+    String jobName;
+    if (args.length > 0) {
+      jobName = args[0];
+    } else {
+      jobName = "importRegionJob";
+    }
+    String inputFile;
+    if (args.length > 1) {
+        inputFile = args[1];
+      } else {
+        inputFile = "classpath:insee/reg2018.txt";
+      }
+    
     JobLauncher jobLauncher = context.getBean("jobLauncher", JobLauncher.class);
-    Job job = context.getBean("radeJob", Job.class);
+    Job job = context.getBean(jobName, Job.class);
+
+    JobParametersBuilder jobBuilder = new JobParametersBuilder();
+    jobBuilder.addString("inputFile", inputFile);
+    jobBuilder.addDate("debutValidite", new Date());
+    jobBuilder.addString("auditAuteur", "Batch");
+    jobBuilder.addDate("auditDate", new Date());
+    jobBuilder.addString("auditNote", "Import " + inputFile);
+    JobParameters jobParameters = jobBuilder.toJobParameters();
 
     try {
-      JobExecution execution = jobLauncher.run(job, new JobParameters());
+      JobExecution execution = jobLauncher.run(job, jobParameters);
       log.info("Job Exit Status : {}", execution.getStatus());
     } catch (JobExecutionException e) {
       log.error("Job failed", e);

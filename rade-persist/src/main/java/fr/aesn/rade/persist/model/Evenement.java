@@ -70,7 +70,7 @@ public class Evenement implements Serializable {
   /** Identifiant de l'évenement. */
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "id_Sequence_Evenement")
-  @SequenceGenerator(name = "id_Sequence_Evenement", sequenceName = "evenement_seq")
+  @SequenceGenerator(name = "id_Sequence_Evenement", sequenceName = "evenement_seq", allocationSize = 1)
   @Column(name = "ID", nullable = false)
   private Integer id;
 
