@@ -17,8 +17,16 @@
 /* $Id$ */
 package fr.aesn.rade.batch;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.Job;
@@ -39,28 +47,82 @@ public class Main {
   private static final Logger log =
     LoggerFactory.getLogger(Main.class);
 
+  /**
+   * Builds CLI Options.
+   * @return CLI Options.
+   */
+  public static Options cliOptions() {
+    Option help = new Option("h", "help", false, "print this message");
+    Option version = new Option("v", "version", false, "print the version information and exit");
+    Option job = Option.builder("j").longOpt("job")
+                                    .argName("name")
+                                    .hasArg()
+                                    .desc("execute the given job")
+                                    .build();
+    Option input = Option.builder("i").longOpt("input")
+                                      .argName("file")
+                                      .hasArg()
+                                      .desc("use the given file as input")
+                                      .build();
+    Option date = Option.builder("d").longOpt("date")
+                                     .argName("date")
+                                     .hasArg()
+                                     .desc("the date of beginning of validity")
+                                     .build();
+    Options options = new Options();
+    options.addOption(help);
+    options.addOption(version);
+    options.addOption(job);
+    options.addOption(input);
+    options.addOption(date);
+    return options;
+  }
+
   public static void main(String[] args) {
     ApplicationContext context = new ClassPathXmlApplicationContext("batch-context.xml");
 
-    String jobName;
-    if (args.length > 0) {
-      jobName = args[0];
-    } else {
-      jobName = "importRegionJob";
+    CommandLineParser parser = new DefaultParser();
+    CommandLine line = null;
+    try {
+      line = parser.parse(cliOptions(), args);
     }
-    String inputFile;
-    if (args.length > 1) {
-        inputFile = args[1];
-      } else {
-        inputFile = "classpath:insee/reg2018.txt";
+    catch(org.apache.commons.cli.ParseException e) {
+      log.error("Parsing failed. Reason: {}", e.getMessage());
+      HelpFormatter formatter = new HelpFormatter();
+      formatter.printHelp("java -jar rade-batch.jar", cliOptions());
+      return;
+    }
+    if (line.hasOption("help")) {
+      HelpFormatter formatter = new HelpFormatter();
+      formatter.printHelp("java -jar rade-batch.jar", cliOptions());
+      return;
+    }
+    if (line.hasOption("version")) {
+      log.info("Version");
+      return;
+    }
+    String jobName = line.hasOption("job") ? line.getOptionValue("job") : "importRegionJob";
+    String inputFile = line.hasOption("input") ? line.getOptionValue("input") : "classpath:insee/reg2018.txt";
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    Date debutValidite;
+    if (line.hasOption("date")) {
+      try {
+        debutValidite = sdf.parse(line.getOptionValue("date"));
       }
+      catch (ParseException e) {
+        log.warn("Exception parsing date {}", line.getOptionValue("date"));
+        debutValidite = new Date();
+      }
+    } else {
+      debutValidite = new Date();
+    }
     
     JobLauncher jobLauncher = context.getBean("jobLauncher", JobLauncher.class);
     Job job = context.getBean(jobName, Job.class);
 
     JobParametersBuilder jobBuilder = new JobParametersBuilder();
     jobBuilder.addString("inputFile", inputFile);
-    jobBuilder.addDate("debutValidite", new Date());
+    jobBuilder.addDate("debutValidite", debutValidite);
     jobBuilder.addString("auditAuteur", "Batch");
     jobBuilder.addDate("auditDate", new Date());
     jobBuilder.addString("auditNote", "Import " + inputFile);

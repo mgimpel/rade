@@ -70,7 +70,7 @@ import lombok.ToString;
 @Inheritance(strategy = InheritanceType.JOINED)
 @Getter @Setter @NoArgsConstructor
 @ToString(exclude = {"typeEntiteAdmin", "parents", "enfants"})
-@EqualsAndHashCode
+@EqualsAndHashCode(exclude = {"parents", "enfants"})
 public class EntiteAdministrative implements Serializable {
   /** Unique Identifier for Serializable Class. */
   private static final long serialVersionUID = 3168273278242785797L;

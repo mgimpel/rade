@@ -113,6 +113,23 @@ public class RegionServiceImpl
   }
 
   /**
+   * Returns a Map of all Region valid at the given date and indexed by code.
+   * @param date the date at which the regions are valid
+   * @return a Map of all Region indexed by code INSEE.
+   */
+  @Override
+  @Transactional(readOnly = true)
+  public Map<String, Region> getRegionMap(final Date date) {
+    log.debug("Region map requested");
+    List<Region> list = getAllRegion(date);
+    HashMap<String, Region> map = new HashMap<>(list.size());
+    for (Region item : list) {
+      map.put(item.getCodeInsee(), item);
+    }
+    return map;
+  }
+
+  /**
    * Get the Region with the given ID.
    * @param id the Region ID.
    * @return the Region with the given ID.
@@ -135,6 +152,8 @@ public class RegionServiceImpl
    * @param code the Region code.
    * @return list of Regions that have historically had the given code.
    */
+  @Override
+  @Transactional(readOnly = true)
   public List<Region> getRegionByCode(final String code) {
     log.debug("Region requested by code: code={}", code);
     return regionJpaDao.findByCodeInsee(code);
@@ -153,6 +172,8 @@ public class RegionServiceImpl
    * @param date the date at which the code was valid
    * @return the Region with the given code at the given date.
    */
+  @Override
+  @Transactional(readOnly = true)
   public Region getRegionByCode(final String code, final Date date) {
     log.debug("Region requested by code and date: code={}, date={}", code, date);
     List<Region> list = getRegionByCode(code);
@@ -175,6 +196,8 @@ public class RegionServiceImpl
    * @param date the date at which the code was valid
    * @return the Region with the given code at the given date.
    */
+  @Override
+  @Transactional(readOnly = true)
   public Region getRegionByCode(final String code, final String date) {
     log.debug("Region requested by code and date: code={}, date={}", code, date);
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -185,5 +208,32 @@ public class RegionServiceImpl
       log.warn("Region requested by code and date: Exception parsing date {}", date, e);
       return null;
     }
+  }
+
+  /**
+   * Invalidates the given region by setting the regions finValidite field to
+   * the given date.
+   * @param region the region to invalidate.
+   * @param date the date of end of validity for the region.
+   * @return the now invalidated region.
+   */
+  @Override
+  @Transactional(readOnly = false)
+  public Region invalidateRegion(Region region, Date date) {
+    if ((region == null) || (date == null)) {
+      return null;
+    }
+    Region oldRegion = getRegionById(region.getId());
+    if (!(region.equals(oldRegion)) ||
+        (oldRegion.getFinValidite() != null)) {
+      // given region has other changes
+      return null;
+    }
+    if (!(date.after(oldRegion.getDebutValidite()))) {
+      // given end of validity if before regions beginning of validity
+      return null;
+    }
+    oldRegion.setFinValidite(date);
+    return regionJpaDao.save(oldRegion);
   }
 }

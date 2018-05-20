@@ -124,13 +124,16 @@
         class="org.springframework.batch.item.database.JpaItemWriter"
         p:entityManagerFactory-ref="entityManagerFactory"/>
 
+  <bean id="regionItemProcessor" scope="step"
+        class="fr.aesn.rade.batch.RegionProcessor"/>
+
   <bean id="entiteAdminItemProcessor" scope="step"
         class="fr.aesn.rade.batch.EntiteAdminProcessor"/>
 
   <batch:job id="importRegionJob">
     <batch:step id="importRegionStep1">
       <batch:tasklet>
-        <batch:chunk reader="regionItemReader" processor="entiteAdminItemProcessor" writer="jpaItemWriter" commit-interval="100"/>
+        <batch:chunk reader="regionItemReader" processor="regionItemProcessor" writer="jpaItemWriter" commit-interval="100"/>
       </batch:tasklet>
     </batch:step>
   </batch:job>

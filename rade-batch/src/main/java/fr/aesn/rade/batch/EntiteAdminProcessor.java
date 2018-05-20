@@ -22,7 +22,6 @@ import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.StepExecution;
-import org.springframework.batch.core.annotation.BeforeStep;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -31,6 +30,11 @@ import fr.aesn.rade.persist.model.EntiteAdministrative;
 import fr.aesn.rade.service.AuditService;
 import lombok.Setter;
 
+/**
+ * Process Entite Admin Read from INSEE file and add additional details to the
+ * Entity (Audit details, Date of beginning of Validity, ...).
+ * @author Marc Gimpel (mgimpel@gmail.com)
+ */
 public class EntiteAdminProcessor
   implements ItemProcessor<EntiteAdministrative, EntiteAdministrative> {
 
@@ -42,11 +46,15 @@ public class EntiteAdminProcessor
   private AuditService auditService;
 
   /** Audit details to add to Entity */
-  private Audit audit;
+  protected Audit audit;
   /** Date of beginning of Validity of Entity */
-  private Date debutValidite;
+  protected Date debutValidite;
 
-  @BeforeStep
+  /**
+   * Recover details from Database and Job Parameters Before Step Execution
+   * starts. 
+   * @param stepExecution Spring Batch stepExecution Object.
+   */
   public void beforeStep(StepExecution stepExecution) {
     this.debutValidite = stepExecution.getJobParameters().getDate("debutValidite", new Date());
     String auditAuteur = stepExecution.getJobParameters().getString("auditAuteur", "Batch");
@@ -57,15 +65,21 @@ public class EntiteAdminProcessor
     audit.setDate(auditDate);
     audit.setNote(auditNote);
     this.audit = auditService.createAudit(audit);
-    log.info("Setting audit for step: {}", this.audit);
+    log.debug("Setting audit for step: {}", this.audit);
   }
 
+  /**
+   * Process the given EntiteAdministrative (add additional details to the
+   * Entity).
+   * @param entiteAdmin the EntiteAdministrative to process.
+   * @return the processed EntiteAdministrative.
+   */
   @Override
   public EntiteAdministrative process(EntiteAdministrative entiteAdmin) {
     entiteAdmin.setAudit(audit);
     entiteAdmin.setDebutValidite(debutValidite);
     entiteAdmin.setCommentaire("-");
-    log.info("Processing Entity: {}", entiteAdmin);
+    log.debug("Processing Entity: {}", entiteAdmin);
     return entiteAdmin;
   }
 }

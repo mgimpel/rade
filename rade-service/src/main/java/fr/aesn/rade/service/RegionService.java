@@ -48,6 +48,13 @@ public interface RegionService {
   public Map<Integer, Region> getRegionMap();
 
   /**
+   * Returns a Map of all Region valid at the given date and indexed by code.
+   * @param date the date at which the regions are valid
+   * @return a Map of all Region indexed by code INSEE.
+   */
+  public Map<String, Region> getRegionMap(Date date);
+
+  /**
    * Get the Region with the given ID.
    * @param id the Region ID.
    * @return the Region with the given ID.
@@ -76,4 +83,13 @@ public interface RegionService {
    * @return the Region with the given code at the given date.
    */
   public Region getRegionByCode(String code, String date);
+
+  /**
+   * Invalidates the given region by setting the regions finValidite field to
+   * the given date.
+   * @param region the region to invalidate.
+   * @param date the date of end of validity for the region.
+   * @return the now invalidated region.
+   */
+  public Region invalidateRegion(Region region, Date date);
 }
