@@ -68,7 +68,7 @@ public class TestDepartementJpaDao extends AbstractTestJpaDao {
   public void testGettingEntityList() {
     List<Departement> list = jpaDao.findAll();
     assertNotNull("JpaDao returned a null list", list);
-    assertEquals(101, list.size());
+    assertEquals(173, list.size());
     for (Departement obj : list) {
       assertNotNull("Hibernate returned a List but an Entity is null",
                     obj);
@@ -100,7 +100,7 @@ public class TestDepartementJpaDao extends AbstractTestJpaDao {
     assertEquals("Hibernate returned a Departement, but the Id doesn't match",
                  197, dept.getId().intValue());
     assertEquals("Hibernate returned a Departement, but a field doesn't match",
-                 sdf.parse("2018-01-01"), dept.getDebutValidite());
+                 sdf.parse("1999-01-01"), dept.getDebutValidite());
     assertEquals("Hibernate returned a Departement, but a field doesn't match",
                  null, dept.getFinValidite());
     assertEquals("Hibernate returned a Departement, but a field doesn't match",

@@ -140,7 +140,7 @@ public class TestDepartement extends AbstractTestEntity {
     assertEquals("Hibernate returned a Departement, but the Id doesn't match",
                  197, dept.getId().intValue());
     assertEquals("Hibernate returned a Departement, but a field doesn't match",
-                 sdf.parse("2018-01-01"), dept.getDebutValidite());
+                 sdf.parse("1999-01-01"), dept.getDebutValidite());
     assertEquals("Hibernate returned a Departement, but a field doesn't match",
                  null, dept.getFinValidite());
     assertEquals("Hibernate returned a Departement, but a field doesn't match",
@@ -173,7 +173,7 @@ public class TestDepartement extends AbstractTestEntity {
     List<Departement> objs = entityManager.createQuery("FROM Departement", Departement.class).getResultList();
     assertNotNull("Hibernate didn't return a List", objs);
     assertEquals("Hibernate returned a List, but the wrong size",
-                 101, objs.size());
+                 173, objs.size());
     for (Departement obj: objs) {
       assertNotNull("Hibernate returned a List but an Entity is null", obj);
     }

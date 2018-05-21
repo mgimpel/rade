@@ -35,7 +35,7 @@ import lombok.Setter;
  * Entity (Audit details, Date of beginning of Validity, ...).
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
-public class EntiteAdminProcessor
+public abstract class EntiteAdminProcessor
   implements ItemProcessor<EntiteAdministrative, EntiteAdministrative> {
 
   /** SLF4J Logger. */

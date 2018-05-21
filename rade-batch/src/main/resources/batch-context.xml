@@ -127,8 +127,8 @@
   <bean id="regionItemProcessor" scope="step"
         class="fr.aesn.rade.batch.RegionProcessor"/>
 
-  <bean id="entiteAdminItemProcessor" scope="step"
-        class="fr.aesn.rade.batch.EntiteAdminProcessor"/>
+  <bean id="departementItemProcessor" scope="step"
+        class="fr.aesn.rade.batch.DepartementProcessor"/>
 
   <batch:job id="importRegionJob">
     <batch:step id="importRegionStep1">
@@ -141,7 +141,7 @@
   <batch:job id="importDeptJob">
     <batch:step id="importDeptStep1">
       <batch:tasklet>
-        <batch:chunk reader="departementItemReader" processor="entiteAdminItemProcessor" writer="jpaItemWriter" commit-interval="100"/>
+        <batch:chunk reader="departementItemReader" processor="departementItemProcessor" writer="jpaItemWriter" commit-interval="100"/>
       </batch:tasklet>
     </batch:step>
   </batch:job>

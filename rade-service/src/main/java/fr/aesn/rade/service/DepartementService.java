@@ -48,6 +48,13 @@ public interface DepartementService {
   public Map<Integer, Departement> getDepartementMap();
 
   /**
+   * Returns a Map of all Departement valid at the given date and indexed by code.
+   * @param date the date at which the departements are valid
+   * @return a Map of all Departement indexed by code INSEE.
+   */
+  public Map<String, Departement> getDepartementMap(Date date);
+
+  /**
    * Get the Departement with the given ID.
    * @param id the Departement ID.
    * @return the Departement with the given ID.
@@ -76,4 +83,13 @@ public interface DepartementService {
    * @return the Departement with the given code at the given date.
    */
   public Departement getDepartementByCode(String code, String date);
+
+  /**
+   * Invalidates the given departement by setting the departements finValidite
+   * field to the given date.
+   * @param dept the departement to invalidate.
+   * @param date the date of end of validity for the departement.
+   * @return the now invalidated departement.
+   */
+  public Departement invalidateDepartement(Departement dept, Date date);
 }

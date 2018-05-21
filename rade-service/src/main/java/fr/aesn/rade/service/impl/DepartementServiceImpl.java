@@ -113,6 +113,21 @@ public class DepartementServiceImpl
   }
 
   /**
+   * Returns a Map of all Departement valid at the given date and indexed by code.
+   * @param date the date at which the departements are valid
+   * @return a Map of all Departement indexed by code INSEE.
+   */
+  public Map<String, Departement> getDepartementMap(final Date date) {
+    log.debug("Departement map requested for Date: date={}", date);
+    List<Departement> list = getAllDepartement(date);
+    HashMap<String, Departement> map = new HashMap<>(list.size());
+    for (Departement item : list) {
+      map.put(item.getCodeInsee(), item);
+    }
+    return map;
+  }
+
+  /**
    * Get the Departement with the given ID.
    * @param id the Departement ID.
    * @return the Departement with the given ID.
@@ -185,5 +200,30 @@ public class DepartementServiceImpl
       log.warn("Departement requested by code and date: Exception parsing date {}", date, e);
       return null;
     }
+  }
+
+  /**
+   * Invalidates the given departement by setting the departements finValidite
+   * field to the given date.
+   * @param dept the departement to invalidate.
+   * @param date the date of end of validity for the departement.
+   * @return the now invalidated departement.
+   */
+  public Departement invalidateDepartement(Departement dept, Date date) {
+    if ((dept == null) || (date == null)) {
+      return null;
+    }
+    Departement oldDept = getDepartementById(dept.getId());
+    if (!(dept.equals(oldDept)) ||
+        (oldDept.getFinValidite() != null)) {
+      // given departement has other changes
+      return null;
+    }
+    if (!(date.after(oldDept.getDebutValidite()))) {
+      // given end of validity if before regions beginning of validity
+      return null;
+    }
+    oldDept.setFinValidite(date);
+    return departementJpaDao.save(oldDept);
   }
 }

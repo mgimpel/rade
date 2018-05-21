@@ -120,7 +120,7 @@ public class RegionServiceImpl
   @Override
   @Transactional(readOnly = true)
   public Map<String, Region> getRegionMap(final Date date) {
-    log.debug("Region map requested");
+    log.debug("Region map requested for Date : date={}", date);
     List<Region> list = getAllRegion(date);
     HashMap<String, Region> map = new HashMap<>(list.size());
     for (Region item : list) {
