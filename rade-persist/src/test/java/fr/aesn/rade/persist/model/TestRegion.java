@@ -131,12 +131,12 @@ public class TestRegion extends AbstractTestEntity {
   @Test
   public void testGettingAnEntity() throws ParseException {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-    Region region = entityManager.find(Region.class, 1);
+    Region region = entityManager.find(Region.class, 0);
     assertNotNull("Hibernate didn't return a Region", region);
     assertEquals("Hibernate returned a Region, but the Id doesn't match",
-                 1, region.getId().intValue());
+                 0, region.getId().intValue());
     assertEquals("Hibernate returned a Region, but a field doesn't match",
-                 sdf.parse("2018-01-01"), region.getDebutValidite());
+                 sdf.parse("1999-01-01"), region.getDebutValidite());
     assertEquals("Hibernate returned a Region, but a field doesn't match",
                  null, region.getFinValidite());
     assertEquals("Hibernate returned a Region, but a field doesn't match",
@@ -167,7 +167,7 @@ public class TestRegion extends AbstractTestEntity {
     List<Region> objs = entityManager.createQuery("FROM Region", Region.class).getResultList();
     assertNotNull("Hibernate didn't return a List", objs);
     assertEquals("Hibernate returned a List, but the wrong size",
-                 18, objs.size());
+                 42, objs.size());
     for (Region obj: objs) {
       assertNotNull("Hibernate returned a List but an Entity is null", obj);
     }

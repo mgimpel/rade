@@ -67,7 +67,7 @@ public class TestRegionJpaDao extends AbstractTestJpaDao {
   public void testGettingEntityList() {
     List<Region> list = jpaDao.findAll();
     assertNotNull("JpaDao returned a null list", list);
-    assertEquals(18, list.size());
+    assertEquals(42, list.size());
     for (Region obj : list) {
       assertNotNull("Hibernate returned a List but an Entity is null",
                     obj);
@@ -79,10 +79,9 @@ public class TestRegionJpaDao extends AbstractTestJpaDao {
    */
   @Test
   public void testExistsEntity() {
-    assertTrue(jpaDao.existsById(1));
-    assertTrue(jpaDao.existsById(18));
-    assertFalse(jpaDao.existsById(20));
-    assertFalse(jpaDao.existsById(0));
+    assertTrue(jpaDao.existsById(0));
+    assertTrue(jpaDao.existsById(41));
+    assertFalse(jpaDao.existsById(42));
     assertFalse(jpaDao.existsById(-1));
   }
 
@@ -93,13 +92,13 @@ public class TestRegionJpaDao extends AbstractTestJpaDao {
   @Test
   public void testGettingEntity() throws ParseException {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-    Optional<Region> result = jpaDao.findById(1);
+    Optional<Region> result = jpaDao.findById(0);
     assertTrue("Hibernate didn't return an Entity", result.isPresent());
     Region region = result.get();
     assertEquals("Hibernate returned a Region, but the Id doesn't match",
-                 1, region.getId().intValue());
+                 0, region.getId().intValue());
     assertEquals("Hibernate returned a Region, but a field doesn't match",
-                 sdf.parse("2018-01-01"), region.getDebutValidite());
+                 sdf.parse("1999-01-01"), region.getDebutValidite());
     assertEquals("Hibernate returned a Region, but a field doesn't match",
                  null, region.getFinValidite());
     assertEquals("Hibernate returned a Region, but a field doesn't match",

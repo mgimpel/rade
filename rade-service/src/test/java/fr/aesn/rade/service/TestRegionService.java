@@ -78,7 +78,7 @@ public class TestRegionService
   public void testGettingRegionList() {
     List<Region> list = regionService.getAllRegion();
     assertNotNull("regionService returned a null list", list);
-    assertEquals(18, list.size());
+    assertEquals(42, list.size());
     for (Region region : list) {
       assertNotNull("Hibernate returned a List but an Entity is null",
                     region);
@@ -92,12 +92,12 @@ public class TestRegionService
   @Test
   public void testGettingRegionById() throws ParseException {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-    Region region = regionService.getRegionById(1);
+    Region region = regionService.getRegionById(0);
     assertNotNull("Hibernate didn't return a Region", region);
     assertEquals("Hibernate returned a Region, but the Id doesn't match",
-                 1, region.getId().intValue());
+                 0, region.getId().intValue());
     assertEquals("Hibernate returned a Region, but a field doesn't match",
-                 sdf.parse("2018-01-01"), region.getDebutValidite());
+                 sdf.parse("1999-01-01"), region.getDebutValidite());
     assertEquals("Hibernate returned a Region, but a field doesn't match",
                  null, region.getFinValidite());
     assertEquals("Hibernate returned a Region, but a field doesn't match",
@@ -118,9 +118,8 @@ public class TestRegionService
                  "01", region.getCodeInsee());
     assertEquals("Hibernate returned a Region, but a field doesn't match",
                  "97105", region.getChefLieu());
-    assertNull(regionService.getRegionById(0));
     assertNull(regionService.getRegionById(-1));
-    assertNull(regionService.getRegionById(20));
+    assertNull(regionService.getRegionById(50));
   }
 
   /**
@@ -136,9 +135,9 @@ public class TestRegionService
     Region region = list.get(0);
     assertNotNull("Hibernate didn't return a Region", region);
     assertEquals("Hibernate returned a Region, but the Id doesn't match",
-                 1, region.getId().intValue());
+                 0, region.getId().intValue());
     assertEquals("Hibernate returned a Region, but a field doesn't match",
-                 sdf.parse("2018-01-01"), region.getDebutValidite());
+                 sdf.parse("1999-01-01"), region.getDebutValidite());
     assertEquals("Hibernate returned a Region, but a field doesn't match",
                  null, region.getFinValidite());
     assertEquals("Hibernate returned a Region, but a field doesn't match",
