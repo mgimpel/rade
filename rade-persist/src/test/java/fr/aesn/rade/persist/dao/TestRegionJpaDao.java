@@ -59,7 +59,7 @@ public class TestRegionJpaDao extends AbstractTestJpaDao {
         .addScript("db/sql/insert-TypeGenealogieEntiteAdmin.sql")
         .addScript("db/sql/insert-Audit.sql")
         .addScript("db/sql/insert-Region.sql")
-        .addScript("db/sql/insert-Genealogie.sql")
+        .addScript("db/sql/insert-RegionGenealogie.sql")
         .build();
   }
 

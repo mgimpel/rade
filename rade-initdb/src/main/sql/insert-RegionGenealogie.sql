@@ -15,9 +15,10 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 /* $Id$ */
+-- Généalogie Régions
 INSERT INTO ZR_GENEALOGIE ("PARENT", "ENFANT", "TYPE_GENEALOGIE", "COMMENTAIRE") VALUES (13, 27, '540', 'Reconstruction manuelle');
 INSERT INTO ZR_GENEALOGIE ("PARENT", "ENFANT", "TYPE_GENEALOGIE", "COMMENTAIRE") VALUES (4, 28, '100', 'Reconstruction manuelle');
---INSERT INTO ZR_GENEALOGIE ("PARENT", "ENFANT", "TYPE_GENEALOGIE", "COMMENTAIRE") VALUES (0, 29, '200', 'Reconstruction manuelle');
+--INSERT INTO ZR_GENEALOGIE ("PARENT", "ENFANT", "TYPE_GENEALOGIE", "COMMENTAIRE") VALUES (0, 29, '200', 'Création Mayotte');
 INSERT INTO ZR_GENEALOGIE ("PARENT", "ENFANT", "TYPE_GENEALOGIE", "COMMENTAIRE") VALUES (22, 30, '100', 'Reconstruction manuelle');
 INSERT INTO ZR_GENEALOGIE ("PARENT", "ENFANT", "TYPE_GENEALOGIE", "COMMENTAIRE") VALUES (9, 31, '100', 'Reconstruction manuelle');
 INSERT INTO ZR_GENEALOGIE ("PARENT", "ENFANT", "TYPE_GENEALOGIE", "COMMENTAIRE") VALUES (11, 32, '200', 'Reconstruction manuelle');

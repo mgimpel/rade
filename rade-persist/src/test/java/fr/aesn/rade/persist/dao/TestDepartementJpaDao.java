@@ -55,9 +55,13 @@ public class TestDepartementJpaDao extends AbstractTestJpaDao {
         .addScript("db/sql/create-tables.sql")
         .addScript("db/sql/insert-TypeEntiteAdmin.sql")
         .addScript("db/sql/insert-TypeNomClair.sql")
+        .addScript("db/sql/insert-StatutModification.sql")
+        .addScript("db/sql/insert-TypeGenealogieEntiteAdmin.sql")
         .addScript("db/sql/insert-Audit.sql")
         .addScript("db/sql/insert-Region.sql")
+        .addScript("db/sql/insert-RegionGenealogie.sql")
         .addScript("db/sql/insert-Departement.sql")
+        .addScript("db/sql/insert-DepartementGenealogie.sql")
         .build();
   }
 
