@@ -22,7 +22,7 @@ INSERT INTO ZR_TYPEGENEALOGIE("CODE", "LIBELLE_COURT", "LIBELLE_LONG", "STATUT_D
 INSERT INTO ZR_TYPEGENEALOGIE("CODE", "LIBELLE_COURT", "LIBELLE_LONG", "STATUT_DEFAUT") VALUES ('120', 'Changement de nom', 'Changement de nom dû à un rétablissement', 'I');
 INSERT INTO ZR_TYPEGENEALOGIE("CODE", "LIBELLE_COURT", "LIBELLE_LONG", "STATUT_DEFAUT") VALUES ('130', 'Changement de nom', 'Changement de nom dû au changement de chef-lieu', 'I');
 INSERT INTO ZR_TYPEGENEALOGIE("CODE", "LIBELLE_COURT", "LIBELLE_LONG", "STATUT_DEFAUT") VALUES ('140', 'Changement de nom', 'Changement de nom dû au transfert du bureau centralisateur de canton', 'I');
-INSERT INTO ZR_TYPEGENEALOGIE("CODE", "LIBELLE_COURT", "LIBELLE_LONG", "STATUT_DEFAUT") VALUES ('150', 'Changement de nom', 'Changement de nom dû au transfert du chef-lieu d’arrondissement', 'I');
+INSERT INTO ZR_TYPEGENEALOGIE("CODE", "LIBELLE_COURT", "LIBELLE_LONG", "STATUT_DEFAUT") VALUES ('150', 'Changement de nom', 'Changement de nom dû au transfert du chef-lieu d''arrondissement', 'I');
 INSERT INTO ZR_TYPEGENEALOGIE("CODE", "LIBELLE_COURT", "LIBELLE_LONG", "STATUT_DEFAUT") VALUES ('200', 'Création', 'Création', 'I');
 INSERT INTO ZR_TYPEGENEALOGIE("CODE", "LIBELLE_COURT", "LIBELLE_LONG", "STATUT_DEFAUT") VALUES ('210', 'Rétablissement', 'Rétablissement', 'I');
 INSERT INTO ZR_TYPEGENEALOGIE("CODE", "LIBELLE_COURT", "LIBELLE_LONG", "STATUT_DEFAUT") VALUES ('220', 'Commune parcellé', 'Commune ayant donné des parcelles pour la création', 'I');

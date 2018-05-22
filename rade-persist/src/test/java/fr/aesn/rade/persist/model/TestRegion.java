@@ -52,8 +52,11 @@ public class TestRegion extends AbstractTestEntity {
         .addScript("db/sql/create-tables.sql")
         .addScript("db/sql/insert-TypeEntiteAdmin.sql")
         .addScript("db/sql/insert-TypeNomClair.sql")
+        .addScript("db/sql/insert-StatutModification.sql")
+        .addScript("db/sql/insert-TypeGenealogieEntiteAdmin.sql")
         .addScript("db/sql/insert-Audit.sql")
         .addScript("db/sql/insert-Region.sql")
+        .addScript("db/sql/insert-Genealogie.sql")
         .build();
   }
 
