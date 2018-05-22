@@ -79,9 +79,10 @@ public class TestRegionJpaDao extends AbstractTestJpaDao {
    */
   @Test
   public void testExistsEntity() {
-    assertTrue(jpaDao.existsById(0));
-    assertTrue(jpaDao.existsById(41));
-    assertFalse(jpaDao.existsById(42));
+    assertTrue(jpaDao.existsById(1));
+    assertTrue(jpaDao.existsById(42));
+    assertFalse(jpaDao.existsById(43));
+    assertFalse(jpaDao.existsById(0));
     assertFalse(jpaDao.existsById(-1));
   }
 
@@ -92,11 +93,11 @@ public class TestRegionJpaDao extends AbstractTestJpaDao {
   @Test
   public void testGettingEntity() throws ParseException {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-    Optional<Region> result = jpaDao.findById(0);
+    Optional<Region> result = jpaDao.findById(1);
     assertTrue("Hibernate didn't return an Entity", result.isPresent());
     Region region = result.get();
     assertEquals("Hibernate returned a Region, but the Id doesn't match",
-                 0, region.getId().intValue());
+                 1, region.getId().intValue());
     assertEquals("Hibernate returned a Region, but a field doesn't match",
                  sdf.parse("1999-01-01"), region.getDebutValidite());
     assertEquals("Hibernate returned a Region, but a field doesn't match",

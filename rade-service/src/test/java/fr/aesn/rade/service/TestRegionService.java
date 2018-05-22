@@ -92,10 +92,10 @@ public class TestRegionService
   @Test
   public void testGettingRegionById() throws ParseException {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-    Region region = regionService.getRegionById(0);
+    Region region = regionService.getRegionById(1);
     assertNotNull("Hibernate didn't return a Region", region);
     assertEquals("Hibernate returned a Region, but the Id doesn't match",
-                 0, region.getId().intValue());
+                 1, region.getId().intValue());
     assertEquals("Hibernate returned a Region, but a field doesn't match",
                  sdf.parse("1999-01-01"), region.getDebutValidite());
     assertEquals("Hibernate returned a Region, but a field doesn't match",
@@ -119,6 +119,7 @@ public class TestRegionService
     assertEquals("Hibernate returned a Region, but a field doesn't match",
                  "97105", region.getChefLieu());
     assertNull(regionService.getRegionById(-1));
+    assertNull(regionService.getRegionById(0));
     assertNull(regionService.getRegionById(50));
   }
 
@@ -135,7 +136,7 @@ public class TestRegionService
     Region region = list.get(0);
     assertNotNull("Hibernate didn't return a Region", region);
     assertEquals("Hibernate returned a Region, but the Id doesn't match",
-                 0, region.getId().intValue());
+                 1, region.getId().intValue());
     assertEquals("Hibernate returned a Region, but a field doesn't match",
                  sdf.parse("1999-01-01"), region.getDebutValidite());
     assertEquals("Hibernate returned a Region, but a field doesn't match",

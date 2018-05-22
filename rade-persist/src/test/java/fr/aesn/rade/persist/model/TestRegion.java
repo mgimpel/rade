@@ -131,10 +131,10 @@ public class TestRegion extends AbstractTestEntity {
   @Test
   public void testGettingAnEntity() throws ParseException {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-    Region region = entityManager.find(Region.class, 0);
+    Region region = entityManager.find(Region.class, 1);
     assertNotNull("Hibernate didn't return a Region", region);
     assertEquals("Hibernate returned a Region, but the Id doesn't match",
-                 0, region.getId().intValue());
+                 1, region.getId().intValue());
     assertEquals("Hibernate returned a Region, but a field doesn't match",
                  sdf.parse("1999-01-01"), region.getDebutValidite());
     assertEquals("Hibernate returned a Region, but a field doesn't match",
