@@ -114,7 +114,7 @@ COMMENT ON COLUMN ZR_TYPEENTITEADMIN.LIBELLE_COURT IS
 -- ZR_TYPEGENEALOGIE : Type de Généalogie d'entité administrative
 -- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - --
 CREATE TABLE ZR_TYPEGENEALOGIE (
-  CODE          varchar(2)   NOT NULL PRIMARY KEY,
+  CODE          varchar(3)   NOT NULL PRIMARY KEY,
   LIBELLE_COURT varchar(20)  NOT NULL,
   LIBELLE_LONG  varchar(100) NOT NULL,
   STATUT_DEFAUT varchar(1),
@@ -249,7 +249,7 @@ COMMENT ON COLUMN ZR_COMMUNE.URBAIN_RURAL IS
 CREATE TABLE ZR_GENEALOGIE (
   PARENT          integer       NOT NULL,
   ENFANT          integer       NOT NULL,
-  TYPE_GENEALOGIE varchar(2)    NOT NULL,
+  TYPE_GENEALOGIE varchar(3)    NOT NULL,
   COMMENTAIRE     varchar(2000),
   PRIMARY KEY (PARENT, ENFANT),
   FOREIGN KEY (PARENT) REFERENCES ZR_ENTITEADMIN,
@@ -276,7 +276,7 @@ CREATE TABLE ZR_EVENEMENT (
   DESCRIPTION   varchar(350),
   ENTITE_ADMIN  integer,
   STATUT_MODIF  varchar(1)   NOT NULL,
-  TYPE_MODIF    varchar(2)   NOT NULL,
+  TYPE_MODIF    varchar(3)   NOT NULL,
   AUDIT_ID      integer      NOT NULL,
   ZR_DSTATUT    date         NOT NULL,
   ZR_BORIGINE   varchar(1)   NOT NULL,

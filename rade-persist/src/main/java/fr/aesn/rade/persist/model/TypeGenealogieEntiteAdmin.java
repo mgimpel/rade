@@ -68,9 +68,9 @@ public class TypeGenealogieEntiteAdmin implements Serializable {
   private static final long serialVersionUID = 885367586801528497L;
 
   /** Code du Type de généalogie d'entité administrative. */
-  @Size(max = 2)
+  @Size(max = 3)
   @Id
-  @Column(name = "CODE", length = 2, nullable = false)
+  @Column(name = "CODE", length = 3, nullable = false)
   private String code;
 
   /** Libellé court du Type de généalogie d'entité administrative. */

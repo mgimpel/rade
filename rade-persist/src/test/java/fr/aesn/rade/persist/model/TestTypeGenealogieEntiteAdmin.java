@@ -64,11 +64,11 @@ public class TestTypeGenealogieEntiteAdmin extends AbstractTestEntity {
     modif.setCode("I");
     modif.setLibelleCourt("Identifié");
     modif.setLibelleLong("Identifié (à traiter)");
-    obj1.setCode("10");
+    obj1.setCode("100");
     obj1.setLibelleCourt("Changement de nom");
     obj1.setLibelleLong("Changement de nom");
     obj1.setStatutParDefaut(modif);
-    obj2.setCode("10");
+    obj2.setCode("100");
     obj2.setLibelleCourt("Changement de nom");
     obj2.setLibelleLong("Changement de nom");
     obj2.setStatutParDefaut(modif);
@@ -92,10 +92,10 @@ public class TestTypeGenealogieEntiteAdmin extends AbstractTestEntity {
    */
   @Test
   public void testGettingAnEntity() {
-    TypeGenealogieEntiteAdmin typeGenealogieEntiteAdmin = entityManager.find(TypeGenealogieEntiteAdmin.class, "10");
+    TypeGenealogieEntiteAdmin typeGenealogieEntiteAdmin = entityManager.find(TypeGenealogieEntiteAdmin.class, "100");
     assertNotNull("Hibernate didn't return a TypeGenealogieEntiteAdmin", typeGenealogieEntiteAdmin);
     assertEquals("Hibernate returned a TypeGenealogieEntiteAdmin, but the Code doesn't match",
-                 "10", typeGenealogieEntiteAdmin.getCode());
+                 "100", typeGenealogieEntiteAdmin.getCode());
     assertEquals("Hibernate returned a TypeGenealogieEntiteAdmin, but the Label doesn't match",
                  "Changement de nom", typeGenealogieEntiteAdmin.getLibelleCourt());
     assertEquals("Hibernate returned a TypeGenealogieEntiteAdmin, but the Label doesn't match",
@@ -112,7 +112,7 @@ public class TestTypeGenealogieEntiteAdmin extends AbstractTestEntity {
     List<TypeGenealogieEntiteAdmin> objs = entityManager.createQuery("FROM TypeGenealogieEntiteAdmin", TypeGenealogieEntiteAdmin.class).getResultList();
     assertNotNull("Hibernate didn't return a List", objs);
     assertEquals("Hibernate returned a List, but the wrong size",
-                 34, objs.size());
+                 49, objs.size());
     for (TypeGenealogieEntiteAdmin obj: objs) {
       assertNotNull("Hibernate returned a List but an Entity is null", obj);
     }
