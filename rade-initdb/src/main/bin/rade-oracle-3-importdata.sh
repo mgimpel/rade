@@ -29,8 +29,8 @@ iconv -f UTF-8 -t ISO_8859-15 -o $DUMP_DIR/rade-$DATE/insert-CirconscriptionBass
 iconv -f UTF-8 -t ISO_8859-15 -o $DUMP_DIR/rade-$DATE/insert-Region-iso885915.sql $DUMP_DIR/rade-$DATE/insert-Region.sql
 iconv -f UTF-8 -t ISO_8859-15 -o $DUMP_DIR/rade-$DATE/insert-Departement-iso885915.sql $DUMP_DIR/rade-$DATE/insert-Departement.sql
 iconv -f UTF-8 -t ISO_8859-15 -o $DUMP_DIR/rade-$DATE/insert-Commune-iso885915.sql $DUMP_DIR/rade-$DATE/insert-Commune.sql
-iconv -f UTF-8 -t ISO_8859-15 -o $DUMP_DIR/rade-$DATE/insert-Genealogie-iso885915.sql $DUMP_DIR/rade-$DATE/insert-RegionGenealogie.sql
-iconv -f UTF-8 -t ISO_8859-15 -o $DUMP_DIR/rade-$DATE/insert-Genealogie-iso885915.sql $DUMP_DIR/rade-$DATE/insert-DepartementGenealogie.sql
+iconv -f UTF-8 -t ISO_8859-15 -o $DUMP_DIR/rade-$DATE/insert-RegionGenealogie-iso885915.sql $DUMP_DIR/rade-$DATE/insert-RegionGenealogie.sql
+iconv -f UTF-8 -t ISO_8859-15 -o $DUMP_DIR/rade-$DATE/insert-DepartementGenealogie-iso885915.sql $DUMP_DIR/rade-$DATE/insert-DepartementGenealogie.sql
 iconv -f UTF-8 -t ISO_8859-15 -o $DUMP_DIR/rade-$DATE/insert-Delegation-iso885915.sql $DUMP_DIR/rade-$DATE/insert-Delegation.sql
 
 sed -i -e "s/'2018-04-01 00:00:00'/TO_TIMESTAMP\('2018-04-01 00:00:00', 'yyyy-mm-dd HH24:MI:SS'\)/" $DUMP_DIR/rade-$DATE/insert-Audit-iso885915.sql
