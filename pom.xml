@@ -39,6 +39,7 @@
     <module>rade-rs</module>
     <module>rade-webapp</module>
     <module>rade-batch</module>
+    <module>rade-rpm</module>
   </modules>
 
   <properties>
@@ -58,6 +59,7 @@
     <slf4j.version>1.7.25</slf4j.version>
     <!-- Other properties -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <rpm.artifact>pom</rpm.artifact> <!-- set to "rpm" to build RPM (done in profile) -->
   </properties>
 
   <dependencies>
@@ -425,9 +427,9 @@
           <arch>i386</arch>
         </os>
       </activation>
-      <modules>
-        <module>rade-rpm</module>
-      </modules>
+      <properties>
+        <rpm.artifact>rpm</rpm.artifact>
+      </properties>
     </profile>
   </profiles>
 

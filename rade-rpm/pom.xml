@@ -28,7 +28,7 @@
     <version>0.2-SNAPSHOT</version>
   </parent>
   <artifactId>rade-rpm</artifactId>
-  <packaging>rpm</packaging>
+  <packaging>${rpm.artifact}</packaging>
 
   <name>Rade (Referentiel Administrative)</name>
   <description>
@@ -57,14 +57,6 @@ des services REST et des service SOAP (dont le service pour Aramis).
         <artifactId>rpm-maven-plugin</artifactId>
         <version>2.2.0</version>
         <extensions>true</extensions>
-        <executions>
-          <execution>
-            <id>generate-rpm</id>
-            <goals>
-              <goal>rpm</goal>
-            </goals>
-          </execution>
-        </executions>
         <configuration>
           <name>rade</name>
           <license>GPLv3</license>
