@@ -423,8 +423,7 @@
       <id>rpm</id>
       <activation>
         <os>
-          <family>linux</family>
-          <arch>i386</arch>
+          <family>unix</family>
         </os>
       </activation>
       <properties>
