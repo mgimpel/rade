@@ -48,7 +48,7 @@
     <!-- Major dependency versions to ensure coherence among subprojects -->
     <java.version>1.8</java.version>
     <spring.version>5.0.6.RELEASE</spring.version>
-    <spring-boot.version>2.0.1.RELEASE</spring-boot.version>
+    <spring-boot.version>2.0.2.RELEASE</spring-boot.version>
     <spring-data.version>2.0.7.RELEASE</spring-data.version>
     <spring-security.version>5.0.5.RELEASE</spring-security.version>
     <spring-batch.version>4.0.1.RELEASE</spring-batch.version>
@@ -245,7 +245,7 @@
       <dependency>
         <groupId>org.apache.commons</groupId>
         <artifactId>commons-dbcp2</artifactId>
-        <version>2.2.0</version>
+        <version>2.3.0</version>
       </dependency>
       <dependency>
         <groupId>commons-cli</groupId>
@@ -336,11 +336,13 @@
             <target>${java.version}</target>
           </configuration>
         </plugin>
+        <!-- Spring Boot (builds all in one JAR) -->
         <plugin>
           <groupId>org.springframework.boot</groupId>
           <artifactId>spring-boot-maven-plugin</artifactId>
           <version>${spring-boot.version}</version>
         </plugin>
+        <!-- CXF builds stub code from WSDL -->
         <plugin>
           <groupId>org.apache.cxf</groupId>
           <artifactId>cxf-codegen-plugin</artifactId>
@@ -388,7 +390,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-war-plugin</artifactId>
-        <version>3.2.0</version>
+        <version>3.2.1</version>
         <configuration>
           <archive>
             <manifest>
@@ -401,6 +403,16 @@
           </archive>
         </configuration>
       </plugin>
+      <!-- Release Management -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <version>2.5.3</version>
+        <configuration>
+          <autoVersionSubmodules>true</autoVersionSubmodules>
+          <localCheckout>true</localCheckout>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
 
@@ -410,7 +422,18 @@
       <name>Project Website</name>
       <url>file:///var/www/html/projects/template-project/</url>
     </site>
+    <repository>
+      <id>releases</id>
+      <name>libs-release-local</name>
+      <url>https://artifactory.aesn.fr/artifactory/libs-release-local</url>
+    </repository>
+    <snapshotRepository>
+      <id>snapshots</id>
+      <name>libs-snapshot-local</name>
+      <url>https://artifactory.aesn.fr/artifactory/libs-snapshot-local</url>
+    </snapshotRepository>
   </distributionManagement>
+  
 
   <reporting>
     <plugins>
@@ -492,6 +515,7 @@
   </ciManagement>
   <scm>
     <connection>scm:git:git://github.com/mgimpel/rade/</connection>
+    <developerConnection>scm:git:git://github.com/mgimpel/rade/</developerConnection>
     <url>https://github.com/mgimpel/rade</url>
   </scm>
 </project>

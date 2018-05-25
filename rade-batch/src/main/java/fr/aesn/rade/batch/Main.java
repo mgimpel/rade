@@ -47,26 +47,34 @@ public class Main {
   private static final Logger log =
     LoggerFactory.getLogger(Main.class);
 
+  public static final String DEFAULT_JOB_NAME = "importRegionJob";
+  public static final String DEFAULT_INPUT_FILE = "classpath:insee/reg2018.txt";
+  public static final String OPTION_HELP    = "help";
+  public static final String OPTION_VERSION = "version";
+  public static final String OPTION_JOB     = "job";
+  public static final String OPTION_INPUT   = "input";
+  public static final String OPTION_DATE    = "date";
+  
+
   /**
    * Builds CLI Options.
    * @return CLI Options.
    */
   public static Options cliOptions() {
-    Option help = new Option("h", "help", false, "print this message");
-    Option version = new Option("v", "version", false, "print the version information and exit");
-    Option job = Option.builder("j").longOpt("job")
-                                    .argName("name")
-                                    .hasArg()
+    Option help = new Option("h", OPTION_HELP, false,
+                             "print this message");
+    Option version = new Option("v", OPTION_VERSION, false,
+                                "print the version information and exit");
+    Option job = Option.builder("j").longOpt(OPTION_JOB)
+                                    .hasArg().argName("name")
                                     .desc("execute the given job")
                                     .build();
-    Option input = Option.builder("i").longOpt("input")
-                                      .argName("file")
-                                      .hasArg()
+    Option input = Option.builder("i").longOpt(OPTION_INPUT)
+                                      .hasArg().argName("file")
                                       .desc("use the given file as input")
                                       .build();
-    Option date = Option.builder("d").longOpt("date")
-                                     .argName("date")
-                                     .hasArg()
+    Option date = Option.builder("d").longOpt(OPTION_DATE)
+                                     .hasArg().argName("date")
                                      .desc("the date of beginning of validity")
                                      .build();
     Options options = new Options();
@@ -79,8 +87,10 @@ public class Main {
   }
 
   public static void main(String[] args) {
+    // Load Spring Context
     ApplicationContext context = new ClassPathXmlApplicationContext("batch-context.xml");
 
+    // Parse Command line
     CommandLineParser parser = new DefaultParser();
     CommandLine line = null;
     try {
@@ -101,8 +111,8 @@ public class Main {
       log.info("Version");
       return;
     }
-    String jobName = line.hasOption("job") ? line.getOptionValue("job") : "importRegionJob";
-    String inputFile = line.hasOption("input") ? line.getOptionValue("input") : "classpath:insee/reg2018.txt";
+    String jobName = line.hasOption("job") ? line.getOptionValue("job") : DEFAULT_JOB_NAME;
+    String inputFile = line.hasOption("input") ? line.getOptionValue("input") : DEFAULT_INPUT_FILE;
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     Date debutValidite;
     if (line.hasOption("date")) {
@@ -116,10 +126,10 @@ public class Main {
     } else {
       debutValidite = new Date();
     }
-    
+
+    // Launch Job
     JobLauncher jobLauncher = context.getBean("jobLauncher", JobLauncher.class);
     Job job = context.getBean(jobName, Job.class);
-
     JobParametersBuilder jobBuilder = new JobParametersBuilder();
     jobBuilder.addString("inputFile", inputFile);
     jobBuilder.addDate("debutValidite", debutValidite);
@@ -127,7 +137,6 @@ public class Main {
     jobBuilder.addDate("auditDate", new Date());
     jobBuilder.addString("auditNote", "Import " + inputFile);
     JobParameters jobParameters = jobBuilder.toJobParameters();
-
     try {
       JobExecution execution = jobLauncher.run(job, jobParameters);
       log.info("Job Exit Status : {}", execution.getStatus());
