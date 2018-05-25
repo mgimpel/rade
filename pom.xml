@@ -416,6 +416,21 @@
     </plugins>
   </build>
 
+  <profiles>
+    <profile>
+      <id>rpm</id>
+      <activation>
+        <os>
+          <family>linux</family>
+          <arch>i386</arch>
+        </os>
+      </activation>
+      <modules>
+        <module>rade-rpm</module>
+      </modules>
+    </profile>
+  </profiles>
+
   <distributionManagement>
     <site>
       <id>site</id>
@@ -423,17 +438,16 @@
       <url>file:///var/www/html/projects/template-project/</url>
     </site>
     <repository>
-      <id>releases</id>
+      <id>artifactory-releases</id>
       <name>libs-release-local</name>
       <url>https://artifactory.aesn.fr/artifactory/libs-release-local</url>
     </repository>
     <snapshotRepository>
-      <id>snapshots</id>
+      <id>artifactory-snapshots</id>
       <name>libs-snapshot-local</name>
       <url>https://artifactory.aesn.fr/artifactory/libs-snapshot-local</url>
     </snapshotRepository>
   </distributionManagement>
-  
 
   <reporting>
     <plugins>
