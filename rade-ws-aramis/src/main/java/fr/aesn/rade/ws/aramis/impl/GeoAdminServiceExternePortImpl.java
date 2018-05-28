@@ -17,6 +17,7 @@
 /* $Id$ */
 package fr.aesn.rade.ws.aramis.impl;
 
+import java.time.Year;
 import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -99,6 +100,10 @@ public class GeoAdminServiceExternePortImpl implements GeoAdminServiceExterneImp
      */
     public java.util.List<fr.aesn.rade.ws.aramis.impl.CommuneVO> findAllCommunes(java.lang.Integer annee) {
         log.info("Processing WebService findAllCommunes for year {}", annee);
+        if (annee == null) {
+          // Si l'annee n'est pas fourni, on suppose l'annee précédent l'annee en cours 
+          annee = Year.now().getValue() - 1;
+        }
         try {
             if (communeService == null) {
                 log.error("Could not findAllCommunes, service was null (configuration error)");
