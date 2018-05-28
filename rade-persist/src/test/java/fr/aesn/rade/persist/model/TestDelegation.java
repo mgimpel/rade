@@ -144,9 +144,9 @@ public class TestDelegation extends AbstractTestEntity {
     assertEquals("Hibernate returned a Delegation, but the Fax doesn't match",
                  "xxx", delegation.getFax());
     assertEquals("Hibernate returned a Delegation, but the Site Web doesn't match",
-                 "xxx", delegation.getSiteWeb());
+                 "http://www.eau-seine-normandie.fr/", delegation.getSiteWeb());
     assertEquals("Hibernate returned a Delegation, but the Telephone doesn't match",
-                 "xxx", delegation.getTelephone());
+                 "01 41 20 16 00", delegation.getTelephone());
     assertEquals("Hibernate returned a Delegation, but the Telephone2 doesn't match",
                  "xxx", delegation.getTelephone2());
     assertEquals("Hibernate returned a Delegation, but the Telephone3 doesn't match",
@@ -161,7 +161,7 @@ public class TestDelegation extends AbstractTestEntity {
     List<Delegation> objs = entityManager.createQuery("FROM Delegation", Delegation.class).getResultList();
     assertNotNull("Hibernate didn't return a List", objs);
     assertEquals("Hibernate returned a List, but the wrong size",
-                 10, objs.size());
+                 9, objs.size());
     for (Delegation obj: objs) {
       assertNotNull("Hibernate returned a List but an Entity is null", obj);
     }

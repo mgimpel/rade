@@ -74,7 +74,7 @@ public class TestDelegationService
   public void testGettingDelegationList() {
     List<Delegation> list = delegationService.getAllDelegation();
     assertNotNull("delegationService returned a null list", list);
-    assertEquals(10, list.size());
+    assertEquals(9, list.size());
     for (Delegation delegation : list) {
       assertNotNull("Hibernate returned a List but an Entity is null",
                     delegation);
@@ -113,9 +113,9 @@ public class TestDelegationService
     assertEquals("Hibernate returned a Delegation, but the Fax doesn't match",
                  "xxx", delegation.getFax());
     assertEquals("Hibernate returned a Delegation, but the Site Web doesn't match",
-                 "xxx", delegation.getSiteWeb());
+                 "http://www.eau-seine-normandie.fr/", delegation.getSiteWeb());
     assertEquals("Hibernate returned a Delegation, but the Telephone doesn't match",
-                 "xxx", delegation.getTelephone());
+                 "01 41 20 16 00", delegation.getTelephone());
     assertEquals("Hibernate returned a Delegation, but the Telephone2 doesn't match",
                  "xxx", delegation.getTelephone2());
     assertEquals("Hibernate returned a Delegation, but the Telephone3 doesn't match",
