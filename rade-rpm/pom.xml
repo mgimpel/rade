@@ -14,18 +14,16 @@
  *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
- *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *  along with this program.  If not, see <https://www.gnu.org/licenses />.
  */-->
 <!-- $Id$ -->
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
     <groupId>fr.aesn.rade</groupId>
     <artifactId>rade</artifactId>
-    <version>0.2-SNAPSHOT</version>
+    <version>0.3</version>
   </parent>
   <artifactId>rade-rpm</artifactId>
   <packaging>${rpm.artifact}</packaging>
@@ -60,9 +58,9 @@ des services REST et des service SOAP (dont le service pour Aramis).
         <configuration>
           <name>rade</name>
           <license>GPLv3</license>
-          <distribution></distribution>
+          <distribution />
           <group>Application/Internet</group>
-          <icon></icon>
+          <icon />
           <packager>AESN</packager>
           <prefix>/usr/local</prefix>
           <defineStatements>
