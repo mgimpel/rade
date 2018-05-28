@@ -59,6 +59,7 @@
     <slf4j.version>1.7.25</slf4j.version>
     <!-- Other properties -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.scm.id>github</project.scm.id> <!-- set username/password in settings.xml -->
     <rpm.artifact>pom</rpm.artifact> <!-- set to "rpm" to build RPM (done in profile) -->
   </properties>
 
@@ -415,6 +416,22 @@
           <localCheckout>true</localCheckout>
         </configuration>
       </plugin>
+      <!-- Javadoc -->
+      <!--
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>3.0.0</version>
+        <executions>
+          <execution>
+            <id>attach-javadocs</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      -->
     </plugins>
   </build>
 
