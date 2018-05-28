@@ -62,5 +62,6 @@ START $DUMP_DIR/rade-$DATE/insert-Commune-iso885915.sql
 START $DUMP_DIR/rade-$DATE/insert-RegionGenealogie-iso885915.sql
 START $DUMP_DIR/rade-$DATE/insert-DepartementGenealogie-iso885915.sql
 START $DUMP_DIR/rade-$DATE/insert-Delegation-iso885915.sql
+update ZR_ENTITEADMIN set DEBUT_VALIDITE=TO_DATE('2017-01-01', 'yyyy-mm-dd') where TYPE_ENTITE_ADMIN='COM';
 SPOOL OFF
 EXIT;
