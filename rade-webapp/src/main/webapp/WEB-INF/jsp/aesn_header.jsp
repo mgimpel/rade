@@ -19,14 +19,15 @@
 <%/* $Id$ */%>
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta http-equiv="Content-Language" content="fr">
 	<title>RADE AESN - ${titre}</title>
-	<link rel="icon" href="<%=request.getContextPath()%>/img/favicon.ico" type="image/x-icon">
-	<link rel="shortcut icon" href="<%=request.getContextPath()%>/img/favicon.ico" type="image/x-icon">
+	<link rel="icon" href="<%=request.getContextPath()%>/favicon.ico" type="image/x-icon">
+	<link rel="shortcut icon" href="<%=request.getContextPath()%>/favicon.ico" type="image/x-icon">
 	<link rel="stylesheet" href="<%=request.getContextPath()%>/css/aesn-styles.css" type="text/css">
 	<link rel="stylesheet" href="<%=request.getContextPath()%>/css/aesn-coul_06.css" type="text/css">
 	<script type="text/javascript">
@@ -54,6 +55,7 @@
 					<form id="f_acces_rap" action="#" method="post">
 						<select name="sel_acces_rapide" id="sel_acces_rapide">
 							<option value="" selected>Accès rapide</option>
+<spring:eval var="headermenu" expression="@headerMenu"/>
 <c:forEach var="menuitem" items="${headermenu}">
 							<option value="${menuitem.value}">${menuitem.key}</option>
 </c:forEach>

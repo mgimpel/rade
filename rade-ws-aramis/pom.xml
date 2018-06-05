@@ -77,9 +77,10 @@
                   </bindingFiles>
                   <extraargs>
                     <!-- <extraarg>-impl</extraarg> --><!-- Generates Implementation Stub (copy to /src/main/java and fill in) -->
-                    <extraarg>-verbose</extraarg>
                     <extraarg>-p</extraarg>
                     <extraarg>http://services.externes.aramis.com/v1/=fr.aesn.rade.ws.aramis.impl</extraarg>
+                    <extraarg>-wsdlLocation</extraarg>
+                    <extraarg>META-INF/wsdl/GeoAdminServiceExterneImpl.wsdl</extraarg>
                   </extraargs>
                 </wsdlOption>
               </wsdlOptions>

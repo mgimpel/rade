@@ -358,7 +358,7 @@
         <artifactId>buildnumber-maven-plugin</artifactId>
         <version>1.4</version>
         <configuration>
-          <shortRevisionLength>5</shortRevisionLength>
+          <shortRevisionLength>7</shortRevisionLength>
           <revisionOnScmFailure>0</revisionOnScmFailure>
         </configuration>
         <executions>

@@ -58,7 +58,7 @@ public class SpringSecurityConfig
           // - all other Actuators (logfile and metrics) : authenticated user
           .antMatchers("/actuator/health", "/actuator/info").permitAll()
           // Static resources (CSS, images, ...) : no restrictions
-          .antMatchers("/css/**", "/img/**", "/resources/**").permitAll()
+          .antMatchers("/css/**", "/img/**", "/resources/**","/favicon.ico").permitAll()
           // Admin files : require administrator role
           .antMatchers("/admin/**").hasAnyRole("ROLE_ADMIN")
           // User files : require user role

@@ -84,7 +84,10 @@ public abstract class AbstractTestService {
         System.out.println("This Should never happen (unless the classes have been changed)");
       }
     }
-    /** In memory Derby Database */
+    /**
+     * In memory Derby Database.
+     * @return In memory Derby Database.
+     */
     @Bean
     protected DataSource dataSource() {
       DriverManagerDataSource ds = new DriverManagerDataSource();

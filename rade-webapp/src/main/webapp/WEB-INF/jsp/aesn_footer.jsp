@@ -19,6 +19,7 @@
 <%@ page import="java.text.*,java.util.*" %>
 <%@ page import="fr.aesn.rade.webapp.config.Version" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 		</td>
 	</tr>
 	<tr id="footer">
@@ -28,8 +29,9 @@
 		%></td>
 		<td>
 			<div id="footer_r">
+<spring:eval var="footermenu" expression="@footerMenu"/>
 <c:forEach var="menuitem" items="${footermenu}">
-				<a href="#" onclick="window.open('${menuitem.value}')">${menuitem.key}</a>&nbsp;&nbsp;|&nbsp;
+				<a href="#" onclick="window.open('<c:url value="${menuitem.value}" />')">${menuitem.key}</a>&nbsp;&nbsp;|&nbsp;
 </c:forEach>
 				<%out.print(Version.PROJECT_VERSION);%>
 			</div>

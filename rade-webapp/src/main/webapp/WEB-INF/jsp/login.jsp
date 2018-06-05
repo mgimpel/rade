@@ -18,7 +18,6 @@
 <%/* $Id$ */%>
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <jsp:include page="aesn_header.jsp" />
 <c:if test="${param.error != null}"><p align="center">Invalid username and password.</p></c:if>
 <c:if test="${param.logout != null}"><p align="center">You have been logged out successfully.</p></c:if>
@@ -38,15 +37,4 @@
 	</tr>
 </table>
 </form>
-<ul>
-<sec:authorize access="isAuthenticated()">
-<li>auth: true
-<li>user: <sec:authentication property="principal.username" />
-<li>user role: <sec:authorize access="hasRole('ROLE_USER')">true</sec:authorize>
-<li>admin role: <sec:authorize access="hasRole('ROLE_ADMIN')">true</sec:authorize>
-</sec:authorize>
-<sec:authorize access="!isAuthenticated()">
-<li>auth: false
-</sec:authorize>
-</ul>
 <jsp:include page="aesn_footer.jsp" />
