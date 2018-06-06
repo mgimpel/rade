@@ -101,7 +101,6 @@
 		</td>
 		<td id="titre_page">
 			<div id="picto">
-				<a href="#" style="display:none;" id="boutonImp"><img src="<%=request.getContextPath()%>/img/picto_print.gif" alt="Imprimer" title="Imprimer" height="25" width="25"></a>
 				<a href="/aide.jsp" target="_blank" id="boutonAide"><img src="<%=request.getContextPath()%>/img/picto_aide.gif" alt="Aide" title="Afficher l'aide" style="margin-right: 0px" height="25" width="25"></a>
 			</div>
 			<h2>${titre}</h2>

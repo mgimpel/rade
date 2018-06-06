@@ -22,38 +22,22 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.AbstractController;
-
-import fr.aesn.rade.service.CommuneService;
 
 /**
  * Spring MVC Controller for Rade.
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
 @Controller
-public class RadeController extends AbstractController {
+public class MainController {
   /** SLF4J Logger. */
   private static final Logger log =
-    LoggerFactory.getLogger(RadeController.class);
-  /** Service. */
-  @Autowired
-  private CommuneService communeService;
-
-  @Override
-  protected ModelAndView handleRequestInternal(HttpServletRequest request,
-                                               HttpServletResponse response)
-    throws Exception
-  {
-    ModelAndView model = new ModelAndView("DefaultPage");
-    return model;
-  }
+    LoggerFactory.getLogger(MainController.class);
 
   /**
    * Homepage mapping.
@@ -61,7 +45,6 @@ public class RadeController extends AbstractController {
    */
   @RequestMapping("/")
   public String home() {
-    log.debug("Requesting /login");
     return "home";
   }
 
@@ -70,8 +53,9 @@ public class RadeController extends AbstractController {
    * @return View for the Login page.
    */
   @RequestMapping("/login")
-  public String login() {
+  public String login(Model model) {
     log.debug("Requesting /login");
+    model.addAttribute("title", "Login");
     return "login";
   }
 
