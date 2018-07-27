@@ -19,14 +19,11 @@ package fr.aesn.rade.webapp.controller;
 
 import java.util.Date;
 
-import javax.validation.Valid;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -62,7 +59,7 @@ public class ReferentielController {
       Region region = regionService.getRegionByCode(code, new Date());
       return (regiondisplay(region, model));
     }
-    model.addAttribute("title", "Recherche Region");
+    model.addAttribute("titre", "Recherche Region");
     model.addAttribute("region", new Region());
     return "regionsearch";
   }
@@ -105,7 +102,7 @@ public class ReferentielController {
    */
   public String regiondisplay(Region region, 
                               Model model) {
-      model.addAttribute("title", "Region");
+      model.addAttribute("titre", "Region");
       model.addAttribute("region", region);
       return "regiondisplay";
   }

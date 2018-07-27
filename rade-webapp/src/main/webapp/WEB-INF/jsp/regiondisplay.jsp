@@ -19,14 +19,26 @@
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <jsp:include page="aesn_header.jsp" />
-<table style="margin-left:auto;margin-right:auto;">
+<table style="margin-left:auto;margin-right:auto;" class="prez">
 	<tr>
-		<td><b>Code INSEE:</b></td>
-		<td>${region.codeInsee}</td>
+		<td width="175"><b>Code INSEE:</b></td>
+		<td><input type="text" style="width:300px" value="${region.codeInsee}" readonly/></td>
 	</tr>
 	<tr>
-		<td><b>Nom:</b></td>
-		<td>${region.nomEnrichi}</td>
+		<td width="175"><b>Nom Enrichi:</b></td>
+		<td><input type="text" style="width:300px" value="${region.nomEnrichi}" readonly/></td>
+	</tr>
+	<tr>
+		<td width="175"><b>Nom Majuscule:</b></td>
+		<td><input type="text" style="width:300px" value="${region.nomMajuscule}" readonly/></td>
+	</tr>
+	<tr>
+		<td width="175"><b>Début Validité:</b></td>
+		<td><input type="text" style="width:300px" value="${region.debutValidite}" readonly/></td>
+	</tr>
+	<tr>
+		<td width="175"><b>Fin Validité:</b></td>
+		<td><input type="text" style="width:300px" value="${region.finValidite != null ? region.finValidite : ''}" readonly/></td>
 	</tr>
 </table>
 <jsp:include page="aesn_footer.jsp" />
