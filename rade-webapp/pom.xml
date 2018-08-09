@@ -51,6 +51,11 @@
       <artifactId>rade-rs</artifactId>
       <version>${project.version}</version>
     </dependency>
+    <dependency>
+      <groupId>fr.aesn.rade</groupId>
+      <artifactId>rade-habilitations</artifactId>
+      <version>${project.version}</version>
+    </dependency>
 
     <!-- Spring -->
     <dependency>
@@ -103,6 +108,10 @@
     <dependency>
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-taglibs</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-cas</artifactId>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>

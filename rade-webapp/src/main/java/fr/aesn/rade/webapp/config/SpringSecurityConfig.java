@@ -60,9 +60,9 @@ public class SpringSecurityConfig
           // Static resources (CSS, images, ...) : no restrictions
           .antMatchers("/css/**", "/img/**", "/resources/**","/favicon.ico").permitAll()
           // Admin files : require administrator role
-          .antMatchers("/admin/**").hasAnyRole("ROLE_ADMIN")
+          .antMatchers("/admin/**").hasAnyAuthority("RAD_ADMIN")
           // User files : require user role
-          .antMatchers("/user/**").hasAnyRole("ROLE_USER")
+          .antMatchers("/user/**").hasAnyAuthority("RAD_CONSULT")
           // All other files : authenticated user
           .anyRequest().authenticated()
           .and()

@@ -132,14 +132,15 @@
   <!-- Spring Security -->
   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
+  <!-- Local Authentication Provider with 2 accounts (user & admin) and password 123456 -->
   <bean id="bCryptPasswordEncoder"
         class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
   <bean id="inMemoryUserDetailsManager"
         class="org.springframework.security.provisioning.InMemoryUserDetailsManager">
     <constructor-arg>
       <props>
-        <prop key="user">$2a$10$xMgsC4BauBhN4qT1e3elLOSFouNrUfW66Rkgav7ADZb4u3Qpyx4Z6,ROLE_USER</prop><!-- password:123456 -->
-        <prop key="admin">$2a$10$7FuXLYrkQcnO7PtTD/WUiutW8NO2Bs2SeZ0e8IFsB01BDitC0wnWi,ROLE_ADMIN</prop><!-- password:123456 -->
+        <prop key="user">$2a$10$xMgsC4BauBhN4qT1e3elLOSFouNrUfW66Rkgav7ADZb4u3Qpyx4Z6,RAD_CONSULT</prop>
+        <prop key="admin">$2a$10$7FuXLYrkQcnO7PtTD/WUiutW8NO2Bs2SeZ0e8IFsB01BDitC0wnWi,RAD_ADMIN</prop>
       </props>
     </constructor-arg>
   </bean>
@@ -147,6 +148,19 @@
         class="org.springframework.security.authentication.dao.DaoAuthenticationProvider"
         p:passwordEncoder-ref="bCryptPasswordEncoder"
         p:userDetailsService-ref="inMemoryUserDetailsManager"/>
+
+  <!-- AESN Habilitations Authentication Provider -->
+<!--
+  <bean id="habilitationsServiceFactory"
+        class="fr.aesn.rade.habilitations.HabilitationsServiceFactory"
+        p:habilitationsWsdlUrl="${habilitations.url}"/>
+  <bean id="habilitationsService"
+        factory-bean="habilitationsServiceFactory"
+        factory-method="getHabilitationsService"/>
+  <bean id="authenticationProvider"
+        class="fr.aesn.rade.habilitations.HabilitationsAuthenticationProvider"
+        p:habilitationsService-ref="habilitationsService"/>
+-->
 
   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
   <!-- Spring MVC -->

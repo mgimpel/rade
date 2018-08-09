@@ -81,7 +81,7 @@
 						<li><a href='<%=request.getContextPath()%>/audit/search'>Recherche Audit</a></li>
 					</ul>
 				</li>
-				<sec:authorize access="hasRole('ROLE_ADMIN')">
+				<sec:authorize access="hasAuthority('RAD_ADMIN')">
 				<li><a href='<%=request.getContextPath()%>/'>Administration</a>
 					<ul>
 						<li><a href='<%=request.getContextPath()%>/actuator/info'>Info Rade</a></li>

@@ -1,0 +1,1514 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="urn:habilitationService" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="urn:habilitationService" xmlns:intf="urn:habilitationService" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<!--WSDL created by Apache Axis version: 1.4
+Built on Apr 22, 2006 (06:55:48 PDT)-->
+ <wsdl:types>
+  <schema targetNamespace="urn:habilitationService" xmlns="http://www.w3.org/2001/XMLSchema">
+   <import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
+   <complexType name="RoleBean">
+    <sequence>
+     <element name="code" nillable="true" type="xsd:string"/>
+     <element name="commentaire" nillable="true" type="xsd:string"/>
+     <element name="identifiant" nillable="true" type="xsd:string"/>
+     <element name="libelle" nillable="true" type="xsd:string"/>
+    </sequence>
+   </complexType>
+   <complexType name="ArrayOfRoleBean">
+    <complexContent>
+     <restriction base="soapenc:Array">
+      <attribute ref="soapenc:arrayType" wsdl:arrayType="impl:RoleBean[]"/>
+     </restriction>
+    </complexContent>
+   </complexType>
+   <complexType name="NestedException">
+    <sequence/>
+   </complexType>
+   <complexType name="BaseException">
+    <complexContent>
+     <extension base="impl:NestedException">
+      <sequence>
+       <element name="code" type="xsd:int"/>
+       <element name="privateMessage" nillable="true" type="xsd:string"/>
+       <element name="stackTraceString" nillable="true" type="xsd:string"/>
+      </sequence>
+     </extension>
+    </complexContent>
+   </complexType>
+   <complexType name="HabilitationException">
+    <complexContent>
+     <extension base="impl:BaseException">
+      <sequence>
+       <element name="codeMessage" nillable="true" type="xsd:string"/>
+      </sequence>
+     </extension>
+    </complexContent>
+   </complexType>
+   <complexType name="UGBean">
+    <sequence>
+     <element name="code" nillable="true" type="xsd:string"/>
+     <element name="commentaire" nillable="true" type="xsd:string"/>
+     <element name="identifiant" nillable="true" type="xsd:string"/>
+     <element name="libelle" nillable="true" type="xsd:string"/>
+    </sequence>
+   </complexType>
+   <complexType name="ArrayOfUGBean">
+    <complexContent>
+     <restriction base="soapenc:Array">
+      <attribute ref="soapenc:arrayType" wsdl:arrayType="impl:UGBean[]"/>
+     </restriction>
+    </complexContent>
+   </complexType>
+   <complexType name="FonctionnalitePerimetreBean">
+    <sequence>
+     <element name="codeFonctionnalite" nillable="true" type="xsd:string"/>
+     <element name="codePerimetre" nillable="true" type="xsd:string"/>
+    </sequence>
+   </complexType>
+   <complexType name="ArrayOfFonctionnalitePerimetreBean">
+    <complexContent>
+     <restriction base="soapenc:Array">
+      <attribute ref="soapenc:arrayType" wsdl:arrayType="impl:FonctionnalitePerimetreBean[]"/>
+     </restriction>
+    </complexContent>
+   </complexType>
+   <complexType name="ArrayOf_xsd_string">
+    <complexContent>
+     <restriction base="soapenc:Array">
+      <attribute ref="soapenc:arrayType" wsdl:arrayType="xsd:string[]"/>
+     </restriction>
+    </complexContent>
+   </complexType>
+   <complexType name="DetailsUtilisateurBean">
+    <sequence>
+     <element name="codeFonction" nillable="true" type="xsd:string"/>
+     <element name="codeStructure" nillable="true" type="xsd:string"/>
+     <element name="courriel" nillable="true" type="xsd:string"/>
+     <element name="libelleFonction" nillable="true" type="xsd:string"/>
+     <element name="libelleStructure" nillable="true" type="xsd:string"/>
+     <element name="nomComplet" nillable="true" type="xsd:string"/>
+     <element name="nomCompletResponsable" nillable="true" type="xsd:string"/>
+     <element name="nomFamille" nillable="true" type="xsd:string"/>
+     <element name="prenom" nillable="true" type="xsd:string"/>
+     <element name="profilGED" nillable="true" type="xsd:string"/>
+     <element name="userName" nillable="true" type="xsd:string"/>
+     <element name="userNameResponsable" nillable="true" type="xsd:string"/>
+    </sequence>
+   </complexType>
+   <complexType name="FonctionnaliteBean">
+    <sequence>
+     <element name="code" nillable="true" type="xsd:string"/>
+     <element name="libelle" nillable="true" type="xsd:string"/>
+    </sequence>
+   </complexType>
+   <complexType name="ArrayOfFonctionnaliteBean">
+    <complexContent>
+     <restriction base="soapenc:Array">
+      <attribute ref="soapenc:arrayType" wsdl:arrayType="impl:FonctionnaliteBean[]"/>
+     </restriction>
+    </complexContent>
+   </complexType>
+   <complexType name="ProfilBean">
+    <sequence>
+     <element name="code" nillable="true" type="xsd:string"/>
+     <element name="libelle" nillable="true" type="xsd:string"/>
+    </sequence>
+   </complexType>
+   <complexType name="ArrayOfProfilBean">
+    <complexContent>
+     <restriction base="soapenc:Array">
+      <attribute ref="soapenc:arrayType" wsdl:arrayType="impl:ProfilBean[]"/>
+     </restriction>
+    </complexContent>
+   </complexType>
+  </schema>
+ </wsdl:types>
+
+   <wsdl:message name="getAttributCourrielResponse">
+
+      <wsdl:part name="getAttributCourrielReturn" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getUGParFonctionnaliteApplicationRequest">
+
+      <wsdl:part name="in0" type="xsd:string"/>
+
+      <wsdl:part name="in1" type="xsd:string"/>
+
+      <wsdl:part name="in2" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getAutresAttributsRequest">
+
+      <wsdl:part name="in0" type="impl:ArrayOf_xsd_string"/>
+
+      <wsdl:part name="in1" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getAttributNomCompletRequest">
+
+   </wsdl:message>
+
+   <wsdl:message name="getAttributUserNameRequest">
+
+   </wsdl:message>
+
+   <wsdl:message name="getAttributBlocNotesRequest">
+
+   </wsdl:message>
+
+   <wsdl:message name="getAttributAssistanteRequest">
+
+   </wsdl:message>
+
+   <wsdl:message name="estHabiliteAResponse">
+
+      <wsdl:part name="estHabiliteAReturn" type="xsd:boolean"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getAttributCourrielRequest">
+
+   </wsdl:message>
+
+   <wsdl:message name="getAttributSurnomResponse">
+
+      <wsdl:part name="getAttributSurnomReturn" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getAttributResponsableResponse">
+
+      <wsdl:part name="getAttributResponsableReturn" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getAttributMatriculeRequest">
+
+   </wsdl:message>
+
+   <wsdl:message name="getAttributTelephoneRequest">
+
+   </wsdl:message>
+
+   <wsdl:message name="getAttributFonctionRequest">
+
+   </wsdl:message>
+
+   <wsdl:message name="estHabiliteARequest">
+
+      <wsdl:part name="in0" type="xsd:string"/>
+
+      <wsdl:part name="in1" type="xsd:string"/>
+
+      <wsdl:part name="in2" type="xsd:string"/>
+
+      <wsdl:part name="in3" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getAttributCiviliteRequest">
+
+   </wsdl:message>
+
+   <wsdl:message name="getAttributTelephoneResponse">
+
+      <wsdl:part name="getAttributTelephoneReturn" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getAttributUserNameResponse">
+
+      <wsdl:part name="getAttributUserNameReturn" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getAttributTelephoneportableResponse">
+
+      <wsdl:part name="getAttributTelephoneportableReturn" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="authentificationRequest">
+
+      <wsdl:part name="in0" type="xsd:string"/>
+
+      <wsdl:part name="in1" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getRolesDunPerimetreRequest">
+
+      <wsdl:part name="in0" type="xsd:string"/>
+
+      <wsdl:part name="in1" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getAttributNomSansAccentResponse">
+
+      <wsdl:part name="getAttributNomSansAccentReturn" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getAttributPhotoResponse">
+
+      <wsdl:part name="getAttributPhotoReturn" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getPerimetresDunRoleRequest">
+
+      <wsdl:part name="in0" type="xsd:string"/>
+
+      <wsdl:part name="in1" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getAttributCodeRequest">
+
+   </wsdl:message>
+
+   <wsdl:message name="getAttributSurnomRequest">
+
+   </wsdl:message>
+
+   <wsdl:message name="getAttributTelephoneportableRequest">
+
+   </wsdl:message>
+
+   <wsdl:message name="getAttributUgAppartenanceResponse">
+
+      <wsdl:part name="getAttributUgAppartenanceReturn" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getAttributDateFinContratRequest">
+
+   </wsdl:message>
+
+   <wsdl:message name="authentificationResponse">
+
+      <wsdl:part name="authentificationReturn" type="xsd:boolean"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getAttributDomaineMetierRequest">
+
+   </wsdl:message>
+
+   <wsdl:message name="getAttributBureauRequest">
+
+   </wsdl:message>
+
+   <wsdl:message name="getDetailsUtilisateurResponse">
+
+      <wsdl:part name="getDetailsUtilisateurReturn" type="impl:DetailsUtilisateurBean"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getDetailsUtilisateurRequest">
+
+      <wsdl:part name="in0" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getAttributCodeResponse">
+
+      <wsdl:part name="getAttributCodeReturn" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getProfilesApplicationRequest">
+
+      <wsdl:part name="in0" type="xsd:string"/>
+
+      <wsdl:part name="in1" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getUGParFonctionnaliteApplicationResponse">
+
+      <wsdl:part name="getUGParFonctionnaliteApplicationReturn" type="impl:ArrayOfFonctionnalitePerimetreBean"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getFonctionnalitesApplicationResponse">
+
+      <wsdl:part name="getFonctionnalitesApplicationReturn" type="impl:ArrayOfFonctionnaliteBean"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getAttributBureauResponse">
+
+      <wsdl:part name="getAttributBureauReturn" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getAttributMatriculeResponse">
+
+      <wsdl:part name="getAttributMatriculeReturn" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getFonctionnalitesPerimetresApplicationResponse">
+
+      <wsdl:part name="getFonctionnalitesPerimetresApplicationReturn" type="impl:ArrayOfFonctionnalitePerimetreBean"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getProfilesApplicationResponse">
+
+      <wsdl:part name="getProfilesApplicationReturn" type="impl:ArrayOfProfilBean"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getAttributUgAppartenanceRequest">
+
+   </wsdl:message>
+
+   <wsdl:message name="getAttributAssistanteResponse">
+
+      <wsdl:part name="getAttributAssistanteReturn" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getAttributNomFamilleResponse">
+
+      <wsdl:part name="getAttributNomFamilleReturn" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getAttributNomSansAccentRequest">
+
+   </wsdl:message>
+
+   <wsdl:message name="getFonctionnalitesApplicationRequest">
+
+      <wsdl:part name="in0" type="xsd:string"/>
+
+      <wsdl:part name="in1" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getAttributDomaineMetierResponse">
+
+      <wsdl:part name="getAttributDomaineMetierReturn" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getAttributPrenomRequest">
+
+   </wsdl:message>
+
+   <wsdl:message name="getAttributCiviliteResponse">
+
+      <wsdl:part name="getAttributCiviliteReturn" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getAttributResponsableRequest">
+
+   </wsdl:message>
+
+   <wsdl:message name="getAutresAttributsResponse">
+
+      <wsdl:part name="getAutresAttributsReturn" type="impl:ArrayOf_xsd_string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getFonctionnalitesPerimetresApplicationRequest">
+
+      <wsdl:part name="in0" type="xsd:string"/>
+
+      <wsdl:part name="in1" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="estHabiliteARequest1">
+
+      <wsdl:part name="in0" type="xsd:string"/>
+
+      <wsdl:part name="in1" type="xsd:string"/>
+
+      <wsdl:part name="in2" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getAttributPhotoRequest">
+
+   </wsdl:message>
+
+   <wsdl:message name="getRolesDunPerimetreResponse">
+
+      <wsdl:part name="getRolesDunPerimetreReturn" type="impl:ArrayOfRoleBean"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getAttributTypeContratResponse">
+
+      <wsdl:part name="getAttributTypeContratReturn" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="estHabiliteAResponse1">
+
+      <wsdl:part name="estHabiliteAReturn" type="xsd:boolean"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getPerimetresDunRoleResponse">
+
+      <wsdl:part name="getPerimetresDunRoleReturn" type="impl:ArrayOfUGBean"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getAttributNomCompletResponse">
+
+      <wsdl:part name="getAttributNomCompletReturn" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getAttributStructureResponse">
+
+      <wsdl:part name="getAttributStructureReturn" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getAttributNomFamilleRequest">
+
+   </wsdl:message>
+
+   <wsdl:message name="getAttributBlocNotesResponse">
+
+      <wsdl:part name="getAttributBlocNotesReturn" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getAttributFonctionResponse">
+
+      <wsdl:part name="getAttributFonctionReturn" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getAttributPrenomResponse">
+
+      <wsdl:part name="getAttributPrenomReturn" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getAttributDateFinContratResponse">
+
+      <wsdl:part name="getAttributDateFinContratReturn" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getAttributStructureRequest">
+
+   </wsdl:message>
+
+   <wsdl:message name="getAttributTypeContratRequest">
+
+   </wsdl:message>
+
+   <wsdl:message name="HabilitationException">
+
+      <wsdl:part name="fault" type="impl:HabilitationException"/>
+
+   </wsdl:message>
+
+   <wsdl:portType name="HabilitationsUtilisateurSrv">
+
+      <wsdl:operation name="getRolesDunPerimetre" parameterOrder="in0 in1">
+
+         <wsdl:input message="impl:getRolesDunPerimetreRequest" name="getRolesDunPerimetreRequest"/>
+
+         <wsdl:output message="impl:getRolesDunPerimetreResponse" name="getRolesDunPerimetreResponse"/>
+
+         <wsdl:fault message="impl:HabilitationException" name="HabilitationException"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getPerimetresDunRole" parameterOrder="in0 in1">
+
+         <wsdl:input message="impl:getPerimetresDunRoleRequest" name="getPerimetresDunRoleRequest"/>
+
+         <wsdl:output message="impl:getPerimetresDunRoleResponse" name="getPerimetresDunRoleResponse"/>
+
+         <wsdl:fault message="impl:HabilitationException" name="HabilitationException"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getAttributNomComplet">
+
+         <wsdl:input message="impl:getAttributNomCompletRequest" name="getAttributNomCompletRequest"/>
+
+         <wsdl:output message="impl:getAttributNomCompletResponse" name="getAttributNomCompletResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getAttributNomFamille">
+
+         <wsdl:input message="impl:getAttributNomFamilleRequest" name="getAttributNomFamilleRequest"/>
+
+         <wsdl:output message="impl:getAttributNomFamilleResponse" name="getAttributNomFamilleResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getAttributNomSansAccent">
+
+         <wsdl:input message="impl:getAttributNomSansAccentRequest" name="getAttributNomSansAccentRequest"/>
+
+         <wsdl:output message="impl:getAttributNomSansAccentResponse" name="getAttributNomSansAccentResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getAttributPhoto">
+
+         <wsdl:input message="impl:getAttributPhotoRequest" name="getAttributPhotoRequest"/>
+
+         <wsdl:output message="impl:getAttributPhotoResponse" name="getAttributPhotoResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getAttributPrenom">
+
+         <wsdl:input message="impl:getAttributPrenomRequest" name="getAttributPrenomRequest"/>
+
+         <wsdl:output message="impl:getAttributPrenomResponse" name="getAttributPrenomResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getAttributResponsable">
+
+         <wsdl:input message="impl:getAttributResponsableRequest" name="getAttributResponsableRequest"/>
+
+         <wsdl:output message="impl:getAttributResponsableResponse" name="getAttributResponsableResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getAttributSurnom">
+
+         <wsdl:input message="impl:getAttributSurnomRequest" name="getAttributSurnomRequest"/>
+
+         <wsdl:output message="impl:getAttributSurnomResponse" name="getAttributSurnomResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getAttributTelephone">
+
+         <wsdl:input message="impl:getAttributTelephoneRequest" name="getAttributTelephoneRequest"/>
+
+         <wsdl:output message="impl:getAttributTelephoneResponse" name="getAttributTelephoneResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getAttributTelephoneportable">
+
+         <wsdl:input message="impl:getAttributTelephoneportableRequest" name="getAttributTelephoneportableRequest"/>
+
+         <wsdl:output message="impl:getAttributTelephoneportableResponse" name="getAttributTelephoneportableResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getAttributTypeContrat">
+
+         <wsdl:input message="impl:getAttributTypeContratRequest" name="getAttributTypeContratRequest"/>
+
+         <wsdl:output message="impl:getAttributTypeContratResponse" name="getAttributTypeContratResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getAttributUgAppartenance">
+
+         <wsdl:input message="impl:getAttributUgAppartenanceRequest" name="getAttributUgAppartenanceRequest"/>
+
+         <wsdl:output message="impl:getAttributUgAppartenanceResponse" name="getAttributUgAppartenanceResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getAttributUserName">
+
+         <wsdl:input message="impl:getAttributUserNameRequest" name="getAttributUserNameRequest"/>
+
+         <wsdl:output message="impl:getAttributUserNameResponse" name="getAttributUserNameResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getAttributStructure">
+
+         <wsdl:input message="impl:getAttributStructureRequest" name="getAttributStructureRequest"/>
+
+         <wsdl:output message="impl:getAttributStructureResponse" name="getAttributStructureResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getAttributCode">
+
+         <wsdl:input message="impl:getAttributCodeRequest" name="getAttributCodeRequest"/>
+
+         <wsdl:output message="impl:getAttributCodeResponse" name="getAttributCodeResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getUGParFonctionnaliteApplication" parameterOrder="in0 in1 in2">
+
+         <wsdl:input message="impl:getUGParFonctionnaliteApplicationRequest" name="getUGParFonctionnaliteApplicationRequest"/>
+
+         <wsdl:output message="impl:getUGParFonctionnaliteApplicationResponse" name="getUGParFonctionnaliteApplicationResponse"/>
+
+         <wsdl:fault message="impl:HabilitationException" name="HabilitationException"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getAutresAttributs" parameterOrder="in0 in1">
+
+         <wsdl:input message="impl:getAutresAttributsRequest" name="getAutresAttributsRequest"/>
+
+         <wsdl:output message="impl:getAutresAttributsResponse" name="getAutresAttributsResponse"/>
+
+         <wsdl:fault message="impl:HabilitationException" name="HabilitationException"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getDetailsUtilisateur" parameterOrder="in0">
+
+         <wsdl:input message="impl:getDetailsUtilisateurRequest" name="getDetailsUtilisateurRequest"/>
+
+         <wsdl:output message="impl:getDetailsUtilisateurResponse" name="getDetailsUtilisateurResponse"/>
+
+         <wsdl:fault message="impl:HabilitationException" name="HabilitationException"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="authentification" parameterOrder="in0 in1">
+
+         <wsdl:input message="impl:authentificationRequest" name="authentificationRequest"/>
+
+         <wsdl:output message="impl:authentificationResponse" name="authentificationResponse"/>
+
+         <wsdl:fault message="impl:HabilitationException" name="HabilitationException"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getFonctionnalitesApplication" parameterOrder="in0 in1">
+
+         <wsdl:input message="impl:getFonctionnalitesApplicationRequest" name="getFonctionnalitesApplicationRequest"/>
+
+         <wsdl:output message="impl:getFonctionnalitesApplicationResponse" name="getFonctionnalitesApplicationResponse"/>
+
+         <wsdl:fault message="impl:HabilitationException" name="HabilitationException"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getFonctionnalitesPerimetresApplication" parameterOrder="in0 in1">
+
+         <wsdl:input message="impl:getFonctionnalitesPerimetresApplicationRequest" name="getFonctionnalitesPerimetresApplicationRequest"/>
+
+         <wsdl:output message="impl:getFonctionnalitesPerimetresApplicationResponse" name="getFonctionnalitesPerimetresApplicationResponse"/>
+
+         <wsdl:fault message="impl:HabilitationException" name="HabilitationException"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getProfilesApplication" parameterOrder="in0 in1">
+
+         <wsdl:input message="impl:getProfilesApplicationRequest" name="getProfilesApplicationRequest"/>
+
+         <wsdl:output message="impl:getProfilesApplicationResponse" name="getProfilesApplicationResponse"/>
+
+         <wsdl:fault message="impl:HabilitationException" name="HabilitationException"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getAttributAssistante">
+
+         <wsdl:input message="impl:getAttributAssistanteRequest" name="getAttributAssistanteRequest"/>
+
+         <wsdl:output message="impl:getAttributAssistanteResponse" name="getAttributAssistanteResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getAttributBlocNotes">
+
+         <wsdl:input message="impl:getAttributBlocNotesRequest" name="getAttributBlocNotesRequest"/>
+
+         <wsdl:output message="impl:getAttributBlocNotesResponse" name="getAttributBlocNotesResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getAttributBureau">
+
+         <wsdl:input message="impl:getAttributBureauRequest" name="getAttributBureauRequest"/>
+
+         <wsdl:output message="impl:getAttributBureauResponse" name="getAttributBureauResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getAttributCivilite">
+
+         <wsdl:input message="impl:getAttributCiviliteRequest" name="getAttributCiviliteRequest"/>
+
+         <wsdl:output message="impl:getAttributCiviliteResponse" name="getAttributCiviliteResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getAttributCourriel">
+
+         <wsdl:input message="impl:getAttributCourrielRequest" name="getAttributCourrielRequest"/>
+
+         <wsdl:output message="impl:getAttributCourrielResponse" name="getAttributCourrielResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getAttributFonction">
+
+         <wsdl:input message="impl:getAttributFonctionRequest" name="getAttributFonctionRequest"/>
+
+         <wsdl:output message="impl:getAttributFonctionResponse" name="getAttributFonctionResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getAttributMatricule">
+
+         <wsdl:input message="impl:getAttributMatriculeRequest" name="getAttributMatriculeRequest"/>
+
+         <wsdl:output message="impl:getAttributMatriculeResponse" name="getAttributMatriculeResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getAttributDateFinContrat">
+
+         <wsdl:input message="impl:getAttributDateFinContratRequest" name="getAttributDateFinContratRequest"/>
+
+         <wsdl:output message="impl:getAttributDateFinContratResponse" name="getAttributDateFinContratResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getAttributDomaineMetier">
+
+         <wsdl:input message="impl:getAttributDomaineMetierRequest" name="getAttributDomaineMetierRequest"/>
+
+         <wsdl:output message="impl:getAttributDomaineMetierResponse" name="getAttributDomaineMetierResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="estHabiliteA" parameterOrder="in0 in1 in2 in3">
+
+         <wsdl:input message="impl:estHabiliteARequest" name="estHabiliteARequest"/>
+
+         <wsdl:output message="impl:estHabiliteAResponse" name="estHabiliteAResponse"/>
+
+         <wsdl:fault message="impl:HabilitationException" name="HabilitationException"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="estHabiliteA" parameterOrder="in0 in1 in2">
+
+         <wsdl:input message="impl:estHabiliteARequest1" name="estHabiliteARequest1"/>
+
+         <wsdl:output message="impl:estHabiliteAResponse1" name="estHabiliteAResponse1"/>
+
+         <wsdl:fault message="impl:HabilitationException" name="HabilitationException"/>
+
+      </wsdl:operation>
+
+   </wsdl:portType>
+
+   <wsdl:binding name="HabilitationsUtilisateurServiceSoapBinding" type="impl:HabilitationsUtilisateurSrv">
+
+      <wsdlsoap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+      <wsdl:operation name="getRolesDunPerimetre">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getRolesDunPerimetreRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getRolesDunPerimetreResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="HabilitationException">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="HabilitationException" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getPerimetresDunRole">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getPerimetresDunRoleRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getPerimetresDunRoleResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="HabilitationException">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="HabilitationException" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getAttributNomComplet">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getAttributNomCompletRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getAttributNomCompletResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getAttributNomFamille">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getAttributNomFamilleRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getAttributNomFamilleResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getAttributNomSansAccent">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getAttributNomSansAccentRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getAttributNomSansAccentResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getAttributPhoto">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getAttributPhotoRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getAttributPhotoResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getAttributPrenom">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getAttributPrenomRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getAttributPrenomResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getAttributResponsable">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getAttributResponsableRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getAttributResponsableResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getAttributSurnom">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getAttributSurnomRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getAttributSurnomResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getAttributTelephone">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getAttributTelephoneRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getAttributTelephoneResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getAttributTelephoneportable">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getAttributTelephoneportableRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getAttributTelephoneportableResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getAttributTypeContrat">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getAttributTypeContratRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getAttributTypeContratResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getAttributUgAppartenance">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getAttributUgAppartenanceRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getAttributUgAppartenanceResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getAttributUserName">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getAttributUserNameRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getAttributUserNameResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getAttributStructure">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getAttributStructureRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getAttributStructureResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getAttributCode">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getAttributCodeRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getAttributCodeResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getUGParFonctionnaliteApplication">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getUGParFonctionnaliteApplicationRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getUGParFonctionnaliteApplicationResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="HabilitationException">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="HabilitationException" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getAutresAttributs">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getAutresAttributsRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getAutresAttributsResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="HabilitationException">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="HabilitationException" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getDetailsUtilisateur">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getDetailsUtilisateurRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getDetailsUtilisateurResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="HabilitationException">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="HabilitationException" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="authentification">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="authentificationRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="authentificationResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="HabilitationException">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="HabilitationException" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getFonctionnalitesApplication">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getFonctionnalitesApplicationRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getFonctionnalitesApplicationResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="HabilitationException">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="HabilitationException" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getFonctionnalitesPerimetresApplication">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getFonctionnalitesPerimetresApplicationRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getFonctionnalitesPerimetresApplicationResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="HabilitationException">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="HabilitationException" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getProfilesApplication">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getProfilesApplicationRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getProfilesApplicationResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="HabilitationException">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="HabilitationException" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getAttributAssistante">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getAttributAssistanteRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getAttributAssistanteResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getAttributBlocNotes">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getAttributBlocNotesRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getAttributBlocNotesResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getAttributBureau">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getAttributBureauRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getAttributBureauResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getAttributCivilite">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getAttributCiviliteRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getAttributCiviliteResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getAttributCourriel">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getAttributCourrielRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getAttributCourrielResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getAttributFonction">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getAttributFonctionRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getAttributFonctionResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getAttributMatricule">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getAttributMatriculeRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getAttributMatriculeResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getAttributDateFinContrat">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getAttributDateFinContratRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getAttributDateFinContratResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getAttributDomaineMetier">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getAttributDomaineMetierRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getAttributDomaineMetierResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="estHabiliteA">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="estHabiliteARequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="estHabiliteAResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="HabilitationException">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="HabilitationException" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="estHabiliteA">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="estHabiliteARequest1">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="estHabiliteAResponse1">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="HabilitationException">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="HabilitationException" namespace="urn:habilitationService" use="encoded"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+   </wsdl:binding>
+
+   <wsdl:service name="HabilitationsUtilisateurSrvService">
+
+      <wsdl:port binding="impl:HabilitationsUtilisateurServiceSoapBinding" name="HabilitationsUtilisateurService">
+
+         <wsdlsoap:address location="http://localhost:8080/Habilitations/services/HabilitationsUtilisateurService"/>
+
+      </wsdl:port>
+
+   </wsdl:service>
+
+</wsdl:definitions>

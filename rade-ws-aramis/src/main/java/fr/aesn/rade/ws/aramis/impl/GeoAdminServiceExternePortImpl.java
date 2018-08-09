@@ -57,7 +57,6 @@ import lombok.Setter;
  * and re-completed.
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
-
 @javax.jws.WebService(
                       serviceName = "GeoAdminServiceExterneImplService",
                       portName = "GeoAdminServiceExternePort",
