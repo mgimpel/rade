@@ -15,16 +15,8 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 /* $Id$ */
-package fr.aesn.rade.habilitations;
-
 /**
- * Custom AuthenticationProvider for Spring Security that uses AESN CAS server
- * to authenticate users, and queries the AESN Active Directory to recover
- * User Roles.
- * 
- * @author Marc Gimpel (mgimpel@gmail.com)
- *
+ * This package contains tools and utilities for the Persistence layer of the
+ * Rade Project.
  */
-public abstract class AesnCasAuthenticationProvider {
-  //TODO implement CAS Authentication and AD Role listing (then remove abstract)
-}
+package fr.aesn.rade.persist.tools;

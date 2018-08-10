@@ -55,6 +55,6 @@ package fr.aesn.rade.habilitations;
  * 
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
-public class AesnAdAuthenticationProvider {
-  //TODO
+public abstract class AesnAdAuthenticationProvider {
+  //TODO implement AD Authentication and Role listing (then remove abstract)
 }

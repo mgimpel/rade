@@ -26,6 +26,11 @@ import fr.aesn.rade.habilitations.ws.HabilitationsUtilisateurSrv;
 import fr.aesn.rade.habilitations.ws.HabilitationsUtilisateurSrvServiceLocator;
 
 /**
+ * Factory That builds and returns the Habilitations WebService.
+ * NB: This WebService is based on Axis1, because Habilitations is so old that
+ * it's WebServices are not compatible with more recent libraries such as
+ * CXF and Axis2. The classes are automatically generated from the WSDL by
+ * Maven during the build process.
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
 public class HabilitationsServiceFactory {
@@ -33,11 +38,12 @@ public class HabilitationsServiceFactory {
   private static final Logger log =
     LoggerFactory.getLogger(HabilitationsServiceFactory.class);
 
-  /**
-   * URL for Habilitations WebService.
-   * (Default value corresponds to the Homolgation Environment - Should not be hardcoded)
-   * */
-  private String habilitationsWsdlUrl = "http://10.81.62.22:8180/Habilitations/services/HabilitationsUtilisateurService?wsdl";
+  /** Default URL for Habilitations WebService. */
+  public static final String DEFAULT_HOMOLOGATION_URL = 
+    "http://localhost:8080/Habilitations/services/HabilitationsUtilisateurService?wsdl";
+
+  /** URL for Habilitations WebService. */
+  private String habilitationsWsdlUrl = DEFAULT_HOMOLOGATION_URL;
 
   /** The Habilitation WebService that this factory provides. */
   private HabilitationsUtilisateurSrv habilitationsService = null;
@@ -49,7 +55,8 @@ public class HabilitationsServiceFactory {
    */
   public HabilitationsUtilisateurSrv getHabilitationsService() {
     if (habilitationsService == null) {
-      HabilitationsUtilisateurSrvServiceLocator locator = new HabilitationsUtilisateurSrvServiceLocator();
+      HabilitationsUtilisateurSrvServiceLocator locator =
+        new HabilitationsUtilisateurSrvServiceLocator();
       locator.setHabilitationsUtilisateurServiceEndpointAddress(habilitationsWsdlUrl);
       try {
         habilitationsService = locator.getHabilitationsUtilisateurService();

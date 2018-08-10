@@ -93,41 +93,57 @@ public class HabilitationsAuthenticationProvider
    *         <code>UsernameNotFoundException</code>) 
    */
   @Override
-  protected UserDetails retrieveUser(String username, UsernamePasswordAuthenticationToken authentication)
-    throws AuthenticationException {
-  String name = authentication.getName();
-  if (username == null || !username.equals(name)) {
-    throw new BadCredentialsException("Username different from that provided " +
-      "by authentication: " + username + " != " + name);
-  }
-  Object credentials = authentication.getCredentials();
-  if (credentials == null) {
-    throw new BadCredentialsException("Credentials were null");
-  }
-  String password = credentials.toString();
+  protected UserDetails retrieveUser(String username,
+                                     UsernamePasswordAuthenticationToken authentication)
+  {
+    if (authentication == null) {
+      throw new BadCredentialsException("Authentication Token was null");
+    }
+    String name = authentication.getName();
+    if (username == null || !username.equals(name)) {
+      throw new BadCredentialsException("Username different from that " +
+                                        "provided by authentication: " +
+                                        username + " != " + name);
+    }
+    Object credentials = authentication.getCredentials();
+    if (credentials == null) {
+      throw new BadCredentialsException("Credentials were null");
+    }
+    String password = credentials.toString();
 
-  // Call getRolesDunPerimetre WebService (with empty perimetre) and extract RAD_* roles
-  List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
-  RoleBean[] roles;
-  try {
-    roles = habilitationsService.getRolesDunPerimetre(username, "");
-    String code;
-    for (RoleBean role : roles) {
-      if (role != null) {
-        code = role.getCode();
-        // Valid roles for the application are: "RAD_ADMIN", "RAD_GESTION" & "RAD_CONSULT"
-        if (code != null && code.startsWith("RAD_")) {
-          grantedAuthorities.add(new SimpleGrantedAuthority(code));
+    // Call "getRolesDunPerimetre" WebService (with empty perimetre)
+    // and extract RAD_* roles
+    List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
+    RoleBean[] roles;
+    try {
+      roles = habilitationsService.getRolesDunPerimetre(username, "");
+      String code;
+      for (RoleBean role : roles) {
+        if (role != null) {
+          code = role.getCode();
+          // Valid roles for the application are: "RAD_ADMIN", "RAD_GESTION" &
+          // "RAD_CONSULT"
+          if (code != null && code.startsWith("RAD_")) {
+            grantedAuthorities.add(new SimpleGrantedAuthority(code));
+          }
         }
       }
+    } catch (RemoteException e) {
+      log.debug("Unable to list user roles for {}", username, e);
+      throw new AuthenticationServiceException("Unable to list user roles for " +
+                                               username, e);
     }
-  } catch (RemoteException e) {
-    log.warn("Unable to list user roles for {}", username, e);
-    throw new AuthenticationServiceException("Unable to list user roles for " + username, e);
-  }
 
-  UserDetails user = new User(username, password, grantedAuthorities);
-  return user;
+    return new User(username, password, grantedAuthorities);
+    // NB: If one wants more user details (firstname, surname, email,
+    // department,...), one could extend the User class and then use the
+    // getDetailsUtilisateur WebService to populate it with the extra details.
+    // This WebService returns details like:
+    // * code et libelle fonction
+    // * code et libelle structure
+    // * prenom, nom, nom complet, courriel
+    // * responsable
+    // * profil GED
   }
 
   /**
@@ -150,29 +166,34 @@ public class HabilitationsAuthenticationProvider
    *         an <code>AuthenticationServiceException</code>)
    */ 
   @Override
-  protected void additionalAuthenticationChecks(UserDetails userDetails, UsernamePasswordAuthenticationToken authentication)
-    throws AuthenticationException {
-      String name = authentication.getName();
-      Object credentials = authentication.getCredentials();
-      if (credentials == null) {
-        throw new BadCredentialsException("Credentials were null");
-      }
-      String password = credentials.toString();
+  protected void additionalAuthenticationChecks(UserDetails userDetails,
+                                                UsernamePasswordAuthenticationToken authentication)
+  {
+    if (authentication == null) {
+      throw new BadCredentialsException("Authentication Token was null");
+    }
+    String name = authentication.getName();
+    Object credentials = authentication.getCredentials();
+    if (credentials == null) {
+      throw new BadCredentialsException("Credentials were null");
+    }
+    String password = credentials.toString();
 
-      // Call authentication WebService to authenticate user
-      boolean result;
-      try {
-        result = habilitationsService.authentification(name, password);
-        if (!result) {
-          throw new BadCredentialsException("Authentication result negative");
-        }
-      } catch (HabilitationException e) {
-        log.warn("Unable to authenticate user {}", name, e);
-        throw new BadCredentialsException("Unable to authenticate user " + name, e);
-      } catch (RemoteException e) {
-        log.warn("Unable to authenticate user {}", name, e);
-        throw new AuthenticationServiceException("Unable to authenticate user " + name, e);
+    // Call authentication WebService to authenticate user
+    try {
+      boolean result = habilitationsService.authentification(name, password);
+      if (!result) {
+        throw new BadCredentialsException("Authentication result negative");
       }
+    } catch (HabilitationException e) {
+      log.debug("Unable to authenticate user {}", name, e);
+      throw new BadCredentialsException("Unable to authenticate user " + name,
+                                        e);
+    } catch (RemoteException e) {
+      log.debug("Unable to authenticate user {}", name, e);
+      throw new AuthenticationServiceException("Unable to authenticate user " +
+                                               name, e);
+    }
   }
 
   /**
