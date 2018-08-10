@@ -39,7 +39,7 @@ public class HabilitationsServiceFactory {
     LoggerFactory.getLogger(HabilitationsServiceFactory.class);
 
   /** Default URL for Habilitations WebService. */
-  public static final String DEFAULT_HOMOLOGATION_URL = 
+  public static final String DEFAULT_HOMOLOGATION_URL =
     "http://localhost:8080/Habilitations/services/HabilitationsUtilisateurService?wsdl";
 
   /** URL for Habilitations WebService. */
@@ -70,9 +70,9 @@ public class HabilitationsServiceFactory {
   /**
    * Sets the URL for Habilitations WebService (replaces default value).
    * This must be set before getHabilitationsService() is called.
-   * @param habilitationsWsdlUrl URL for Habilitations WebService.
+   * @param url URL for Habilitations WebService.
    */
-  public void setHabilitationsWsdlUrl(String habilitationsWsdlUrl) {
-    this.habilitationsWsdlUrl = habilitationsWsdlUrl;
+  public void setHabilitationsWsdlUrl(final String url) {
+    this.habilitationsWsdlUrl = url;
   }
 }

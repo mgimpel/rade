@@ -86,13 +86,14 @@ public class InseeImportServiceImpl
   }
 
   /**
-   * 
+   * Import Regions
    * @param regionList parsed list from INSEE file reg2018.txt or whatever year.
    * @param debutValidite date that the given data is valid from.
    */
   //@Override
   @Transactional(readOnly = false)
-  public void importRegion(List<String[]> regionList, Date debutValidite) {
+  public void importRegion(final List<String[]> regionList,
+                           final Date debutValidite) {
     // Verifier les intitules des colonnes
     String[] line = regionList.get(0);
     if (line.length != 5 ||
@@ -110,7 +111,7 @@ public class InseeImportServiceImpl
     audit.setAuteur("");
     audit.setDate(new Date());
     audit.setNote("Import par le Service " + getClass().getName());
-    for (int i=1; i<regionList.size(); i++) {
+    for (int i = 1; i < regionList.size(); i++) {
       line = regionList.get(i);
       Region region = new Region();
       //region.setId(id);
@@ -126,6 +127,11 @@ public class InseeImportServiceImpl
     }
   }
 
+  /**
+   * Parse tab-separated data into List.
+   * @param bytes raw data to parse.
+   * @return List.
+   */
   public static List<String[]> tabSeparatedValueToList(final byte[] bytes) {
     String str = new String(bytes, StandardCharsets.UTF_8);
     List<String[]> list = null;
@@ -133,13 +139,18 @@ public class InseeImportServiceImpl
       @Cleanup StringReader sr = new StringReader(str);
       @Cleanup BufferedReader br = new BufferedReader(sr);
       list = tabSeparatedValueToList(br);
-    }     
-    catch (IOException e) {
+    } catch (IOException e) {
         log.warn("Should never happen", e);
     }
     return list;
   }
 
+  /**
+   * Parse tab-separated data into List.
+   * @param reader raw data stream to parse.
+   * @return List
+   * @throws IOException Error reading Stream.
+   */
   public static List<String[]> tabSeparatedValueToList(final BufferedReader reader)
     throws IOException {
     String line;

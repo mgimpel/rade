@@ -20,12 +20,12 @@ package fr.aesn.rade.habilitations;
 /**
  * Custom AuthenticationProvider for Spring Security that queries AESN
  * Active Directory.
- * 
+ *
  * The Habilitations provides many more features than are required by
  * Spring Security, and all the details are in fact stored in the Active
  * Directory. As such it is possible to bypass Habilitations completely and
  * directly query the AD.
- * 
+ *
  * The AD can easily authenticate users. To recover the list of roles is a bit
  * more technical. There are 2 types of roles:
  * <ul>
@@ -49,12 +49,12 @@ package fr.aesn.rade.habilitations;
  *   </ul>
  * </li>
  * </ul>
- * 
+ *
  * NB: This AuthenticationProvider could be based on
  * org.springframework.security.ldap.authentication.ad.ActiveDirectoryLdapAuthenticationProvider
- * 
+ *
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
-public abstract class AesnAdAuthenticationProvider {
-  //TODO implement AD Authentication and Role listing (then remove abstract)
+public class AesnAdAuthenticationProvider {
+  //TODO implement AD Authentication and Role listing
 }

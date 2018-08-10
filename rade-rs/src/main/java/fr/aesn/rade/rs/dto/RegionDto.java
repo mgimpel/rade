@@ -29,17 +29,19 @@ import lombok.Setter;
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
 @Getter @Setter @NoArgsConstructor
-@XmlRootElement(name="Region")
+@XmlRootElement(name = "Region")
 public class RegionDto
   extends EntiteAdministrativeDto {
+  /** Code INSEE de la région. */
   private String codeInsee;
+  /** Chef-lieu de la région. */
   private String chefLieu;
 
   /**
    * Set all the variables in this DTO with values from the given Entity.
    * @param region Entity used to initialize DTO.
    */
-  protected void setAllfromEntity(Region region) {
+  protected void setAllfromEntity(final Region region) {
     if (region == null) {
       return;
     }
@@ -53,7 +55,7 @@ public class RegionDto
    * @param region Entity used to build DTO.
    * @return new DTO built from it's associated Entity.
    */
-  public static RegionDto fromEntity(Region region) {
+  public static RegionDto fromEntity(final Region region) {
     RegionDto dto = new RegionDto();
     dto.setAllfromEntity(region);
     return dto;

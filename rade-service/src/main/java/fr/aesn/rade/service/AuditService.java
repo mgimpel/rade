@@ -41,7 +41,7 @@ public interface AuditService {
 
   /**
    * Create Audit.
-   * @param audit the new Audit to persist. 
+   * @param audit the new Audit to persist.
    * @return the new Audit.
    */
   public Audit createAudit(Audit audit);

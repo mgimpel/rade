@@ -31,15 +31,18 @@ import lombok.Setter;
 @Getter @Setter @NoArgsConstructor
 @XmlRootElement(name = "CirconscriptionBassin")
 public class CirconscriptionBassinDto {
+  /** Code du Bassin. */
   private String code;
+  /** Libellé Court du Bassin. */
   private String libelleCourt;
+  /** Libellé Long du Bassin. */
   private String libelleLong;
 
   /**
    * Set all the variables in this DTO with values from the given Entity.
    * @param bassin Entity used to initialize DTO.
    */
-  protected void setAllfromEntity(CirconscriptionBassin bassin) {
+  protected void setAllfromEntity(final CirconscriptionBassin bassin) {
     if (bassin == null) {
       return;
     }
@@ -53,7 +56,7 @@ public class CirconscriptionBassinDto {
    * @param bassin Entity used to build DTO.
    * @return new DTO built from it's associated Entity.
    */
-  public static CirconscriptionBassinDto fromEntity(CirconscriptionBassin bassin) {
+  public static CirconscriptionBassinDto fromEntity(final CirconscriptionBassin bassin) {
     CirconscriptionBassinDto dto = new CirconscriptionBassinDto();
     dto.setAllfromEntity(bassin);
     return dto;

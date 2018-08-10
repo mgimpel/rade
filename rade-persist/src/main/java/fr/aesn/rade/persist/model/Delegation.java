@@ -118,7 +118,7 @@ public class Delegation implements Serializable {
   @Column(name = "FAX", length = 255)
   private String fax;
 
-  /** Numéro Fax de la Délégation. */
+  /** Site Web de la Délégation. */
   @Size(max = 255)
   @Column(name = "SITEWEB", length = 255)
   private String siteWeb;

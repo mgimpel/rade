@@ -31,16 +31,20 @@ import lombok.Setter;
 @Getter @Setter @NoArgsConstructor
 @XmlRootElement(name = "TypeNomClair")
 public class TypeNomClairDto {
+  /** Code du nom en clair de l'entité administrative. */
   private String code;
+  /** Article du nom en clair de l'entité administrative. */
   private String article;
+  /** Charnière du nom en clair de l'entité administrative. */
   private String charniere;
+  /** Article Majuscule du nom en clair de l'entité administrative. */
   private String articleMaj;
 
   /**
    * Set all the variables in this DTO with values from the given Entity.
    * @param tncc Entity used to initialize DTO.
    */
-  protected void setAllfromEntity(TypeNomClair tncc) {
+  protected void setAllfromEntity(final TypeNomClair tncc) {
     if (tncc == null) {
       return;
     }
@@ -55,7 +59,7 @@ public class TypeNomClairDto {
    * @param tncc Entity used to build DTO.
    * @return new DTO built from it's associated Entity.
    */
-  public static TypeNomClairDto fromEntity(TypeNomClair tncc) {
+  public static TypeNomClairDto fromEntity(final TypeNomClair tncc) {
     TypeNomClairDto dto = new TypeNomClairDto();
     dto.setAllfromEntity(tncc);
     return dto;

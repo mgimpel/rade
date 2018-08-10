@@ -60,13 +60,15 @@ public class DepartementProcessor
   public void beforeStep(StepExecution stepExecution) {
     super.beforeStep(stepExecution);
     deptMap = deptService.getDepartementMap(debutValidite);
-    log.info("BeforeStep initialisation completed ({} depts currently in DB)", deptMap.size());
+    log.info("BeforeStep initialisation completed ({} depts currently in DB)",
+             deptMap.size());
   }
 
   @AfterStep
   public ExitStatus afterStep(StepExecution stepExecution) {
     for (Departement dept : deptMap.values()) {
-      log.info("Removing departement {}: not present in new file", dept.getCodeInsee());
+      log.info("Removing departement {}: not present in new file",
+               dept.getCodeInsee());
       deptService.invalidateDepartement(dept, debutValidite);
     }
     log.info("AfterStep cleanup completed");
@@ -88,20 +90,23 @@ public class DepartementProcessor
     Departement oldDept = deptMap.get(dept.getCodeInsee());
     if (oldDept != null) {
       deptMap.remove(dept.getCodeInsee());
-      if ((dept.getRegion().equals(oldDept.getRegion())) &&
-          (dept.getChefLieu().equals(oldDept.getChefLieu())) &&
-          (dept.getTypeNomClair().equals(oldDept.getTypeNomClair())) &&
-          (dept.getNomMajuscule().equals(oldDept.getNomMajuscule())) &&
-          (dept.getNomEnrichi().equals(oldDept.getNomEnrichi()))) {
-        log.info("Processing departement {}: Already exists - filtering out", dept.getCodeInsee());
+      if ((dept.getRegion().equals(oldDept.getRegion()))
+          && (dept.getChefLieu().equals(oldDept.getChefLieu()))
+          && (dept.getTypeNomClair().equals(oldDept.getTypeNomClair()))
+          && (dept.getNomMajuscule().equals(oldDept.getNomMajuscule()))
+          && (dept.getNomEnrichi().equals(oldDept.getNomEnrichi()))) {
+        log.info("Processing departement {}: Already exists - filtering out",
+                 dept.getCodeInsee());
         return null;
       } else {
-        log.info("Processing departement {}: Already exists but changed - updating", dept.getCodeInsee());
+        log.info("Processing departement {}: Already exists but changed - updating",
+                 dept.getCodeInsee());
         deptService.invalidateDepartement(oldDept, debutValidite);
         return super.process(dept);
       }
     } else {
-      log.info("Processing departement {}: Adding new region", dept.getCodeInsee());
+      log.info("Processing departement {}: Adding new region",
+               dept.getCodeInsee());
       return super.process(dept);
     }
   }

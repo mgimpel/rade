@@ -54,7 +54,6 @@ public class Main {
   public static final String OPTION_JOB     = "job";
   public static final String OPTION_INPUT   = "input";
   public static final String OPTION_DATE    = "date";
-  
 
   /**
    * Builds CLI Options.
@@ -86,7 +85,11 @@ public class Main {
     return options;
   }
 
-  public static void main(String[] args) {
+  /**
+   * Command line entrance.
+   * @param args Command line arguments
+   */
+  public static void main(final String[] args) {
     // Load Spring Context
     ApplicationContext context = new ClassPathXmlApplicationContext("batch-context.xml");
 
@@ -95,8 +98,7 @@ public class Main {
     CommandLine line = null;
     try {
       line = parser.parse(cliOptions(), args);
-    }
-    catch(org.apache.commons.cli.ParseException e) {
+    } catch(org.apache.commons.cli.ParseException e) {
       log.error("Parsing failed. Reason: {}", e.getMessage());
       HelpFormatter formatter = new HelpFormatter();
       formatter.printHelp("java -jar rade-batch.jar", cliOptions());
@@ -118,8 +120,7 @@ public class Main {
     if (line.hasOption("date")) {
       try {
         debutValidite = sdf.parse(line.getOptionValue("date"));
-      }
-      catch (ParseException e) {
+      } catch (ParseException e) {
         log.warn("Exception parsing date {}", line.getOptionValue("date"));
         debutValidite = new Date();
       }

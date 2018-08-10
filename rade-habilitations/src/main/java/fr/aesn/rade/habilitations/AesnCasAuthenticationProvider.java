@@ -21,10 +21,9 @@ package fr.aesn.rade.habilitations;
  * Custom AuthenticationProvider for Spring Security that uses AESN CAS server
  * to authenticate users, and queries the AESN Active Directory to recover
  * User Roles.
- * 
- * @author Marc Gimpel (mgimpel@gmail.com)
  *
+ * @author Marc Gimpel (mgimpel@gmail.com)
  */
-public abstract class AesnCasAuthenticationProvider {
-  //TODO implement CAS Authentication and AD Role listing (then remove abstract)
+public class AesnCasAuthenticationProvider {
+  //TODO implement CAS Authentication and AD Role listing
 }

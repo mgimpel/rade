@@ -48,7 +48,8 @@ public interface DepartementService {
   public Map<Integer, Departement> getDepartementMap();
 
   /**
-   * Returns a Map of all Departement valid at the given date and indexed by code.
+   * Returns a Map of all Departement valid at the given date and indexed by
+   * code.
    * @param date the date at which the departements are valid
    * @return a Map of all Departement indexed by code INSEE.
    */

@@ -91,19 +91,18 @@ public class AuditServiceImpl
     Optional<Audit> result = auditJpaDao.findById(id);
     if (result.isPresent()) {
       return result.get();
-    }
-    else {
+    } else {
       return null;
     }
   }
 
   /**
    * Create Audit.
-   * @param audit the new Audit to persist. 
+   * @param audit the new Audit to persist.
    * @return the new Audit.
    */
   @Override
-  public Audit createAudit(Audit audit) {
+  public Audit createAudit(final Audit audit) {
     return auditJpaDao.save(audit);
   }
 }

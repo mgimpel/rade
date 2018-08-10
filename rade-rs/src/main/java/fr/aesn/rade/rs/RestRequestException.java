@@ -18,25 +18,41 @@
 package fr.aesn.rade.rs;
 
 /**
- * 
+ * Exception for REST WebService Request.
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
 @SuppressWarnings("serial")
-public class RestRequestException extends Exception {
-
+public class RestRequestException
+  extends Exception {
+  /**
+   * Constructs a new exception with null as its detail message.
+   */
   public RestRequestException() {
     super();
   }
 
-  public RestRequestException(String message, Throwable cause) {
+  /**
+   * Constructs a new exception with the specified cause and a detail message.
+   * @param message the detail message.
+   * @param cause the cause.
+   */
+  public RestRequestException(final String message, final Throwable cause) {
     super(message, cause);
   }
 
-  public RestRequestException(String message) {
+  /**
+   * Constructs a new exception with the specified detail message.
+   * @param message the detail message.
+   */
+  public RestRequestException(final String message) {
     super(message);
   }
 
-  public RestRequestException(Throwable cause) {
+  /**
+   * Constructs a new exception with the specified cause and a detail message.
+   * @param cause the cause.
+   */
+  public RestRequestException(final Throwable cause) {
     super(cause);
   }
 }

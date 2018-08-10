@@ -41,7 +41,7 @@ import fr.aesn.rade.habilitations.ws.RoleBean;
 /**
  * Custom AuthenticationProvider for Spring Security that queries the AESN
  * Habilitation application.
- * 
+ *
  * The Habilitations application provides many more features than are required
  * by Spring Security. As such only a small subset of features will be used,
  * namely:
@@ -57,7 +57,7 @@ import fr.aesn.rade.habilitations.ws.RoleBean;
  * NB: The WebServices provided by the Habilitations application are quite
  * ancient, and incompatible with modern SOAP libraries such as CXF and Axis2.
  * As such it is necessary to user Axis1 for these WebServices.
- * 
+ *
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
 public class HabilitationsAuthenticationProvider
@@ -76,13 +76,13 @@ public class HabilitationsAuthenticationProvider
    * credentials are incorrect (this is especially useful if it is necessary
    * to bind to a resource as the user in order to obtain or generate a
    * <code>UserDetails</code>).
-   * 
+   *
    * <p>The classes will not perform credentials inspection in this method,
    * instead performing it in
    * {@link #additionalAuthenticationChecks(UserDetails, UsernamePasswordAuthenticationToken)}
    * so that code related to credentials validation need not be duplicated
    * across two methods.</p> 
-   * 
+   *
    * @param username The username to retrieve
    * @param authentication The authentication request
    * @return the user information (never <code>null</code> -
@@ -90,20 +90,19 @@ public class HabilitationsAuthenticationProvider
    * @throws AuthenticationException if the credentials could not be validated
    *         (generally a <code>BadCredentialsException</code>,
    *         an <code>AuthenticationServiceException</code> or
-   *         <code>UsernameNotFoundException</code>) 
+   *         <code>UsernameNotFoundException</code>)
    */
   @Override
   protected UserDetails retrieveUser(String username,
-                                     UsernamePasswordAuthenticationToken authentication)
-  {
+                                     UsernamePasswordAuthenticationToken authentication) {
     if (authentication == null) {
       throw new BadCredentialsException("Authentication Token was null");
     }
     String name = authentication.getName();
     if (username == null || !username.equals(name)) {
-      throw new BadCredentialsException("Username different from that " +
-                                        "provided by authentication: " +
-                                        username + " != " + name);
+      throw new BadCredentialsException("Username different from that "
+                                        + "provided by authentication: "
+                                        + username + " != " + name);
     }
     Object credentials = authentication.getCredentials();
     if (credentials == null) {
@@ -130,8 +129,8 @@ public class HabilitationsAuthenticationProvider
       }
     } catch (RemoteException e) {
       log.debug("Unable to list user roles for {}", username, e);
-      throw new AuthenticationServiceException("Unable to list user roles for " +
-                                               username, e);
+      throw new AuthenticationServiceException("Unable to list user roles for "
+                                               + username, e);
     }
 
     return new User(username, password, grantedAuthorities);
@@ -156,7 +155,7 @@ public class HabilitationsAuthenticationProvider
    * <code>UserDetails</code> and/or
    * <code>UsernamePasswordAuthenticationToken</code>,
    * these should also appear in this method.
-   * 
+   *
    * @param userDetails as retrieved from the
    *        {@link #retrieveUser(String, UsernamePasswordAuthenticationToken)}
    *        or <code>UserCache</code>
@@ -167,8 +166,7 @@ public class HabilitationsAuthenticationProvider
    */ 
   @Override
   protected void additionalAuthenticationChecks(UserDetails userDetails,
-                                                UsernamePasswordAuthenticationToken authentication)
-  {
+                                                UsernamePasswordAuthenticationToken authentication) {
     if (authentication == null) {
       throw new BadCredentialsException("Authentication Token was null");
     }
@@ -191,17 +189,16 @@ public class HabilitationsAuthenticationProvider
                                         e);
     } catch (RemoteException e) {
       log.debug("Unable to authenticate user {}", name, e);
-      throw new AuthenticationServiceException("Unable to authenticate user " +
-                                               name, e);
+      throw new AuthenticationServiceException("Unable to authenticate user "
+                                               + name, e);
     }
   }
 
   /**
    * Sets the WebService Stub to be used by this AuthenticationProvider.
-   * @param habilitationsService The WebService Stub that queries the
-   * Habilitations server.
+   * @param service The WebService Stub that queries the Habilitations server.
    */
-  public void setHabilitationsService(HabilitationsUtilisateurSrv habilitationsService) {
-    this.habilitationsService = habilitationsService;
+  public void setHabilitationsService(HabilitationsUtilisateurSrv service) {
+    this.habilitationsService = service;
   }
 }

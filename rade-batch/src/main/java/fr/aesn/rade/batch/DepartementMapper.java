@@ -42,7 +42,8 @@ public class DepartementMapper
    * @return the Departement Entity.
    */
   @Override
-  public Departement mapFieldSet(FieldSet fieldSet) throws BindException {
+  public Departement mapFieldSet(final FieldSet fieldSet)
+    throws BindException {
     log.debug("Importing line: {}", fieldSet.toString());
     Departement dept = new Departement();
     dept.setTypeEntiteAdmin(getTypeEntiteAdmin("DEP"));

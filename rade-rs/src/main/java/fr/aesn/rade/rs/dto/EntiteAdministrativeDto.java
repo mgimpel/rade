@@ -32,19 +32,26 @@ import lombok.Setter;
  */
 @Getter @Setter @NoArgsConstructor
 public abstract class EntiteAdministrativeDto {
+  /** Date de début de Validité de l'entité. */
   private String debutValidite;
+  /** Date de fin de Validité de l'entité. */
   private String finValidite;
+  /** Article (enrichie) de l'entité. */
   private String articleEnrichi;
+  /** Nom (en majuscule) de l'entité. */
   private String nomMajuscule;
+  /** Nom (enrichie) de l'entité. */
   private String nomEnrichi;
+  /** Commentaire. */
   private String commentaire;
+  /** Type de Nom Clair (TNCC) de l'entité. */
   private TypeNomClairDto typeNomClair;
 
   /**
    * Set all the variables in this DTO with values from the given Entity.
    * @param entity Entity used to initialize DTO.
    */
-  protected void setAllfromEntity(EntiteAdministrative entity) {
+  protected void setAllfromEntity(final EntiteAdministrative entity) {
     if (entity == null) {
       return;
     }

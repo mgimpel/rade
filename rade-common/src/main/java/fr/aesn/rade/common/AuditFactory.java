@@ -26,11 +26,11 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 
+ * Audit Factory.
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
 @Getter @Setter
-public class AuditFactory extends AbstractFactoryBean<Audit>{
+public class AuditFactory extends AbstractFactoryBean<Audit> {
 
 //  private EntityManager em
   private String auteur;

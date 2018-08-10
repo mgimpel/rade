@@ -35,6 +35,7 @@ import lombok.Setter;
 @Getter @Setter @NoArgsConstructor
 @XmlRootElement(name = "Delegations")
 public class DelegationListDto {
+  /** Delegation List. */
   @XmlElement(name = "delegations")
   private List<DelegationDto> delegations;
 
@@ -43,7 +44,7 @@ public class DelegationListDto {
    * @param delegations Entity List used to build DTO.
    * @return new DTO List built from it's associated Entity List.
    */
-  public static DelegationListDto fromEntityList(List<Delegation> delegations) {
+  public static DelegationListDto fromEntityList(final List<Delegation> delegations) {
     List<DelegationDto> dtos = new ArrayList<>(delegations.size());
     for (Delegation delegation : delegations) {
       dtos.add(DelegationDto.fromEntity(delegation));

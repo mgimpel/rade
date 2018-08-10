@@ -118,8 +118,7 @@ public class RestService {
         return Response.ok(RegionListDto.fromEntityList(regions))
                        .build();
       }
-    }
-    catch (RestRequestException e) {
+    } catch (RestRequestException e) {
       log.error(e.getMessage(), e);
       return Response.status(Response.Status.BAD_REQUEST)
                      .entity(e.getMessage())
@@ -152,8 +151,7 @@ public class RestService {
         return Response.ok(HateoasRegionDto.fromEntity(region, getRestBasePath(req, REST_PATH_REGION)))
                        .build();
       }
-    }
-    catch (RestRequestException e) {
+    } catch (RestRequestException e) {
       log.error(e.getMessage(), e);
       return Response.status(Response.Status.BAD_REQUEST)
                      .entity(e.getMessage())
@@ -183,8 +181,7 @@ public class RestService {
         return Response.ok(DepartementListDto.fromEntityList(depts))
                        .build();
       }
-    }
-    catch (RestRequestException e) {
+    } catch (RestRequestException e) {
       log.error(e.getMessage(), e);
       return Response.status(Response.Status.BAD_REQUEST)
                      .entity(e.getMessage())
@@ -217,8 +214,7 @@ public class RestService {
         return Response.ok(HateoasDepartementDto.fromEntity(dept, getRestBasePath(req, REST_PATH_DEPARTEMENT)))
                        .build();
       }
-    }
-    catch (RestRequestException e) {
+    } catch (RestRequestException e) {
       log.error(e.getMessage(), e);
       return Response.status(Response.Status.BAD_REQUEST)
                      .entity(e.getMessage())
@@ -248,8 +244,7 @@ public class RestService {
         return Response.ok(CommuneListDto.fromEntityList(communes))
                        .build();
       }
-    }
-    catch (RestRequestException e) {
+    } catch (RestRequestException e) {
       log.error(e.getMessage(), e);
       return Response.status(Response.Status.BAD_REQUEST)
                      .entity(e.getMessage())
@@ -282,8 +277,7 @@ public class RestService {
         return Response.ok(HateoasCommuneDto.fromEntity(commune, getRestBasePath(req, REST_PATH_COMMUNE)))
                        .build();
       }
-    }
-    catch (RestRequestException e) {
+    } catch (RestRequestException e) {
       log.error(e.getMessage(), e);
       return Response.status(Response.Status.BAD_REQUEST)
                      .entity(e.getMessage())
@@ -333,8 +327,7 @@ public class RestService {
         return Response.ok(HateoasDelegationDto.fromEntity(delegation, getRestBasePath(req, REST_PATH_DELEGATION)))
                        .build();
       }
-    }
-    catch (RestRequestException e) {
+    } catch (RestRequestException e) {
       log.error(e.getMessage(), e);
       return Response.status(Response.Status.BAD_REQUEST)
                      .entity(e.getMessage())
@@ -384,8 +377,7 @@ public class RestService {
         return Response.ok(HateoasCirconscriptionBassinDto.fromEntity(bassin, getRestBasePath(req, REST_PATH_CIRCONSCRIPTION_BASSIN)))
                        .build();
       }
-    }
-    catch (RestRequestException e) {
+    } catch (RestRequestException e) {
       log.error(e.getMessage(), e);
       return Response.status(Response.Status.BAD_REQUEST)
                      .entity(e.getMessage())
@@ -425,8 +417,7 @@ public class RestService {
     } else {
       try {
         date = sdf.parse(rawdate);
-      }
-      catch (ParseException e) {
+      } catch (ParseException e) {
         throw new RestRequestException("Could not parse date " + rawdate, e);
       }
     }

@@ -49,7 +49,7 @@ public class SharedBusinessRules {
     }
     Date debut = entiteAdmin.getDebutValidite();
     Date fin = entiteAdmin.getFinValidite();
-    return ((debut != null && debut.before(date)) &&
-            (fin == null || fin.after(date)));
+    return ((debut != null && debut.before(date))
+            && (fin == null || fin.after(date)));
   }
 }

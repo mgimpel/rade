@@ -52,7 +52,7 @@ public class RegionProcessor
 
   /**
    * Recover details from Database and Job Parameters Before Step Execution
-   * starts. 
+   * starts.
    * @param stepExecution Spring Batch stepExecution Object.
    */
   @BeforeStep
@@ -60,13 +60,15 @@ public class RegionProcessor
   public void beforeStep(StepExecution stepExecution) {
     super.beforeStep(stepExecution);
     regionMap = regionService.getRegionMap(debutValidite);
-    log.info("BeforeStep initialisation completed ({} regions currently in DB)", regionMap.size());
+    log.info("BeforeStep initialisation completed ({} regions currently in DB)",
+             regionMap.size());
   }
 
   @AfterStep
   public ExitStatus afterStep(StepExecution stepExecution) {
     for (Region region : regionMap.values()) {
-      log.info("Removing region {}: not present in new file", region.getCodeInsee());
+      log.info("Removing region {}: not present in new file",
+               region.getCodeInsee());
       regionService.invalidateRegion(region, debutValidite);
     }
     log.info("AfterStep cleanup completed");
@@ -88,19 +90,22 @@ public class RegionProcessor
     Region oldRegion = regionMap.get(region.getCodeInsee());
     if (oldRegion != null) {
       regionMap.remove(region.getCodeInsee());
-      if ((region.getChefLieu().equals(oldRegion.getChefLieu())) &&
-          (region.getTypeNomClair().equals(oldRegion.getTypeNomClair())) &&
-          (region.getNomMajuscule().equals(oldRegion.getNomMajuscule())) &&
-          (region.getNomEnrichi().equals(oldRegion.getNomEnrichi()))) {
-        log.info("Processing region {}: Already exists - filtering out", region.getCodeInsee());
+      if ((region.getChefLieu().equals(oldRegion.getChefLieu()))
+          && (region.getTypeNomClair().equals(oldRegion.getTypeNomClair()))
+          && (region.getNomMajuscule().equals(oldRegion.getNomMajuscule()))
+          && (region.getNomEnrichi().equals(oldRegion.getNomEnrichi()))) {
+        log.info("Processing region {}: Already exists - filtering out",
+                 region.getCodeInsee());
         return null;
       } else {
-        log.info("Processing region {}: Already exists but changed - updating", region.getCodeInsee());
+        log.info("Processing region {}: Already exists but changed - updating",
+                 region.getCodeInsee());
         regionService.invalidateRegion(oldRegion, debutValidite);
         return super.process(region);
       }
     } else {
-      log.info("Processing region {}: Adding new region", region.getCodeInsee());
+      log.info("Processing region {}: Adding new region",
+               region.getCodeInsee());
       return super.process(region);
     }
   }

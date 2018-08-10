@@ -40,11 +40,15 @@ public class SpringBootWebApplication
   private static final Logger log = LoggerFactory.getLogger(SpringBootWebApplication.class);
 
   @Override
-  protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+  protected SpringApplicationBuilder configure(final SpringApplicationBuilder application) {
     return application.sources(SpringBootWebApplication.class);
   }
 
-  public static void main(String[] args) throws Exception {
+  /**
+   * Command line entrance.
+   * @param args Command line arguments
+   */
+  public static void main(final String[] args) throws Exception {
     log.info("Starting Rade ...");
     SpringApplication.run(SpringBootWebApplication.class, args);
   }

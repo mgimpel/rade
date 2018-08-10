@@ -32,15 +32,18 @@ import lombok.Setter;
 @XmlRootElement(name = "Departement")
 public class DepartementDto
   extends EntiteAdministrativeDto {
+  /** Code INSEE du département. */
   private String codeInsee;
+  /** Chef-lieu du département. */
   private String chefLieu;
+  /** Région à laquelle appartient le département. */
   private String region;
 
   /**
    * Set all the variables in this DTO with values from the given Entity.
    * @param dept Entity used to initialize DTO.
    */
-  protected void setAllfromEntity(Departement dept) {
+  protected void setAllfromEntity(final Departement dept) {
     if (dept == null) {
       return;
     }
@@ -55,7 +58,7 @@ public class DepartementDto
    * @param dept Entity used to build DTO.
    * @return new DTO built from it's associated Entity.
    */
-  public static DepartementDto fromEntity(Departement dept) {
+  public static DepartementDto fromEntity(final Departement dept) {
     DepartementDto dto = new DepartementDto();
     dto.setAllfromEntity(dept);
     return dto;

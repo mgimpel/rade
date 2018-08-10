@@ -48,7 +48,8 @@ public class SpringSecurityConfig
    * @param http Spring HttpSecurity.
    */
   @Override
-  protected void configure(HttpSecurity http) throws Exception {
+  protected void configure(final HttpSecurity http)
+    throws Exception {
     http.csrf().disable()
         .authorizeRequests()
           // SOAP & REST WebServices (CXF) : no restrictions
@@ -58,7 +59,7 @@ public class SpringSecurityConfig
           // - all other Actuators (logfile and metrics) : authenticated user
           .antMatchers("/actuator/health", "/actuator/info").permitAll()
           // Static resources (CSS, images, ...) : no restrictions
-          .antMatchers("/css/**", "/img/**", "/resources/**","/favicon.ico").permitAll()
+          .antMatchers("/css/**", "/img/**", "/resources/**", "/favicon.ico").permitAll()
           // Admin files : require administrator role
           .antMatchers("/admin/**").hasAnyAuthority("RAD_ADMIN")
           // User files : require user role
@@ -82,7 +83,7 @@ public class SpringSecurityConfig
    * @param auth Spring AuthenticationManagerBuilder.
    */
   @Autowired
-  public void configureGlobal(AuthenticationManagerBuilder auth) {
+  public void configureGlobal(final AuthenticationManagerBuilder auth) {
     auth.authenticationProvider(authenticationProvider);
   }
 }

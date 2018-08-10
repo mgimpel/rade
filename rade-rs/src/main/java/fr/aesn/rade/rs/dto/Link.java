@@ -34,7 +34,9 @@ import lombok.Setter;
 @XmlRootElement(name = "Link")
 @XmlType(propOrder = {"rel", "href"})
 public class Link {
+  /** Name of the link. */
   private String rel;
+  /** URI of the link. */
   private URI href;
 
   /**
@@ -43,7 +45,7 @@ public class Link {
    * @param href URI of the link.
    * @return new Link.
    */
-  public static Link fromData(String rel, URI href) {
+  public static Link fromData(final String rel, final URI href) {
     Link link = new Link();
     link.setRel(rel);
     link.setHref(href);

@@ -57,8 +57,7 @@ public class AnnotationUtils {
     Map<Class<? extends Annotation>, Annotation> map = null;
     try {
       map = (Map<Class<? extends Annotation>, Annotation>) classAnnotations.get(annotationData);
-    }
-    catch (IllegalAccessException e) {
+    } catch (IllegalAccessException e) {
       log.warn("this should never happen (just changed accessibility)", e);
     }
     classAnnotations.setAccessible(false);
@@ -75,8 +74,7 @@ public class AnnotationUtils {
     Map<Class<? extends Annotation>, Annotation> map = null;
     try {
       map = (Map<Class<? extends Annotation>, Annotation>) fieldAnnotations.get(field);
-    }
-    catch (IllegalAccessException e) {
+    } catch (IllegalAccessException e) {
       log.warn("this should never happen (just changed accessibility)", e);
     }
     fieldAnnotations.setAccessible(false);

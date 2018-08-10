@@ -42,7 +42,8 @@ public class RegionMapper
    * @return the Region Entity.
    */
   @Override
-  public Region mapFieldSet(FieldSet fieldSet) throws BindException {
+  public Region mapFieldSet(final FieldSet fieldSet)
+    throws BindException {
     log.debug("Importing line: {}", fieldSet.toString());
     Region reg = new Region();
     reg.setTypeEntiteAdmin(getTypeEntiteAdmin("REG"));

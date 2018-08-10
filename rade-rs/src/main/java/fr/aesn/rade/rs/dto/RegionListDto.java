@@ -35,6 +35,7 @@ import lombok.Setter;
 @Getter @Setter @NoArgsConstructor
 @XmlRootElement(name = "Regions")
 public class RegionListDto {
+  /** Region List. */
   @XmlElement(name = "regions")
   private List<RegionDto> regions;
 
@@ -43,7 +44,7 @@ public class RegionListDto {
    * @param regions Entity List used to build DTO.
    * @return new DTO List built from it's associated Entity List.
    */
-  public static RegionListDto fromEntityList(List<Region> regions) {
+  public static RegionListDto fromEntityList(final List<Region> regions) {
     List<RegionDto> dtos = new ArrayList<>(regions.size());
     for (Region region : regions) {
       dtos.add(RegionDto.fromEntity(region));

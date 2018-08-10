@@ -35,6 +35,7 @@ import lombok.Setter;
 @Getter @Setter @NoArgsConstructor
 public class HateoasCommuneDto
   extends CommuneDto {
+  /** Link List. */
   private List<Link> links;
 
   /**
@@ -43,7 +44,8 @@ public class HateoasCommuneDto
    * @param basePath base URI for REST Service, used to build HATEOAS links.
    * @return new DTO built from it's associated Entity.
    */
-  public static HateoasCommuneDto fromEntity(Commune commune, String basePath) {
+  public static HateoasCommuneDto fromEntity(final Commune commune,
+                                             final String basePath) {
     HateoasCommuneDto dto = new HateoasCommuneDto();
     dto.setAllfromEntity(commune);
     dto.setLinks(Arrays.asList(Link.fromData("self", URI.create(basePath + RestService.REST_PATH_COMMUNE + commune.getCodeInsee())),

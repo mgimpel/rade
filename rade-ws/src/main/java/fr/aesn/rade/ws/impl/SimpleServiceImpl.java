@@ -25,16 +25,17 @@ import org.slf4j.LoggerFactory;
 import fr.aesn.rade.ws.SimpleService;
 
 /**
- * 
+ * Example WebService.
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
 @WebService(endpointInterface = "fr.aesn.rade.ws.SimpleService",
-            serviceName="SimpleService")
+            serviceName = "SimpleService")
 public class SimpleServiceImpl
   implements SimpleService {
-    /** SLF4J Logger. */
-    private static final Logger log =
-      LoggerFactory.getLogger(SimpleServiceImpl.class);
+  /** SLF4J Logger. */
+  private static final Logger log =
+    LoggerFactory.getLogger(SimpleServiceImpl.class);
+
   /**
    * Say Hello World
    * @return Hello World

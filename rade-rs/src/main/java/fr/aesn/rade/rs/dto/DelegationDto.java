@@ -31,27 +31,42 @@ import lombok.Setter;
 @Getter @Setter @NoArgsConstructor
 @XmlRootElement(name = "Delegation")
 public class DelegationDto {
+  /** Code de la Délégation. */
   private String code;
+  /** Libellé de la Délégation. */
   private String libelle;
+  /** Acheminement de la Délégation. */
   private String acheminement;
+  /** Adresse (ligne 1) de la Délégation. */
   private String adresse1;
+  /** Adresse (ligne 2) de la Délégation. */
   private String adresse2;
+  /** Adresse (ligne 3) de la Délégation. */
   private String adresse3;
+  /** Adresse (ligne 4) de la Délégation. */
   private String adresse4;
+  /** Adresse (ligne 5) de la Délégation. */
   private String adresse5;
+  /** Code Postale de la Délégation. */
   private String codePostal;
+  /** Adresse E-mail de la Délégation. */
   private String email;
+  /** Numéro Fax de la Délégation. */
   private String fax;
+  /** Site Web de la Délégation. */
   private String siteWeb;
+  /** Numéro de Téléphone de la Délégation. */
   private String telephone;
+  /** Numéro de Téléphone (2ème) de la Délégation. */
   private String telephone2;
+  /** Numéro de Téléphone (3ème) de la Délégation. */
   private String telephone3;
 
   /**
    * Set all the variables in this DTO with values from the given Entity.
    * @param delegation Entity used to initialize DTO.
    */
-  protected void setAllfromEntity(Delegation delegation) {
+  protected void setAllfromEntity(final Delegation delegation) {
     if (delegation == null) {
       return;
     }
@@ -77,7 +92,7 @@ public class DelegationDto {
    * @param delegation Entity used to build DTO.
    * @return new DTO built from it's associated Entity.
    */
-  public static DelegationDto fromEntity(Delegation delegation) {
+  public static DelegationDto fromEntity(final Delegation delegation) {
     DelegationDto dto = new DelegationDto();
     dto.setAllfromEntity(delegation);
     return dto;

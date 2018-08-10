@@ -141,8 +141,7 @@ public class RegionServiceImpl
     Optional<Region> result = regionJpaDao.findById(id);
     if (result.isPresent()) {
       return result.get();
-    }
-    else {
+    } else {
       return null;
     }
   }
@@ -203,8 +202,7 @@ public class RegionServiceImpl
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     try {
       return getRegionByCode(code, sdf.parse(date));
-    }
-    catch (ParseException e) {
+    } catch (ParseException e) {
       log.warn("Region requested by code and date: Exception parsing date {}", date, e);
       return null;
     }
@@ -219,13 +217,13 @@ public class RegionServiceImpl
    */
   @Override
   @Transactional(readOnly = false)
-  public Region invalidateRegion(Region region, Date date) {
+  public Region invalidateRegion(final Region region, final Date date) {
     if ((region == null) || (date == null)) {
       return null;
     }
     Region oldRegion = getRegionById(region.getId());
-    if (!(region.equals(oldRegion)) ||
-        (oldRegion.getFinValidite() != null)) {
+    if (!(region.equals(oldRegion))
+        || (oldRegion.getFinValidite() != null)) {
       // given region has other changes
       return null;
     }

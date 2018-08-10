@@ -35,6 +35,7 @@ import lombok.Setter;
 @Getter @Setter @NoArgsConstructor
 @XmlRootElement(name = "Departements")
 public class DepartementListDto {
+  /** Departement List. */
   @XmlElement(name = "departments")
   private List<DepartementDto> departments;
 
@@ -43,7 +44,7 @@ public class DepartementListDto {
    * @param depts Entity List used to build DTO.
    * @return new DTO List built from it's associated Entity List.
    */
-  public static DepartementListDto fromEntityList(List<Departement> depts) {
+  public static DepartementListDto fromEntityList(final List<Departement> depts) {
     List<DepartementDto> dtos = new ArrayList<>(depts.size());
     for (Departement dept : depts) {
       dtos.add(DepartementDto.fromEntity(dept));

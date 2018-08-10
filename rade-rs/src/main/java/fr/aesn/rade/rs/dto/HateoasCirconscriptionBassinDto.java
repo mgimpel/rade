@@ -35,6 +35,7 @@ import lombok.Setter;
 @Getter @Setter @NoArgsConstructor
 public class HateoasCirconscriptionBassinDto
   extends CirconscriptionBassinDto {
+  /** Link List. */
   private List<Link> links;
 
   /**
@@ -43,7 +44,8 @@ public class HateoasCirconscriptionBassinDto
    * @param basePath base URI for REST Service, used to build HATEOAS links.
    * @return new DTO built from it's associated Entity.
    */
-  public static HateoasCirconscriptionBassinDto fromEntity(CirconscriptionBassin bassin, String basePath) {
+  public static HateoasCirconscriptionBassinDto fromEntity(final CirconscriptionBassin bassin,
+                                                           final String basePath) {
     HateoasCirconscriptionBassinDto dto = new HateoasCirconscriptionBassinDto();
     dto.setAllfromEntity(bassin);
     dto.setLinks(Arrays.asList(Link.fromData("self", URI.create(basePath + RestService.REST_PATH_CIRCONSCRIPTION_BASSIN + bassin.getCode()))));

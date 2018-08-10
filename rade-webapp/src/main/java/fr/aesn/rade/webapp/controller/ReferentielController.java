@@ -50,6 +50,8 @@ public class ReferentielController {
 
   /**
    * Region Search mapping.
+   * @param code INSEE code for Region.
+   * @param model MVC model passed to JSP.
    * @return View for the Login page.
    */
   @RequestMapping(value = "/region", method = RequestMethod.GET)
@@ -66,6 +68,7 @@ public class ReferentielController {
 
   /**
    * Region Search mapping.
+   * @param model MVC model passed to JSP.
    * @return View for the Login page.
    */
   @RequestMapping(value = "/region", method = RequestMethod.POST)
@@ -81,6 +84,8 @@ public class ReferentielController {
 
   /**
    * Region Search mapping.
+   * @param code INSEE code for Region.
+   * @param model MVC model passed to JSP.
    * @return View for the Login page.
    */
   @RequestMapping(value = "/region/{code}")

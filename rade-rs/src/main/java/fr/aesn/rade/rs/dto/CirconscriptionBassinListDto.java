@@ -35,6 +35,7 @@ import lombok.Setter;
 @Getter @Setter @NoArgsConstructor
 @XmlRootElement(name = "CirconscriptionBassins")
 public class CirconscriptionBassinListDto {
+  /** Bassins List. */
   @XmlElement(name = "bassins")
   private List<CirconscriptionBassinDto> bassins;
 
@@ -43,7 +44,7 @@ public class CirconscriptionBassinListDto {
    * @param bassins Entity List used to build DTO.
    * @return new DTO List built from it's associated Entity List.
    */
-  public static CirconscriptionBassinListDto fromEntityList(List<CirconscriptionBassin> bassins) {
+  public static CirconscriptionBassinListDto fromEntityList(final List<CirconscriptionBassin> bassins) {
     List<CirconscriptionBassinDto> dtos = new ArrayList<>(bassins.size());
     for (CirconscriptionBassin bassin : bassins) {
       dtos.add(CirconscriptionBassinDto.fromEntity(bassin));

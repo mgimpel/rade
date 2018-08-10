@@ -44,7 +44,7 @@ public abstract class EntiteAdminMapper {
    * @param code the TNCC code
    * @return the TypeNomClair.
    */
-  protected TypeNomClair getTypeNomClair(String code) {
+  protected TypeNomClair getTypeNomClair(final String code) {
     if (tncc == null) {
       tncc = metadataService.getTypeNomClairMap();
     }
@@ -56,7 +56,7 @@ public abstract class EntiteAdminMapper {
    * @param code the TypeEntiteAdmin code
    * @return the TypeEntiteAdmin.
    */
-  protected TypeEntiteAdmin getTypeEntiteAdmin(String code) {
+  protected TypeEntiteAdmin getTypeEntiteAdmin(final String code) {
     if (tea == null) {
       tea = metadataService.getTypeEntiteAdminMap();
     }

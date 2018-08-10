@@ -139,8 +139,7 @@ public class DepartementServiceImpl
     Optional<Departement> result = departementJpaDao.findById(id);
     if (result.isPresent()) {
       return result.get();
-    }
-    else {
+    } else {
       return null;
     }
   }
@@ -190,13 +189,13 @@ public class DepartementServiceImpl
    * @param date the date at which the code was valid
    * @return the Departement with the given code at the given date.
    */
-  public Departement getDepartementByCode(final String code, final String date) {
+  public Departement getDepartementByCode(final String code,
+                                          final String date) {
     log.debug("Departement requested by code and date: code={}, date={}", code, date);
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     try {
       return getDepartementByCode(code, sdf.parse(date));
-    }
-    catch (ParseException e) {
+    } catch (ParseException e) {
       log.warn("Departement requested by code and date: Exception parsing date {}", date, e);
       return null;
     }
@@ -209,13 +208,14 @@ public class DepartementServiceImpl
    * @param date the date of end of validity for the departement.
    * @return the now invalidated departement.
    */
-  public Departement invalidateDepartement(Departement dept, Date date) {
+  public Departement invalidateDepartement(final Departement dept,
+                                           final Date date) {
     if ((dept == null) || (date == null)) {
       return null;
     }
     Departement oldDept = getDepartementById(dept.getId());
-    if (!(dept.equals(oldDept)) ||
-        (oldDept.getFinValidite() != null)) {
+    if (!(dept.equals(oldDept))
+        || (oldDept.getFinValidite() != null)) {
       // given departement has other changes
       return null;
     }

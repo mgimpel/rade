@@ -45,14 +45,14 @@ public abstract class EntiteAdminProcessor
   @Autowired @Setter
   private AuditService auditService;
 
-  /** Audit details to add to Entity */
+  /** Audit details to add to Entity. */
   protected Audit audit;
-  /** Date of beginning of Validity of Entity */
+  /** Date of beginning of Validity of Entity. */
   protected Date debutValidite;
 
   /**
    * Recover details from Database and Job Parameters Before Step Execution
-   * starts. 
+   * starts.
    * @param stepExecution Spring Batch stepExecution Object.
    */
   public void beforeStep(StepExecution stepExecution) {

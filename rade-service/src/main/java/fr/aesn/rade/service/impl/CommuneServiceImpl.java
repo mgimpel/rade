@@ -124,8 +124,7 @@ public class CommuneServiceImpl
     Optional<Commune> result = communeJpaDao.findById(id);
     if (result.isPresent()) {
       return result.get();
-    }
-    else {
+    } else {
       return null;
     }
   }
@@ -186,8 +185,7 @@ public class CommuneServiceImpl
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     try {
       return getCommuneByCode(code, sdf.parse(date));
-    }
-    catch (ParseException e) {
+    } catch (ParseException e) {
       log.warn("Commune requested by code and date: Exception parsing date {}", date, e);
       return null;
     }

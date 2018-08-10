@@ -35,6 +35,7 @@ import lombok.Setter;
 @Getter @Setter @NoArgsConstructor
 public class HateoasDelegationDto
   extends DelegationDto {
+  /** Link List. */
   private List<Link> links;
 
   /**
@@ -43,7 +44,8 @@ public class HateoasDelegationDto
    * @param basePath base URI for REST Service, used to build HATEOAS links.
    * @return new DTO built from it's associated Entity.
    */
-  public static HateoasDelegationDto fromEntity(Delegation delegation, String basePath) {
+  public static HateoasDelegationDto fromEntity(final Delegation delegation,
+                                                final String basePath) {
     HateoasDelegationDto dto = new HateoasDelegationDto();
     dto.setAllfromEntity(delegation);
     dto.setLinks(Arrays.asList(Link.fromData("self", URI.create(basePath + RestService.REST_PATH_DELEGATION + delegation.getCode()))));

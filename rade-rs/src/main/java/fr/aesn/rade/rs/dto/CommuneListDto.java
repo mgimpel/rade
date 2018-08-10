@@ -35,6 +35,7 @@ import lombok.Setter;
 @Getter @Setter @NoArgsConstructor
 @XmlRootElement(name = "Communes")
 public class CommuneListDto {
+  /** Communes List. */
   @XmlElement(name = "communes")
   private List<CommuneDto> communes;
 
@@ -43,7 +44,7 @@ public class CommuneListDto {
    * @param communes Entity List used to build DTO.
    * @return new DTO List built from it's associated Entity List.
    */
-  public static CommuneListDto fromEntityList(List<Commune> communes) {
+  public static CommuneListDto fromEntityList(final List<Commune> communes) {
     List<CommuneDto> dtos = new ArrayList<>(communes.size());
     for (Commune commune : communes) {
       dtos.add(CommuneDto.fromEntity(commune));

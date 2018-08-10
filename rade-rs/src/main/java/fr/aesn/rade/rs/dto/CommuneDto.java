@@ -30,19 +30,23 @@ import lombok.Setter;
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
 @Getter @Setter @NoArgsConstructor
-@XmlRootElement(name="Commune")
+@XmlRootElement(name = "Commune")
 public class CommuneDto
   extends EntiteAdministrativeDto {
+  /** Code INSEE de la Commune. */
   private String codeInsee;
+  /** Département auquel appartient la Commune. */
   private String departement;
+  /** Bassin auquel appartient la Commune. */
   private CirconscriptionBassinDto circonscriptionBassin;
+  /** Indicateur Urbain/Rural de la Commune. */
   private String indicateurUrbain;
 
   /**
    * Set all the variables in this DTO with values from the given Entity.
    * @param commune Entity used to initialize DTO.
    */
-  protected void setAllfromEntity(Commune commune) {
+  protected void setAllfromEntity(final Commune commune) {
     if (commune == null) {
       return;
     }
@@ -59,7 +63,7 @@ public class CommuneDto
    * @param commune Entity used to build DTO.
    * @return new DTO built from it's associated Entity.
    */
-  public static CommuneDto fromEntity(Commune commune) {
+  public static CommuneDto fromEntity(final Commune commune) {
     CommuneDto dto = new CommuneDto();
     dto.setAllfromEntity(commune);
     return dto;

@@ -96,8 +96,7 @@ public class BassinServiceImpl
     Optional<CirconscriptionBassin> result = circonscriptionBassinJpaDao.findById(code);
     if (result.isPresent()) {
       return result.get();
-    }
-    else {
+    } else {
       return null;
     }
   }
