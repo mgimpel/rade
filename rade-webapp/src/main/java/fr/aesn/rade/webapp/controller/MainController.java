@@ -50,6 +50,7 @@ public class MainController {
 
   /**
    * Login mapping.
+   * @param model MVC model passed to JSP.
    * @return View for the Login page.
    */
   @RequestMapping("/login")

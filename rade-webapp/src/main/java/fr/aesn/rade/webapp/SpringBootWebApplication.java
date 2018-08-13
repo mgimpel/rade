@@ -48,7 +48,7 @@ public class SpringBootWebApplication
    * Command line entrance.
    * @param args Command line arguments
    */
-  public static void main(final String[] args) throws Exception {
+  public static void main(final String[] args) {
     log.info("Starting Rade ...");
     SpringApplication.run(SpringBootWebApplication.class, args);
   }

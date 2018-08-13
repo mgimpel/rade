@@ -31,7 +31,7 @@ import fr.aesn.rade.persist.model.Departement;
  * Mapper class to map Entities (from the service package) to VOs (defined in the WSDL).
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
-public class Entity2VoMapper {
+public final class Entity2VoMapper {
   /** SLF4J Logger. */
   private static final Logger log =
     LoggerFactory.getLogger(Entity2VoMapper.class);

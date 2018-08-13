@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
  * Project Version Info.
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
-public class Version {
+public final class Version {
   /** SLF4J Logger. */
   private static final Logger log = LoggerFactory.getLogger(Version.class);
   /** Singleton instance. */

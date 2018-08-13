@@ -26,7 +26,7 @@ import fr.aesn.rade.persist.model.EntiteAdministrative;
  * The methods in this class should be static and stateless.
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
-public class SharedBusinessRules {
+public final class SharedBusinessRules {
   /**
    * Hidden private Constructor makes the class non-instantiable.
    */

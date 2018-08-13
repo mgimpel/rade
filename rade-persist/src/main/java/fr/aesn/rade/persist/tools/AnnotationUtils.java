@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
  * The methods in this class should be static and stateless.
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
-public class AnnotationUtils {
+public final class AnnotationUtils {
   /** SLF4J Logger. */
   private static final Logger log =
     LoggerFactory.getLogger(AnnotationUtils.class);
