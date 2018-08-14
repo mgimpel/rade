@@ -123,6 +123,7 @@ public class HabilitationsAuthenticationProvider
           // Valid roles for the application are: "RAD_ADMIN", "RAD_GESTION" &
           // "RAD_CONSULT"
           if (code != null && code.startsWith("RAD_")) {
+            log.info("Role found for user {}: {}", username, code);
             grantedAuthorities.add(new SimpleGrantedAuthority(code));
           }
         }
@@ -183,6 +184,7 @@ public class HabilitationsAuthenticationProvider
       if (!result) {
         throw new BadCredentialsException("Authentication result negative");
       }
+      log.info("User authenticated: {}", name);
     } catch (HabilitationException e) {
       log.debug("Unable to authenticate user {}", name, e);
       throw new BadCredentialsException("Unable to authenticate user " + name,
