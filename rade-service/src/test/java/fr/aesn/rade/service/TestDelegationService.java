@@ -93,15 +93,15 @@ public class TestDelegationService
     assertEquals("Hibernate returned a Delegation, but the ID doesn't match",
                  "PPC", delegation.getCode());
     assertEquals("Hibernate returned a Delegation, but the Libelle doesn't match",
-                 "DIRECTION DE PARIS PETITE COURONNE", delegation.getLibelle());
+                 "Direction territoriale Paris Petite Couronne", delegation.getLibelle());
     assertEquals("Hibernate returned a Delegation, but the Acheminement doesn't match",
-                 "NANTERRE CEDEX", delegation.getAcheminement());
+                 "Nanterre Cedex - France", delegation.getAcheminement());
     assertEquals("Hibernate returned a Delegation, but the Addresse1 doesn't match",
-                 "AGENCE DE L'EAU SEINE NORMANDIE", delegation.getAdresse1());
+                 "Agence de l'eau Seine-Normandie", delegation.getAdresse1());
     assertEquals("Hibernate returned a Delegation, but the Addresse2 doesn't match",
-                 "DIRECTION PARIS PETITE COURONNE", delegation.getAdresse2());
+                 "Direction territoriale Paris Petite Couronne", delegation.getAdresse2());
     assertEquals("Hibernate returned a Delegation, but the Addresse3 doesn't match",
-                 "51 RUE SALVADOR ALLENDE", delegation.getAdresse3());
+                 "51, rue Salvador Allende", delegation.getAdresse3());
     assertEquals("Hibernate returned a Delegation, but the Addresse4 doesn't match",
                  "", delegation.getAdresse4());
     assertEquals("Hibernate returned a Delegation, but the Addresse5 doesn't match",
@@ -111,14 +111,14 @@ public class TestDelegationService
     assertEquals("Hibernate returned a Delegation, but the E-mail doesn't match",
                  "xxx", delegation.getEmail());
     assertEquals("Hibernate returned a Delegation, but the Fax doesn't match",
-                 "xxx", delegation.getFax());
+                 "01 41 20 16 09", delegation.getFax());
     assertEquals("Hibernate returned a Delegation, but the Site Web doesn't match",
                  "http://www.eau-seine-normandie.fr/", delegation.getSiteWeb());
     assertEquals("Hibernate returned a Delegation, but the Telephone doesn't match",
                  "01 41 20 16 00", delegation.getTelephone());
     assertEquals("Hibernate returned a Delegation, but the Telephone2 doesn't match",
-                 "xxx", delegation.getTelephone2());
+                 "", delegation.getTelephone2());
     assertEquals("Hibernate returned a Delegation, but the Telephone3 doesn't match",
-                 "xxx", delegation.getTelephone3());
+                 "", delegation.getTelephone3());
   }
 }
