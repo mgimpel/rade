@@ -52,8 +52,8 @@
     <spring-data.version>2.0.9.RELEASE</spring-data.version>
     <spring-security.version>5.0.7.RELEASE</spring-security.version>
     <spring-batch.version>4.0.1.RELEASE</spring-batch.version>
-    <hibernate.version>5.3.4.Final</hibernate.version>
-    <cxf.version>3.2.5</cxf.version>
+    <hibernate.version>5.3.6.Final</hibernate.version>
+    <cxf.version>3.2.6</cxf.version>
     <cglib.version>3.2.7</cglib.version>
     <slf4j.version>1.7.25</slf4j.version>
     <!-- Other properties -->
@@ -232,6 +232,37 @@
         <artifactId>jaxws-api</artifactId>
         <version>2.3.0</version>
       </dependency>
+      <!-- Apache Axis 1 -->
+      <dependency>
+        <groupId>org.apache.axis</groupId>
+        <artifactId>axis</artifactId>
+        <version>1.4</version>
+      </dependency>
+      <dependency>
+        <groupId>javax.xml</groupId>
+        <artifactId>jaxrpc-api</artifactId>
+        <version>1.1</version>
+      </dependency>
+      <dependency>
+        <groupId>wsdl4j</groupId>
+        <artifactId>wsdl4j</artifactId>
+        <version>1.6.2</version>
+      </dependency>
+      <dependency>
+        <groupId>commons-discovery</groupId>
+        <artifactId>commons-discovery</artifactId>
+        <version>0.5</version>
+      </dependency>
+      <dependency>
+        <groupId>javax.activation</groupId>
+        <artifactId>activation</artifactId>
+        <version>1.1.1</version>
+      </dependency>
+      <dependency>
+        <groupId>javax.mail</groupId>
+        <artifactId>mail</artifactId>
+        <version>1.4.7</version>
+      </dependency>
       <!-- Logging -->
       <dependency>
         <groupId>ch.qos.logback</groupId>
@@ -247,7 +278,7 @@
       <dependency>
         <groupId>org.apache.commons</groupId>
         <artifactId>commons-lang3</artifactId>
-        <version>3.7</version>
+        <version>3.8</version>
       </dependency>
       <dependency>
         <groupId>org.apache.commons</groupId>
@@ -276,7 +307,7 @@
       <dependency>
         <groupId>org.apache.tomcat.embed</groupId>
         <artifactId>tomcat-embed-jasper</artifactId>
-        <version>8.5.32</version>
+        <version>8.5.33</version>
         <scope>provided</scope>
       </dependency>
       <dependency>
