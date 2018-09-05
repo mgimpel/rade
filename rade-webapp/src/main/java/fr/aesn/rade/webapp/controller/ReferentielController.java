@@ -68,6 +68,8 @@ public class ReferentielController {
 
   /**
    * Region Search mapping.
+   * @param criteria Region search criteria entered in form.
+   * @param result binding to Region object result.
    * @param model MVC model passed to JSP.
    * @return View for the Login page.
    */
