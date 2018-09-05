@@ -27,8 +27,6 @@ import org.springframework.security.authentication.AuthenticationServiceExceptio
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.AbstractUserDetailsAuthenticationProvider;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -53,7 +51,7 @@ import fr.aesn.rade.habilitations.ws.RoleBean;
  * It should be noted that only roles beginning with "RAD_" are used by the
  * Rade application (RAD_ADMIN, RAD_GESTION and RAD_CONSULT are the only roles
  * defined so far).
- * 
+ *
  * NB: The WebServices provided by the Habilitations application are quite
  * ancient, and incompatible with modern SOAP libraries such as CXF and Axis2.
  * As such it is necessary to user Axis1 for these WebServices.
@@ -79,7 +77,7 @@ public class HabilitationsAuthenticationProvider
    *
    * <p>The classes will not perform credentials inspection in this method,
    * instead performing it in
-   * {@link #additionalAuthenticationChecks(UserDetails, UsernamePasswordAuthenticationToken)}
+   * additionalAuthenticationChecks(UserDetails, UsernamePasswordAuthenticationToken)
    * so that code related to credentials validation need not be duplicated
    * across two methods.</p> 
    *
@@ -150,15 +148,14 @@ public class HabilitationsAuthenticationProvider
    * Perform any additional checks on a returned (or cached)
    * <code>UserDetails</code> for a given authentication request.
    * Generally a subclass will at least compare the
-   * {@link Authentication#getCredentials()} with a
-   * {@link UserDetails#getPassword()}
+   * Authentication.getCredentials() with a UserDetails.getPassword()
    * If custom logic is needed to compare additional properties of
    * <code>UserDetails</code> and/or
    * <code>UsernamePasswordAuthenticationToken</code>,
    * these should also appear in this method.
    *
    * @param userDetails as retrieved from the
-   *        {@link #retrieveUser(String, UsernamePasswordAuthenticationToken)}
+   *        retrieveUser(String, UsernamePasswordAuthenticationToken)
    *        or <code>UserCache</code>
    * @param authentication the current request that needs to be authenticated
    * @throws AuthenticationException AuthenticationException if the credentials

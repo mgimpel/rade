@@ -60,6 +60,9 @@ import fr.aesn.rade.service.RegionService;
 import lombok.Setter;
 
 /**
+ * REST WebService for the Rade Project.
+ * Exposes Region, Departement, Commune, Bassin and Delegation details through
+ * a simple REST interface.
  * 
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
@@ -425,12 +428,14 @@ public class RestService {
   }
 
   /**
-   * Extracts the REST Services base path from the given HTTP Request and the Service Path
+   * Extracts the REST Services base path from the given HTTP Request and the
+   * Service Path.
    * @param req HTTP Request (for determining base path of Rest Service).
    * @param servicePath the path of REST query used by the request.
    * @return the REST Services base path.
    */
-  private static final String getRestBasePath(final HttpServletRequest req, final String servicePath) {
+  private static final String getRestBasePath(final HttpServletRequest req,
+                                              final String servicePath) {
     String url = req.getRequestURL().toString();
     int index = url.indexOf(servicePath);
     if (index < 0) {
