@@ -8,12 +8,13 @@ After=syslog.target network.target
 [Service]
 WorkingDirectory=/etc/rade
 Environment=BINARY="/usr/lib/rade/rade-webapp.war"
+Environment=JAVA_EXEC="/usr/bin/java"
 Environment=JAVA_OPTS="-Xmx256m"
 Environment=RADE_OPTS=""
 Environment=LOGGING="-Dlogging.config=/etc/rade/logback.xml"
 User=rade
 Group=rade
-ExecStart=/usr/bin/java $JAVA_OPTS $RADE_OPTS $LOGGING -jar $BINARY
+ExecStart=/usr/bin/env $JAVA_EXEC $JAVA_OPTS $RADE_OPTS $LOGGING -jar $BINAR
 StandardOutput=journal
 StandardError=journal
 SyslogIdentifier=rade

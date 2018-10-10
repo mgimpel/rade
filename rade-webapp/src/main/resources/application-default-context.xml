@@ -166,6 +166,10 @@
   <!-- Spring MVC -->
   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
+  <bean id="applicationName" class="java.lang.String">
+    <constructor-arg value="${app.name}"/>
+  </bean>
+
   <util:map id="headerMenu">
     <entry key="Tiers" value="http://tiers.aesn.fr/"/>
     <entry key="Sitouref" value="http://sitouref.aesn.fr/"/>

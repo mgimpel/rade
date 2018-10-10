@@ -47,15 +47,16 @@
     <timestamp>${maven.build.timestamp}</timestamp>
     <!-- Major dependency versions to ensure coherence among subprojects -->
     <java.version>1.8</java.version>
-    <spring.version>5.0.8.RELEASE</spring.version>
-    <spring-boot.version>2.0.4.RELEASE</spring-boot.version>
-    <spring-data.version>2.0.9.RELEASE</spring-data.version>
-    <spring-security.version>5.0.7.RELEASE</spring-security.version>
+    <spring.version>5.0.9.RELEASE</spring.version>
+    <spring-boot.version>2.0.5.RELEASE</spring-boot.version>
+    <spring-data.version>2.1.0.RELEASE</spring-data.version>
+    <spring-security.version>5.0.8.RELEASE</spring-security.version>
     <spring-batch.version>4.0.1.RELEASE</spring-batch.version>
     <hibernate.version>5.3.6.Final</hibernate.version>
     <cxf.version>3.2.6</cxf.version>
-    <cglib.version>3.2.7</cglib.version>
+    <cglib.version>3.2.8</cglib.version>
     <slf4j.version>1.7.25</slf4j.version>
+    <logback.version>1.2.3</logback.version>
     <!-- Other properties -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.scm.id>github</project.scm.id> <!-- set username/password in settings.xml -->
@@ -135,6 +136,11 @@
         <groupId>org.springframework</groupId>
         <artifactId>spring-core</artifactId>
         <version>${spring.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework.data</groupId>
+        <artifactId>spring-data-commons</artifactId>
+        <version>${spring-data.version}</version>
       </dependency>
       <dependency>
         <groupId>org.springframework.data</groupId>
@@ -267,7 +273,7 @@
       <dependency>
         <groupId>ch.qos.logback</groupId>
         <artifactId>logback-classic</artifactId>
-        <version>1.2.3</version>
+        <version>${logback.version}</version>
       </dependency>
       <dependency>
         <groupId>org.slf4j</groupId>
@@ -278,7 +284,7 @@
       <dependency>
         <groupId>org.apache.commons</groupId>
         <artifactId>commons-lang3</artifactId>
-        <version>3.8</version>
+        <version>3.8.1</version>
       </dependency>
       <dependency>
         <groupId>org.apache.commons</groupId>
@@ -307,7 +313,7 @@
       <dependency>
         <groupId>org.apache.tomcat.embed</groupId>
         <artifactId>tomcat-embed-jasper</artifactId>
-        <version>8.5.33</version>
+        <version>8.5.34</version>
         <scope>provided</scope>
       </dependency>
       <dependency>

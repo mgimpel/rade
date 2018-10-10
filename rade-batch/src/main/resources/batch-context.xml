@@ -119,6 +119,24 @@
     </property>
   </bean>
 
+  <!-- ItemReader which reads data from Hexaposte file -->
+  <bean id="hexaposteItemReader" scope="step"
+        class="org.springframework.batch.item.file.FlatFileItemReader">
+    <property name="resource" value="#{jobParameters['inputFile']}"/>
+    <property name="linesToSkip" value="1"/>
+    <property name="lineMapper">
+      <bean class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
+        <property name="lineTokenizer">
+          <bean class="org.springframework.batch.item.file.transform.FixedLengthTokenizer"
+                p:columns="1-6,7-11,12-49,50,51,52-89,90-94,95-126,127-131,132,133-142"/>
+        </property>
+        <property name="fieldSetMapper">
+          <bean class="fr.aesn.rade.batch.HexaposteMapper"/>
+        </property>
+      </bean>
+    </property>
+  </bean>
+
   <!-- ItemWriter which writes the data to the database -->
   <bean id="jpaItemWriter" scope="step"
         class="org.springframework.batch.item.database.JpaItemWriter"
@@ -129,6 +147,9 @@
 
   <bean id="departementItemProcessor" scope="step"
         class="fr.aesn.rade.batch.DepartementProcessor"/>
+
+  <bean id="hexaposteItemProcessor" scope="step"
+        class="fr.aesn.rade.batch.HexaposteProcessor"/>
 
   <batch:job id="importRegionJob">
     <batch:step id="importRegionStep1">
@@ -142,6 +163,14 @@
     <batch:step id="importDeptStep1">
       <batch:tasklet>
         <batch:chunk reader="departementItemReader" processor="departementItemProcessor" writer="jpaItemWriter" commit-interval="100"/>
+      </batch:tasklet>
+    </batch:step>
+  </batch:job>
+
+  <batch:job id="importHexaposteJob">
+    <batch:step id="importHexaposteStep1">
+      <batch:tasklet>
+        <batch:chunk reader="hexaposteItemReader" processor="hexaposteItemProcessor" writer="jpaItemWriter" commit-interval="100"/>
       </batch:tasklet>
     </batch:step>
   </batch:job>

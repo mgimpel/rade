@@ -291,3 +291,25 @@ CREATE TABLE ZR_EVENEMENT (
 COMMENT ON TABLE ZR_EVENEMENT IS
   'Entité [EVENEMENT COMMUNE A CONTROLER]';
 */
+-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - --
+-- ZR_HEXAPOSTE : Référentiel des codes postaux et des codes CEDEX de France
+-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - --
+CREATE TABLE ZR_HEXAPOSTE (
+  IDENTIFIANT                  varchar(6)  NOT NULL PRIMARY KEY,
+  CODE_INSEE_COMMUNE           varchar(5),
+  LIBELLE_COMMUNE              varchar(38),
+  INDICATEUR_PLURIDISTRIBUTION integer     NOT NULL,
+  TYPE_CODE_POSTALE            varchar(1)  NOT NULL,
+  LIBELLE_LIGNE5               varchar(38),
+  CODE_POSTALE                 varchar(5)  NOT NULL,
+  LIBELLE_ACHEMINEMENT         varchar(32) NOT NULL,
+  CODE_INSEE_ANCIENNE_COMMUNE  varchar(5),
+  CODE_MAJ                     varchar(1),
+  CODE_ETENDU_ADRESSE          varchar(10),
+  AUDIT_ID                     integer     NOT NULL,
+  FOREIGN KEY(AUDIT_ID) REFERENCES ZR_AUDIT
+);
+/*
+COMMENT ON TABLE ZR_HEXAPOSTE IS
+  'Entité [HEXAPOSTE]';
+*/

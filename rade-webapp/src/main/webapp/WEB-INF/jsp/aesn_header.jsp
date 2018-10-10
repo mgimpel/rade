@@ -22,10 +22,11 @@
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <html xmlns="http://www.w3.org/1999/xhtml">
+<spring:eval var="appname" expression="@applicationName"/>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta http-equiv="Content-Language" content="fr">
-	<title>RADE AESN - ${titre}</title>
+	<title>${appname} - ${titre}</title>
 	<link rel="icon" href="<%=request.getContextPath()%>/favicon.ico" type="image/x-icon">
 	<link rel="shortcut icon" href="<%=request.getContextPath()%>/favicon.ico" type="image/x-icon">
 	<link rel="stylesheet" href="<%=request.getContextPath()%>/css/aesn-styles.css" type="text/css">
@@ -63,7 +64,7 @@
 						<input class="btn_ok" onclick="javascript:accederRapidement();" value="OK" type="button">
 					</form>
 				</div>
-				<h1>Rade</h1>
+				<h1>${appname}</h1>
 			</div>
 			<div id="chemin_nav">Vous êtes ici : &nbsp;${titre}&nbsp;</div>
 			<ul id="nav">
