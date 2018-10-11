@@ -17,6 +17,7 @@
 /* $Id$ */
 package fr.aesn.rade.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -69,24 +70,30 @@ public class HexaposteServiceImpl
   }
 
   /**
-   * Get all current Hexaposte records for the given Code Postale.
-   * @param codePostale Code Postale of the Commune 
-   * @return a list of all Hexaposte records for the given Code Postale.
+   * Get all current Hexaposte records for the given Code Postal.
+   * @param codePostal Code Postal of the Commune 
+   * @return a list of all Hexapost records for the given Code Postale.
    */
-  public List<Hexaposte> getHexposteByCodePostale (final String codePostale) {
-    log.debug("Hexaposte requested by Code Postale: CodePostale={}", codePostale);
-    //TODO
-    return hexaposteJpaDao.findAll();
+  public List<Hexaposte> getHexposteByCodePostal (final String codePostal) {
+    log.debug("Hexaposte requested by Code Postal: CodePostal={}", codePostal);
+    return hexaposteJpaDao.findByCodePostal(codePostal);
   }
 
   /**
-   * Get all current Libelle d'acheminement for the given Code Postale.
-   * @param codePostale Code Postale of the Commune 
-   * @return a list of all Libelle d'acheminement for the given Code Postale.
+   * Get all current Libelle d'acheminement for the given Code Postal.
+   * @param codePostal Code Postal of the Commune 
+   * @return a list of all Libelle d'acheminement for the given Code Postal.
    */
-  public List<String> getLibelleAcheminementByCodePostale (final String codePostale) {
-    log.debug("Libelle d'acheminement requested by Code Postale: CodePostale={}", codePostale);
-    //TODO
-    return null;
+  public List<String> getLibelleAcheminementByCodePostal (final String codePostal) {
+    log.debug("Libelle d'acheminement requested by Code Postal: CodePostal={}", codePostal);
+    List<Hexaposte> list = getHexposteByCodePostal(codePostal);
+    if (list == null) {
+      return null;
+    }
+    List<String> libelle = new ArrayList<>(list.size());
+    for (Hexaposte hexaposte : list) {
+      libelle.add(hexaposte.getLibelleAcheminement());
+    }
+    return libelle;
   }
 }

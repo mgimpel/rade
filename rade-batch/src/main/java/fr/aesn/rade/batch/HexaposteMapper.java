@@ -51,7 +51,7 @@ public class HexaposteMapper
     hexaposte.setIndicateurPluridistribution(fieldSet.readInt(3));
     hexaposte.setTypeCodePostal(fieldSet.readString(4));
     hexaposte.setLibelleLigne5(fieldSet.readString(5));
-    hexaposte.setCodePostale(fieldSet.readString(6));
+    hexaposte.setCodePostal(fieldSet.readString(6));
     hexaposte.setLibelleAcheminement(fieldSet.readString(7));
     hexaposte.setCodeInseeAncienneCommune(fieldSet.readString(8));
     hexaposte.setCodeMaJ(fieldSet.readString(9));

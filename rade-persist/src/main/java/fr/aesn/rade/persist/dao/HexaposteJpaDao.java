@@ -18,6 +18,8 @@
 package fr.aesn.rade.persist.dao;
 
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import fr.aesn.rade.persist.model.Hexaposte;
@@ -28,5 +30,11 @@ import fr.aesn.rade.persist.model.Hexaposte;
  */
 public interface HexaposteJpaDao
   extends JpaRepository<Hexaposte, String> {
-  // Add new, specific methods here if necessary
+    /**
+     * Returns a List of Hexaposte with the given CodePostal.
+     * Database Query created from Method Name by JPA.
+     * @param codePostal the Code Postal of the Hexaposte.
+     * @return a List of Hexaposte with the given CodePostal.
+     */
+    public List<Hexaposte> findByCodePostal(String codePostal);
 }

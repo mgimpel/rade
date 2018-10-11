@@ -27,16 +27,16 @@ import fr.aesn.rade.persist.model.Hexaposte;
  */
 public interface HexaposteService {
     /**
-     * Get all current Hexaposte records for the given Code Postale.
-     * @param codePostale Code Postale of the Commune 
-     * @return a list of all Hexaposte records for the given Code Postale.
+     * Get all current Hexaposte records for the given Code Postal.
+     * @param codePostal Code Postal of the Commune 
+     * @return a list of all Hexaposte records for the given Code Postal.
      */
-    public List<Hexaposte> getHexposteByCodePostale (String codePostale);
+    public List<Hexaposte> getHexposteByCodePostal (String codePostal);
 
     /**
-     * Get all current Libelle d'acheminement for the given Code Postale.
-     * @param codePostale Code Postale of the Commune 
-     * @return a list of all Libelle d'acheminement for the given Code Postale.
+     * Get all current Libelle d'acheminement for the given Code Postal.
+     * @param codePostal Code Postal of the Commune 
+     * @return a list of all Libelle d'acheminement for the given Code Postal.
      */
-    public List<String> getLibelleAcheminementByCodePostale (String codePostale);
+    public List<String> getLibelleAcheminementByCodePostal (String codePostal);
 }

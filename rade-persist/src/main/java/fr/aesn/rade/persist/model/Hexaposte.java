@@ -104,7 +104,7 @@ public class Hexaposte implements Serializable {
   /** Code postal. */
   @Size(max = 5)
   @Column(name = "CODE_POSTALE", length = 5, nullable = false)
-  private String codePostale;
+  private String codePostal;
 
   /** Libellé acheminement. */
   @Size(max = 32)
