@@ -124,7 +124,7 @@ public class Hexaposte implements Serializable {
   /** Code Etendu de l’Adresse (Uniquement sur CP Ménage). */
   @Size(max = 10)
   @Column(name = "CODE_ETENDU_ADRESSE", length = 10, nullable = true)
-  private String CodeEtenduAdresse;
+  private String codeEtenduAdresse;
 
   /** Détails de Modification de l'entité. */
   @ManyToOne(fetch = FetchType.LAZY)

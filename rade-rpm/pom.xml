@@ -116,7 +116,7 @@ des services REST et des service SOAP (dont le service pour Aramis).
             </mapping>
             <mapping>
               <directory>/etc/rade</directory>
-              <filemode>644</filemode>
+              <filemode>640</filemode>
               <username>rade</username>
               <groupname>rade</groupname>
               <configuration>noreplace</configuration>
