@@ -112,7 +112,7 @@
                   address="/GeoAdminService"/>
 
   <bean id="restService"
-        class="fr.aesn.rade.rs.RestService"
+        class="fr.aesn.rade.rs.impl.RestServiceImpl"
         p:delegationService-ref="delegationServiceImpl"
         p:communeService-ref="communeServiceImpl"
         p:departementService-ref="departementServiceImpl"
