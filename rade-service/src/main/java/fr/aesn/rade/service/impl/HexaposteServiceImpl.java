@@ -74,7 +74,7 @@ public class HexaposteServiceImpl
    * @param codePostal Code Postal of the Commune 
    * @return a list of all Hexapost records for the given Code Postale.
    */
-  public List<Hexaposte> getHexposteByCodePostal (final String codePostal) {
+  public List<Hexaposte> getHexposteByCodePostal(final String codePostal) {
     log.debug("Hexaposte requested by Code Postal: CodePostal={}", codePostal);
     return hexaposteJpaDao.findByCodePostal(codePostal);
   }
@@ -84,7 +84,7 @@ public class HexaposteServiceImpl
    * @param codePostal Code Postal of the Commune 
    * @return a list of all Libelle d'acheminement for the given Code Postal.
    */
-  public List<String> getLibelleAcheminementByCodePostal (final String codePostal) {
+  public List<String> getLibelleAcheminementByCodePostal(final String codePostal) {
     log.debug("Libelle d'acheminement requested by Code Postal: CodePostal={}", codePostal);
     List<Hexaposte> list = getHexposteByCodePostal(codePostal);
     if (list == null) {

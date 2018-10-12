@@ -62,6 +62,7 @@
     <jdbc:script location="classpath:db/sql/insert-Departement.sql" />
     <!--jdbc:script location="classpath:db/sql/insert-Commune.sql" /-->
     <jdbc:script location="classpath:db/sql/insert-Delegation.sql" />
+    <!--jdbc:script location="classpath:db/sql/insert-Hexaposte.sql" /-->
   </jdbc:embedded-database>
 <!--
   <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close"
@@ -110,6 +111,13 @@
   <jaxws:endpoint id="GeoAdminService"
                   implementor="#geoAdminService"
                   address="/GeoAdminService"/>
+
+  <bean name="hexaposteWebService"
+        class="fr.aesn.rade.ws.impl.HexaposteWebServiceImpl"
+        p:hexaposteService-ref="hexaposteServiceImpl"/>
+  <jaxws:endpoint id="HexaposteWebService"
+                  implementor="#hexaposteWebService"
+                  address="/HexaposteWebService"/>
 
   <bean id="restService"
         class="fr.aesn.rade.rs.impl.RestServiceImpl"

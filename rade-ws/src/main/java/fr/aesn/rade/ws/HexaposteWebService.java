@@ -17,28 +17,22 @@
 /* $Id$ */
 package fr.aesn.rade.ws;
 
+import java.util.List;
+
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 
 /**
- * Simple Web Service
+ * Hexaposte Web Service.
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
 @WebService
-public interface SimpleService {
+public interface HexaposteWebService {
     /**
-     * Say Hello World
-     * @return Hello World
+     * Get all current Libelle d'acheminement for the given Code Postal.
+     * @param codePostal Code Postal of the Commune 
+     * @return a list of all Libelle d'acheminement for the given Code Postal.
      */
   @WebMethod
-  public String helloWorld();
-
-  /**
-   * Add 2 given Integers
-   * @param a 1st integer
-   * @param b 2nd integer
-   * @return sum of the 2 given integers
-   */
-  @WebMethod
-  public int addInteger(int a, int b);
+  public List<String> getLibelleAcheminementByCodePostal(String codePostal);
 }

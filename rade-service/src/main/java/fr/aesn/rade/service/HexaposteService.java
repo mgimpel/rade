@@ -31,12 +31,12 @@ public interface HexaposteService {
      * @param codePostal Code Postal of the Commune 
      * @return a list of all Hexaposte records for the given Code Postal.
      */
-    public List<Hexaposte> getHexposteByCodePostal (String codePostal);
+    public List<Hexaposte> getHexposteByCodePostal(String codePostal);
 
     /**
      * Get all current Libelle d'acheminement for the given Code Postal.
      * @param codePostal Code Postal of the Commune 
      * @return a list of all Libelle d'acheminement for the given Code Postal.
      */
-    public List<String> getLibelleAcheminementByCodePostal (String codePostal);
+    public List<String> getLibelleAcheminementByCodePostal(String codePostal);
 }

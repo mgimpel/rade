@@ -36,17 +36,17 @@ import javax.ws.rs.core.Response;
  */
 public interface RestService {
   /** Relative path of the REST Service for Audit. */
-  public static final String REST_PATH_AUDIT       = "audit/";
+  public static final String REST_PATH_AUDIT                  = "audit/";
   /** Relative path of the REST Service for Region. */
-  public static final String REST_PATH_REGION      = "region/";
+  public static final String REST_PATH_REGION                 = "region/";
   /** Relative path of the REST Service for Departement. */
-  public static final String REST_PATH_DEPARTEMENT = "departement/";
+  public static final String REST_PATH_DEPARTEMENT            = "departement/";
   /** Relative path of the REST Service for Commune. */
-  public static final String REST_PATH_COMMUNE     = "commune/";
+  public static final String REST_PATH_COMMUNE                = "commune/";
   /** Relative path of the REST Service for Delegation. */
-  public static final String REST_PATH_DELEGATION  = "delegation/";
+  public static final String REST_PATH_DELEGATION             = "delegation/";
   /** Relative path of the REST Service for Circonscription Bassin. */
-  public static final String REST_PATH_CIRCONSCRIPTION_BASSIN  = "bassin/";
+  public static final String REST_PATH_CIRCONSCRIPTION_BASSIN = "bassin/";
 
   /**
    * Get all Region.

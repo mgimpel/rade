@@ -111,6 +111,13 @@
                   implementor="#geoAdminService"
                   address="/GeoAdminService"/>
 
+  <bean name="hexaposteWebService"
+        class="fr.aesn.rade.ws.impl.HexaposteWebServiceImpl"
+        p:hexaposteService-ref="hexaposteServiceImpl"/>
+  <jaxws:endpoint id="HexaposteWebService"
+                  implementor="#hexaposteWebService"
+                  address="/HexaposteWebService"/>
+
   <bean id="restService"
         class="fr.aesn.rade.rs.impl.RestServiceImpl"
         p:delegationService-ref="delegationServiceImpl"
