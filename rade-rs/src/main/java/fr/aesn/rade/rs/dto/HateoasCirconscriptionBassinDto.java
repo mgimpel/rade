@@ -47,7 +47,7 @@ public class HateoasCirconscriptionBassinDto
   public static HateoasCirconscriptionBassinDto fromEntity(final CirconscriptionBassin bassin,
                                                            final String basePath) {
     HateoasCirconscriptionBassinDto dto = new HateoasCirconscriptionBassinDto();
-    dto.setAllfromEntity(bassin);
+    dto.setAllfromCirconscriptionBassinEntity(bassin);
     dto.setLinks(Arrays.asList(Link.fromData("self", URI.create(basePath + RestService.REST_PATH_CIRCONSCRIPTION_BASSIN + bassin.getCode()))));
     return dto;
   }

@@ -66,7 +66,7 @@ public class DelegationDto {
    * Set all the variables in this DTO with values from the given Entity.
    * @param delegation Entity used to initialize DTO.
    */
-  protected void setAllfromEntity(final Delegation delegation) {
+  protected void setAllfromDelegationEntity(final Delegation delegation) {
     if (delegation == null) {
       return;
     }
@@ -94,7 +94,7 @@ public class DelegationDto {
    */
   public static DelegationDto fromEntity(final Delegation delegation) {
     DelegationDto dto = new DelegationDto();
-    dto.setAllfromEntity(delegation);
+    dto.setAllfromDelegationEntity(delegation);
     return dto;
   }
 }

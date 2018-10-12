@@ -47,7 +47,7 @@ public class HateoasRegionDto
   public static HateoasRegionDto fromEntity(final Region region,
                                             final String basePath) {
     HateoasRegionDto dto = new HateoasRegionDto();
-    dto.setAllfromEntity(region);
+    dto.setAllfromRegionEntity(region);
     dto.setLinks(Arrays.asList(Link.fromData("self", URI.create(basePath + RestService.REST_PATH_REGION + region.getCodeInsee())),
                                Link.fromData("chef-lieu", URI.create(basePath + RestService.REST_PATH_COMMUNE + region.getChefLieu()))));
     return dto;

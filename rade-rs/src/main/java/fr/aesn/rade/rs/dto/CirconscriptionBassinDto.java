@@ -42,7 +42,7 @@ public class CirconscriptionBassinDto {
    * Set all the variables in this DTO with values from the given Entity.
    * @param bassin Entity used to initialize DTO.
    */
-  protected void setAllfromEntity(final CirconscriptionBassin bassin) {
+  protected void setAllfromCirconscriptionBassinEntity(final CirconscriptionBassin bassin) {
     if (bassin == null) {
       return;
     }
@@ -58,7 +58,7 @@ public class CirconscriptionBassinDto {
    */
   public static CirconscriptionBassinDto fromEntity(final CirconscriptionBassin bassin) {
     CirconscriptionBassinDto dto = new CirconscriptionBassinDto();
-    dto.setAllfromEntity(bassin);
+    dto.setAllfromCirconscriptionBassinEntity(bassin);
     return dto;
   }
 }

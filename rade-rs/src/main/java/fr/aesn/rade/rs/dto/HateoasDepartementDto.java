@@ -47,7 +47,7 @@ public class HateoasDepartementDto
   public static HateoasDepartementDto fromEntity(final Departement dept,
                                                  final String basePath) {
     HateoasDepartementDto dto = new HateoasDepartementDto();
-    dto.setAllfromEntity(dept);
+    dto.setAllfromDepartementEntity(dept);
     dto.setLinks(Arrays.asList(Link.fromData("self", URI.create(basePath + RestService.REST_PATH_DEPARTEMENT + dept.getCodeInsee())),
                                Link.fromData("region", URI.create(basePath + RestService.REST_PATH_REGION + dept.getRegion())),
                                Link.fromData("chef-lieu", URI.create(basePath + RestService.REST_PATH_COMMUNE + dept.getChefLieu()))));

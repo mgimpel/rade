@@ -47,7 +47,7 @@ public class HateoasCommuneDto
   public static HateoasCommuneDto fromEntity(final Commune commune,
                                              final String basePath) {
     HateoasCommuneDto dto = new HateoasCommuneDto();
-    dto.setAllfromEntity(commune);
+    dto.setAllfromCommuneEntity(commune);
     dto.setLinks(Arrays.asList(Link.fromData("self", URI.create(basePath + RestService.REST_PATH_COMMUNE + commune.getCodeInsee())),
                                Link.fromData("departement", URI.create(basePath + RestService.REST_PATH_DEPARTEMENT + commune.getDepartement())),
                                Link.fromData("bassin", URI.create(basePath + RestService.REST_PATH_CIRCONSCRIPTION_BASSIN + commune.getCirconscriptionBassin().getCode()))));

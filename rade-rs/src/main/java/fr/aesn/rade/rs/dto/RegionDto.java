@@ -41,11 +41,11 @@ public class RegionDto
    * Set all the variables in this DTO with values from the given Entity.
    * @param region Entity used to initialize DTO.
    */
-  protected void setAllfromEntity(final Region region) {
+  protected void setAllfromRegionEntity(final Region region) {
     if (region == null) {
       return;
     }
-    super.setAllfromEntity(region);
+    setAllfromEntity(region);
     this.setCodeInsee(region.getCodeInsee());
     this.setChefLieu(region.getChefLieu());
   }
@@ -57,7 +57,7 @@ public class RegionDto
    */
   public static RegionDto fromEntity(final Region region) {
     RegionDto dto = new RegionDto();
-    dto.setAllfromEntity(region);
+    dto.setAllfromRegionEntity(region);
     return dto;
   }
 }

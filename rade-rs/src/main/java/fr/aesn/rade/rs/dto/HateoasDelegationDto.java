@@ -47,7 +47,7 @@ public class HateoasDelegationDto
   public static HateoasDelegationDto fromEntity(final Delegation delegation,
                                                 final String basePath) {
     HateoasDelegationDto dto = new HateoasDelegationDto();
-    dto.setAllfromEntity(delegation);
+    dto.setAllfromDelegationEntity(delegation);
     dto.setLinks(Arrays.asList(Link.fromData("self", URI.create(basePath + RestService.REST_PATH_DELEGATION + delegation.getCode()))));
     return dto;
   }

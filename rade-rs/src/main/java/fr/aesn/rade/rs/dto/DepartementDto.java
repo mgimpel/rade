@@ -43,11 +43,11 @@ public class DepartementDto
    * Set all the variables in this DTO with values from the given Entity.
    * @param dept Entity used to initialize DTO.
    */
-  protected void setAllfromEntity(final Departement dept) {
+  protected void setAllfromDepartementEntity(final Departement dept) {
     if (dept == null) {
       return;
     }
-    super.setAllfromEntity(dept);
+    setAllfromEntity(dept);
     this.setCodeInsee(dept.getCodeInsee());
     this.setChefLieu(dept.getChefLieu());
     this.setRegion(dept.getRegion());
@@ -60,7 +60,7 @@ public class DepartementDto
    */
   public static DepartementDto fromEntity(final Departement dept) {
     DepartementDto dto = new DepartementDto();
-    dto.setAllfromEntity(dept);
+    dto.setAllfromDepartementEntity(dept);
     return dto;
   }
 }

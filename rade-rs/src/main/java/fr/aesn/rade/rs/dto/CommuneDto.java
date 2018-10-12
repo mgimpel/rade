@@ -46,11 +46,11 @@ public class CommuneDto
    * Set all the variables in this DTO with values from the given Entity.
    * @param commune Entity used to initialize DTO.
    */
-  protected void setAllfromEntity(final Commune commune) {
+  protected void setAllfromCommuneEntity(final Commune commune) {
     if (commune == null) {
       return;
     }
-    super.setAllfromEntity(commune);
+    setAllfromEntity(commune);
     this.setCodeInsee(commune.getCodeInsee());
     this.setDepartement(commune.getDepartement());
     CirconscriptionBassin bassin = commune.getCirconscriptionBassin();
@@ -65,7 +65,7 @@ public class CommuneDto
    */
   public static CommuneDto fromEntity(final Commune commune) {
     CommuneDto dto = new CommuneDto();
-    dto.setAllfromEntity(commune);
+    dto.setAllfromCommuneEntity(commune);
     return dto;
   }
 }
