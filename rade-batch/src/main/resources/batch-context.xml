@@ -91,7 +91,7 @@
     <property name="lineMapper">
       <bean class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
         <property name="fieldSetMapper">
-          <bean class="fr.aesn.rade.batch.RegionMapper"/>
+          <bean class="fr.aesn.rade.batch.chunk.RegionMapper"/>
         </property>
         <property name="lineTokenizer">
           <bean class="org.springframework.batch.item.file.transform.DelimitedLineTokenizer"
@@ -109,7 +109,7 @@
     <property name="lineMapper">
       <bean class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
         <property name="fieldSetMapper">
-          <bean class="fr.aesn.rade.batch.DepartementMapper"/>
+          <bean class="fr.aesn.rade.batch.chunk.DepartementMapper"/>
         </property>
         <property name="lineTokenizer">
           <bean class="org.springframework.batch.item.file.transform.DelimitedLineTokenizer"
@@ -131,7 +131,7 @@
                 p:columns="1-6,7-11,12-49,50,51,52-89,90-94,95-126,127-131,132,133-142"/>
         </property>
         <property name="fieldSetMapper">
-          <bean class="fr.aesn.rade.batch.HexaposteMapper"/>
+          <bean class="fr.aesn.rade.batch.chunk.HexaposteMapper"/>
         </property>
       </bean>
     </property>
@@ -143,13 +143,13 @@
         p:entityManagerFactory-ref="entityManagerFactory"/>
 
   <bean id="regionItemProcessor" scope="step"
-        class="fr.aesn.rade.batch.RegionProcessor"/>
+        class="fr.aesn.rade.batch.chunk.RegionProcessor"/>
 
   <bean id="departementItemProcessor" scope="step"
-        class="fr.aesn.rade.batch.DepartementProcessor"/>
+        class="fr.aesn.rade.batch.chunk.DepartementProcessor"/>
 
   <bean id="hexaposteItemProcessor" scope="step"
-        class="fr.aesn.rade.batch.HexaposteProcessor"/>
+        class="fr.aesn.rade.batch.chunk.HexaposteProcessor"/>
 
   <batch:job id="importRegionJob">
     <batch:step id="importRegionStep1">

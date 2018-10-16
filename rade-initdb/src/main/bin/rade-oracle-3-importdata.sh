@@ -19,6 +19,8 @@
 # Creates and fills the various Rade tables with data.
 
 . rade-db-init-parameters.sh
+
+# SQL Scripts to import data
 cp ../sql/insert-*.sql $DUMP_DIR/rade-$DATE/
 iconv -f UTF-8 -t ISO_8859-15 -o $DUMP_DIR/rade-$DATE/insert-TypeEntiteAdmin-iso885915.sql $DUMP_DIR/rade-$DATE/insert-TypeEntiteAdmin.sql
 iconv -f UTF-8 -t ISO_8859-15 -o $DUMP_DIR/rade-$DATE/insert-TypeNomClair-iso885915.sql $DUMP_DIR/rade-$DATE/insert-TypeNomClair.sql
@@ -65,3 +67,8 @@ START $DUMP_DIR/rade-$DATE/insert-Delegation-iso885915.sql
 update ZR_ENTITEADMIN set DEBUT_VALIDITE=TO_DATE('2017-01-01', 'yyyy-mm-dd') where TYPE_ENTITE_ADMIN='COM';
 SPOOL OFF
 EXIT;
+EOF
+
+# Batch Scripts to import data
+
+#java -jar rade-batch\target\rade-batch.jar -i file:AMAHXP38c-201808-NOV2011.txt -j importHexaposteJob

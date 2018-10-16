@@ -16,7 +16,16 @@
  */
 /* $Id$ */
 /**
- * This is the base package for Batch Scripts (based on Spring Batch) for the
- * Rade Project.
+ * This package contains the chunk orientated components for the Rade
+ * Batch Scripts.
+ * 
+ * In chunk oriented jobs, Spring Batch will Read, Process and then Write
+ * items/lines in chunks. As such this package contains:
+ * <ul>
+ * <li>ItemReaders and their helper classes (such as line/fieldset mappers
+ * that map a line from a CSV or fixed length data file to a java object)</li>
+ * <li>ItemProcessors (that transform and enrich an item passed to it)</li>
+ * <li>ItemWriters (that write/persist an item passed to it)</li>
+ * </ul>
  */
-package fr.aesn.rade.batch;
+package fr.aesn.rade.batch.chunk;

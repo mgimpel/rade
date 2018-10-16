@@ -15,7 +15,7 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 /* $Id$ */
-package fr.aesn.rade.batch;
+package fr.aesn.rade.batch.chunk;
 
 import java.util.Map;
 

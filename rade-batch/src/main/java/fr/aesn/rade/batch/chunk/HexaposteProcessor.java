@@ -15,48 +15,47 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 /* $Id$ */
-package fr.aesn.rade.batch;
+package fr.aesn.rade.batch.chunk;
 
 import java.util.Date;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.StepExecution;
+import org.springframework.batch.core.annotation.BeforeStep;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import fr.aesn.rade.persist.model.Audit;
-import fr.aesn.rade.persist.model.EntiteAdministrative;
+import fr.aesn.rade.persist.model.Hexaposte;
 import fr.aesn.rade.service.AuditService;
 import lombok.Setter;
 
 /**
- * Process Entite Admin Read from INSEE file and add additional details to the
- * Entity (Audit details, Date of beginning of Validity, ...).
+ * Process Hexaposte Read from Hexaposte file and add additional details to the
+ * Entity (Audit details, ...).
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
-public abstract class EntiteAdminProcessor
-  implements ItemProcessor<EntiteAdministrative, EntiteAdministrative> {
+public class HexaposteProcessor
+  implements ItemProcessor<Hexaposte, Hexaposte> {
 
   /** SLF4J Logger. */
   private static final Logger log =
-    LoggerFactory.getLogger(EntiteAdminProcessor.class);
+    LoggerFactory.getLogger(HexaposteProcessor.class);
   /** Service for Audit. */
   @Autowired @Setter
   private AuditService auditService;
 
   /** Audit details to add to Entity. */
   protected Audit audit;
-  /** Date of beginning of Validity of Entity. */
-  protected Date debutValidite;
 
   /**
    * Recover details from Database and Job Parameters Before Step Execution
    * starts.
    * @param stepExecution Spring Batch stepExecution Object.
    */
+  @BeforeStep
   public void beforeStep(StepExecution stepExecution) {
-    this.debutValidite = stepExecution.getJobParameters().getDate("debutValidite", new Date());
     String auditAuteur = stepExecution.getJobParameters().getString("auditAuteur", "Batch");
     Date auditDate = stepExecution.getJobParameters().getDate("auditDate", new Date());
     String auditNote = stepExecution.getJobParameters().getString("auditNote", "Import Batch");
@@ -69,17 +68,15 @@ public abstract class EntiteAdminProcessor
   }
 
   /**
-   * Process the given EntiteAdministrative (add additional details to the
+   * Process the given Hexaposte (add additional details to the
    * Entity).
-   * @param entiteAdmin the EntiteAdministrative to process.
-   * @return the processed EntiteAdministrative.
+   * @param hexaposte the Hexaposte to process.
+   * @return the processed Hexaposte.
    */
   @Override
-  public EntiteAdministrative process(EntiteAdministrative entiteAdmin) {
-    entiteAdmin.setAudit(audit);
-    entiteAdmin.setDebutValidite(debutValidite);
-    entiteAdmin.setCommentaire("-");
-    log.debug("Processing Entity: {}", entiteAdmin);
-    return entiteAdmin;
+  public Hexaposte process(Hexaposte hexaposte) {
+    hexaposte.setAudit(audit);
+    log.debug("Processing Entity: {}", hexaposte);
+    return hexaposte;
   }
 }

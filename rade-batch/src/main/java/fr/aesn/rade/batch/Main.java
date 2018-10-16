@@ -92,6 +92,7 @@ public class Main {
   public static void main(final String[] args) {
     // Load Spring Context
     ApplicationContext context = new ClassPathXmlApplicationContext("batch-context.xml");
+    log.debug("Loaded Spring Application Context: {}", context);
 
     // Parse Command line
     CommandLineParser parser = new DefaultParser();

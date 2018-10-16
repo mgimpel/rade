@@ -15,7 +15,7 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 /* $Id$ */
-package fr.aesn.rade.batch;
+package fr.aesn.rade.batch.chunk;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,36 +23,35 @@ import org.springframework.batch.item.file.mapping.FieldSetMapper;
 import org.springframework.batch.item.file.transform.FieldSet;
 import org.springframework.validation.BindException;
 
-import fr.aesn.rade.persist.model.Departement;
+import fr.aesn.rade.persist.model.Region;
 
 /**
- * FieldSetMapper that Maps INSEE Departement file lines to Departement Entities.
+ * FieldSetMapper that Maps INSEE Region file lines to Region Entities.
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
-public class DepartementMapper
+public class RegionMapper
   extends EntiteAdminMapper
-  implements FieldSetMapper<Departement> {
+  implements FieldSetMapper<Region> {
   /** SLF4J Logger. */
   private static final Logger log =
-    LoggerFactory.getLogger(DepartementMapper.class);
+    LoggerFactory.getLogger(RegionMapper.class);
 
   /**
-   * Maps INSEE Departement file lines to Departement Entities.
-   * @param fieldSet parsed line from INSEE Departement file.
-   * @return the Departement Entity.
+   * Maps INSEE Region file lines to Region Entities.
+   * @param fieldSet parsed line from INSEE Region file.
+   * @return the Region Entity.
    */
   @Override
-  public Departement mapFieldSet(final FieldSet fieldSet)
+  public Region mapFieldSet(final FieldSet fieldSet)
     throws BindException {
     log.debug("Importing line: {}", fieldSet.toString());
-    Departement dept = new Departement();
-    dept.setTypeEntiteAdmin(getTypeEntiteAdmin("DEP"));
-    dept.setRegion(fieldSet.readString(0));
-    dept.setCodeInsee(fieldSet.readString(1));
-    dept.setChefLieu(fieldSet.readString(2));
-    dept.setTypeNomClair(getTypeNomClair(fieldSet.readString(3)));
-    dept.setNomMajuscule(fieldSet.readString(4));
-    dept.setNomEnrichi(fieldSet.readString(5));
-    return dept;
+    Region reg = new Region();
+    reg.setTypeEntiteAdmin(getTypeEntiteAdmin("REG"));
+    reg.setCodeInsee(fieldSet.readString(0));
+    reg.setChefLieu(fieldSet.readString(1));
+    reg.setTypeNomClair(getTypeNomClair(fieldSet.readString(2)));
+    reg.setNomMajuscule(fieldSet.readString(3));
+    reg.setNomEnrichi(fieldSet.readString(4));
+    return reg;
   }
 }
