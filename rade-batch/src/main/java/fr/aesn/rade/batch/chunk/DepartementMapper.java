@@ -27,6 +27,38 @@ import fr.aesn.rade.persist.model.Departement;
 
 /**
  * FieldSetMapper that Maps INSEE Departement file lines to Departement Entities.
+ *
+ * Parsed using the following Spring Batch Configuration:
+ * <code>
+ *     <property name="lineMapper">
+ *       <bean class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
+ *         <property name="lineTokenizer">
+ *           <bean class="org.springframework.batch.item.file.transform.DelimitedLineTokenizer"
+ *                 p:delimiter="&#9;"/> <!-- &#9; for TAB (ASCII code 09) -->
+ *         </property>
+ *         <property name="fieldSetMapper">
+ *           <bean class="fr.aesn.rade.batch.chunk.DepartementMapper"/>
+ *         </property>
+ *       </bean>
+ *     </property>
+ * </code>
+ * Example file:
+ * <code>
+ * REGION DEP CHEFLIEU TNCC NCC                     NCCENR
+ * 84     01  01053    5    AIN                     Ain
+ * 32     02  02408    5    AISNE                   Aisne
+ * 84     03  03190    5    ALLIER                  Allier
+ * 93     04  04070    4    ALPES-DE-HAUTE-PROVENCE Alpes-de-Haute-Provence
+ * 93     05  05061    4    HAUTES-ALPES            Hautes-Alpes
+ * 93     06  06088    4    ALPES-MARITIMES         Alpes-Maritimes
+ * 84     07  07186    5    ARDECHE                 Ardèche
+ * 44     08  08105    4    ARDENNES                Ardennes
+ * 76     09  09122    5    ARIEGE                  Ariège
+ * 44     10  10387    5    AUBE                    Aube
+ * </code>
+ * Pour plus de détails, voir
+ * https://www.insee.fr/fr/information/3363419
+ *
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
 public class DepartementMapper

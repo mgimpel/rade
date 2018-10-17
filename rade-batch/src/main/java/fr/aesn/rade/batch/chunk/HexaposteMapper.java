@@ -27,6 +27,38 @@ import fr.aesn.rade.persist.model.Hexaposte;
 
 /**
  * FieldSetMapper that Maps Hexaposte file lines to Hexaposte Entities.
+ * 
+ * Parsed using the following Spring Batch Configuration:
+ * <code>
+ *   <property name="lineMapper">
+ *     <bean class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
+ *       <property name="lineTokenizer">
+ *         <bean class="org.springframework.batch.item.file.transform.FixedLengthTokenizer"
+ *               p:columns="1-6,7-11,12-49,50,51,52-89,90-94,95-126,127-131,132,133-142"/>
+ *       </property>
+ *       <property name="fieldSetMapper">
+ *         <bean class="fr.aesn.rade.batch.chunk.HexaposteMapper"/>
+ *       </property>
+ *     </bean>
+ *   </property>
+ * </code>
+ * Example file:
+ * <code>
+ * 19/02/2012©LA POSTE HEXAPOSTE   COMPLET 38                                                                                                    
+ * 2204  01001L ABERGEMENT CLEMENCIAT               0M                                      01400L ABERGEMENT CLEMENCIAT                         
+ * 2205  01002L ABERGEMENT DE VAREY                 0M                                      01640L ABERGEMENT DE VAREY                           
+ * 2206  01004AMBERIEU EN BUGEY                     0M                                      01500AMBERIEU EN BUGEY                               
+ * 56168201004AMBERIEU EN BUGEY                     0C                                      01501AMBERIEU EN BUGEY CEDEX                         
+ * 56168301004AMBERIEU EN BUGEY                     0C                                      01502AMBERIEU EN BUGEY CEDEX                         
+ * 56168401004AMBERIEU EN BUGEY                     0C                                      01503AMBERIEU EN BUGEY CEDEX                         
+ * 56168501004AMBERIEU EN BUGEY                     0C                                      01504AMBERIEU EN BUGEY CEDEX                         
+ * 56168601004AMBERIEU EN BUGEY                     0C                                      01505AMBERIEU EN BUGEY CEDEX                         
+ * 56168701004AMBERIEU EN BUGEY                     0C                                      01506AMBERIEU EN BUGEY CEDEX                         
+ * 56168801004AMBERIEU EN BUGEY                     0C                                      01508AMBERIEU EN BUGEY CEDEX                         
+ * </code>
+ * Pour plus de détails, voir
+ * https://www.fichiers-postaux.com/referentiel/Hexaposte%20NV%202011%20version%20nov%202014%20Amabis.pdf
+ *
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
 public class HexaposteMapper

@@ -27,6 +27,46 @@ import fr.aesn.rade.persist.model.Region;
 
 /**
  * FieldSetMapper that Maps INSEE Region file lines to Region Entities.
+ *
+ * Parsed using the following Spring Batch Configuration:
+ * <code>
+ *   <property name="lineMapper">
+ *     <bean class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
+ *       <property name="lineTokenizer">
+ *         <bean class="org.springframework.batch.item.file.transform.DelimitedLineTokenizer"
+ *               p:delimiter="&#9;"/> <!-- &#9; for TAB (ASCII code 09) -->
+ *       </property>
+ *       <property name="fieldSetMapper">
+ *         <bean class="fr.aesn.rade.batch.chunk.RegionMapper"/>
+ *       </property>
+ *     </bean>
+ *   </property>
+ * </code>
+ * Example file:
+ * <code>
+ * REGION CHEFLIEU TNCC NCC                        NCCENR
+ * 01     97105    3    GUADELOUPE                 Guadeloupe
+ * 02     97209    3    MARTINIQUE                 Martinique
+ * 03     97302    3    GUYANE                     Guyane
+ * 04     97411    0    LA REUNION                 La Réunion
+ * 06     97608    0    MAYOTTE                    Mayotte
+ * 11     75056    1    ILE-DE-FRANCE              Île-de-France
+ * 24     45234    2    CENTRE-VAL DE LOIRE        Centre-Val de Loire
+ * 27     21231    0    BOURGOGNE-FRANCHE-COMTE    Bourgogne-Franche-Comté
+ * 28     76540    0    NORMANDIE                  Normandie
+ * 32     59350    4    HAUTS-DE-FRANCE            Hauts-de-France
+ * 44     67482    2    GRAND EST                  Grand Est
+ * 52     44109    4    PAYS DE LA LOIRE           Pays de la Loire
+ * 53     35238    0    BRETAGNE                   Bretagne
+ * 75     33063    3    NOUVELLE-AQUITAINE         Nouvelle-Aquitaine
+ * 76     31555    1    OCCITANIE                  Occitanie
+ * 84     69123    1    AUVERGNE-RHONE-ALPES       Auvergne-Rhône-Alpes
+ * 93     13055    0    PROVENCE-ALPES-COTE D'AZUR Provence-Alpes-Côte d'Azur
+ * 94     2A004    0    CORSE                      Corse
+ * </code>
+ * Pour plus de détails, voir
+ * https://www.insee.fr/fr/information/3363419
+ *
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
 public class RegionMapper

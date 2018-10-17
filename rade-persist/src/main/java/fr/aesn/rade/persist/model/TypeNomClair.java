@@ -25,6 +25,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -47,6 +48,7 @@ import lombok.ToString;
 @Table(name = "ZR_TYPENOMCLAIR")
 @Getter @Setter @NoArgsConstructor
 @ToString @EqualsAndHashCode
+@AllArgsConstructor(staticName = "of")
 public class TypeNomClair implements Serializable {
   /** Unique Identifier for Serializable Class. */
   private static final long serialVersionUID = -2207036818162244651L;
