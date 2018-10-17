@@ -26,21 +26,22 @@ import org.springframework.validation.BindException;
 import fr.aesn.rade.persist.model.Departement;
 
 /**
- * FieldSetMapper that Maps INSEE Departement file lines to Departement Entities.
+ * FieldSetMapper that Maps INSEE Departement file lines to Departement
+ * Entities.
  *
  * Parsed using the following Spring Batch Configuration:
  * <code>
- *     <property name="lineMapper">
- *       <bean class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
- *         <property name="lineTokenizer">
- *           <bean class="org.springframework.batch.item.file.transform.DelimitedLineTokenizer"
- *                 p:delimiter="&#9;"/> <!-- &#9; for TAB (ASCII code 09) -->
- *         </property>
- *         <property name="fieldSetMapper">
- *           <bean class="fr.aesn.rade.batch.chunk.DepartementMapper"/>
- *         </property>
- *       </bean>
- *     </property>
+ *   <property name="lineMapper">
+ *     <bean class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
+ *       <property name="lineTokenizer">
+ *         <bean class="org.springframework.batch.item.file.transform.DelimitedLineTokenizer"
+ *               p:delimiter="&#9;"/> <!-- &#9; for TAB (ASCII code 09) -->
+ *       </property>
+ *       <property name="fieldSetMapper">
+ *         <bean class="fr.aesn.rade.batch.chunk.DepartementMapper"/>
+ *       </property>
+ *     </bean>
+ *   </property>
  * </code>
  * Example file:
  * <code>

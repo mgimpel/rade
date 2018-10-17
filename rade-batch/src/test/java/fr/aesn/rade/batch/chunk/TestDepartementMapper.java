@@ -42,7 +42,7 @@ import org.springframework.batch.item.file.transform.FieldSet;
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
 public class TestDepartementMapper {
-  /** Test line from the INSEE Region file to import. */
+  /** Test line from the INSEE Departement file to import. */
   public static final String TEST_LINE =
     "11\t75\t75056\t0\tPARIS\tParis";
 
@@ -86,7 +86,7 @@ public class TestDepartementMapper {
   }
 
   /**
-   * Test mapping one line from the Hexaposte file to import.
+   * Test mapping one line from the Departement file to import.
    */
   @Test
   public void testMapping() {
@@ -97,20 +97,33 @@ public class TestDepartementMapper {
     mapper.setMetadataService(metadataService);
     try {
       Departement dept = mapper.mapFieldSet(fieldSet);
-      assertEquals("", "DEP", dept.getTypeEntiteAdmin().getCode());
-      assertEquals("", "11", dept.getRegion());
-      assertEquals("", "75", dept.getCodeInsee());
-      assertEquals("", "75056", dept.getChefLieu());
-      assertEquals("", "0", dept.getTypeNomClair().getCode());
-      assertEquals("", "PARIS", dept.getNomMajuscule());
-      assertEquals("", "Paris", dept.getNomEnrichi());
-      assertNull("", dept.getArticleEnrichi());
-      assertNull("", dept.getCommentaire());
-      assertNull("", dept.getDebutValidite());
-      assertNull("", dept.getFinValidite());
-      assertNull("", dept.getAudit());
+      assertEquals("Entity doesn't match expected value",
+                   "DEP", dept.getTypeEntiteAdmin().getCode());
+      assertEquals("Entity doesn't match expected value",
+                   "11", dept.getRegion());
+      assertEquals("Entity doesn't match expected value",
+                   "75", dept.getCodeInsee());
+      assertEquals("Entity doesn't match expected value",
+                   "75056", dept.getChefLieu());
+      assertEquals("Entity doesn't match expected value",
+                   "0", dept.getTypeNomClair().getCode());
+      assertEquals("Entity doesn't match expected value",
+                   "PARIS", dept.getNomMajuscule());
+      assertEquals("Entity doesn't match expected value",
+                   "Paris", dept.getNomEnrichi());
+      assertNull("Entity doesn't match expected null value",
+                 dept.getArticleEnrichi());
+      assertNull("Entity doesn't match expected null value",
+                 dept.getCommentaire());
+      assertNull("Entity doesn't match expected null value",
+                 dept.getDebutValidite());
+      assertNull("Entity doesn't match expected null value",
+                 dept.getFinValidite());
+      assertNull("Entity doesn't match expected null value",
+                 dept.getAudit());
     } catch (BindException e) {
-      fail("Mapper failed to parse test String with BindException: " + e.getMessage());
+      fail("Mapper failed to parse test String with BindException: "
+           + e.getMessage());
     }
   }
 }

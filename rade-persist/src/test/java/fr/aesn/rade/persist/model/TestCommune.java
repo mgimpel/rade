@@ -82,7 +82,7 @@ public class TestCommune extends AbstractTestEntity {
     audit.setNote("Import initial");
     CirconscriptionBassin bassin = new CirconscriptionBassin();
     bassin.setCode("07");
-    bassin.setLibelleCourt("GUADELOUPE");
+    bassin.setLibelleCourt("GUA");
     bassin.setLibelleLong("GUADELOUPE");
     bassin.setAudit(audit);
     Commune obj1 = new Commune();

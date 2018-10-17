@@ -86,7 +86,7 @@ public class TestRegionMapper {
   }
 
   /**
-   * Test mapping one line from the Hexaposte file to import.
+   * Test mapping one line from the Region file to import.
    */
   @Test
   public void testMapping() {
@@ -97,19 +97,31 @@ public class TestRegionMapper {
     mapper.setMetadataService(metadataService);
     try {
       Region region = mapper.mapFieldSet(fieldSet);
-      assertEquals("", "REG", region.getTypeEntiteAdmin().getCode());
-      assertEquals("", "11", region.getCodeInsee());
-      assertEquals("", "75056", region.getChefLieu());
-      assertEquals("", "1", region.getTypeNomClair().getCode());
-      assertEquals("", "ILE-DE-FRANCE", region.getNomMajuscule());
-      assertEquals("", "Île-de-France", region.getNomEnrichi());
-      assertNull("", region.getArticleEnrichi());
-      assertNull("", region.getCommentaire());
-      assertNull("", region.getDebutValidite());
-      assertNull("", region.getFinValidite());
-      assertNull("", region.getAudit());
+      assertEquals("Entity doesn't match expected value",
+                   "REG", region.getTypeEntiteAdmin().getCode());
+      assertEquals("Entity doesn't match expected value",
+                   "11", region.getCodeInsee());
+      assertEquals("Entity doesn't match expected value",
+                   "75056", region.getChefLieu());
+      assertEquals("Entity doesn't match expected value",
+                   "1", region.getTypeNomClair().getCode());
+      assertEquals("Entity doesn't match expected value",
+                   "ILE-DE-FRANCE", region.getNomMajuscule());
+      assertEquals("Entity doesn't match expected value",
+                   "Île-de-France", region.getNomEnrichi());
+      assertNull("Entity doesn't match expected null value",
+                 region.getArticleEnrichi());
+      assertNull("Entity doesn't match expected null value",
+                 region.getCommentaire());
+      assertNull("Entity doesn't match expected null value",
+                 region.getDebutValidite());
+      assertNull("Entity doesn't match expected null value",
+                 region.getFinValidite());
+      assertNull("Entity doesn't match expected null value",
+                 region.getAudit());
     } catch (BindException e) {
-      fail("Mapper failed to parse test String with BindException: " + e.getMessage());
+      fail("Mapper failed to parse test String with BindException: "
+           + e.getMessage());
     }
   }
 }

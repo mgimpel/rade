@@ -119,6 +119,25 @@
     </property>
   </bean>
 
+  <!-- ItemReader which reads data from Sandre commune file -->
+  <bean id="communeSandreItemReader" scope="step"
+        class="org.springframework.batch.item.file.FlatFileItemReader">
+    <property name="resource" value="#{jobParameters['inputFile']}"/>
+    <property name="encoding" value="UTF-8"/>
+    <property name="linesToSkip" value="2"/>
+    <property name="lineMapper">
+      <bean class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
+        <property name="fieldSetMapper">
+          <bean class="fr.aesn.rade.batch.chunk.CommuneSandreMapper"/>
+        </property>
+        <property name="lineTokenizer">
+          <bean class="org.springframework.batch.item.file.transform.DelimitedLineTokenizer"
+                p:delimiter=";"/>
+        </property>
+      </bean>
+    </property>
+  </bean>
+
   <!-- ItemReader which reads data from Hexaposte file -->
   <bean id="hexaposteItemReader" scope="step"
         class="org.springframework.batch.item.file.FlatFileItemReader">
@@ -148,6 +167,9 @@
   <bean id="departementItemProcessor" scope="step"
         class="fr.aesn.rade.batch.chunk.DepartementProcessor"/>
 
+  <bean id="communeSandreItemProcessor" scope="step"
+        class="fr.aesn.rade.batch.chunk.CommuneSandreProcessor"/>
+
   <bean id="hexaposteItemProcessor" scope="step"
         class="fr.aesn.rade.batch.chunk.HexaposteProcessor"/>
 
@@ -163,6 +185,14 @@
     <batch:step id="importDeptStep1">
       <batch:tasklet>
         <batch:chunk reader="departementItemReader" processor="departementItemProcessor" writer="jpaItemWriter" commit-interval="100"/>
+      </batch:tasklet>
+    </batch:step>
+  </batch:job>
+
+  <batch:job id="importCommuneSandreJob">
+    <batch:step id="importCommuneSandreStep1">
+      <batch:tasklet>
+        <batch:chunk reader="communeSandreItemReader" processor="communeSandreItemProcessor" writer="jpaItemWriter" commit-interval="100"/>
       </batch:tasklet>
     </batch:step>
   </batch:job>

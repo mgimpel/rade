@@ -55,20 +55,33 @@ public class TestHexaposteMapper {
     HexaposteMapper mapper = new HexaposteMapper();
     try {
       Hexaposte hexaposte = mapper.mapFieldSet(fieldSet);
-      assertEquals("", "2204", hexaposte.getIdentifiant());
-      assertEquals("", "01001", hexaposte.getCodeInseeCommune());
-      assertEquals("", "L ABERGEMENT CLEMENCIAT", hexaposte.getLibelleCommune());
-      assertEquals("", 0, hexaposte.getIndicateurPluridistribution().intValue());
-      assertEquals("", "M", hexaposte.getTypeCodePostal());
-      assertEquals("", "", hexaposte.getLibelleLigne5());
-      assertEquals("", "01400", hexaposte.getCodePostal());
-      assertEquals("", "L ABERGEMENT CLEMENCIAT", hexaposte.getLibelleAcheminement());
-      assertEquals("", "", hexaposte.getCodeInseeAncienneCommune());
-      assertEquals("", "", hexaposte.getCodeMaJ());
-      assertEquals("", "", hexaposte.getCodeEtenduAdresse());
-      assertNull("", hexaposte.getAudit());
+      assertEquals("Entity doesn't match expected value",
+                   "2204", hexaposte.getIdentifiant());
+      assertEquals("Entity doesn't match expected value",
+                   "01001", hexaposte.getCodeInseeCommune());
+      assertEquals("Entity doesn't match expected value",
+                   "L ABERGEMENT CLEMENCIAT", hexaposte.getLibelleCommune());
+      assertEquals("Entity doesn't match expected value",
+                   0, hexaposte.getIndicateurPluridistribution().intValue());
+      assertEquals("Entity doesn't match expected value",
+                   "M", hexaposte.getTypeCodePostal());
+      assertEquals("Entity doesn't match expected value",
+                   "", hexaposte.getLibelleLigne5());
+      assertEquals("Entity doesn't match expected value",
+                   "01400", hexaposte.getCodePostal());
+      assertEquals("Entity doesn't match expected value",
+                   "L ABERGEMENT CLEMENCIAT", hexaposte.getLibelleAcheminement());
+      assertEquals("Entity doesn't match expected value",
+                   "", hexaposte.getCodeInseeAncienneCommune());
+      assertEquals("Entity doesn't match expected value",
+                   "", hexaposte.getCodeMaJ());
+      assertEquals("Entity doesn't match expected value",
+                   "", hexaposte.getCodeEtenduAdresse());
+      assertNull("Entity doesn't match expected null value",
+                 hexaposte.getAudit());
     } catch (BindException e) {
-      fail("Mapper failed to parse test String with BindException: " + e.getMessage());
+      fail("Mapper failed to parse test String with BindException: "
+           + e.getMessage());
     }
   }
 }

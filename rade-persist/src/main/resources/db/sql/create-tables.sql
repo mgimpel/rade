@@ -292,6 +292,27 @@ COMMENT ON TABLE ZR_EVENEMENT IS
   'Entité [EVENEMENT COMMUNE A CONTROLER]';
 */
 -- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - --
+-- ZR_COMMUNESANDRE : Référentiel des Communes associées à leur circonscription bassin
+-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - --
+CREATE TABLE ZR_COMMUNESANDRE (
+  CODE_COMMUNE           varchar(5)  NOT NULL PRIMARY KEY,
+  LIBELLE_COMMUNE        varchar(45) NOT NULL,
+  STATUT_COMMUNE         varchar(20) NOT NULL,
+  DATE_CREATION_COMMUNE  date,
+  DATE_MAJ_COMMUNE       date        NOT NULL,
+  CODE_BASSIN_DCE        varchar(2)  NOT NULL,
+  CODE_EU_DISTRICT       varchar(24) NOT NULL,
+  CIRCONSCRIPTION_BASSIN varchar(2)  NOT NULL,
+  CODE_COMITE_BASSIN     varchar(8)  NOT NULL,
+  AUDIT_ID               integer     NOT NULL,
+  FOREIGN KEY(CIRCONSCRIPTION_BASSIN) REFERENCES ZR_BASSIN,
+  FOREIGN KEY(AUDIT_ID)               REFERENCES ZR_AUDIT
+);
+/*
+COMMENT ON TABLE ZR_COMMUNESANDRE IS
+  'Entité [COMMUNE SANDRE]';
+*/
+-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - --
 -- ZR_HEXAPOSTE : Référentiel des codes postaux et des codes CEDEX de France
 -- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - --
 CREATE TABLE ZR_HEXAPOSTE (

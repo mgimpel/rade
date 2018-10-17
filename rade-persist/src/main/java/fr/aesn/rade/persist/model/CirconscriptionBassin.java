@@ -28,6 +28,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -51,6 +52,7 @@ import lombok.ToString;
 @Table(name = "ZR_BASSIN")
 @Getter @Setter @NoArgsConstructor
 @ToString @EqualsAndHashCode
+@AllArgsConstructor(staticName = "of")
 public class CirconscriptionBassin implements Serializable {
   /** Unique Identifier for Serializable Class. */
   private static final long serialVersionUID = 8540064762489843689L;
