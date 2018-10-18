@@ -48,7 +48,7 @@ public class CommuneSandreProcessor
   private AuditService auditService;
 
   /** Audit details to add to Entity. */
-  protected Audit audit;
+  protected Audit batchAudit;
 
   /**
    * Recover details from Database and Job Parameters Before Step Execution
@@ -62,8 +62,8 @@ public class CommuneSandreProcessor
     audit.setAuteur(params.getString("auditAuteur", "Batch"));
     audit.setDate(params.getDate("auditDate", new Date()));
     audit.setNote(params.getString("auditNote", "Import Batch"));
-    this.audit = auditService.createAudit(audit);
-    log.debug("Setting audit for step: {}", this.audit);
+    batchAudit = auditService.createAudit(audit);
+    log.debug("Setting audit for step: {}", batchAudit);
   }
 
   /**
@@ -74,7 +74,7 @@ public class CommuneSandreProcessor
    */
   @Override
   public CommuneSandre process(CommuneSandre commune) {
-    commune.setAudit(audit);
+    commune.setAudit(batchAudit);
     log.debug("Processing Entity: {}", commune);
     return commune;
   }

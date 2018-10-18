@@ -46,7 +46,7 @@ public abstract class EntiteAdminProcessor
   private AuditService auditService;
 
   /** Audit details to add to Entity. */
-  protected Audit audit;
+  protected Audit batchAudit;
   /** Date of beginning of Validity of Entity. */
   protected Date debutValidite;
 
@@ -64,8 +64,8 @@ public abstract class EntiteAdminProcessor
     audit.setAuteur(auditAuteur);
     audit.setDate(auditDate);
     audit.setNote(auditNote);
-    this.audit = auditService.createAudit(audit);
-    log.debug("Setting audit for step: {}", this.audit);
+    batchAudit = auditService.createAudit(audit);
+    log.debug("Setting audit for step: {}", batchAudit);
   }
 
   /**
@@ -76,7 +76,7 @@ public abstract class EntiteAdminProcessor
    */
   @Override
   public EntiteAdministrative process(EntiteAdministrative entiteAdmin) {
-    entiteAdmin.setAudit(audit);
+    entiteAdmin.setAudit(batchAudit);
     entiteAdmin.setDebutValidite(debutValidite);
     entiteAdmin.setCommentaire("-");
     log.debug("Processing Entity: {}", entiteAdmin);

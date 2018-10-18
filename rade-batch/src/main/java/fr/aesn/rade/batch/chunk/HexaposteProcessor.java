@@ -47,7 +47,7 @@ public class HexaposteProcessor
   private AuditService auditService;
 
   /** Audit details to add to Entity. */
-  protected Audit audit;
+  protected Audit batchAudit;
 
   /**
    * Recover details from Database and Job Parameters Before Step Execution
@@ -63,8 +63,8 @@ public class HexaposteProcessor
     audit.setAuteur(auditAuteur);
     audit.setDate(auditDate);
     audit.setNote(auditNote);
-    this.audit = auditService.createAudit(audit);
-    log.debug("Setting audit for step: {}", this.audit);
+    batchAudit = auditService.createAudit(audit);
+    log.debug("Setting audit for step: {}", batchAudit);
   }
 
   /**
@@ -75,7 +75,7 @@ public class HexaposteProcessor
    */
   @Override
   public Hexaposte process(Hexaposte hexaposte) {
-    hexaposte.setAudit(audit);
+    hexaposte.setAudit(batchAudit);
     log.debug("Processing Entity: {}", hexaposte);
     return hexaposte;
   }

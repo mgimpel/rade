@@ -47,12 +47,12 @@
     <timestamp>${maven.build.timestamp}</timestamp>
     <!-- Major dependency versions to ensure coherence among subprojects -->
     <java.version>1.8</java.version>
-    <spring.version>5.0.9.RELEASE</spring.version>
-    <spring-boot.version>2.0.5.RELEASE</spring-boot.version>
-    <spring-data.version>2.1.0.RELEASE</spring-data.version>
-    <spring-security.version>5.0.8.RELEASE</spring-security.version>
+    <spring.version>5.0.10.RELEASE</spring.version>
+    <spring-boot.version>2.0.6.RELEASE</spring-boot.version>
+    <spring-data.version>2.1.1.RELEASE</spring-data.version>
+    <spring-security.version>5.0.9.RELEASE</spring-security.version>
     <spring-batch.version>4.0.1.RELEASE</spring-batch.version>
-    <hibernate.version>5.3.6.Final</hibernate.version>
+    <hibernate.version>5.3.7.Final</hibernate.version>
     <cxf.version>3.2.6</cxf.version>
     <cglib.version>3.2.8</cglib.version>
     <slf4j.version>1.7.25</slf4j.version>
@@ -354,7 +354,7 @@
       <dependency>
         <groupId>org.postgresql</groupId>
         <artifactId>postgresql</artifactId>
-        <version>9.4.1212</version>
+        <version>42.2.5</version>
         <scope>runtime</scope>
       </dependency>
       <dependency>

@@ -57,6 +57,7 @@ public class ReferentielController {
   @RequestMapping(value = "/region", method = RequestMethod.GET)
   public String regionsearch(@RequestParam(value = "code", required = false) String code,
                              Model model) {
+    log.debug("Search for region: {}", code);
     if (code != null) {
       Region region = regionService.getRegionByCode(code, new Date());
       return (regiondisplay(region, model));
@@ -77,6 +78,7 @@ public class ReferentielController {
   public String regiondisplay(@ModelAttribute("region") Region criteria, 
                               BindingResult result,
                               Model model) {
+    log.debug("Search for region with criteria: {}", criteria);
     if (result.hasErrors()) {
       return "error";
     }
@@ -93,6 +95,7 @@ public class ReferentielController {
   @RequestMapping(value = "/region/{code}")
   public String regiondisplay(@PathVariable("code") String code, 
                               Model model) {
+    log.debug("Display region: {}", code);
     if (code != null) {
       Region region = regionService.getRegionByCode(code, new Date());
       if (region != null) {
@@ -109,8 +112,8 @@ public class ReferentielController {
    */
   public String regiondisplay(Region region, 
                               Model model) {
-      model.addAttribute("titre", "Region");
-      model.addAttribute("region", region);
-      return "regiondisplay";
+    model.addAttribute("titre", "Region");
+    model.addAttribute("region", region);
+    return "regiondisplay";
   }
 }
