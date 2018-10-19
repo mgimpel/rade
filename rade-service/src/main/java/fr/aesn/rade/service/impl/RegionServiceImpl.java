@@ -31,6 +31,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import fr.aesn.rade.common.util.SharedBusinessRules;
 import fr.aesn.rade.persist.dao.RegionJpaDao;
 import fr.aesn.rade.persist.model.Region;
 import fr.aesn.rade.service.RegionService;
@@ -183,7 +184,7 @@ public class RegionServiceImpl
     for (Region reg : list) {
       if (SharedBusinessRules.isEntiteAdministrativeValid(reg, testdate)) {
         // Suppose database correct (au plus 1 valeur valide)
-        return reg;
+          return reg;
       }
     }
     return null;

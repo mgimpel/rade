@@ -16,11 +16,13 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import fr.aesn.rade.common.modelplus.CommunePlus;
 import fr.aesn.rade.persist.model.CirconscriptionBassin;
 import fr.aesn.rade.persist.model.Commune;
+import fr.aesn.rade.persist.model.CommuneSandre;
 import fr.aesn.rade.persist.model.Delegation;
 import fr.aesn.rade.persist.model.Departement;
-import fr.aesn.rade.service.CommuneService;
+import fr.aesn.rade.service.CommunePlusService;
 import fr.aesn.rade.service.DelegationService;
 import fr.aesn.rade.service.DepartementService;
 
@@ -42,7 +44,7 @@ public class TestGeoAdminService {
   /** Departement Service. */
   private static DepartementService departementService = mock(DepartementService.class);
   /** Commune Service. */
-  private static CommuneService communeService = mock(CommuneService.class);
+  private static CommunePlusService communePlusService = mock(CommunePlusService.class);
 
   /**
    * Set up the Test Environment.
@@ -75,13 +77,13 @@ public class TestGeoAdminService {
                                             departementBuilder("974", "La Réunion"),
                                             departementBuilder("976", "Mayotte"));
     when(departementService.getAllDepartement()).thenReturn(depts);
-    List<Commune> communes = Arrays.asList(communeBuilder("Abergement-Clémenciat", "ABERGEMENT-CLEMENCIAT", "01001", "06"),
-                                           communeBuilder("Abergement-de-Varey", "ABERGEMENT-DE-VAREY", "01002", "06"),
-                                           communeBuilder("Ambérieu-en-Bugey", "AMBERIEU-EN-BUGEY", "01004", "06"),
-                                           communeBuilder("Ambérieux-en-Dombes", "AMBERIEUX-EN-DOMBES", "01005", "06"));
-    List<Commune> nocommunes = Collections.<Commune>emptyList();
+    List<CommunePlus> communes = Arrays.asList(communeBuilder("Abergement-Clémenciat", "ABERGEMENT-CLEMENCIAT", "01001", "06"),
+                                               communeBuilder("Abergement-de-Varey", "ABERGEMENT-DE-VAREY", "01002", "06"),
+                                               communeBuilder("Ambérieu-en-Bugey", "AMBERIEU-EN-BUGEY", "01004", "06"),
+                                               communeBuilder("Ambérieux-en-Dombes", "AMBERIEUX-EN-DOMBES", "01005", "06"));
+    List<CommunePlus> nocommunes = Collections.<CommunePlus>emptyList();
     Date year2018 = new GregorianCalendar(2018, 1, 1, 0, 0, 0).getTime();
-    when(communeService.getAllCommune(any())).thenAnswer(invocation -> {
+    when(communePlusService.getAllCommune(any())).thenAnswer(invocation -> {
       Date date = (Date) invocation.getArguments()[0];
       return date.after(year2018) ? communes : nocommunes;
     });
@@ -95,7 +97,7 @@ public class TestGeoAdminService {
     GeoAdminServiceExternePortImpl implementor = new GeoAdminServiceExternePortImpl();
     implementor.setDelegationService(delegationService);
     implementor.setDepartementService(departementService);
-    implementor.setCommuneService(communeService);
+    implementor.setCommunePlusService(communePlusService);
     // Create Endpoint
     JaxWsServerFactoryBean jaxWsServerFactoryBean = 
       new JaxWsServerFactoryBean();
@@ -191,17 +193,24 @@ public class TestGeoAdminService {
    * @param bassin Commune bassin.
    * @return a Commune with the given parameters.
    */
-  private static Commune communeBuilder(final String nomCommune,
-                                        final String nomCourt,
-                                        final String numInsee,
-                                        final String bassin) {
+  private static CommunePlus communeBuilder(final String nomCommune,
+                                            final String nomCourt,
+                                            final String numInsee,
+                                            final String bassin) {
     CirconscriptionBassin circonscriptionBassin = new CirconscriptionBassin();
     circonscriptionBassin.setCode(bassin);
-    Commune obj = new Commune();
-    obj.setNomEnrichi(nomCommune);
-    obj.setNomMajuscule(nomCourt);
-    obj.setCodeInsee(numInsee);
-    obj.setCirconscriptionBassin(circonscriptionBassin);
+    CommunePlus obj = new CommunePlus();
+    obj.setCode(numInsee);
+    obj.setDateEffective(new Date());
+    Commune insee = new Commune();
+    insee.setNomEnrichi(nomCommune);
+    insee.setNomMajuscule(nomCourt);
+    insee.setCodeInsee(numInsee);
+    obj.setCommuneInsee(insee);
+    CommuneSandre sandre = new CommuneSandre();
+    sandre.setCodeCommune(numInsee);
+    sandre.setCirconscriptionBassin(circonscriptionBassin);
+    obj.setCommuneSandre(sandre);
     return obj;
   }
 

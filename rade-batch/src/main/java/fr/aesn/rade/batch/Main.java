@@ -17,6 +17,7 @@
 /* $Id$ */
 package fr.aesn.rade.batch;
 
+import java.io.PrintWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -36,7 +37,9 @@ import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.support.FileSystemXmlApplicationContext;
+
+import fr.aesn.rade.common.util.Version;
 
 /**
  * Main class to launch Batch Job.
@@ -47,10 +50,14 @@ public class Main {
   private static final Logger log =
     LoggerFactory.getLogger(Main.class);
 
-  public static final String DEFAULT_JOB_NAME = "importRegionJob";
-  public static final String DEFAULT_INPUT_FILE = "classpath:insee/reg2018.txt";
+  public static final int DEFAULT_LINE_WIDTH = 120;
+  public static final String DEFAULT_CONFIG_FILE = "classpath:batch-context.xml";
+  public static final String DEFAULT_JOB_NAME    = "noJob";
+  public static final String DEFAULT_INPUT_FILE  = "file:input.csv";
   public static final String OPTION_HELP    = "help";
   public static final String OPTION_VERSION = "version";
+  public static final String OPTION_CONFIG  = "config";
+  public static final String OPTION_LIST    = "list";
   public static final String OPTION_JOB     = "job";
   public static final String OPTION_INPUT   = "input";
   public static final String OPTION_DATE    = "date";
@@ -59,30 +66,58 @@ public class Main {
    * Builds CLI Options.
    * @return CLI Options.
    */
-  public static Options cliOptions() {
-    Option help = new Option("h", OPTION_HELP, false,
-                             "print this message");
-    Option version = new Option("v", OPTION_VERSION, false,
-                                "print the version information and exit");
-    Option job = Option.builder("j").longOpt(OPTION_JOB)
-                                    .hasArg().argName("name")
-                                    .desc("execute the given job")
-                                    .build();
-    Option input = Option.builder("i").longOpt(OPTION_INPUT)
-                                      .hasArg().argName("file")
-                                      .desc("use the given file as input")
-                                      .build();
-    Option date = Option.builder("d").longOpt(OPTION_DATE)
-                                     .hasArg().argName("date")
-                                     .desc("the date of beginning of validity")
-                                     .build();
+  public static Options buildCliOptions() {
     Options options = new Options();
-    options.addOption(help);
-    options.addOption(version);
-    options.addOption(job);
-    options.addOption(input);
-    options.addOption(date);
+    options.addOption(Option.builder("h").longOpt(OPTION_HELP)
+                            .hasArg(false)
+                            .desc("print this message")
+                            .build());
+    options.addOption(Option.builder("v").longOpt(OPTION_VERSION)
+                            .hasArg(false)
+                            .desc("print the version information")
+                            .build());
+    options.addOption(Option.builder("c").longOpt(OPTION_CONFIG)
+                            .hasArg().argName("configfile")
+                            .desc("use the give Spring configuration file")
+                            .build());
+    options.addOption(Option.builder("l").longOpt(OPTION_LIST)
+                            .hasArg(false)
+                            .desc("print a list of available jobs")
+                            .build());
+    options.addOption(Option.builder("j").longOpt(OPTION_JOB)
+                            .hasArg().argName("jobname")
+                            .desc("execute the given job")
+                            .build());
+    options.addOption(Option.builder("i").longOpt(OPTION_INPUT)
+                            .hasArg().argName("filename")
+                            .desc("use the given file as input")
+                            .build());
+    options.addOption(Option.builder("d").longOpt(OPTION_DATE)
+                            .hasArg().argName("date")
+                            .desc("the start date (yyyy-MM-dd)")
+                            .build());
     return options;
+  }
+
+  /**
+   * Print Help message to Console.
+   * @param cliOptions CLI Options.
+   */
+  public static void printHelp(Options cliOptions) {
+    HelpFormatter formatter = new HelpFormatter();
+    String syntax = "java -jar rade-batch.jar";
+    String header = "Rade Batch Script Executor\n\n";
+    String footer = "\nFor details, see https://github.com/mgimpel/rade";
+    formatter.printHelp(DEFAULT_LINE_WIDTH, syntax, header, cliOptions, footer, true);
+  }
+
+  /**
+   * Print message to Console.
+   * @param msg the message.
+   */
+  public static void printMsg(String msg) {
+    HelpFormatter formatter = new HelpFormatter();
+    formatter.printWrapped(new PrintWriter(System.out, true), DEFAULT_LINE_WIDTH, msg);
   }
 
   /**
@@ -90,45 +125,57 @@ public class Main {
    * @param args Command line arguments
    */
   public static void main(final String[] args) {
-    // Load Spring Context
-    ApplicationContext context = new ClassPathXmlApplicationContext("batch-context.xml");
-    log.debug("Loaded Spring Application Context: {}", context);
-
     // Parse Command line
     CommandLineParser parser = new DefaultParser();
     CommandLine line = null;
+    Options cliOptions = buildCliOptions();
     try {
-      line = parser.parse(cliOptions(), args);
+      line = parser.parse(cliOptions, args);
     } catch(org.apache.commons.cli.ParseException e) {
       log.error("Parsing failed. Reason: {}", e.getMessage());
-      HelpFormatter formatter = new HelpFormatter();
-      formatter.printHelp("java -jar rade-batch.jar", cliOptions());
+      printHelp(cliOptions);
       return;
     }
-    if (line.hasOption("help")) {
-      HelpFormatter formatter = new HelpFormatter();
-      formatter.printHelp("java -jar rade-batch.jar", cliOptions());
+    if (line.hasOption(OPTION_HELP)) {
+      printHelp(cliOptions);
       return;
     }
-    if (line.hasOption("version")) {
-      log.info("Version");
+    if (line.hasOption(OPTION_VERSION)) {
+      String version = "Rade Batch Scripts Version: " + Version.PROJECT_VERSION
+                     + " (Build date: " + Version.BUILD_TIMESTAMP + ")";
+      printMsg(version);
       return;
     }
-    String jobName = line.hasOption("job") ? line.getOptionValue("job") : DEFAULT_JOB_NAME;
-    String inputFile = line.hasOption("input") ? line.getOptionValue("input") : DEFAULT_INPUT_FILE;
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    String configFile = line.hasOption(OPTION_CONFIG) ? line.getOptionValue(OPTION_CONFIG) : DEFAULT_CONFIG_FILE;
+    ApplicationContext context = new FileSystemXmlApplicationContext(configFile);
+    log.debug("Loaded Spring Application Context: {}", context);
+    if (line.hasOption(OPTION_LIST)) {
+      String[] jobs = context.getBeanNamesForType(Job.class);
+      String msg = "Rade Batch Script Executor has found the following jobs:\n\n "
+                 + String.join("\n ", jobs);
+      printMsg(msg);
+      return;
+    }
+    String jobName = line.hasOption(OPTION_JOB) ? line.getOptionValue(OPTION_JOB) : DEFAULT_JOB_NAME;
+    if (DEFAULT_JOB_NAME.equals(jobName)) {
+      printHelp(cliOptions);
+      return;
+    }
+    String inputFile = line.hasOption(OPTION_INPUT) ? line.getOptionValue(OPTION_INPUT) : DEFAULT_INPUT_FILE;
     Date debutValidite;
-    if (line.hasOption("date")) {
+    if (line.hasOption(OPTION_DATE)) {
+      SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
       try {
-        debutValidite = sdf.parse(line.getOptionValue("date"));
+        debutValidite = sdf.parse(line.getOptionValue(OPTION_DATE));
       } catch (ParseException e) {
-        log.warn("Exception parsing date {}", line.getOptionValue("date"));
+        log.warn("Exception parsing date {}", line.getOptionValue(OPTION_DATE));
         debutValidite = new Date();
       }
     } else {
       debutValidite = new Date();
     }
-
+    log.debug("Parsed Command line: config={}, job={}, input={}, date={}",
+              configFile, jobName, inputFile, debutValidite.toString());
     // Launch Job
     JobLauncher jobLauncher = context.getBean("jobLauncher", JobLauncher.class);
     Job job = context.getBean(jobName, Job.class);

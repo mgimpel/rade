@@ -66,7 +66,7 @@ public class TestCommuneSandreJpaDao extends AbstractTestJpaDao {
   public void testGettingEntityList() {
     List<CommuneSandre> list = jpaDao.findAll();
     assertNotNull("JpaDao returned a null list", list);
-    assertEquals(100, list.size());
+    assertEquals(101, list.size());
     for (CommuneSandre obj : list) {
       assertNotNull("Hibernate returned a List but an Entity is null",
                     obj);
@@ -125,5 +125,58 @@ public class TestCommuneSandreJpaDao extends AbstractTestJpaDao {
     assertEquals("", 1, list.size());
     CommuneSandre resultat = list.get(0);
     assertNotNull("", resultat);
+  }
+
+  /**
+   * Test custom repository method.
+   * @throws ParseException failed to parse date.
+   */
+  @Test
+  public void testFindAllValidOnDate() throws ParseException {
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    List<CommuneSandre> result;
+    result = jpaDao.findAllValidOnDate(sdf.parse("2018-01-01"));
+    assertEquals("Hibernate returned the wrong number of results",
+                 101, result.size());
+    result = jpaDao.findAllValidOnDate(sdf.parse("2010-01-01"));
+    assertEquals("Hibernate returned the wrong number of results",
+                 100, result.size());
+    result = jpaDao.findAllValidOnDate(sdf.parse("2000-01-01"));
+    assertEquals("Hibernate returned the wrong number of results",
+                 0, result.size());
+  }
+
+  /**
+   * Test custom repository method.
+   * @throws ParseException failed to parse date.
+   */
+  @Test
+  public void testFindByCodeInseeValidOnDate() throws ParseException {
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    CommuneSandre commune;
+    commune = jpaDao.findByCodeInseeValidOnDate("01001", sdf.parse("2018-01-01"));
+    assertNotNull("Hibernate returned null", commune);
+    assertEquals("Hibernate returned a CommuneSandre, but the Code INSEE doesn't match",
+                 "01001", commune.getCodeCommune());
+    assertEquals("Hibernate returned a CommuneSandre, but the Libelle Commune doesn't match",
+                 "L'ABERGEMENT-CLÉMENCIAT", commune.getLibelleCommune());
+    assertEquals("Hibernate returned a CommuneSandre, but the Statut Commune doesn't match",
+                 "Validé", commune.getStatutCommune());
+    assertEquals("Hibernate returned a CommuneSandre, but the Date de Creation doesn't match",
+                 sdf.parse("2002-01-01"), commune.getDateCreationCommune());
+    assertEquals("Hibernate returned a CommuneSandre, but the Date de MaJ doesn't match",
+                 sdf.parse("2016-01-01"), commune.getDateMajCommune());
+    assertEquals("Hibernate returned a CommuneSandre, but the Code Bassin DCE doesn't match",
+                 "D", commune.getCodeBassinDce());
+    assertEquals("Hibernate returned a CommuneSandre, but the Code EU District doesn't match",
+                 "EU35", commune.getCodeEuDistrict());
+    assertEquals("Hibernate returned a CommuneSandre, but the Circonscription Bassin doesn't match",
+                 "06", commune.getCirconscriptionBassin().getCode());
+    assertEquals("Hibernate returned a CommuneSandre, but the Code Comite Bassin doesn't match",
+                 "FR000006", commune.getCodeComiteBassin());
+    assertEquals("Hibernate returned a CommuneSandre, but the Audit doesn't match",
+                 1, commune.getAudit().getId().intValue());
+    commune = jpaDao.findByCodeInseeValidOnDate("01001", sdf.parse("2000-01-01"));
+    assertNull("Hibernate return a Commune it shouldn't have", commune);
   }
 }

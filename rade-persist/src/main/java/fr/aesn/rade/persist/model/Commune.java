@@ -19,9 +19,6 @@ package fr.aesn.rade.persist.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
@@ -68,15 +65,4 @@ public class Commune extends EntiteAdministrative {
   @Size(max = 3)
   @Column(name = "DEPT", length = 3, nullable = false)
   private String departement;
-
-  /** Bassin auquel appartient la Commune. */
-  @Size(max = 2)
-  @ManyToOne(fetch = FetchType.EAGER)
-  @JoinColumn(name = "BASSIN", nullable = true)
-  private CirconscriptionBassin circonscriptionBassin;
-
-  /** Indicateur Urbain/Rural de la Commune. */
-  @Size(max = 1)
-  @Column(name = "URBAIN_RURAL", length = 1, nullable = false)
-  private String indicateurUrbain;
 }

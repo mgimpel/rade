@@ -149,10 +149,6 @@ public class TestCommuneService
     assertEquals("Hibernate returned a Commune, but a field doesn't match",
                  "97105", com.getCodeInsee());
     assertEquals("Hibernate returned a Commune, but a field doesn't match",
-                 "O", com.getIndicateurUrbain());
-    assertEquals("Hibernate returned a Commune, but a field doesn't match",
-                 "07", com.getCirconscriptionBassin().getCode());
-    assertEquals("Hibernate returned a Commune, but a field doesn't match",
                  "971", com.getDepartement());
     assertNull(communeService.getCommuneById(0));
     assertNull(communeService.getCommuneById(-1));
@@ -193,10 +189,6 @@ public class TestCommuneService
                  1, com.getAudit().getId().intValue());
     assertEquals("Hibernate returned a Commune, but a field doesn't match",
                  "97105", com.getCodeInsee());
-    assertEquals("Hibernate returned a Commune, but a field doesn't match",
-                 "O", com.getIndicateurUrbain());
-    assertEquals("Hibernate returned a Commune, but a field doesn't match",
-                 "07", com.getCirconscriptionBassin().getCode());
     assertEquals("Hibernate returned a Commune, but a field doesn't match",
                  "971", com.getDepartement());
   }

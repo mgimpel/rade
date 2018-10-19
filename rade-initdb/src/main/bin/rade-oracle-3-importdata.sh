@@ -71,4 +71,5 @@ EOF
 
 # Batch Scripts to import data
 
-#java -jar rade-batch\target\rade-batch.jar -i file:AMAHXP38c-201808-NOV2011.txt -j importHexaposteJob
+#java -jar ..\rade-batch\target\rade-batch.jar -i file:../../rade/misc/sandre/COM_20181016_SANDRE.csv -j importCommuneSandreJob
+#java -jar ..\rade-batch\target\rade-batch.jar -i file:../../rade/misc/hexaposte/AMAHXP38c-201809-NOV2011.txt -j importHexaposteJob

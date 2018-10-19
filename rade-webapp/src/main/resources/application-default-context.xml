@@ -105,7 +105,7 @@
 
   <bean name="geoAdminService"
         class="fr.aesn.rade.ws.aramis.impl.GeoAdminServiceExternePortImpl"
-        p:communeService-ref="communeServiceImpl"
+        p:communePlusService-ref="communePlusServiceImpl"
         p:delegationService-ref="delegationServiceImpl"
         p:departementService-ref="departementServiceImpl"/>
   <jaxws:endpoint id="GeoAdminService"

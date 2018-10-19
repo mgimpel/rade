@@ -32,6 +32,20 @@
 
   <build>
     <finalName>rade-common</finalName>
+    <resources>
+      <!-- Filter version.properties to set version, revision, ... -->
+      <resource>
+        <directory>src/main/resources</directory>
+        <includes>
+          <include>version.properties</include>
+        </includes>
+        <filtering>true</filtering>
+      </resource>
+      <!-- Copy the other resources too. -->
+      <resource>
+        <directory>src/main/resources</directory>
+      </resource>
+    </resources>
   </build>
 
   <dependencies>

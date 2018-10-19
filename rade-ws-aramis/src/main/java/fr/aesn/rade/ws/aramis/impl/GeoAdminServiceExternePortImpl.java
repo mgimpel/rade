@@ -25,7 +25,7 @@ import java.util.GregorianCalendar;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.aesn.rade.service.CommuneService;
+import fr.aesn.rade.service.CommunePlusService;
 import fr.aesn.rade.service.DelegationService;
 import fr.aesn.rade.service.DepartementService;
 import lombok.Setter;
@@ -72,7 +72,7 @@ public class GeoAdminServiceExternePortImpl implements GeoAdminServiceExterneImp
     private DepartementService departementService;
     /** Commune Service. */
     @Setter
-    private CommuneService communeService;
+    private CommunePlusService communePlusService;
     /** Delegation Service. */
     @Setter
     private DelegationService delegationService;
@@ -104,12 +104,12 @@ public class GeoAdminServiceExternePortImpl implements GeoAdminServiceExterneImp
           annee = Year.now().getValue() - 1;
         }
         try {
-            if (communeService == null) {
+            if (communePlusService == null) {
                 log.error("Could not findAllCommunes, service was null (configuration error)");
                 return Collections.<fr.aesn.rade.ws.aramis.impl.CommuneVO>emptyList();
             }
             Date date = new GregorianCalendar(annee, 1, 2, 12, 0, 0).getTime(); // January 2nd, 12:00
-            return Entity2VoMapper.communeEntity2VoList(communeService.getAllCommune(date));
+            return Entity2VoMapper.communePlusEntity2VoList(communePlusService.getAllCommune(date));
         } catch (java.lang.Exception ex) {
             log.error("Unexpected Exception while processing WebService Request (this should never happen)", ex);
             throw new RuntimeException(ex);

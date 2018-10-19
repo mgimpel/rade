@@ -31,6 +31,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import fr.aesn.rade.common.util.SharedBusinessRules;
 import fr.aesn.rade.persist.dao.CommuneJpaDao;
 import fr.aesn.rade.persist.model.Commune;
 import fr.aesn.rade.service.CommuneService;

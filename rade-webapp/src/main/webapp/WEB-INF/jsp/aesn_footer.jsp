@@ -17,7 +17,7 @@
  */%>
 <%/* $Id$ */%>
 <%@ page import="java.text.*,java.util.*" %>
-<%@ page import="fr.aesn.rade.webapp.config.Version" %>
+<%@ page import="fr.aesn.rade.common.util.Version" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 		</td>

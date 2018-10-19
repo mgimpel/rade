@@ -23,7 +23,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.aesn.rade.persist.model.Commune;
+import fr.aesn.rade.common.modelplus.CommunePlus;
+import fr.aesn.rade.persist.model.CirconscriptionBassin;
 import fr.aesn.rade.persist.model.Delegation;
 import fr.aesn.rade.persist.model.Departement;
 
@@ -55,6 +56,81 @@ public final class Entity2VoMapper {
     return instance;
   }
 
+
+  /**
+   * VO to Entity mapping.
+   * @param source VO to Map.
+   * @return Entity mapped by VO.
+   */
+  public static final Delegation delegationVo2Entity(DelegationVO source) {
+    log.debug("Mapping {}", source); // Debug
+    if (source == null) {
+      return null;
+    }
+    Delegation dest = new Delegation();
+    dest.setCode(source.getCode());
+    dest.setLibelle(source.getLibelle());
+    dest.setAcheminement(source.getAcheminement());
+    dest.setAdresse1(source.getAdresse1());
+    dest.setAdresse2(source.getAdresse2());
+    dest.setAdresse3(source.getAdresse3());
+    dest.setAdresse4(source.getAdresse4());
+    dest.setAdresse5(source.getAdresse5());
+    dest.setCodePostal(source.getCodePostal());
+    dest.setEmail(source.getEmail());
+    dest.setFax(source.getFax());
+    dest.setSiteWeb(source.getSiteWeb());
+    dest.setTelephone(source.getTelephone());
+    dest.setTelephone2(source.getTelephone2());
+    dest.setTelephone3(source.getTelephone3());
+    return dest;
+  }
+
+  /**
+   * Entity to VO mapping.
+   * @param source Entity to Map.
+   * @return VO mapped by Entity.
+   */
+  public static final DelegationVO delegationEntity2Vo(Delegation source) {
+    log.debug("Mapping {}", source); // Debug
+    if (source == null) {
+      return null;
+    }
+    DelegationVO dest = new DelegationVO();
+    dest.setCode(source.getCode());
+    dest.setLibelle(source.getLibelle());
+    dest.setAcheminement(source.getAcheminement());
+    dest.setAdresse1(source.getAdresse1());
+    dest.setAdresse2(source.getAdresse2());
+    dest.setAdresse3(source.getAdresse3());
+    dest.setAdresse4(source.getAdresse4());
+    dest.setAdresse5(source.getAdresse5());
+    dest.setCodePostal(source.getCodePostal());
+    dest.setEmail(source.getEmail());
+    dest.setFax(source.getFax());
+    dest.setSiteWeb(source.getSiteWeb());
+    dest.setTelephone(source.getTelephone());
+    dest.setTelephone2(source.getTelephone2());
+    dest.setTelephone3(source.getTelephone3());
+    return dest;
+  }
+
+  /**
+   * Entity to VO List mapping.
+   * @param sources Entity List to Map.
+   * @return VO List mapped by Entity.
+   */
+  public static final List<DelegationVO> delegationEntity2VoList(List<Delegation> sources) {
+    log.debug("Mapping List {}", sources); // Debug
+    if (sources == null) {
+      return null;
+    }
+    List<DelegationVO> dest = new ArrayList<>(sources.size());
+    for (Delegation source : sources) {
+      dest.add(delegationEntity2Vo(source));
+    }
+    return dest;
+  }
   /**
    * Entity to VO mapping.
    * @param source Entity to Map.
@@ -93,7 +169,7 @@ public final class Entity2VoMapper {
    * @param source Entity to Map.
    * @return VO mapped by Entity.
    */
-  public static final CommuneVO communeEntity2Vo(Commune source) {
+  public static final CommuneVO communePlusEntity2Vo(CommunePlus source) {
     log.debug("Mapping {}", source); // Debug
     if (source == null) {
       return null;
@@ -102,9 +178,18 @@ public final class Entity2VoMapper {
     dest.setNomCommune(source.getNomEnrichi());
     dest.setNomCourt(source.getNomMajuscule());
     dest.setNumInsee(source.getCodeInsee());
-    dest.setBassin(source.getCirconscriptionBassin().getCode());
+    CirconscriptionBassin bassin = source.getCirconscriptionBassin();
+    String code;
+    if (bassin == null) {
+      log.info("Commune with no CirconscriptionBassin defined: {} - {}",
+               source.getCodeInsee(), source.getNomEnrichi());
+      code = "";
+    } else {
+      code = bassin.getCode();
+    }
+    dest.setBassin(code);
     // Code Bassin Seine-Normandie: "03"
-    dest.setHorsBassin(!"03".equals(source.getCirconscriptionBassin().getCode()));
+    dest.setHorsBassin(!"03".equals(code));
     return dest;
   }
 
@@ -113,89 +198,14 @@ public final class Entity2VoMapper {
    * @param sources Entity List to Map.
    * @return VO List mapped by Entity.
    */
-  public static final List<CommuneVO> communeEntity2VoList(List<Commune> sources) {
+  public static final List<CommuneVO> communePlusEntity2VoList(List<CommunePlus> sources) {
     log.debug("Mapping List {}", sources); // Debug
     if (sources == null) {
       return null;
     }
     List<CommuneVO> dest = new ArrayList<>(sources.size());
-    for (Commune source : sources) {
-      dest.add(communeEntity2Vo(source));
-    }
-    return dest;
-  }
-
-  /**
-   * Entity to VO mapping.
-   * @param source Entity to Map.
-   * @return VO mapped by Entity.
-   */
-  public static final DelegationVO delegationEntity2Vo(Delegation source) {
-    log.debug("Mapping {}", source); // Debug
-    if (source == null) {
-      return null;
-    }
-    DelegationVO dest = new DelegationVO();
-    dest.setCode(source.getCode());
-    dest.setLibelle(source.getLibelle());
-    dest.setAcheminement(source.getAcheminement());
-    dest.setAdresse1(source.getAdresse1());
-    dest.setAdresse2(source.getAdresse2());
-    dest.setAdresse3(source.getAdresse3());
-    dest.setAdresse4(source.getAdresse4());
-    dest.setAdresse5(source.getAdresse5());
-    dest.setCodePostal(source.getCodePostal());
-    dest.setEmail(source.getEmail());
-    dest.setFax(source.getFax());
-    dest.setSiteWeb(source.getSiteWeb());
-    dest.setTelephone(source.getTelephone());
-    dest.setTelephone2(source.getTelephone2());
-    dest.setTelephone3(source.getTelephone3());
-    return dest;
-  }
-
-  /**
-   * VO to Entity mapping.
-   * @param source VO to Map.
-   * @return Entity mapped by VO.
-   */
-  public static final Delegation delegationVo2Entity(DelegationVO source) {
-    log.debug("Mapping {}", source); // Debug
-    if (source == null) {
-      return null;
-    }
-    Delegation dest = new Delegation();
-    dest.setCode(source.getCode());
-    dest.setLibelle(source.getLibelle());
-    dest.setAcheminement(source.getAcheminement());
-    dest.setAdresse1(source.getAdresse1());
-    dest.setAdresse2(source.getAdresse2());
-    dest.setAdresse3(source.getAdresse3());
-    dest.setAdresse4(source.getAdresse4());
-    dest.setAdresse5(source.getAdresse5());
-    dest.setCodePostal(source.getCodePostal());
-    dest.setEmail(source.getEmail());
-    dest.setFax(source.getFax());
-    dest.setSiteWeb(source.getSiteWeb());
-    dest.setTelephone(source.getTelephone());
-    dest.setTelephone2(source.getTelephone2());
-    dest.setTelephone3(source.getTelephone3());
-    return dest;
-  }
-
-  /**
-   * Entity to VO List mapping.
-   * @param sources Entity List to Map.
-   * @return VO List mapped by Entity.
-   */
-  public static final List<DelegationVO> delegationEntity2VoList(List<Delegation> sources) {
-    log.debug("Mapping List {}", sources); // Debug
-    if (sources == null) {
-      return null;
-    }
-    List<DelegationVO> dest = new ArrayList<>(sources.size());
-    for (Delegation source : sources) {
-      dest.add(delegationEntity2Vo(source));
+    for (CommunePlus source : sources) {
+      dest.add(communePlusEntity2Vo(source));
     }
     return dest;
   }

@@ -37,7 +37,7 @@
   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
   <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close"
         p:driverClassName="oracle.jdbc.OracleDriver"
-        p:url="jdbc:oracle:thin:@10.132.140.12:1521/AESNDEV"
+        p:url="jdbc:oracle:thin:@RAD-DB-DEV.aesn.fr:1521/AESNDEV"
         p:username="RADE_DEV2"
         p:password="password"/>
 <!--

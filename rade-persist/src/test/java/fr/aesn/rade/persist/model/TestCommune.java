@@ -80,11 +80,6 @@ public class TestCommune extends AbstractTestEntity {
     audit.setAuteur("gimpelma");
     audit.setDate(sdf.parse("2018-04-01"));
     audit.setNote("Import initial");
-    CirconscriptionBassin bassin = new CirconscriptionBassin();
-    bassin.setCode("07");
-    bassin.setLibelleCourt("GUA");
-    bassin.setLibelleLong("GUADELOUPE");
-    bassin.setAudit(audit);
     Commune obj1 = new Commune();
     Commune obj2 = new Commune();
     obj1.setId(135233);
@@ -98,8 +93,6 @@ public class TestCommune extends AbstractTestEntity {
     obj1.setTypeEntiteAdmin(type);
     obj1.setAudit(audit);
     obj1.setCodeInsee("97105");
-    obj1.setIndicateurUrbain("O");
-    obj1.setCirconscriptionBassin(bassin);
     obj1.setDepartement("971");
     obj2.setId(135233);
     obj2.setDebutValidite(sdf.parse("2018-04-01"));
@@ -112,8 +105,6 @@ public class TestCommune extends AbstractTestEntity {
     obj2.setTypeEntiteAdmin(type);
     obj2.setAudit(audit);
     obj2.setCodeInsee("97105");
-    obj2.setIndicateurUrbain("O");
-    obj2.setCirconscriptionBassin(bassin);
     obj2.setDepartement("971");
     assertTrue("String should contain value", obj1.toString().contains("135233"));
     assertTrue("String should contain value", obj1.toString().contains(obj1.getDebutValidite().toString()));
@@ -124,8 +115,6 @@ public class TestCommune extends AbstractTestEntity {
     assertTrue("String should contain value", obj1.toString().contains(obj1.getTypeNomClair().getCode()));
     assertTrue("String should contain value", obj1.toString().contains(obj1.getAudit().getAuteur()));
     assertTrue("String should contain value", obj1.toString().contains(obj1.getCodeInsee()));
-    assertTrue("String should contain value", obj1.toString().contains(obj1.getIndicateurUrbain()));
-    assertTrue("String should contain value", obj1.toString().contains(obj1.getCirconscriptionBassin().getCode()));
     assertTrue("String should contain value", obj1.toString().contains(obj1.getDepartement()));
     assertEquals("Object should be equal to itself", obj1, obj1);
     assertEquals("Identically created Objects are supposed to be equal", obj1, obj2);
@@ -169,10 +158,6 @@ public class TestCommune extends AbstractTestEntity {
                  1, com.getAudit().getId().intValue());
     assertEquals("Hibernate returned a Commune, but a field doesn't match",
                  "97105", com.getCodeInsee());
-    assertEquals("Hibernate returned a Commune, but a field doesn't match",
-                 "O", com.getIndicateurUrbain());
-    assertEquals("Hibernate returned a Commune, but a field doesn't match",
-                 "07", com.getCirconscriptionBassin().getCode());
     assertEquals("Hibernate returned a Commune, but a field doesn't match",
                  "971", com.getDepartement());
   }

@@ -41,6 +41,11 @@
       <version>${project.version}</version>
     </dependency>
     <dependency>
+      <groupId>fr.aesn.rade</groupId>
+      <artifactId>rade-common</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-tx</artifactId>
     </dependency>

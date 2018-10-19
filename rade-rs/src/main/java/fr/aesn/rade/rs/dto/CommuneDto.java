@@ -19,7 +19,6 @@ package fr.aesn.rade.rs.dto;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import fr.aesn.rade.persist.model.CirconscriptionBassin;
 import fr.aesn.rade.persist.model.Commune;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -53,9 +52,6 @@ public class CommuneDto
     setAllfromEntity(commune);
     this.setCodeInsee(commune.getCodeInsee());
     this.setDepartement(commune.getDepartement());
-    CirconscriptionBassin bassin = commune.getCirconscriptionBassin();
-    this.setCirconscriptionBassin(bassin != null ? CirconscriptionBassinDto.fromEntity(bassin) : null);
-    this.setIndicateurUrbain(commune.getIndicateurUrbain());
   }
 
   /**
