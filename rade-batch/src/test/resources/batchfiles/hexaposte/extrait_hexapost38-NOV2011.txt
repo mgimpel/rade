@@ -1,0 +1,11 @@
+19/02/2012©LA POSTE HEXAPOSTE   COMPLET 38                                                                                                    
+2204  01001L ABERGEMENT CLEMENCIAT               0M                                      01400L ABERGEMENT CLEMENCIAT                         
+2205  01002L ABERGEMENT DE VAREY                 0M                                      01640L ABERGEMENT DE VAREY                           
+2206  01004AMBERIEU EN BUGEY                     0M                                      01500AMBERIEU EN BUGEY                               
+56168201004AMBERIEU EN BUGEY                     0C                                      01501AMBERIEU EN BUGEY CEDEX                         
+56168301004AMBERIEU EN BUGEY                     0C                                      01502AMBERIEU EN BUGEY CEDEX                         
+56168401004AMBERIEU EN BUGEY                     0C                                      01503AMBERIEU EN BUGEY CEDEX                         
+56168501004AMBERIEU EN BUGEY                     0C                                      01504AMBERIEU EN BUGEY CEDEX                         
+56168601004AMBERIEU EN BUGEY                     0C                                      01505AMBERIEU EN BUGEY CEDEX                         
+56168701004AMBERIEU EN BUGEY                     0C                                      01506AMBERIEU EN BUGEY CEDEX                         
+56168801004AMBERIEU EN BUGEY                     0C                                      01508AMBERIEU EN BUGEY CEDEX                         

@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--/*
+ *  This file is part of the Rade project (https://github.com/mgimpel/rade).
+ *  Copyright (C) 2018 Marc Gimpel
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */-->
+<!-- $Id$ -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:batch="http://www.springframework.org/schema/batch"
+       xsi:schemaLocation="
+         http://www.springframework.org/schema/beans
+         http://www.springframework.org/schema/beans/spring-beans.xsd
+         http://www.springframework.org/schema/batch
+         http://www.springframework.org/schema/batch/spring-batch.xsd">
+
+  <!-- ItemReader which reads data from INSEE region file -->
+  <bean id="regionItemReader" scope="step"
+        class="org.springframework.batch.item.file.FlatFileItemReader">
+    <property name="resource" value="#{jobParameters['inputFile']}"/>
+    <property name="linesToSkip" value="1"/>
+    <property name="lineMapper">
+      <bean class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
+        <property name="fieldSetMapper">
+          <bean class="fr.aesn.rade.batch.tasks.insee.RegionMapper"/>
+        </property>
+        <property name="lineTokenizer">
+          <bean class="org.springframework.batch.item.file.transform.DelimitedLineTokenizer"
+                p:delimiter="&#9;"/> <!-- &#9; for TAB (ASCII code 09) -->
+        </property>
+      </bean>
+    </property>
+  </bean>
+
+  <!-- ItemReader which reads data from INSEE departement file -->
+  <bean id="departementItemReader" scope="step"
+        class="org.springframework.batch.item.file.FlatFileItemReader">
+    <property name="resource" value="#{jobParameters['inputFile']}"/>
+    <property name="linesToSkip" value="1"/>
+    <property name="lineMapper">
+      <bean class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
+        <property name="fieldSetMapper">
+          <bean class="fr.aesn.rade.batch.tasks.insee.DepartementMapper"/>
+        </property>
+        <property name="lineTokenizer">
+          <bean class="org.springframework.batch.item.file.transform.DelimitedLineTokenizer"
+                p:delimiter="&#9;"/> <!-- &#9; for TAB (ASCII code 09) -->
+        </property>
+      </bean>
+    </property>
+  </bean>
+
+  <!-- ItemReader which reads data from INSEE commune file -->
+  <bean id="communeItemReader" scope="step"
+        class="org.springframework.batch.item.file.FlatFileItemReader">
+    <property name="resource" value="#{jobParameters['inputFile']}"/>
+    <property name="linesToSkip" value="1"/>
+    <property name="lineMapper">
+      <bean class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
+        <property name="fieldSetMapper">
+          <bean class="fr.aesn.rade.batch.tasks.insee.CommuneMapper"/>
+        </property>
+        <property name="lineTokenizer">
+          <bean class="org.springframework.batch.item.file.transform.DelimitedLineTokenizer"
+                p:delimiter="&#9;"/> <!-- &#9; for TAB (ASCII code 09) -->
+        </property>
+      </bean>
+    </property>
+  </bean>
+
+  <!-- ItemReader which reads data from INSEE commune history file -->
+  <bean id="historiqueCommuneItemReader" scope="step"
+        class="org.springframework.batch.item.file.FlatFileItemReader">
+    <property name="resource" value="#{jobParameters['inputFile']}"/>
+    <property name="linesToSkip" value="1"/>
+    <property name="lineMapper">
+      <bean class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
+        <property name="lineTokenizer">
+          <bean class="org.springframework.batch.item.file.transform.DelimitedLineTokenizer"
+                p:delimiter="&#9;"/> <!-- &#9; for TAB (ASCII code 09) -->
+        </property>
+        <property name="fieldSetMapper">
+          <bean class="fr.aesn.rade.batch.tasks.insee.HistoriqueCommuneInseeMapper"/>
+        </property>
+      </bean>
+  </property>
+  </bean>
+
+  <!-- ItemReader which reads data from INSEE commune history file -->
+  <bean id="contextItemReader" scope="step"
+        class="fr.aesn.rade.batch.util.ContextListItemReader"
+        p:name="historyList"/>
+
+  <!-- ItemWriter which writes the data to the database -->
+  <bean id="jpaItemWriter" scope="step"
+        class="org.springframework.batch.item.database.JpaItemWriter"
+        p:entityManagerFactory-ref="entityManagerFactory"/>
+
+  <!-- ItemWriter which writes the data to the context -->
+  <bean id="contextItemWriter" scope="step"
+        class="fr.aesn.rade.batch.util.ContextListItemWriter"
+        p:name="historyList"/>
+
+  <!-- ItemWriter which writes the data to the log -->
+  <bean id="logItemWriter" scope="step"
+        class="fr.aesn.rade.batch.util.LogItemWriter"/>
+
+  <!-- ItemProcessor which processes the data (adds Audit details) -->
+  <bean id="regionItemProcessor" scope="step"
+        class="fr.aesn.rade.batch.tasks.insee.RegionProcessor"/>
+
+  <!-- ItemProcessor which processes the data (adds Audit details) -->
+  <bean id="departementItemProcessor" scope="step"
+        class="fr.aesn.rade.batch.tasks.insee.DepartementProcessor"/>
+
+  <!-- ItemProcessor which processes the data (adds Audit details) -->
+  <bean id="communeItemProcessor" scope="step"
+        class="fr.aesn.rade.batch.tasks.insee.CommuneProcessor"/>
+
+  <!-- The Region INSEE Full Import Job -->
+  <batch:job id="importRegionInseeJob">
+    <batch:step id="importRegionInseeStep1">
+      <batch:tasklet>
+        <batch:chunk reader="regionItemReader"
+                     processor="regionItemProcessor"
+                     writer="jpaItemWriter"
+                     commit-interval="100"/>
+      </batch:tasklet>
+    </batch:step>
+  </batch:job>
+
+  <!-- The Departement INSEE Full Import Job -->
+  <batch:job id="importDeptInseeJob">
+    <batch:step id="importDeptInseeStep1">
+      <batch:tasklet>
+        <batch:chunk reader="departementItemReader"
+                     processor="departementItemProcessor"
+                     writer="jpaItemWriter"
+                     commit-interval="100"/>
+      </batch:tasklet>
+    </batch:step>
+  </batch:job>
+
+  <!-- The Commune INSEE Full Import Job -->
+  <batch:job id="importCommuneInseeJob">
+    <batch:step id="importCommuneInseeStep1">
+      <batch:tasklet>
+        <batch:chunk reader="communeItemReader"
+                     processor="communeItemProcessor"
+                     writer="jpaItemWriter"
+                     commit-interval="100"/>
+      </batch:tasklet>
+    </batch:step>
+  </batch:job>
+
+  <!-- The Commune INSEE History Import Job -->
+  <batch:job id="importCommuneInseeHistoryJob">
+    <batch:step id="importCommuneInseeHistoryStep1" next="importCommuneInseeHistoryStep2">
+      <batch:tasklet>
+        <batch:chunk reader="historiqueCommuneItemReader"
+                     writer="contextItemWriter"
+                     commit-interval="100"/>
+      </batch:tasklet>
+    </batch:step>
+    <batch:step id="importCommuneInseeHistoryStep2">
+      <batch:tasklet>
+        <batch:chunk reader="contextItemReader"
+                     writer="logItemWriter"
+                     commit-interval="100"/>
+      </batch:tasklet>
+    </batch:step>
+  </batch:job>
+</beans>

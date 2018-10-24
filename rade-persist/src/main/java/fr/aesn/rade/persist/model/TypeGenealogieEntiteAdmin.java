@@ -29,6 +29,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -64,7 +65,7 @@ import lombok.ToString;
 @Table(name = "ZR_TYPEGENEALOGIE")
 @Getter @Setter @NoArgsConstructor
 @ToString @EqualsAndHashCode
-@AllArgsConstructor(staticName = "of")
+@Builder @AllArgsConstructor(staticName = "of")
 public class TypeGenealogieEntiteAdmin implements Serializable {
   /** Unique Identifier for Serializable Class. */
   private static final long serialVersionUID = 885367586801528497L;

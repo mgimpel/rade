@@ -102,13 +102,28 @@ public class CommuneServiceImpl
    * @return a Map of all Commune indexed by ID.
    */
   @Override
-  @Transactional(readOnly = true)
   public Map<Integer, Commune> getCommuneMap() {
     log.debug("Commune map requested");
     List<Commune> list = getAllCommune();
     HashMap<Integer, Commune> map = new HashMap<>(list.size());
     for (Commune item : list) {
       map.put(item.getId(), item);
+    }
+    return map;
+  }
+
+  /**
+   * Returns a Map of all Commune valid at the given date and indexed by code.
+   * @param date the date at which the Commune are valid.
+   * @return a Map of all Commune indexed by code INSEE.
+   */
+  @Override
+  public Map<String, Commune> getCommuneMap(final Date date) {
+    log.debug("Commune map requested for Date: date={}", date);
+    List<Commune> list = getAllCommune(date);
+    HashMap<String, Commune> map = new HashMap<>(list.size());
+    for (Commune item : list) {
+      map.put(item.getCodeInsee(), item);
     }
     return map;
   }
@@ -190,5 +205,33 @@ public class CommuneServiceImpl
       log.warn("Commune requested by code and date: Exception parsing date {}", date, e);
       return null;
     }
+  }
+
+  /**
+   * Invalidates the given commune by setting the communes finValidite
+   * field to the given date.
+   * @param commune the commune to invalidate.
+   * @param date the date of end of validity for the commune.
+   * @return the now invalidated commune.
+   */
+  @Override
+  @Transactional(readOnly = false)
+  public Commune invalidateCommune(final Commune commune,
+                                   final Date date) {
+    if ((commune == null) || (date == null)) {
+      return null;
+    }
+    Commune oldCommune = getCommuneById(commune.getId());
+    if (!(commune.equals(oldCommune))
+        || (oldCommune.getFinValidite() != null)) {
+      // given commune has other changes
+      return null;
+    }
+    if (!(date.after(oldCommune.getDebutValidite()))) {
+      // given end of validity if before commune beginning of validity
+      return null;
+    }
+    oldCommune.setFinValidite(date);
+    return communeJpaDao.save(oldCommune);
   }
 }

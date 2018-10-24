@@ -102,7 +102,6 @@ public class DepartementServiceImpl
    * @return a Map of all Departement indexed by ID.
    */
   @Override
-  @Transactional(readOnly = true)
   public Map<Integer, Departement> getDepartementMap() {
     log.debug("Departement map requested");
     List<Departement> list = getAllDepartement();
@@ -115,9 +114,10 @@ public class DepartementServiceImpl
 
   /**
    * Returns a Map of all Departement valid at the given date and indexed by code.
-   * @param date the date at which the departements are valid
+   * @param date the date at which the Departements are valid.
    * @return a Map of all Departement indexed by code INSEE.
    */
+  @Override
   public Map<String, Departement> getDepartementMap(final Date date) {
     log.debug("Departement map requested for Date: date={}", date);
     List<Departement> list = getAllDepartement(date);
@@ -209,6 +209,8 @@ public class DepartementServiceImpl
    * @param date the date of end of validity for the departement.
    * @return the now invalidated departement.
    */
+  @Override
+  @Transactional(readOnly = false)
   public Departement invalidateDepartement(final Departement dept,
                                            final Date date) {
     if ((dept == null) || (date == null)) {
@@ -221,7 +223,7 @@ public class DepartementServiceImpl
       return null;
     }
     if (!(date.after(oldDept.getDebutValidite()))) {
-      // given end of validity if before regions beginning of validity
+      // given end of validity if before departements beginning of validity
       return null;
     }
     oldDept.setFinValidite(date);

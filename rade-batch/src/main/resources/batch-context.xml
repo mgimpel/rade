@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--/*
  *  This file is part of the Rade project (https://github.com/mgimpel/rade).
  *  Copyright (C) 2018 Marc Gimpel
@@ -21,6 +21,7 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:p="http://www.springframework.org/schema/p"
        xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
        xmlns:jpa="http://www.springframework.org/schema/data/jpa"
        xmlns:batch="http://www.springframework.org/schema/batch"
        xsi:schemaLocation="
@@ -28,6 +29,8 @@
          http://www.springframework.org/schema/beans/spring-beans.xsd
          http://www.springframework.org/schema/context
          http://www.springframework.org/schema/context/spring-context.xsd
+         http://www.springframework.org/schema/tx
+         http://www.springframework.org/schema/tx/spring-tx.xsd
          http://www.springframework.org/schema/data/jpa 
          http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
          http://www.springframework.org/schema/batch
@@ -67,6 +70,9 @@
         class="org.springframework.orm.jpa.JpaTransactionManager"
         p:entityManagerFactory-ref="entityManagerFactory"/>
 
+  <!-- Enable annotation driven transaction management -->
+  <tx:annotation-driven/>
+
   <!-- Configure Spring Data JPA -->
   <jpa:repositories base-package="fr.aesn.rade.persist.dao"/>
 
@@ -83,126 +89,7 @@
   <bean id="jobLauncher" class="org.springframework.batch.core.launch.support.SimpleJobLauncher"
         p:jobRepository-ref="jobRepository"/>
 
-  <!-- ItemReader which reads data from INSEE region file -->
-  <bean id="regionItemReader" scope="step"
-        class="org.springframework.batch.item.file.FlatFileItemReader">
-    <property name="resource" value="#{jobParameters['inputFile']}"/>
-    <property name="linesToSkip" value="1"/>
-    <property name="lineMapper">
-      <bean class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
-        <property name="fieldSetMapper">
-          <bean class="fr.aesn.rade.batch.chunk.RegionMapper"/>
-        </property>
-        <property name="lineTokenizer">
-          <bean class="org.springframework.batch.item.file.transform.DelimitedLineTokenizer"
-                p:delimiter="&#9;"/> <!-- &#9; for TAB (ASCII code 09) -->
-        </property>
-      </bean>
-    </property>
-  </bean>
-
-  <!-- ItemReader which reads data from INSEE departement file -->
-  <bean id="departementItemReader" scope="step"
-        class="org.springframework.batch.item.file.FlatFileItemReader">
-    <property name="resource" value="#{jobParameters['inputFile']}"/>
-    <property name="linesToSkip" value="1"/>
-    <property name="lineMapper">
-      <bean class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
-        <property name="fieldSetMapper">
-          <bean class="fr.aesn.rade.batch.chunk.DepartementMapper"/>
-        </property>
-        <property name="lineTokenizer">
-          <bean class="org.springframework.batch.item.file.transform.DelimitedLineTokenizer"
-                p:delimiter="&#9;"/> <!-- &#9; for TAB (ASCII code 09) -->
-        </property>
-      </bean>
-    </property>
-  </bean>
-
-  <!-- ItemReader which reads data from Sandre commune file -->
-  <bean id="communeSandreItemReader" scope="step"
-        class="org.springframework.batch.item.file.FlatFileItemReader">
-    <property name="resource" value="#{jobParameters['inputFile']}"/>
-    <property name="encoding" value="UTF-8"/>
-    <property name="linesToSkip" value="2"/>
-    <property name="lineMapper">
-      <bean class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
-        <property name="fieldSetMapper">
-          <bean class="fr.aesn.rade.batch.chunk.CommuneSandreMapper"/>
-        </property>
-        <property name="lineTokenizer">
-          <bean class="org.springframework.batch.item.file.transform.DelimitedLineTokenizer"
-                p:delimiter=";"/>
-        </property>
-      </bean>
-    </property>
-  </bean>
-
-  <!-- ItemReader which reads data from Hexaposte file -->
-  <bean id="hexaposteItemReader" scope="step"
-        class="org.springframework.batch.item.file.FlatFileItemReader">
-    <property name="resource" value="#{jobParameters['inputFile']}"/>
-    <property name="linesToSkip" value="1"/>
-    <property name="lineMapper">
-      <bean class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
-        <property name="lineTokenizer">
-          <bean class="org.springframework.batch.item.file.transform.FixedLengthTokenizer"
-                p:columns="1-6,7-11,12-49,50,51,52-89,90-94,95-126,127-131,132,133-142"/>
-        </property>
-        <property name="fieldSetMapper">
-          <bean class="fr.aesn.rade.batch.chunk.HexaposteMapper"/>
-        </property>
-      </bean>
-    </property>
-  </bean>
-
-  <!-- ItemWriter which writes the data to the database -->
-  <bean id="jpaItemWriter" scope="step"
-        class="org.springframework.batch.item.database.JpaItemWriter"
-        p:entityManagerFactory-ref="entityManagerFactory"/>
-
-  <bean id="regionItemProcessor" scope="step"
-        class="fr.aesn.rade.batch.chunk.RegionProcessor"/>
-
-  <bean id="departementItemProcessor" scope="step"
-        class="fr.aesn.rade.batch.chunk.DepartementProcessor"/>
-
-  <bean id="communeSandreItemProcessor" scope="step"
-        class="fr.aesn.rade.batch.chunk.CommuneSandreProcessor"/>
-
-  <bean id="hexaposteItemProcessor" scope="step"
-        class="fr.aesn.rade.batch.chunk.HexaposteProcessor"/>
-
-  <batch:job id="importRegionJob">
-    <batch:step id="importRegionStep1">
-      <batch:tasklet>
-        <batch:chunk reader="regionItemReader" processor="regionItemProcessor" writer="jpaItemWriter" commit-interval="100"/>
-      </batch:tasklet>
-    </batch:step>
-  </batch:job>
-
-  <batch:job id="importDeptJob">
-    <batch:step id="importDeptStep1">
-      <batch:tasklet>
-        <batch:chunk reader="departementItemReader" processor="departementItemProcessor" writer="jpaItemWriter" commit-interval="100"/>
-      </batch:tasklet>
-    </batch:step>
-  </batch:job>
-
-  <batch:job id="importCommuneSandreJob">
-    <batch:step id="importCommuneSandreStep1">
-      <batch:tasklet>
-        <batch:chunk reader="communeSandreItemReader" processor="communeSandreItemProcessor" writer="jpaItemWriter" commit-interval="100"/>
-      </batch:tasklet>
-    </batch:step>
-  </batch:job>
-
-  <batch:job id="importHexaposteJob">
-    <batch:step id="importHexaposteStep1">
-      <batch:tasklet>
-        <batch:chunk reader="hexaposteItemReader" processor="hexaposteItemProcessor" writer="jpaItemWriter" commit-interval="100"/>
-      </batch:tasklet>
-    </batch:step>
-  </batch:job>
-
+  <import resource="classpath*:batch-job-insee.xml"/>
+  <import resource="classpath*:batch-job-sandre.xml"/>
+  <import resource="classpath*:batch-job-hexaposte.xml"/>
 </beans>

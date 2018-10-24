@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--/*
+ *  This file is part of the Rade project (https://github.com/mgimpel/rade).
+ *  Copyright (C) 2018 Marc Gimpel
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */-->
+<!-- $Id$ -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:batch="http://www.springframework.org/schema/batch"
+       xsi:schemaLocation="
+         http://www.springframework.org/schema/beans
+         http://www.springframework.org/schema/beans/spring-beans.xsd
+         http://www.springframework.org/schema/batch
+         http://www.springframework.org/schema/batch/spring-batch.xsd">
+
+  <!-- ItemReader which reads data from Hexaposte file -->
+  <bean id="hexaposteItemReader" scope="step"
+        class="org.springframework.batch.item.file.FlatFileItemReader">
+    <property name="resource" value="#{jobParameters['inputFile']}"/>
+    <property name="linesToSkip" value="1"/>
+    <property name="lineMapper">
+      <bean class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
+        <property name="lineTokenizer">
+          <bean class="org.springframework.batch.item.file.transform.FixedLengthTokenizer"
+                p:columns="1-6,7-11,12-49,50,51,52-89,90-94,95-126,127-131,132,133-142"/>
+        </property>
+        <property name="fieldSetMapper">
+          <bean class="fr.aesn.rade.batch.tasks.hexaposte.HexaposteMapper"/>
+        </property>
+      </bean>
+    </property>
+  </bean>
+
+  <!-- ItemWriter which writes the data to the database -->
+  <bean id="hexaposteItemWriter" scope="step"
+        class="org.springframework.batch.item.database.JpaItemWriter"
+        p:entityManagerFactory-ref="entityManagerFactory"/>
+
+  <!-- ItemProcessor which processes the data (adds Audit details) -->
+  <bean id="hexaposteItemProcessor" scope="step"
+        class="fr.aesn.rade.batch.tasks.hexaposte.HexaposteProcessor"/>
+
+  <!-- The Hexaposte Full Import Job -->
+  <batch:job id="importHexaposteJob">
+    <batch:step id="importHexaposteStep1">
+      <batch:tasklet>
+        <batch:chunk reader="hexaposteItemReader"
+                     processor="hexaposteItemProcessor"
+                     writer="hexaposteItemWriter"
+                     commit-interval="100"/>
+      </batch:tasklet>
+    </batch:step>
+  </batch:job>
+</beans>

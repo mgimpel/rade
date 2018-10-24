@@ -32,6 +32,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -54,6 +56,7 @@ import lombok.ToString;
 @Table(name = "ZR_AUDIT")
 @Getter @Setter @NoArgsConstructor
 @ToString @EqualsAndHashCode
+@Builder @AllArgsConstructor(staticName = "of")
 public class Audit implements Serializable {
   /** Unique Identifier for Serializable Class. */
   private static final long serialVersionUID = 745022625240437798L;

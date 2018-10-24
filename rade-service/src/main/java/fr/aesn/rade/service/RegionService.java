@@ -49,7 +49,7 @@ public interface RegionService {
 
   /**
    * Returns a Map of all Region valid at the given date and indexed by code.
-   * @param date the date at which the regions are valid
+   * @param date the date at which the Regions are valid.
    * @return a Map of all Region indexed by code INSEE.
    */
   public Map<String, Region> getRegionMap(Date date);

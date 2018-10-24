@@ -50,7 +50,7 @@ public interface DepartementService {
   /**
    * Returns a Map of all Departement valid at the given date and indexed by
    * code.
-   * @param date the date at which the departements are valid
+   * @param date the date at which the Departements are valid.
    * @return a Map of all Departement indexed by code INSEE.
    */
   public Map<String, Departement> getDepartementMap(Date date);

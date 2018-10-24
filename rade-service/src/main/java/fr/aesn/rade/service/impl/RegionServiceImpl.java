@@ -115,11 +115,10 @@ public class RegionServiceImpl
 
   /**
    * Returns a Map of all Region valid at the given date and indexed by code.
-   * @param date the date at which the regions are valid
+   * @param date the date at which the Regions are valid.
    * @return a Map of all Region indexed by code INSEE.
    */
   @Override
-  @Transactional(readOnly = true)
   public Map<String, Region> getRegionMap(final Date date) {
     log.debug("Region map requested for Date : date={}", date);
     List<Region> list = getAllRegion(date);

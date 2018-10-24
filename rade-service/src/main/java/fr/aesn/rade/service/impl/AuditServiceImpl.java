@@ -103,6 +103,7 @@ public class AuditServiceImpl
    */
   @Override
   public Audit createAudit(final Audit audit) {
+    log.debug("Audit creation: {}", audit);
     return auditJpaDao.save(audit);
   }
 }

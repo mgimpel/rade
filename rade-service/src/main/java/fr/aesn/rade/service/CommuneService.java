@@ -48,6 +48,13 @@ public interface CommuneService {
   public Map<Integer, Commune> getCommuneMap();
 
   /**
+   * Returns a Map of all Commune valid at the given date and indexed by code.
+   * @param date the date at which the Commune are valid.
+   * @return a Map of all Commune indexed by code INSEE.
+   */
+  public Map<String, Commune> getCommuneMap(Date date);
+
+  /**
    * Get the Commune with the given ID.
    * @param id the Commune ID.
    * @return the Commune with the given ID.
@@ -76,4 +83,13 @@ public interface CommuneService {
    * @return the Commune with the given code at the given date.
    */
   public Commune getCommuneByCode(String code, String date);
+
+  /**
+   * Invalidates the given commune by setting the communes finValidite
+   * field to the given date.
+   * @param commune the commune to invalidate.
+   * @param date the date of end of validity for the commune.
+   * @return the now invalidated commune.
+   */
+  public Commune invalidateCommune(Commune commune, Date date);
 }
