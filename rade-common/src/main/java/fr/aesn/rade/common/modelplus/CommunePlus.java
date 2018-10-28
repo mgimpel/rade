@@ -19,6 +19,7 @@ package fr.aesn.rade.common.modelplus;
 
 import java.util.Date;
 
+import fr.aesn.rade.common.InvalidArgumentException;
 import fr.aesn.rade.common.util.SharedBusinessRules;
 import fr.aesn.rade.persist.model.CirconscriptionBassin;
 import fr.aesn.rade.persist.model.Commune;
@@ -84,12 +85,12 @@ public class CommunePlus {
    * @throws IllegalArgumentException if the given Commune is not Valid at the dateEffective.
    */
   public void setCommuneInsee(Commune insee)
-    throws IllegalArgumentException {
+    throws InvalidArgumentException {
     if (insee == null 
         || !SharedBusinessRules.isBetween(insee.getDebutValidite(),
                                           insee.getFinValidite(),
                                           dateEffective)) {
-      throw new IllegalArgumentException("The given INSEE Commune is not valid for the effective date of this CommunePlus");
+      throw new InvalidArgumentException("The given INSEE Commune is not valid for the effective date of this CommunePlus: " + insee);
     }
     this.insee = insee;
   }
@@ -100,12 +101,12 @@ public class CommunePlus {
    * @throws IllegalArgumentException
    */
   public void setCommuneSandre(CommuneSandre sandre)
-    throws IllegalArgumentException {
+    throws InvalidArgumentException {
     if (sandre == null 
         || !SharedBusinessRules.isBetween(sandre.getDateCreationCommune(),
                                           null,
                                           dateEffective)) {
-      throw new IllegalArgumentException("The given INSEE Commune is not valid for the effective date of this CommunePlus");
+      throw new InvalidArgumentException("The given Sandre Commune is not valid for the effective date of this CommunePlus: " + sandre);
     }
     this.sandre = sandre;
   }

@@ -29,6 +29,8 @@ import org.springframework.transaction.annotation.Transactional;
 import fr.aesn.rade.persist.dao.AuditJpaDao;
 import fr.aesn.rade.persist.model.Audit;
 import fr.aesn.rade.service.AuditService;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * Service Implementation for Audit.
@@ -36,37 +38,15 @@ import fr.aesn.rade.service.AuditService;
  */
 @Service
 @Transactional
+@NoArgsConstructor
 public class AuditServiceImpl
   implements AuditService {
     /** SLF4J Logger. */
     private static final Logger log =
       LoggerFactory.getLogger(AuditServiceImpl.class);
     /** Data Access Object for Audit. */
-    @Autowired
+    @Autowired @Setter
     private AuditJpaDao auditJpaDao;
-
-    /**
-     * Empty Constructor for Bean.
-     */
-    public AuditServiceImpl() {
-      // Empty Constructor for Bean.
-    }
-
-    /**
-     * Standard Constructor.
-     * @param auditJpaDao Data Access Object for Audit.
-     */
-    public AuditServiceImpl(final AuditJpaDao auditJpaDao) {
-      setAuditJpaDao(auditJpaDao);
-    }
-
-    /**
-     * Sets the Data Access Object for Audit.
-     * @param auditJpaDao Data Access Object for Audit.
-     */
-    public void setAuditJpaDao(final AuditJpaDao auditJpaDao) {
-      this.auditJpaDao = auditJpaDao;
-    }
 
   /**
    * List all Audit.

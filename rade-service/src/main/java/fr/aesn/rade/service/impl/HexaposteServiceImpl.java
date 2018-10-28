@@ -29,6 +29,8 @@ import org.springframework.transaction.annotation.Transactional;
 import fr.aesn.rade.persist.dao.HexaposteJpaDao;
 import fr.aesn.rade.persist.model.Hexaposte;
 import fr.aesn.rade.service.HexaposteService;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * Service Implementation for Hexaposte.
@@ -36,38 +38,15 @@ import fr.aesn.rade.service.HexaposteService;
  */
 @Service
 @Transactional
+@NoArgsConstructor
 public class HexaposteServiceImpl
   implements HexaposteService {
   /** SLF4J Logger. */
   private static final Logger log =
     LoggerFactory.getLogger(HexaposteServiceImpl.class);
   /** Data Access Object for CirconscriptionBassin. */
-  @Autowired
+  @Autowired @Setter
   private HexaposteJpaDao hexaposteJpaDao;
-
-
-  /**
-   * Empty Constructor for Bean.
-   */
-  public HexaposteServiceImpl() {
-    // Empty Constructor for Bean.
-  }
-
-  /**
-   * Standard Constructor.
-   * @param hexaposteJpaDao Data Access Object for Hexaposte.
-   */
-  public HexaposteServiceImpl(final HexaposteJpaDao hexaposteJpaDao) {
-    setHexaposteJpaDao(hexaposteJpaDao);
-  }
-
-  /**
-   * Sets the Data Access Object for Hexaposte.
-   * @param hexaposteJpaDao Data Access Object for Hexaposte.
-   */
-  public void setHexaposteJpaDao(final HexaposteJpaDao hexaposteJpaDao) {
-    this.hexaposteJpaDao = hexaposteJpaDao;
-  }
 
   /**
    * Get all current Hexaposte records for the given Code Postal.

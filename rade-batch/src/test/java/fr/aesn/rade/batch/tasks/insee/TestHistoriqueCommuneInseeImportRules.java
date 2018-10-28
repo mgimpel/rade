@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.batch.item.ExecutionContext;
 import org.springframework.batch.item.file.FlatFileItemReader;
@@ -241,7 +240,6 @@ public class TestHistoriqueCommuneInseeImportRules {
    * @throws ParseException failed to parse date.
    */
   @Test
-  @Ignore
   public void testBuildMod310x320Set() throws ParseException {
     List<HistoriqueCommuneInseeModel> testList = historyList;
     List<HistoriqueCommuneInseeModel.Pair> pairList;
@@ -252,7 +250,7 @@ public class TestHistoriqueCommuneInseeImportRules {
     assertEquals(620, pairSet.size());
     int count = 0;
     for (HistoriqueCommuneInseeModel.Changeset set : pairSet) {
-      count += set.pairs.size();
+      count += set.getPairs().size();
       assertTrue(set.isValid());
     }
     assertEquals(pairListSize, count);
@@ -263,7 +261,7 @@ public class TestHistoriqueCommuneInseeImportRules {
     assertEquals(0, pairSet.size());
     count = 0;
     for (HistoriqueCommuneInseeModel.Changeset set : pairSet) {
-      count += set.pairs.size();
+      count += set.getPairs().size();
       assertTrue(set.isValid());
     }
     assertEquals(pairListSize, count);
@@ -284,7 +282,7 @@ public class TestHistoriqueCommuneInseeImportRules {
     assertEquals(31, pairSet.size());
     int count = 0;
     for (HistoriqueCommuneInseeModel.Changeset set : pairSet) {
-      count += set.pairs.size();
+      count += set.getPairs().size();
       assertTrue(set.isValid());
     }
     assertEquals(pairListSize, count);
@@ -295,7 +293,7 @@ public class TestHistoriqueCommuneInseeImportRules {
     assertEquals(11, pairSet.size());
     count = 0;
     for (HistoriqueCommuneInseeModel.Changeset set : pairSet) {
-      count += set.pairs.size();
+      count += set.getPairs().size();
       assertTrue(set.isValid());
     }
     assertEquals(pairListSize, count);
@@ -306,7 +304,6 @@ public class TestHistoriqueCommuneInseeImportRules {
    * @throws ParseException failed to parse date.
    */
   @Test
-  @Ignore
   public void testBuildMod330x340Set() throws ParseException {
     List<HistoriqueCommuneInseeModel> testList = historyList;
     List<HistoriqueCommuneInseeModel.Pair> pairList;
@@ -317,7 +314,7 @@ public class TestHistoriqueCommuneInseeImportRules {
     assertEquals(686, pairSet.size());
     int count = 0;
     for (HistoriqueCommuneInseeModel.Changeset set : pairSet) {
-      count += set.pairs.size();
+      count += set.getPairs().size();
       assertTrue(set.isValid());
     }
     assertEquals(pairListSize, count);
@@ -328,7 +325,7 @@ public class TestHistoriqueCommuneInseeImportRules {
     assertEquals(0, pairSet.size());
     count = 0;
     for (HistoriqueCommuneInseeModel.Changeset set : pairSet) {
-      count += set.pairs.size();
+      count += set.getPairs().size();
       assertTrue(set.isValid());
     }
     assertEquals(pairListSize, count);
@@ -349,7 +346,7 @@ public class TestHistoriqueCommuneInseeImportRules {
     assertEquals(549, pairSet.size());
     int count = 0;
     for (HistoriqueCommuneInseeModel.Changeset set : pairSet) {
-      count += set.pairs.size();
+      count += set.getPairs().size();
       assertTrue(set.isValid());
     }
     assertEquals(pairListSize, count);
@@ -360,7 +357,7 @@ public class TestHistoriqueCommuneInseeImportRules {
     assertEquals(171, pairSet.size());
     count = 0;
     for (HistoriqueCommuneInseeModel.Changeset set : pairSet) {
-      count += set.pairs.size();
+      count += set.getPairs().size();
       assertTrue(set.isValid());
     }
     assertEquals(pairListSize, count);

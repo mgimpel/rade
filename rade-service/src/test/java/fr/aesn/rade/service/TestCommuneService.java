@@ -73,7 +73,7 @@ public class TestCommuneService
   @Autowired
   private StatutModificationJpaDao statutModificationJpaDao;
   /** Service  to be tested. */
-  private CommuneService communeService;
+  private CommuneService service;
 
   /**
    * Set up the Test Environment.
@@ -108,9 +108,10 @@ public class TestCommuneService
     ((MetadataServiceImpl)metadataService).setTypeGenealogieEntiteAdminJpaDao(typeGenealogieEntiteAdminJpaDao);
     ((MetadataServiceImpl)metadataService).setTypeNomClairJpaDao(typeNomClairJpaDao);
     ((MetadataServiceImpl)metadataService).setStatutModificationJpaDao(statutModificationJpaDao);
-    communeService = new CommuneServiceImpl(communeJpaDao);
-    ((CommuneServiceImpl)communeService).setGenealogieEntiteAdminJpaDao(genealogieEntiteAdminJpaDao);;
-    ((CommuneServiceImpl)communeService).setMetadataService(metadataService);
+    service = new CommuneServiceImpl();
+    ((CommuneServiceImpl)service).setCommuneJpaDao(communeJpaDao);
+    ((CommuneServiceImpl)service).setGenealogieEntiteAdminJpaDao(genealogieEntiteAdminJpaDao);
+    ((CommuneServiceImpl)service).setMetadataService(metadataService);
   }
 
   /**
@@ -118,7 +119,7 @@ public class TestCommuneService
    */
   @Test
   public void testGettingCommuneList() {
-    List<Commune> list = communeService.getAllCommune();
+    List<Commune> list = service.getAllCommune();
     assertNotNull("CommuneService returned a null list", list);
     assertEquals(632, list.size());
     for (Commune commune : list) {
@@ -133,7 +134,7 @@ public class TestCommuneService
   @Test
   public void testGettingCommuneList2018() {
     Date year2018 = new GregorianCalendar(2018, 1, 1, 0, 0, 0).getTime();
-    List<Commune> list = communeService.getAllCommune(year2018);
+    List<Commune> list = service.getAllCommune(year2018);
     assertNotNull("CommuneService returned a null list", list);
     assertEquals(632, list.size());
     for (Commune commune : list) {
@@ -148,7 +149,7 @@ public class TestCommuneService
   @Test
   public void testGettingCommuneList2017() {
     Date year2017 = new GregorianCalendar(2017, 1, 1, 0, 0, 0).getTime();
-    List<Commune> list = communeService.getAllCommune(year2017);
+    List<Commune> list = service.getAllCommune(year2017);
     assertNotNull("CommuneService returned a null list", list);
     assertEquals(0, list.size());
   }
@@ -160,7 +161,7 @@ public class TestCommuneService
   @Test
   public void testGettingCommuneById() throws ParseException {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-    Commune com = communeService.getCommuneById(135233);
+    Commune com = service.getCommuneById(135233);
     assertNotNull("Hibernate didn't return a Commune", com);
     assertEquals("Hibernate returned a Commune, but the Id doesn't match",
                  135233, com.getId().intValue());
@@ -186,9 +187,9 @@ public class TestCommuneService
                  "97105", com.getCodeInsee());
     assertEquals("Hibernate returned a Commune, but a field doesn't match",
                  "971", com.getDepartement());
-    assertNull(communeService.getCommuneById(0));
-    assertNull(communeService.getCommuneById(-1));
-    assertNull(communeService.getCommuneById(2000000));
+    assertNull(service.getCommuneById(0));
+    assertNull(service.getCommuneById(-1));
+    assertNull(service.getCommuneById(2000000));
   }
 
   /**
@@ -198,7 +199,7 @@ public class TestCommuneService
   @Test
   public void testGettingCommuneByCode() throws ParseException {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-    List<Commune> list = communeService.getCommuneByCode("97105");
+    List<Commune> list = service.getCommuneByCode("97105");
     assertNotNull("CommuneService returned a null list", list);
     assertEquals(1, list.size());
     Commune com = list.get(0);
@@ -237,7 +238,7 @@ public class TestCommuneService
     List<Commune> list;
     Calendar cal = Calendar.getInstance();
     cal.set(2018, 1, 2);
-    list = communeService.getAllCommune(cal.getTime());
+    list = service.getAllCommune(cal.getTime());
     assertNotNull("CommuneService returned a null list", list);
     assertEquals(632, list.size());
     for (Commune commune : list) {
@@ -245,7 +246,7 @@ public class TestCommuneService
                     commune);
     }
     cal.set(2017, 1, 2);
-    list = communeService.getAllCommune(cal.getTime());
+    list = service.getAllCommune(cal.getTime());
     assertNotNull("CommuneService returned a null list", list);
     assertEquals(0, list.size());
   }
@@ -261,11 +262,11 @@ public class TestCommuneService
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     Set<GenealogieEntiteAdmin> genealogie;
     // Check the commune has no children
-    Commune commune = communeService.getCommuneByCode("97105", "2018-03-01");
+    Commune commune = service.getCommuneByCode("97105", "2018-03-01");
     genealogie = commune.getEnfants();
     assertEquals(0, genealogie.size());
     // Modify the Commune and test it's new values
-    Commune newCommune = communeService.mod100ChangementdeNom("97105", sdf.parse("2018-06-01"), "0", "Basse-Terre 2", commune.getAudit(), null);
+    Commune newCommune = service.mod100ChangementdeNom("97105", sdf.parse("2018-06-01"), "0", "Basse-Terre 2", commune.getAudit(), null);
     assertNotNull("Hibernate didn't return a Commune", newCommune);
     assertNotEquals("Hibernate returned a Commune, but the Id doesn't match",
                     135233, newCommune.getId().intValue());
@@ -297,7 +298,7 @@ public class TestCommuneService
     genealogie = newCommune.getParents();
     assertEquals(1, genealogie.size());
     assertEquals(135233, genealogie.iterator().next().getParentEnfant().getParent().getId().intValue());
-    Commune parent = communeService.getCommuneById(135233);
+    Commune parent = service.getCommuneById(135233);
     // Check the original commune now has a child
     genealogie = parent.getEnfants();
     assertEquals(1, genealogie.size());
@@ -313,12 +314,12 @@ public class TestCommuneService
   @Test
   public void testMod200() throws ParseException, InvalidArgumentException {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-    Audit audit = communeService.getCommuneById(135233).getAudit(); // re-use existing Audit
-    Commune newCommune = communeService.mod200Creation("01999", sdf.parse("2019-01-01"), "01", "0", "Nouvelle Commune", audit, null);
+    Audit audit = service.getCommuneById(135233).getAudit(); // re-use existing Audit
+    Commune newCommune = service.mod200Creation("01999", sdf.parse("2019-01-01"), "01", "0", "Nouvelle Commune", audit, null);
     Commune commune;
-    commune = communeService.getCommuneByCode("01999", "2018-01-01");
+    commune = service.getCommuneByCode("01999", "2018-01-01");
     assertNull(commune);
-    commune = communeService.getCommuneByCode("01999", "2019-01-02");
+    commune = service.getCommuneByCode("01999", "2019-01-02");
     assertNotNull(commune);
     assertEquals(newCommune, commune);
   }

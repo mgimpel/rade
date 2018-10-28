@@ -31,6 +31,8 @@ import org.springframework.transaction.annotation.Transactional;
 import fr.aesn.rade.persist.dao.CirconscriptionBassinJpaDao;
 import fr.aesn.rade.persist.model.CirconscriptionBassin;
 import fr.aesn.rade.service.BassinService;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * Service Implementation for Circonscription Bassin.
@@ -38,37 +40,15 @@ import fr.aesn.rade.service.BassinService;
  */
 @Service
 @Transactional
+@NoArgsConstructor
 public class BassinServiceImpl
   implements BassinService {
   /** SLF4J Logger. */
   private static final Logger log =
     LoggerFactory.getLogger(BassinServiceImpl.class);
   /** Data Access Object for CirconscriptionBassin. */
-  @Autowired
+  @Autowired @Setter
   private CirconscriptionBassinJpaDao circonscriptionBassinJpaDao;
-
-  /**
-   * Empty Constructor for Bean.
-   */
-  public BassinServiceImpl() {
-    // Empty Constructor for Bean.
-  }
-
-  /**
-   * Standard Constructor.
-   * @param circonscriptionBassinJpaDao Data Access Object for CirconscriptionBassin.
-   */
-  public BassinServiceImpl(final CirconscriptionBassinJpaDao circonscriptionBassinJpaDao) {
-    setCirconscriptionBassinJpaDao(circonscriptionBassinJpaDao);
-  }
-
-  /**
-   * Sets the Data Access Object for CirconscriptionBassin.
-   * @param circonscriptionBassinJpaDao Data Access Object for CirconscriptionBassin.
-   */
-  public void setCirconscriptionBassinJpaDao(final CirconscriptionBassinJpaDao circonscriptionBassinJpaDao) {
-    this.circonscriptionBassinJpaDao = circonscriptionBassinJpaDao;
-  }
 
   @Override
   @Transactional(readOnly = true)

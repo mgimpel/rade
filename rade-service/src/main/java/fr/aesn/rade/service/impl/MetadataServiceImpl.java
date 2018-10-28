@@ -37,14 +37,25 @@ import fr.aesn.rade.persist.model.TypeEntiteAdmin;
 import fr.aesn.rade.persist.model.TypeGenealogieEntiteAdmin;
 import fr.aesn.rade.persist.model.TypeNomClair;
 import fr.aesn.rade.service.MetadataService;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
  * Service Implementation for Metadata.
+ *
+ * The Metadata managed by this Service include:
+ * <ul>
+ *   <li>TypeNomClair</li>
+ *   <li>TypeEntiteAdmin</li>
+ *   <li>TypeGenealogieEntiteAdmin</li>
+ *   <li>StatutModification</li>
+ * </ul>
+ *
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
 @Service
 @Transactional
+@NoArgsConstructor
 public class MetadataServiceImpl
   implements MetadataService {
   /** SLF4J Logger. */
@@ -62,20 +73,6 @@ public class MetadataServiceImpl
   /** Data Access Object for StatutModification. */
   @Autowired @Setter
   private StatutModificationJpaDao statutModificationJpaDao;
-
-  /**
-   * Creates a Service to manage Metadata.
-   * The Metadata managed by this Service include:
-   * <ul>
-   *   <li>TypeNomClair</li>
-   *   <li>TypeEntiteAdmin</li>
-   *   <li>TypeGenealogieEntiteAdmin</li>
-   *   <li>StatutModification</li>
-   * </ul>
-   */
-  public MetadataServiceImpl() {
-    // Empty Constructor for Bean.
-  }
 
   /**
    * Gets the TypeNomClair for the given code.

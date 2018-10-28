@@ -42,7 +42,7 @@ public class TestDelegationService
   @Autowired
   private DelegationJpaDao jpaDao;
   /** Service  to be tested. */
-  private DelegationService delegationService;
+  private DelegationService service;
 
   /**
    * Set up the Test Environment.
@@ -64,7 +64,8 @@ public class TestDelegationService
    */
   @Before
   public void setUp() {
-    delegationService = new DelegationServiceImpl(jpaDao);
+    service = new DelegationServiceImpl();
+    ((DelegationServiceImpl)service).setDelegationJpaDao(jpaDao);
   }
 
   /**
@@ -72,7 +73,7 @@ public class TestDelegationService
    */
   @Test
   public void testGettingDelegationList() {
-    List<Delegation> list = delegationService.getAllDelegation();
+    List<Delegation> list = service.getAllDelegation();
     assertNotNull("delegationService returned a null list", list);
     assertEquals(9, list.size());
     for (Delegation delegation : list) {
@@ -87,7 +88,7 @@ public class TestDelegationService
    */
   @Test
   public void testGettingDelegation() throws ParseException {
-    Delegation delegation = delegationService.getDelegationById("PPC");
+    Delegation delegation = service.getDelegationById("PPC");
     assertNotNull("Hibernate didn't return a Delegation", delegation);
     // Test IdentiteTiers fields
     assertEquals("Hibernate returned a Delegation, but the ID doesn't match",

@@ -43,7 +43,7 @@ public class TestDepartementService
   @Autowired
   private DepartementJpaDao jpaDao;
   /** Service  to be tested. */
-  private DepartementService departementService;
+  private DepartementService service;
 
   /**
    * Set up the Test Environment.
@@ -73,7 +73,8 @@ public class TestDepartementService
    */
   @Before
   public void setUp() {
-    departementService = new DepartementServiceImpl(jpaDao);
+    service = new DepartementServiceImpl();
+    ((DepartementServiceImpl)service).setDepartementJpaDao(jpaDao);
   }
 
   /**
@@ -81,7 +82,7 @@ public class TestDepartementService
    */
   @Test
   public void testGettingDepartementList() {
-    List<Departement> list = departementService.getAllDepartement();
+    List<Departement> list = service.getAllDepartement();
     assertNotNull("DepartementService returned a null list", list);
     assertEquals(173, list.size());
     for (Departement dept : list) {
@@ -97,7 +98,7 @@ public class TestDepartementService
   @Test
   public void testGettingDepartementById() throws ParseException {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-    Departement dept = departementService.getDepartementById(197);
+    Departement dept = service.getDepartementById(197);
     assertNotNull("Hibernate didn't return a Departement", dept);
     assertEquals("Hibernate returned a Departement, but the Id doesn't match",
                  197, dept.getId().intValue());
@@ -125,9 +126,9 @@ public class TestDepartementService
                  "97105", dept.getChefLieu());
     assertEquals("vdept returned a Departement, but a field doesn't match",
                  "01", dept.getRegion());
-    assertNull(departementService.getDepartementById(0));
-    assertNull(departementService.getDepartementById(-1));
-    assertNull(departementService.getDepartementById(1000));
+    assertNull(service.getDepartementById(0));
+    assertNull(service.getDepartementById(-1));
+    assertNull(service.getDepartementById(1000));
 
   }
 
@@ -138,7 +139,7 @@ public class TestDepartementService
   @Test
   public void testGettingDepartementByCode() throws ParseException {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-    List<Departement> list = departementService.getDepartementByCode("971");
+    List<Departement> list = service.getDepartementByCode("971");
     assertNotNull("DepartementService returned a null list", list);
     assertEquals(1, list.size());
     Departement dept = list.get(0);

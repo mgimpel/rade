@@ -31,6 +31,8 @@ import org.springframework.transaction.annotation.Transactional;
 import fr.aesn.rade.persist.dao.DelegationJpaDao;
 import fr.aesn.rade.persist.model.Delegation;
 import fr.aesn.rade.service.DelegationService;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * Service Implementation for Delegation.
@@ -38,37 +40,15 @@ import fr.aesn.rade.service.DelegationService;
  */
 @Service
 @Transactional
+@NoArgsConstructor
 public class DelegationServiceImpl
   implements DelegationService {
   /** SLF4J Logger. */
   private static final Logger log =
     LoggerFactory.getLogger(DelegationServiceImpl.class);
   /** Data Access Object for Delegation. */
-  @Autowired
+  @Autowired @Setter
   private DelegationJpaDao delegationJpaDao;
-
-  /**
-   * Empty Constructor for Bean.
-   */
-  public DelegationServiceImpl() {
-    // Empty Constructor for Bean.
-  }
-
-  /**
-   * Standard Constructor.
-   * @param delegationJpaDao Data Access Object for Delegation.
-   */
-  public DelegationServiceImpl(final DelegationJpaDao delegationJpaDao) {
-    setDelegationJpaDao(delegationJpaDao);
-  }
-
-  /**
-   * Sets the Data Access Object for Delegation.
-   * @param delegationJpaDao Data Access Object for Delegation.
-   */
-  public void setDelegationJpaDao(final DelegationJpaDao delegationJpaDao) {
-    this.delegationJpaDao = delegationJpaDao;
-  }
 
   /**
    * Add a Delegation.

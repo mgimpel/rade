@@ -35,6 +35,8 @@ import fr.aesn.rade.common.util.SharedBusinessRules;
 import fr.aesn.rade.persist.dao.RegionJpaDao;
 import fr.aesn.rade.persist.model.Region;
 import fr.aesn.rade.service.RegionService;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * Service Implementation for Region.
@@ -42,37 +44,15 @@ import fr.aesn.rade.service.RegionService;
  */
 @Service
 @Transactional
+@NoArgsConstructor
 public class RegionServiceImpl
   implements RegionService {
   /** SLF4J Logger. */
   private static final Logger log =
     LoggerFactory.getLogger(RegionServiceImpl.class);
   /** Data Access Object for Region. */
-  @Autowired
+  @Autowired @Setter
   private RegionJpaDao regionJpaDao;
-
-  /**
-   * Empty Constructor for Bean.
-   */
-  public RegionServiceImpl() {
-    // Empty Constructor for Bean.
-  }
-
-  /**
-   * Standard Constructor.
-   * @param regionJpaDao Data Access Object for Region.
-   */
-  public RegionServiceImpl(final RegionJpaDao regionJpaDao) {
-    setRegionJpaDao(regionJpaDao);
-  }
-
-  /**
-   * Sets the Data Access Object for Region.
-   * @param regionJpaDao Data Access Object for Region.
-   */
-  public void setRegionJpaDao(final RegionJpaDao regionJpaDao) {
-    this.regionJpaDao = regionJpaDao;
-  }
 
   /**
    * List all Region.

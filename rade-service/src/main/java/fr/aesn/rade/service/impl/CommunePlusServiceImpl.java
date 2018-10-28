@@ -30,12 +30,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import fr.aesn.rade.common.InvalidArgumentException;
 import fr.aesn.rade.common.modelplus.CommunePlus;
 import fr.aesn.rade.persist.dao.CommuneJpaDao;
 import fr.aesn.rade.persist.dao.CommuneSandreJpaDao;
 import fr.aesn.rade.persist.model.Commune;
 import fr.aesn.rade.persist.model.CommuneSandre;
 import fr.aesn.rade.service.CommunePlusService;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * Service Implementation for Commune.
@@ -43,50 +46,18 @@ import fr.aesn.rade.service.CommunePlusService;
  */
 @Service
 @Transactional
+@NoArgsConstructor
 public class CommunePlusServiceImpl
   implements CommunePlusService {
   /** SLF4J Logger. */
   private static final Logger log =
     LoggerFactory.getLogger(CommunePlusServiceImpl.class);
   /** Data Access Object for Commune. */
-  @Autowired
+  @Autowired @Setter
   private CommuneJpaDao communeJpaDao;
   /** Data Access Object for CommuneSandre. */
-  @Autowired
+  @Autowired @Setter
   private CommuneSandreJpaDao communeSandreJpaDao;
-
-  /**
-   * Empty Constructor for Bean.
-   */
-  public CommunePlusServiceImpl() {
-    // Empty Constructor for Bean.
-  }
-
-  /**
-   * Standard Constructor.
-   * @param communeJpaDao Data Access Object for Commune.
-   */
-  public CommunePlusServiceImpl(final CommuneJpaDao communeJpaDao,
-                                final CommuneSandreJpaDao communeSandreJpaDao) {
-    setCommuneJpaDao(communeJpaDao);
-    setCommuneSandreJpaDao(communeSandreJpaDao);
-  }
-
-  /**
-   * Sets the Data Access Object for Commune.
-   * @param communeJpaDao Data Access Object for Commune.
-   */
-  public void setCommuneJpaDao(final CommuneJpaDao communeJpaDao) {
-    this.communeJpaDao = communeJpaDao;
-  }
-
-  /**
-   * Sets the Data Access Object for CommuneSandre.
-   * @param communeSandreJpaDao Data Access Object for CommuneSandre.
-   */
-  public void setCommuneSandreJpaDao(final CommuneSandreJpaDao communeSandreJpaDao) {
-    this.communeSandreJpaDao = communeSandreJpaDao;
-  }
 
   /**
    * List all Commune valid at the given date.
@@ -111,13 +82,18 @@ public class CommunePlusServiceImpl
     for (Commune item : listInsee) {
       if (item != null) {
         code = item.getCodeInsee();
-        commune = new CommunePlus(code, testdate);
-        commune.setCommuneInsee(item);
-        sandre = map.get(code);
-        if (sandre != null) {
-          commune.setCommuneSandre(sandre);
+        try {
+          commune = new CommunePlus(code, testdate);
+          commune.setCommuneInsee(item);
+          sandre = map.get(code);
+          if (sandre != null) {
+            commune.setCommuneSandre(sandre);
+          }
+          result.add(commune);
         }
-        result.add(commune);
+        catch (InvalidArgumentException e) {
+          log.warn("Error assembling CommunePlus for Commune {} on {}", code, testdate, e);
+        }
       }
     }
     return result;
@@ -141,11 +117,16 @@ public class CommunePlusServiceImpl
     if (insee == null) {
       return null;
     }
-    CommunePlus result = new CommunePlus(code, testdate);
-    result.setCommuneInsee(insee);
     CommuneSandre sandre = communeSandreJpaDao.findByCodeInseeValidOnDate(code, testdate);
-    if (sandre != null) {
-      result.setCommuneSandre(sandre);
+    CommunePlus result = new CommunePlus(code, testdate);
+    try {
+      result.setCommuneInsee(insee);
+      if (sandre != null) {
+        result.setCommuneSandre(sandre);
+      }
+    }
+    catch (InvalidArgumentException e) {
+      log.warn("Error assembling CommunePlus for Commune {} on {}", code, testdate, e);
     }
     return result;
   }

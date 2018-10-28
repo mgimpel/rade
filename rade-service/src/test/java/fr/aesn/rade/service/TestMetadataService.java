@@ -57,7 +57,7 @@ public class TestMetadataService
   @Autowired
   private StatutModificationJpaDao statutModificationJpaDao;
   /** Service to be tested. */
-  private MetadataService metadataService;
+  private MetadataService service;
 
   /**
    * Set up the Test Environment.
@@ -82,11 +82,11 @@ public class TestMetadataService
    */
   @Before
   public void setUp() {
-    metadataService = new MetadataServiceImpl();
-    ((MetadataServiceImpl)metadataService).setTypeEntiteAdminJpaDao(typeEntiteAdminJpaDao);
-    ((MetadataServiceImpl)metadataService).setTypeGenealogieEntiteAdminJpaDao(typeGenealogieEntiteAdminJpaDao);
-    ((MetadataServiceImpl)metadataService).setTypeNomClairJpaDao(typeNomClairJpaDao);
-    ((MetadataServiceImpl)metadataService).setStatutModificationJpaDao(statutModificationJpaDao);
+    service = new MetadataServiceImpl();
+    ((MetadataServiceImpl)service).setTypeEntiteAdminJpaDao(typeEntiteAdminJpaDao);
+    ((MetadataServiceImpl)service).setTypeGenealogieEntiteAdminJpaDao(typeGenealogieEntiteAdminJpaDao);
+    ((MetadataServiceImpl)service).setTypeNomClairJpaDao(typeNomClairJpaDao);
+    ((MetadataServiceImpl)service).setStatutModificationJpaDao(statutModificationJpaDao);
   }
 
   /**
@@ -94,7 +94,7 @@ public class TestMetadataService
    */
   @Test
   public void testGetStatutModification() {
-    StatutModification statutModification = metadataService.getStatutModification("I");
+    StatutModification statutModification = service.getStatutModification("I");
     assertNotNull("Hibernate didn't return a StatutModification", statutModification);
     assertEquals("Hibernate returned a StatutModification, but the Code doesn't match",
                  "I", statutModification.getCode());
@@ -109,7 +109,7 @@ public class TestMetadataService
    */
   @Test
   public void testGetStatutModificationList() {
-    List<StatutModification> objs = metadataService.getStatutModificationList();
+    List<StatutModification> objs = service.getStatutModificationList();
     assertNotNull("Hibernate didn't return a List", objs);
     assertEquals("Hibernate returned a List, but the wrong size",
                  3, objs.size());
@@ -123,7 +123,7 @@ public class TestMetadataService
    */
   @Test
   public void testGetStatutModificationMap() {
-    Map<String, StatutModification> objs = metadataService.getStatutModificationMap();
+    Map<String, StatutModification> objs = service.getStatutModificationMap();
     assertNotNull("Hibernate didn't return a List", objs);
     assertEquals("Hibernate returned a List, but the wrong size",
                  3, objs.size());
@@ -134,7 +134,7 @@ public class TestMetadataService
    */
   @Test
   public void testGetTypeEntiteAdmin() {
-    TypeEntiteAdmin typeEntiteAdmin = metadataService.getTypeEntiteAdmin("COM");
+    TypeEntiteAdmin typeEntiteAdmin = service.getTypeEntiteAdmin("COM");
     assertNotNull("Hibernate didn't return a TypeEntiteAdmin", typeEntiteAdmin);
     assertEquals("Hibernate returned a TypeEntiteAdmin, but the Code doesn't match",
                  "COM", typeEntiteAdmin.getCode());
@@ -147,7 +147,7 @@ public class TestMetadataService
    */
   @Test
   public void testGetTypeEntiteAdminList() {
-    List<TypeEntiteAdmin> objs = metadataService.getTypeEntiteAdminList();
+    List<TypeEntiteAdmin> objs = service.getTypeEntiteAdminList();
     assertNotNull("Hibernate didn't return a List", objs);
     assertEquals("Hibernate returned a List, but the wrong size",
                  5, objs.size());
@@ -161,7 +161,7 @@ public class TestMetadataService
    */
   @Test
   public void testGetTypeEntiteAdminMap() {
-    Map<String, TypeEntiteAdmin> objs = metadataService.getTypeEntiteAdminMap();
+    Map<String, TypeEntiteAdmin> objs = service.getTypeEntiteAdminMap();
     assertNotNull("Hibernate didn't return a List", objs);
     assertEquals("Hibernate returned a List, but the wrong size",
                  5, objs.size());
@@ -172,7 +172,7 @@ public class TestMetadataService
    */
   @Test
   public void testGetTypeGenealogieEntiteAdmin() {
-    TypeGenealogieEntiteAdmin typeGenealogieEntiteAdmin = metadataService.getTypeGenealogieEntiteAdmin("100");
+    TypeGenealogieEntiteAdmin typeGenealogieEntiteAdmin = service.getTypeGenealogieEntiteAdmin("100");
     assertNotNull("Hibernate didn't return a TypeGenealogieEntiteAdmin", typeGenealogieEntiteAdmin);
     assertEquals("Hibernate returned a TypeGenealogieEntiteAdmin, but the Code doesn't match",
                  "100", typeGenealogieEntiteAdmin.getCode());
@@ -189,7 +189,7 @@ public class TestMetadataService
    */
   @Test
   public void testGetTypeGenealogieEntiteAdminList() {
-    List<TypeGenealogieEntiteAdmin> objs = metadataService.getTypeGenealogieEntiteAdminList();
+    List<TypeGenealogieEntiteAdmin> objs = service.getTypeGenealogieEntiteAdminList();
     assertNotNull("Hibernate didn't return a List", objs);
     assertEquals("Hibernate returned a List, but the wrong size",
                  49, objs.size());
@@ -203,7 +203,7 @@ public class TestMetadataService
    */
   @Test
   public void testGetTypeGenealogieEntiteAdminMap() {
-    Map<String, TypeGenealogieEntiteAdmin> objs = metadataService.getTypeGenealogieEntiteAdminMap();
+    Map<String, TypeGenealogieEntiteAdmin> objs = service.getTypeGenealogieEntiteAdminMap();
     assertNotNull("Hibernate didn't return a List", objs);
     assertEquals("Hibernate returned a List, but the wrong size",
                  49, objs.size());
@@ -214,7 +214,7 @@ public class TestMetadataService
    */
   @Test
   public void testGetTypeNomClair() {
-    TypeNomClair typeNomClair = metadataService.getTypeNomClair("8");
+    TypeNomClair typeNomClair = service.getTypeNomClair("8");
     assertNotNull("Hibernate didn't return a TypeNomClair", typeNomClair);
     assertEquals("Hibernate returned a TypeNomClair, but the Code doesn't match",
                  "8", typeNomClair.getCode());
@@ -231,7 +231,7 @@ public class TestMetadataService
    */
   @Test
   public void testGetTypeNomClairList() {
-    List<TypeNomClair> objs = metadataService.getTypeNomClairList();
+    List<TypeNomClair> objs = service.getTypeNomClairList();
     assertNotNull("Hibernate didn't return a List", objs);
     assertEquals("Hibernate returned a List, but the wrong size",
                  9, objs.size());
@@ -245,7 +245,7 @@ public class TestMetadataService
    */
   @Test
   public void testGetTypeNomClairMap() {
-    Map<String, TypeNomClair> objs = metadataService.getTypeNomClairMap();
+    Map<String, TypeNomClair> objs = service.getTypeNomClairMap();
     assertNotNull("Hibernate didn't return a List", objs);
     assertEquals("Hibernate returned a List, but the wrong size",
                  9, objs.size());

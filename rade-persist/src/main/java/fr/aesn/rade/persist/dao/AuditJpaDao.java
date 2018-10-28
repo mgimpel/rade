@@ -28,6 +28,4 @@ import fr.aesn.rade.persist.model.Audit;
 public interface AuditJpaDao
   extends JpaRepository<Audit, Integer> {
   // Add new, specific methods here if necessary
-//  @Query(value = "SELECT seq_name.nextval FROM dual", nativeQuery = true)
-//  Long getNextAuditId();
 }

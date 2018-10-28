@@ -42,6 +42,7 @@ import fr.aesn.rade.persist.model.GenealogieEntiteAdmin.ParentEnfant;
 import fr.aesn.rade.persist.model.TypeNomClair;
 import fr.aesn.rade.service.CommuneService;
 import fr.aesn.rade.service.MetadataService;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
@@ -50,6 +51,7 @@ import lombok.Setter;
  */
 @Service
 @Transactional
+@NoArgsConstructor
 public class CommuneServiceImpl
   implements CommuneService {
   /** SLF4J Logger. */
@@ -62,21 +64,6 @@ public class CommuneServiceImpl
   private GenealogieEntiteAdminJpaDao genealogieEntiteAdminJpaDao;
   @Autowired @Setter
   private MetadataService metadataService;
-
-  /**
-   * Empty Constructor for Bean.
-   */
-  public CommuneServiceImpl() {
-    // Empty Constructor for Bean.
-  }
-
-  /**
-   * Standard Constructor.
-   * @param communeJpaDao Data Access Object for Commune.
-   */
-  public CommuneServiceImpl(final CommuneJpaDao communeJpaDao) {
-    setCommuneJpaDao(communeJpaDao);
-  }
 
   /**
    * List all Commune.

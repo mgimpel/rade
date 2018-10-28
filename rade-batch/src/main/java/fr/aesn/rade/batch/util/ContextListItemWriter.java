@@ -49,7 +49,7 @@ public class ContextListItemWriter<T>
   @Setter
   private String name = DEFAULT_CONTEXT_PARAM_NAME;
   /** The list to write to, that will be placed in the Batch Context. */
-  private List<T> list = new ArrayList<T>();
+  private List<T> list = new ArrayList<>();
 
   /**
    * Process the supplied data element.

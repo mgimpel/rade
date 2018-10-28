@@ -35,6 +35,8 @@ import fr.aesn.rade.common.util.SharedBusinessRules;
 import fr.aesn.rade.persist.dao.DepartementJpaDao;
 import fr.aesn.rade.persist.model.Departement;
 import fr.aesn.rade.service.DepartementService;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * Service Implementation for Departement.
@@ -42,37 +44,15 @@ import fr.aesn.rade.service.DepartementService;
  */
 @Service
 @Transactional
+@NoArgsConstructor
 public class DepartementServiceImpl
   implements DepartementService {
   /** SLF4J Logger. */
   private static final Logger log =
     LoggerFactory.getLogger(DepartementServiceImpl.class);
   /** Data Access Object for Departement. */
-  @Autowired
+  @Autowired @Setter
   private DepartementJpaDao departementJpaDao;
-
-  /**
-   * Empty Constructor for Bean.
-   */
-  public DepartementServiceImpl() {
-    // Empty Constructor for Bean.
-  }
-
-  /**
-   * Standard Constructor.
-   * @param departementJpaDao Data Access Object for Departement.
-   */
-  public DepartementServiceImpl(final DepartementJpaDao departementJpaDao) {
-    setDepartementJpaDao(departementJpaDao);
-  }
-
-  /**
-   * Sets the Data Access Object for Departement.
-   * @param departementJpaDao Data Access Object for Departement.
-   */
-  public void setDepartementJpaDao(final DepartementJpaDao departementJpaDao) {
-    this.departementJpaDao = departementJpaDao;
-  }
 
   /**
    * List all Departement.

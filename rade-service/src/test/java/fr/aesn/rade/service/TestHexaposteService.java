@@ -41,7 +41,7 @@ public class TestHexaposteService
   @Autowired
   private HexaposteJpaDao jpaDao;
   /** Service  to be tested. */
-  private HexaposteService hexaposteService;
+  private HexaposteService service;
 
   /**
    * Set up the Test Environment.
@@ -64,7 +64,8 @@ public class TestHexaposteService
    */
   @Before
   public void setUp() {
-    hexaposteService = new HexaposteServiceImpl(jpaDao);
+    service = new HexaposteServiceImpl();
+    ((HexaposteServiceImpl)service).setHexaposteJpaDao(jpaDao);
   }
 
   /**
@@ -72,7 +73,7 @@ public class TestHexaposteService
    */
   @Test
   public void testGetHexaposteByCodePostal() {
-    List<Hexaposte> list = hexaposteService.getHexposteByCodePostal("01400");
+    List<Hexaposte> list = service.getHexposteByCodePostal("01400");
     assertNotNull("Service returned a null list", list);
     assertEquals(1, list.size());
     Hexaposte hexaposte = list.get(0);
@@ -105,7 +106,7 @@ public class TestHexaposteService
    */
   @Test
   public void testGetLibelleAcheminementByCodePostal() {
-    List<String> list = hexaposteService.getLibelleAcheminementByCodePostal("01400");
+    List<String> list = service.getLibelleAcheminementByCodePostal("01400");
     assertNotNull("Service returned a null list", list);
     assertEquals(1, list.size());
     String libelle = list.get(0);

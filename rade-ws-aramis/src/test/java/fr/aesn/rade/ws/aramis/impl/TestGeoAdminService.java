@@ -16,6 +16,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import fr.aesn.rade.common.InvalidArgumentException;
 import fr.aesn.rade.common.modelplus.CommunePlus;
 import fr.aesn.rade.persist.model.CirconscriptionBassin;
 import fr.aesn.rade.persist.model.Commune;
@@ -206,11 +207,17 @@ public class TestGeoAdminService {
     insee.setNomEnrichi(nomCommune);
     insee.setNomMajuscule(nomCourt);
     insee.setCodeInsee(numInsee);
-    obj.setCommuneInsee(insee);
     CommuneSandre sandre = new CommuneSandre();
     sandre.setCodeCommune(numInsee);
     sandre.setCirconscriptionBassin(circonscriptionBassin);
-    obj.setCommuneSandre(sandre);
+    try {
+      obj.setCommuneInsee(insee);
+      obj.setCommuneSandre(sandre);
+    } catch (InvalidArgumentException e) {
+      // This should never happen because the INSEE and sandre Commune Objects
+      // we built are valid for any and every date.
+      throw new RuntimeException(e);
+    }
     return obj;
   }
 

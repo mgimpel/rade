@@ -184,12 +184,24 @@ public class HistoriqueCommuneInseeModel implements Serializable {
    * Pair of INSEE Commune History records that are associated.
    * @author Marc Gimpel (mgimpel@gmail.com)
    */
-  @Getter @Setter @NoArgsConstructor
+  @Getter
   public static class Pair {
     /** Parent INSEE Commune History record. */
     private HistoriqueCommuneInseeModel parent;
     /** Child INSEE Commune History record. */
     private HistoriqueCommuneInseeModel enfant;
+
+    /**
+     * Full Constructor.
+     * @param parent Parent INSEE Commune History record.
+     * @param enfant Child INSEE Commune History record.
+     */
+    public Pair(HistoriqueCommuneInseeModel parent,
+                HistoriqueCommuneInseeModel enfant) {
+      this.parent = parent;
+      this.enfant = enfant;
+    }
+
     /**
      * Pair is considered valid if the effective date of the change is the same
      * and the Commune d'Echange (COMECH) field of one corresponds to the Code
@@ -206,6 +218,7 @@ public class HistoriqueCommuneInseeModel implements Serializable {
         && enfant.getCommuneEchange().equals(parent.getCodeDepartement()
                                            + parent.getCodeCommune()));
     }
+
     /**
      * Returns the effective date of the Pair, or null if the pair isn't valid.
      * @return the effective date of the Pair, or null if the pair isn't valid.
@@ -219,22 +232,18 @@ public class HistoriqueCommuneInseeModel implements Serializable {
    * Set of INSEE Commune History Pairs that are associated into one Changeset.
    * @author Marc Gimpel (mgimpel@gmail.com)
    */
+  @Getter
   public static class Changeset {
     /** Set of INSEE Commune History Pairs that make up the Changeset. */
-    public List<Pair> pairs;
+    private List<Pair> pairs;
+
     /**
      * Basic Constructor.
      */
     public Changeset() {
       pairs = new ArrayList<>();
     }
-    /**
-     * Append the given Pair to the end of the list.
-     * @param pair Pair to be appended to the end of the list.
-     */
-    public void add(Pair pair) {
-      pairs.add(pair);
-    }
+
     /**
      * Append all of the Pairs in the given collection to the end of the list.
      * @param collection Pairs to be appended to the end of the list.
@@ -242,6 +251,7 @@ public class HistoriqueCommuneInseeModel implements Serializable {
     public void addAll(Collection<Pair> collection) {
       pairs.addAll(collection);
     }
+
     /**
      * Changeset is considered valid if all the Pairs are associated, in
      * particular if they all have the same effective date, and their number
@@ -249,17 +259,16 @@ public class HistoriqueCommuneInseeModel implements Serializable {
      * @return true if valid, false otherwise.
      */
     public boolean isValid() {
-      if (pairs.size() < 1) {
+      if (pairs.isEmpty()) {
         return false;
       }
       Date eff = pairs.get(0).getDateEffet();
       Integer nbcom = pairs.get(0).getParent().getNombreCommunes();
-//      nbcom = (nbcom == null ? pairs.get(0).getEnfant().getNombreCommunes() : nbcom);
       if (eff == null || nbcom == null) {
         return false;
       }
       if (pairs.size() != nbcom 
-          && !pairs.get(0).getParent().getNomOfficiel().equals("Roche-sur-Yon")) {
+          && !"Roche-sur-Yon".equals(pairs.get(0).getParent().getNomOfficiel())) {
         // Le 25/08/1964 Saint-André-d'Ornay (85195) et Bourg-sous-la-Roche-sur-Yon (85032)
         // ont fusionné avec Roche-sur-Yon (85191) mais tous les deux sont de rang=1 & nb=1
         return false;

@@ -43,7 +43,7 @@ public class TestAuditService
   @Autowired
   private AuditJpaDao jpaDao;
   /** Service  to be tested. */
-  private AuditService auditService;
+  private AuditService service;
 
   /**
    * Set up the Test Environment.
@@ -65,7 +65,8 @@ public class TestAuditService
    */
   @Before
   public void setUp() {
-    auditService = new AuditServiceImpl(jpaDao);
+    service = new AuditServiceImpl();
+    ((AuditServiceImpl)service).setAuditJpaDao(jpaDao);
   }
 
   /**
@@ -73,7 +74,7 @@ public class TestAuditService
    */
   @Test @Ignore
   public void testGettingAuditList() {
-    List<Audit> list = auditService.getAllAudit();
+    List<Audit> list = service.getAllAudit();
     assertNotNull("auditService returned a null list", list);
     assertEquals(1, list.size());
     for (Audit audit: list) {
@@ -87,7 +88,7 @@ public class TestAuditService
    */
   @Test
   public void testGettingCommuneById() {
-    Audit audit = auditService.getAuditbyId(1);
+    Audit audit = service.getAuditbyId(1);
     assertNotNull(audit);
     assertEquals(1, audit.getId().intValue());
     assertEquals("gimpelma", audit.getAuteur());
@@ -97,7 +98,7 @@ public class TestAuditService
 
   @Test
   public void testCreatingAudit() {
-    List<Audit> list = auditService.getAllAudit();
+    List<Audit> list = service.getAllAudit();
     assertNotNull("auditService returned a null list", list);
     assertEquals(1, list.size());
     Audit audit = new Audit();
@@ -105,13 +106,13 @@ public class TestAuditService
     audit.setDate(new Date());
     audit.setNote("Import Batch");
     assertEquals(null, audit.getId());
-    Audit created = auditService.createAudit(audit);
+    Audit created = service.createAudit(audit);
     assertNotNull(created);
     assertEquals(2, audit.getId().intValue());
     assertEquals(audit, created);
-    list = auditService.getAllAudit();
+    list = service.getAllAudit();
     assertNotNull("auditService returned a null list", list);
     assertEquals(2, list.size());
-    assertEquals(created, auditService.getAuditbyId(2));
+    assertEquals(created, service.getAuditbyId(2));
   }
 }

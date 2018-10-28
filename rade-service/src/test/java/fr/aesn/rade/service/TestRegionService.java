@@ -43,7 +43,7 @@ public class TestRegionService
   @Autowired
   private RegionJpaDao jpaDao;
   /** Service  to be tested. */
-  private RegionService regionService;
+  private RegionService service;
 
   /**
    * Set up the Test Environment.
@@ -71,7 +71,8 @@ public class TestRegionService
    */
   @Before
   public void setUp() {
-    regionService = new RegionServiceImpl(jpaDao);
+    service = new RegionServiceImpl();
+    ((RegionServiceImpl)service).setRegionJpaDao(jpaDao);
   }
 
   /**
@@ -79,7 +80,7 @@ public class TestRegionService
    */
   @Test
   public void testGettingRegionList() {
-    List<Region> list = regionService.getAllRegion();
+    List<Region> list = service.getAllRegion();
     assertNotNull("regionService returned a null list", list);
     assertEquals(42, list.size());
     for (Region region : list) {
@@ -95,7 +96,7 @@ public class TestRegionService
   @Test
   public void testGettingRegionById() throws ParseException {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-    Region region = regionService.getRegionById(1);
+    Region region = service.getRegionById(1);
     assertNotNull("Hibernate didn't return a Region", region);
     assertEquals("Hibernate returned a Region, but the Id doesn't match",
                  1, region.getId().intValue());
@@ -121,9 +122,9 @@ public class TestRegionService
                  "01", region.getCodeInsee());
     assertEquals("Hibernate returned a Region, but a field doesn't match",
                  "97105", region.getChefLieu());
-    assertNull(regionService.getRegionById(-1));
-    assertNull(regionService.getRegionById(0));
-    assertNull(regionService.getRegionById(50));
+    assertNull(service.getRegionById(-1));
+    assertNull(service.getRegionById(0));
+    assertNull(service.getRegionById(50));
   }
 
   /**
@@ -133,7 +134,7 @@ public class TestRegionService
   @Test
   public void testGettingRegionByCode() throws ParseException {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-    List<Region> list = regionService.getRegionByCode("01");
+    List<Region> list = service.getRegionByCode("01");
     assertNotNull("regionService returned a null list", list);
     assertEquals(1, list.size());
     Region region = list.get(0);
