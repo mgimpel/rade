@@ -26,7 +26,7 @@
 		</encoder>
 	</appender>
 
-	<logger name="fr.aesn.rade" level="info" additivity="false">
+	<logger name="fr.aesn.rade" level="warn" additivity="false">
 		<appender-ref ref="CONSOLE" />
 	</logger>
 

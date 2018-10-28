@@ -84,7 +84,7 @@ public class RegionMapper
   @Override
   public Region mapFieldSet(final FieldSet fieldSet)
     throws BindException {
-    log.debug("Importing line: {}", fieldSet.toString());
+    log.trace("Importing line: {}", fieldSet.toString());
     Region reg = new Region();
     reg.setTypeEntiteAdmin(getTypeEntiteAdmin("REG"));
     reg.setCodeInsee(fieldSet.readString(0));

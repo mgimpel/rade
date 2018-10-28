@@ -76,7 +76,7 @@ public class HexaposteProcessor
   @Override
   public Hexaposte process(Hexaposte hexaposte) {
     hexaposte.setAudit(batchAudit);
-    log.debug("Processing Entity: {}", hexaposte);
+    log.trace("Processing Entity: {}", hexaposte);
     return hexaposte;
   }
 }

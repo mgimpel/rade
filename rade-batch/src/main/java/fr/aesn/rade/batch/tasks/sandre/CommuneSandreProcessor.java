@@ -75,7 +75,7 @@ public class CommuneSandreProcessor
   @Override
   public CommuneSandre process(CommuneSandre commune) {
     commune.setAudit(batchAudit);
-    log.debug("Processing Entity: {}", commune);
+    log.trace("Processing Entity: {}", commune);
     return commune;
   }
 }

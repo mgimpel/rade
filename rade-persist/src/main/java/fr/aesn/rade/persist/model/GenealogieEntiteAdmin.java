@@ -95,7 +95,6 @@ public class GenealogieEntiteAdmin implements Serializable {
   private ParentEnfant parentEnfant;
 
   /** Type de Généalogie qui défini la relation. */
-  @Size(max = 3)
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "TYPE_GENEALOGIE", nullable = true)
   private TypeGenealogieEntiteAdmin typeGenealogie;

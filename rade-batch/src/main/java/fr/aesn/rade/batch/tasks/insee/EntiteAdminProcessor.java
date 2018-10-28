@@ -79,7 +79,7 @@ public abstract class EntiteAdminProcessor
     entiteAdmin.setAudit(batchAudit);
     entiteAdmin.setDebutValidite(debutValidite);
     entiteAdmin.setCommentaire("-");
-    log.debug("Processing Entity: {}", entiteAdmin);
+    log.trace("Processing Entity: {}", entiteAdmin);
     return entiteAdmin;
   }
 }

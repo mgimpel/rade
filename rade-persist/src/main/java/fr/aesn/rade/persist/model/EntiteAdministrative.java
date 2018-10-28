@@ -113,13 +113,11 @@ public class EntiteAdministrative implements Serializable {
   private String commentaire;
 
   /** Type de Nom Clair (TNCC) de l'entité. */
-  @Size(max = 1)
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "TYPE_NOM_CLAIR", nullable = true)
   private TypeNomClair typeNomClair;
 
   /** Type d'Entité Administrative (Région, Département, ...). */
-  @Size(max = 3)
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "TYPE_ENTITE_ADMIN", nullable = false)
   private TypeEntiteAdmin typeEntiteAdmin;

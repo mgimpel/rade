@@ -27,6 +27,10 @@
          http://www.springframework.org/schema/batch
          http://www.springframework.org/schema/batch/spring-batch.xsd">
 
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+  <!-- Readers -->
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
   <!-- ItemReader which reads data from INSEE region file -->
   <bean id="regionItemReader" scope="step"
         class="org.springframework.batch.item.file.FlatFileItemReader">
@@ -104,6 +108,10 @@
         class="fr.aesn.rade.batch.util.ContextListItemReader"
         p:name="historyList"/>
 
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+  <!-- Writers -->
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
   <!-- ItemWriter which writes the data to the database -->
   <bean id="jpaItemWriter" scope="step"
         class="org.springframework.batch.item.database.JpaItemWriter"
@@ -118,6 +126,10 @@
   <bean id="logItemWriter" scope="step"
         class="fr.aesn.rade.batch.util.LogItemWriter"/>
 
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+  <!-- Processors -->
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
   <!-- ItemProcessor which processes the data (adds Audit details) -->
   <bean id="regionItemProcessor" scope="step"
         class="fr.aesn.rade.batch.tasks.insee.RegionProcessor"/>
@@ -129,6 +141,18 @@
   <!-- ItemProcessor which processes the data (adds Audit details) -->
   <bean id="communeItemProcessor" scope="step"
         class="fr.aesn.rade.batch.tasks.insee.CommuneProcessor"/>
+
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+  <!-- Tasklets -->
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+  <!-- Tasklet for Commune History Import -->
+  <bean id="historiqueCommuneInseeTasklet" scope="step"
+        class="fr.aesn.rade.batch.tasks.insee.HistoriqueCommuneInseeTasklet"/>
+
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+  <!-- Jobs -->
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
   <!-- The Region INSEE Full Import Job -->
   <batch:job id="importRegionInseeJob">
@@ -176,11 +200,14 @@
       </batch:tasklet>
     </batch:step>
     <batch:step id="importCommuneInseeHistoryStep2">
+      <batch:tasklet ref="historiqueCommuneInseeTasklet"/>
+<!--
       <batch:tasklet>
         <batch:chunk reader="contextItemReader"
                      writer="logItemWriter"
                      commit-interval="100"/>
       </batch:tasklet>
+-->
     </batch:step>
   </batch:job>
 </beans>

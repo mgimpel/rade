@@ -25,26 +25,53 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.*;
+import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 
+import fr.aesn.rade.common.InvalidArgumentException;
 import fr.aesn.rade.persist.dao.CommuneJpaDao;
+import fr.aesn.rade.persist.dao.GenealogieEntiteAdminJpaDao;
+import fr.aesn.rade.persist.dao.StatutModificationJpaDao;
+import fr.aesn.rade.persist.dao.TypeEntiteAdminJpaDao;
+import fr.aesn.rade.persist.dao.TypeGenealogieEntiteAdminJpaDao;
+import fr.aesn.rade.persist.dao.TypeNomClairJpaDao;
+import fr.aesn.rade.persist.model.Audit;
 import fr.aesn.rade.persist.model.Commune;
+import fr.aesn.rade.persist.model.GenealogieEntiteAdmin;
 import fr.aesn.rade.service.impl.CommuneServiceImpl;
+import fr.aesn.rade.service.impl.MetadataServiceImpl;
 
 /**
  * JUnit Test for DelegationService.
  * 
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TestCommuneService
   extends AbstractTestService {
   /** DAO for the Service to be tested. */
   @Autowired
-  private CommuneJpaDao jpaDao;
+  private CommuneJpaDao communeJpaDao;
+  /** Data Access Object for TypeEntiteAdmin. */
+  @Autowired
+  private GenealogieEntiteAdminJpaDao genealogieEntiteAdminJpaDao;
+  /** Data Access Object for TypeEntiteAdmin. */
+  @Autowired
+  private TypeEntiteAdminJpaDao typeEntiteAdminJpaDao;
+  /** Data Access Object for TypeGenealogieEntiteAdmin. */
+  @Autowired
+  private TypeGenealogieEntiteAdminJpaDao typeGenealogieEntiteAdminJpaDao;
+  /** Data Access Object for TypeNomClair. */
+  @Autowired
+  private TypeNomClairJpaDao typeNomClairJpaDao;
+  /** Data Access Object for StatutModification. */
+  @Autowired
+  private StatutModificationJpaDao statutModificationJpaDao;
   /** Service  to be tested. */
   private CommuneService communeService;
 
@@ -59,7 +86,9 @@ public class TestCommuneService
         .setScriptEncoding("UTF-8")
         .setName("testdb")
         .addScript("db/sql/create-tables.sql")
+        .addScript("db/sql/insert-StatutModification.sql")
         .addScript("db/sql/insert-TypeEntiteAdmin.sql")
+        .addScript("db/sql/insert-TypeGenealogieEntiteAdmin.sql")
         .addScript("db/sql/insert-TypeNomClair.sql")
         .addScript("db/sql/insert-Audit.sql")
         .addScript("db/sql/insert-CirconscriptionBassin.sql")
@@ -74,7 +103,14 @@ public class TestCommuneService
    */
   @Before
   public void setUp() {
-    communeService = new CommuneServiceImpl(jpaDao);
+    MetadataService metadataService = new MetadataServiceImpl();
+    ((MetadataServiceImpl)metadataService).setTypeEntiteAdminJpaDao(typeEntiteAdminJpaDao);
+    ((MetadataServiceImpl)metadataService).setTypeGenealogieEntiteAdminJpaDao(typeGenealogieEntiteAdminJpaDao);
+    ((MetadataServiceImpl)metadataService).setTypeNomClairJpaDao(typeNomClairJpaDao);
+    ((MetadataServiceImpl)metadataService).setStatutModificationJpaDao(statutModificationJpaDao);
+    communeService = new CommuneServiceImpl(communeJpaDao);
+    ((CommuneServiceImpl)communeService).setGenealogieEntiteAdminJpaDao(genealogieEntiteAdminJpaDao);;
+    ((CommuneServiceImpl)communeService).setMetadataService(metadataService);
   }
 
   /**
@@ -212,5 +248,78 @@ public class TestCommuneService
     list = communeService.getAllCommune(cal.getTime());
     assertNotNull("CommuneService returned a null list", list);
     assertEquals(0, list.size());
+  }
+
+  /**
+   * Tests MOD=100 : Changement de Nom.
+   * @throws ParseException failed to parse date.
+   * @throws InvalidArgumentException passed wrong arguments during
+   * CommuneService request.
+   */
+  @Test
+  public void testMod100() throws ParseException, InvalidArgumentException {
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    Set<GenealogieEntiteAdmin> genealogie;
+    // Check the commune has no children
+    Commune commune = communeService.getCommuneByCode("97105", "2018-03-01");
+    genealogie = commune.getEnfants();
+    assertEquals(0, genealogie.size());
+    // Modify the Commune and test it's new values
+    Commune newCommune = communeService.mod100ChangementdeNom("97105", sdf.parse("2018-06-01"), "0", "Basse-Terre 2", commune.getAudit(), null);
+    assertNotNull("Hibernate didn't return a Commune", newCommune);
+    assertNotEquals("Hibernate returned a Commune, but the Id doesn't match",
+                    135233, newCommune.getId().intValue());
+    assertEquals("Hibernate returned a Commune, but a field doesn't match",
+                 sdf.parse("2018-06-01"), newCommune.getDebutValidite());
+    assertNull("Hibernate returned a Commune, but a field doesn't match",
+               newCommune.getFinValidite());
+    assertNull("Hibernate returned a Commune, but a field doesn't match",
+               newCommune.getArticleEnrichi());
+    assertEquals("Hibernate returned a Commune, but a field doesn't match",
+                 "BASSE-TERRE 2", newCommune.getNomMajuscule());
+    assertEquals("Hibernate returned a Commune, but a field doesn't match",
+                 "Basse-Terre 2", newCommune.getNomEnrichi());
+    assertEquals("Hibernate returned a Commune, but a field doesn't match",
+                 "", newCommune.getCommentaire());
+    assertEquals("Hibernate returned a Commune, but a field doesn't match",
+                 "0", newCommune.getTypeNomClair().getCode());
+    assertEquals("Hibernate returned a Commune, but a field doesn't match",
+                 "COM", newCommune.getTypeEntiteAdmin().getCode());
+    assertEquals("Hibernate returned a Commune, but a field doesn't match",
+                 1, newCommune.getAudit().getId().intValue());
+    assertEquals("Hibernate returned a Commune, but a field doesn't match",
+                 "97105", newCommune.getCodeInsee());
+    assertEquals("Hibernate returned a Commune, but a field doesn't match",
+                 "971", newCommune.getDepartement());
+    // Check the new genealogie
+    genealogie = newCommune.getEnfants();
+    assertEquals(0, genealogie.size());
+    genealogie = newCommune.getParents();
+    assertEquals(1, genealogie.size());
+    assertEquals(135233, genealogie.iterator().next().getParentEnfant().getParent().getId().intValue());
+    Commune parent = communeService.getCommuneById(135233);
+    // Check the original commune now has a child
+    genealogie = parent.getEnfants();
+    assertEquals(1, genealogie.size());
+    assertEquals(newCommune.getId(), genealogie.iterator().next().getParentEnfant().getEnfant().getId());
+  }
+
+  /**
+   * Tests MOD=200 : Creation.
+   * @throws ParseException failed to parse date.
+   * @throws InvalidArgumentException passed wrong arguments during
+   * CommuneService request.
+   */
+  @Test
+  public void testMod200() throws ParseException, InvalidArgumentException {
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    Audit audit = communeService.getCommuneById(135233).getAudit(); // re-use existing Audit
+    Commune newCommune = communeService.mod200Creation("01999", sdf.parse("2019-01-01"), "01", "0", "Nouvelle Commune", audit, null);
+    Commune commune;
+    commune = communeService.getCommuneByCode("01999", "2018-01-01");
+    assertNull(commune);
+    commune = communeService.getCommuneByCode("01999", "2019-01-02");
+    assertNotNull(commune);
+    assertEquals(newCommune, commune);
   }
 }

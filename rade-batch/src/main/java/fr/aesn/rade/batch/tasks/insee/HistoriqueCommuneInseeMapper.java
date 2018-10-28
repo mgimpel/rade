@@ -73,7 +73,7 @@ public class HistoriqueCommuneInseeMapper
   @Override
   public HistoriqueCommuneInseeModel mapFieldSet(final FieldSet fieldSet)
     throws BindException {
-    log.debug("Importing line: {}", fieldSet.toString());
+    log.trace("Importing line: {}", fieldSet.toString());
     HistoriqueCommuneInseeModel historique = new HistoriqueCommuneInseeModel();
     historique.setCodeDepartement(fieldSet.readString(0));
     historique.setCodeArrondissement(fieldSet.readString(1));

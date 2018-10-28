@@ -77,7 +77,7 @@ public class CommuneMapper
   @Override
   public Commune mapFieldSet(final FieldSet fieldSet)
     throws BindException {
-    log.debug("Importing line: {}", fieldSet.toString());
+    log.trace("Importing line: {}", fieldSet.toString());
     Commune commune = new Commune();
     commune.setTypeEntiteAdmin(getTypeEntiteAdmin("COM"));
     commune.setDepartement(fieldSet.readString(3));

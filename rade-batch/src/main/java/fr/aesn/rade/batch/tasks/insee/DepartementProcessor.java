@@ -43,7 +43,7 @@ public class DepartementProcessor
   /** SLF4J Logger. */
   private static final Logger log =
     LoggerFactory.getLogger(DepartementProcessor.class);
-  /** Service for Metadata. */
+  /** Service for Departement. */
   @Autowired @Setter
   private DepartementService deptService;
 
@@ -64,6 +64,14 @@ public class DepartementProcessor
              deptMap.size());
   }
 
+  /**
+   * Give a listener a chance to modify the exit status from a step.
+   * The value returned will be combined with the normal exit status using
+   * ExitStatus.and(ExitStatus).
+   * @param stepExecution Spring Batch stepExecution Object.
+   * @return an ExitStatus to combine with the normal value.
+   * Return null to leave the old value unchanged.
+   */
   @AfterStep
   public ExitStatus afterStep(StepExecution stepExecution) {
     for (Departement dept : deptMap.values()) {

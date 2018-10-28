@@ -77,7 +77,7 @@ public class DepartementMapper
   @Override
   public Departement mapFieldSet(final FieldSet fieldSet)
     throws BindException {
-    log.debug("Importing line: {}", fieldSet.toString());
+    log.trace("Importing line: {}", fieldSet.toString());
     Departement dept = new Departement();
     dept.setTypeEntiteAdmin(getTypeEntiteAdmin("DEP"));
     dept.setRegion(fieldSet.readString(0));

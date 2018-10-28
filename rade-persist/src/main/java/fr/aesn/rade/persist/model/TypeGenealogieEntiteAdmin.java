@@ -87,7 +87,6 @@ public class TypeGenealogieEntiteAdmin implements Serializable {
   private String libelleLong;
 
   /** Statut par défaut du Type de généalogie d'entité administrative. */
-  @Size(max = 1)
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "STATUT_DEFAUT", nullable = true)
   private StatutModification statutParDefaut;

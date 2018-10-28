@@ -66,7 +66,7 @@ public final class SharedBusinessRules {
     if (date == null) {
       return false;
     }
-    return (start == null || (start != null && start.before(date)))
+    return (start == null || (start != null && !start.after(date))) // not after <-> before or equals
            && (end == null || end.after(date));
   }
 }

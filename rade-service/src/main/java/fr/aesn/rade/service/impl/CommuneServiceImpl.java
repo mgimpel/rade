@@ -25,16 +25,24 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import fr.aesn.rade.common.util.SharedBusinessRules;
+import fr.aesn.rade.common.InvalidArgumentException;
 import fr.aesn.rade.persist.dao.CommuneJpaDao;
+import fr.aesn.rade.persist.dao.GenealogieEntiteAdminJpaDao;
+import fr.aesn.rade.persist.model.Audit;
 import fr.aesn.rade.persist.model.Commune;
+import fr.aesn.rade.persist.model.GenealogieEntiteAdmin;
+import fr.aesn.rade.persist.model.GenealogieEntiteAdmin.ParentEnfant;
+import fr.aesn.rade.persist.model.TypeNomClair;
 import fr.aesn.rade.service.CommuneService;
+import fr.aesn.rade.service.MetadataService;
+import lombok.Setter;
 
 /**
  * Service Implementation for Commune.
@@ -48,8 +56,12 @@ public class CommuneServiceImpl
   private static final Logger log =
     LoggerFactory.getLogger(CommuneServiceImpl.class);
   /** Data Access Object for Commune. */
-  @Autowired
+  @Autowired @Setter
   private CommuneJpaDao communeJpaDao;
+  @Autowired @Setter
+  private GenealogieEntiteAdminJpaDao genealogieEntiteAdminJpaDao;
+  @Autowired @Setter
+  private MetadataService metadataService;
 
   /**
    * Empty Constructor for Bean.
@@ -64,14 +76,6 @@ public class CommuneServiceImpl
    */
   public CommuneServiceImpl(final CommuneJpaDao communeJpaDao) {
     setCommuneJpaDao(communeJpaDao);
-  }
-
-  /**
-   * Sets the Data Access Object for Commune.
-   * @param communeJpaDao Data Access Object for Commune.
-   */
-  public void setCommuneJpaDao(final CommuneJpaDao communeJpaDao) {
-    this.communeJpaDao = communeJpaDao;
   }
 
   /**
@@ -174,18 +178,7 @@ public class CommuneServiceImpl
   @Transactional(readOnly = true)
   public Commune getCommuneByCode(final String code, final Date date) {
     log.debug("Commune requested by code and date: code={}, date={}", code, date);
-    List<Commune> list = getCommuneByCode(code);
-    if (list == null) {
-      return null;
-    }
-    Date testdate = date == null ? new Date() : date;
-    for (Commune commune : list) {
-      if (SharedBusinessRules.isEntiteAdministrativeValid(commune, testdate)) {
-        // Suppose database correct (au plus 1 valeur valide)
-        return commune;
-      }
-    }
-    return null;
+    return communeJpaDao.findByCodeInseeValidOnDate(code, date);
   }
 
   /**
@@ -218,6 +211,7 @@ public class CommuneServiceImpl
   @Transactional(readOnly = false)
   public Commune invalidateCommune(final Commune commune,
                                    final Date date) {
+    log.debug("Invalidate Commune requested: commune={}, date={}", commune, date);
     if ((commune == null) || (date == null)) {
       return null;
     }
@@ -233,5 +227,117 @@ public class CommuneServiceImpl
     }
     oldCommune.setFinValidite(date);
     return communeJpaDao.save(oldCommune);
+  }
+
+  /**
+   * Changes the name (MOD=100 : Changement de Nom) of the Commune with the
+   * given CodeInsee effective as of the given Date.
+   * @param codeInsee the code of Commune to change.
+   * @param dateEffective the date that the change takes effect.
+   * @param tnccoff the type of the official new name.
+   * @param nccoff the official new name.
+   * @param audit audit details about change.
+   * @param commentaire comment for the genealogie link.
+   * @return the new Commune.
+   * @throws InvalidArgumentException if an invalid argument has been passed.
+   */
+  @Override
+  @Transactional(readOnly = false)
+  public Commune mod100ChangementdeNom(final String codeInsee,
+                                       final Date dateEffective,
+                                       final String tnccoff,
+                                       final String nccoff,
+                                       final Audit audit,
+                                       final String commentaire)
+    throws InvalidArgumentException {
+    log.info("Mod=100 (Changement de nom) requested: commune={}, date={}", codeInsee, dateEffective);
+    if (codeInsee == null || dateEffective == null || tnccoff == null || nccoff == null || audit == null) {
+      throw new InvalidArgumentException("A mandatory argument was null");
+    }
+    Commune oldCommune = getCommuneByCode(codeInsee, dateEffective);
+    if ((oldCommune == null)) {
+      throw new InvalidArgumentException("There is no Commune with the given codeInsee valid at the dateEffective");
+    }
+    if (oldCommune.getFinValidite() != null) {
+      throw new InvalidArgumentException("The Commune has already been invalidated");
+    }
+    // invalidate old commune
+    oldCommune.setFinValidite(dateEffective);
+    Commune parent = communeJpaDao.save(oldCommune);
+    // create new commune
+    Commune newCommune = new Commune();
+    newCommune.setTypeEntiteAdmin(metadataService.getTypeEntiteAdmin("COM"));
+    newCommune.setCodeInsee(codeInsee);
+    newCommune.setDebutValidite(dateEffective);
+    newCommune.setAudit(audit);
+    newCommune.setNomEnrichi(nccoff);
+    newCommune.setNomMajuscule(nccoff.toUpperCase()); //TODO check this works
+    TypeNomClair tncc = metadataService.getTypeNomClair(tnccoff);
+    newCommune.setTypeNomClair(tncc);
+    if (tncc.getArticleMaj() != null) {
+      newCommune.setArticleEnrichi(StringUtils.capitalize(tncc.getArticleMaj().toLowerCase())); //TODO check this
+    }
+    newCommune.setCommentaire("");
+    newCommune.setDepartement(oldCommune.getDepartement());
+    Commune enfant = communeJpaDao.save(newCommune);
+    // add genealogie
+    ParentEnfant parentEnfant = new ParentEnfant();
+    parentEnfant.setParent(parent);
+    parentEnfant.setEnfant(enfant);
+    GenealogieEntiteAdmin genealogie = new GenealogieEntiteAdmin();
+    genealogie.setParentEnfant(parentEnfant);
+    genealogie.setCommentaire(commentaire);
+    genealogie.setTypeGenealogie(metadataService.getTypeGenealogieEntiteAdmin("100"));
+    genealogieEntiteAdminJpaDao.save(genealogie);
+    return getCommuneById(enfant.getId());
+  }
+
+  /**
+   * Creates (MOD=200 : Creation) a new Commune with the given CodeInsee and
+   * details, effective as of the given Date.
+   * @param codeInsee the code of the new Commune.
+   * @param dateEffective the date that the change takes effect.
+   * @param departement the departement to which the new Commune belongs.
+   * @param tnccoff the type of the official name.
+   * @param nccoff the official name.
+   * @param audit audit details about change.
+   * @param commentaire comment for the new Commune.
+   * @return the new Commune.
+   * @throws InvalidArgumentException if an invalid argument has been passed.
+   */
+  @Override
+  @Transactional(readOnly = false)
+  public Commune mod200Creation(final String codeInsee,
+                                final Date dateEffective,
+                                final String departement,
+                                final String tnccoff,
+                                final String nccoff,
+                                final Audit audit,
+                                final String commentaire)
+    throws InvalidArgumentException {
+    log.info("Mod=200 (Creation) requested: commune={}, date={}", codeInsee, dateEffective);
+    if (codeInsee == null || dateEffective == null || departement == null || tnccoff == null || nccoff == null || audit == null) {
+      throw new InvalidArgumentException("A mandatory argument was null");
+    }
+    Commune oldCommune = getCommuneByCode(codeInsee, dateEffective);
+    if ((oldCommune != null)) {
+      throw new InvalidArgumentException("There is already a Commune with the given codeInsee valid at the dateEffective");
+    }
+    // create new commune
+    Commune newCommune = new Commune();
+    newCommune.setTypeEntiteAdmin(metadataService.getTypeEntiteAdmin("COM"));
+    newCommune.setCodeInsee(codeInsee);
+    newCommune.setDebutValidite(dateEffective);
+    newCommune.setAudit(audit);
+    newCommune.setNomEnrichi(nccoff);
+    newCommune.setNomMajuscule(nccoff.toUpperCase()); //TODO check this works
+    TypeNomClair tncc = metadataService.getTypeNomClair(tnccoff);
+    newCommune.setTypeNomClair(tncc);
+    if (tncc.getArticleMaj() != null) {
+      newCommune.setArticleEnrichi(StringUtils.capitalize(tncc.getArticleMaj().toLowerCase())); //TODO check this
+    }
+    newCommune.setCommentaire(commentaire == null ? "" : commentaire);
+    newCommune.setDepartement(departement);
+    return communeJpaDao.save(newCommune);
   }
 }

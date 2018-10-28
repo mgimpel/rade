@@ -90,7 +90,7 @@ public class CommuneSandreMapper
   @Override
   public CommuneSandre mapFieldSet(final FieldSet fieldSet)
     throws BindException {
-    log.debug("Importing line: {}", fieldSet.toString());
+    log.trace("Importing line: {}", fieldSet.toString());
     CommuneSandre commune = new CommuneSandre();
     commune.setCodeCommune(fieldSet.readString(0));
     commune.setLibelleCommune(fieldSet.readString(1));

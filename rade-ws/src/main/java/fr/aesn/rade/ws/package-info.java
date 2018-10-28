@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--/*
- *  This file is part of the Rade project (https://github.com/mgimpel/rade).
+/*  This file is part of the Rade project (https://github.com/mgimpel/rade).
  *  Copyright (C) 2018 Marc Gimpel
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -15,23 +13,9 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
- */-->
-<!-- $Id$ -->
-<!DOCTYPE configuration>
-<configuration>
-	<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
-		<encoder>
-			<Pattern>
-				[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %logger{36} - %msg%n
-			</Pattern>
-		</encoder>
-	</appender>
-
-	<logger name="fr.aesn.rade" level="warn" additivity="false">
-		<appender-ref ref="CONSOLE" />
-	</logger>
-
-	<root level="warn">
-		<appender-ref ref="CONSOLE" />
-	</root>
-</configuration>
+ */
+/* $Id$ */
+/**
+ * This package contains Web Service Interfaces for the Rade Project.
+ */
+package fr.aesn.rade.ws;

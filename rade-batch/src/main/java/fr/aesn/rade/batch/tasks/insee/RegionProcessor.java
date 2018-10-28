@@ -43,7 +43,7 @@ public class RegionProcessor
   /** SLF4J Logger. */
   private static final Logger log =
     LoggerFactory.getLogger(RegionProcessor.class);
-  /** Service for Metadata. */
+  /** Service for Region. */
   @Autowired @Setter
   private RegionService regionService;
 
@@ -64,6 +64,14 @@ public class RegionProcessor
              regionMap.size());
   }
 
+  /**
+   * Give a listener a chance to modify the exit status from a step.
+   * The value returned will be combined with the normal exit status using
+   * ExitStatus.and(ExitStatus).
+   * @param stepExecution Spring Batch stepExecution Object.
+   * @return an ExitStatus to combine with the normal value.
+   * Return null to leave the old value unchanged.
+   */
   @AfterStep
   public ExitStatus afterStep(StepExecution stepExecution) {
     for (Region region : regionMap.values()) {

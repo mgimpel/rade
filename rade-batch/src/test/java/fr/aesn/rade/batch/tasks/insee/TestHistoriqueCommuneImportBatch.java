@@ -21,7 +21,6 @@ import static org.junit.Assert.*;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -48,14 +47,13 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import fr.aesn.rade.batch.tasks.SpringBatchTestConfiguration;
 import fr.aesn.rade.persist.dao.CommuneJpaDao;
-import fr.aesn.rade.persist.model.Commune;
 
 /**
  * Test the Commune Batch Import Job.
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-public class TestCommuneImportBatch {
+public class TestHistoriqueCommuneImportBatch {
   /** Static Spring Configuration. */
   @Configuration
   @ImportResource(locations = "classpath*:batch-job-insee.xml")
@@ -101,13 +99,24 @@ public class TestCommuneImportBatch {
 
   /**
    * Set up the Test Environment.
+ * @throws Exception 
    */
   @Before
-  public void setUp() {
+  public void setUp() throws Exception {
     jobLauncherTestUtils = new JobLauncherTestUtils();
     jobLauncherTestUtils.setJobRepository(context.getBean("jobRepository", JobRepository.class));
     jobLauncherTestUtils.setJobLauncher(context.getBean("jobLauncher", JobLauncher.class));
     jobLauncherTestUtils.setJob(context.getBean("importCommuneInseeJob", Job.class));
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    JobParametersBuilder jobBuilder = new JobParametersBuilder();
+    jobBuilder.addString("inputFile", "classpath:batchfiles/insee/comsimp2017.txt");
+    jobBuilder.addDate("debutValidite", sdf.parse("2017-01-01"));
+    jobBuilder.addString("auditAuteur", "Batch");
+    jobBuilder.addDate("auditDate", new Date());
+    jobBuilder.addString("auditNote", "Import Test Setup");
+    JobParameters jobParameters = jobBuilder.toJobParameters();
+    jobLauncherTestUtils.launchJob(jobParameters);
+    jobLauncherTestUtils.setJob(context.getBean("importCommuneInseeHistoryJob", Job.class));
   }
 
   /**
@@ -117,20 +126,27 @@ public class TestCommuneImportBatch {
   public void tearDown() {
   }
 
+  /**
+   * 
+   * @throws Exception
+   */
   @Test
-  public void testImportCommuneJob() throws Exception {
+  public void testImportDeptJob() throws Exception {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    int initialSizeAll = communeJpaDao.findAll().size();
+    int initialSizeValid = communeJpaDao.findAllValidOnDate(sdf.parse("2017-01-01")).size();
     JobParametersBuilder jobBuilder = new JobParametersBuilder();
-    jobBuilder.addString("inputFile", "classpath:batchfiles/insee/comsimp2018.txt");
-    jobBuilder.addDate("debutValidite", sdf.parse("2018-01-01"));
+    jobBuilder.addString("inputFile", "classpath:batchfiles/insee/historiq2018.txt");
+    jobBuilder.addDate("debutValidite", sdf.parse("2017-01-01"));
     jobBuilder.addString("auditAuteur", "Batch");
     jobBuilder.addDate("auditDate", new Date());
     jobBuilder.addString("auditNote", "Import Test");
     JobParameters jobParameters = jobBuilder.toJobParameters();
     JobExecution jobExecution = jobLauncherTestUtils.launchJob(jobParameters);
     assertEquals(BatchStatus.COMPLETED, jobExecution.getStatus());
-    List<Commune> list = communeJpaDao.findAll();
     assertEquals("The batch imported the wrong number of lines",
-                 35357, list.size());
+                 initialSizeAll + 16, communeJpaDao.findAll().size());
+    assertEquals("Changing Names should not change the number of Valid Communes on any given date",
+                 initialSizeValid, communeJpaDao.findAllValidOnDate(sdf.parse("2018-01-01")).size());
   }
 }

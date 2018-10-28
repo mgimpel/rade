@@ -20,7 +20,9 @@ package fr.aesn.rade.batch;
 import java.io.PrintWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
+import java.util.Properties;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -96,6 +98,11 @@ public class SpringBatchApplication {
                             .hasArg().argName("date")
                             .desc("the start date (yyyy-MM-dd)")
                             .build());
+    options.addOption(Option.builder("P").argName( "property=value" )
+                            .hasArgs().numberOfArgs(2)
+                            .valueSeparator()
+                            .desc("sets given job property with the given value")
+                            .build());
     return options;
   }
 
@@ -149,6 +156,8 @@ public class SpringBatchApplication {
     String configFile = line.hasOption(OPTION_CONFIG) ? line.getOptionValue(OPTION_CONFIG) : DEFAULT_CONFIG_FILE;
     ApplicationContext context = new FileSystemXmlApplicationContext(configFile);
     log.debug("Loaded Spring Application Context: {}", context);
+    Properties properties = line.getOptionProperties("P");
+    log.debug("Application Properties: {}", properties);
     if (line.hasOption(OPTION_LIST)) {
       String[] jobs = context.getBeanNamesForType(Job.class);
       String msg = "Rade Batch Script Executor has found the following jobs:\n\n "
@@ -174,8 +183,8 @@ public class SpringBatchApplication {
     } else {
       debutValidite = new Date();
     }
-    log.debug("Parsed Command line: config={}, job={}, input={}, date={}",
-              configFile, jobName, inputFile, debutValidite.toString());
+    log.debug("Parsed Command line: config={}, job={}, input={}, date={}, other properties={}",
+              configFile, jobName, inputFile, debutValidite.toString(), properties.size());
     // Launch Job
     JobLauncher jobLauncher = context.getBean("jobLauncher", JobLauncher.class);
     Job job = context.getBean(jobName, Job.class);
@@ -185,6 +194,11 @@ public class SpringBatchApplication {
     jobBuilder.addString("auditAuteur", "Batch");
     jobBuilder.addDate("auditDate", new Date());
     jobBuilder.addString("auditNote", "Import " + inputFile);
+    String property;
+    for (Object item : Collections.list(properties.propertyNames())) {
+      property = (String) item;
+      jobBuilder.addString(property, properties.getProperty(property));
+    }
     JobParameters jobParameters = jobBuilder.toJobParameters();
     try {
       JobExecution execution = jobLauncher.run(job, jobParameters);

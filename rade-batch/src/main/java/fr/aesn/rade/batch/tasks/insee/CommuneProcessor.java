@@ -43,7 +43,7 @@ public class CommuneProcessor
   /** SLF4J Logger. */
   private static final Logger log =
     LoggerFactory.getLogger(CommuneProcessor.class);
-  /** Service for Metadata. */
+  /** Service for Commune. */
   @Autowired @Setter
   private CommuneService communeService;
 
@@ -64,6 +64,14 @@ public class CommuneProcessor
              communeMap.size());
   }
 
+  /**
+   * Give a listener a chance to modify the exit status from a step.
+   * The value returned will be combined with the normal exit status using
+   * ExitStatus.and(ExitStatus).
+   * @param stepExecution Spring Batch stepExecution Object.
+   * @return an ExitStatus to combine with the normal value.
+   * Return null to leave the old value unchanged.
+   */
   @AfterStep
   public ExitStatus afterStep(StepExecution stepExecution) {
     for (Commune commune : communeMap.values()) {

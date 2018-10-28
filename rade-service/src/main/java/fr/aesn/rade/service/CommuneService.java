@@ -21,6 +21,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import fr.aesn.rade.common.InvalidArgumentException;
+import fr.aesn.rade.persist.model.Audit;
 import fr.aesn.rade.persist.model.Commune;
 
 /**
@@ -92,4 +94,40 @@ public interface CommuneService {
    * @return the now invalidated commune.
    */
   public Commune invalidateCommune(Commune commune, Date date);
+
+  /**
+   * Changes the name (MOD=100 : Changement de Nom) of the Commune with the
+   * given CodeInsee effective as of the given Date.
+   * @param codeInsee the code of Commune to change.
+   * @param dateEffective the date that the change takes effect.
+   * @param tnccoff the type of the official new name.
+   * @param nccoff the official new name.
+   * @param audit audit details about change.
+   * @param commentaire comment for the genealogie link.
+   * @return the new Commune.
+   * @throws InvalidArgumentException if an invalid argument has been passed.
+   */
+  public Commune mod100ChangementdeNom(String codeInsee, Date dateEffective,
+                                       String tnccoff, String nccoff,
+                                       Audit audit, String commentaire)
+    throws InvalidArgumentException;
+
+  /**
+   * Creates (MOD=200 : Creation) a new Commune with the given CodeInsee and
+   * details, effective as of the given Date.
+   * @param codeInsee the code of the new Commune.
+   * @param dateEffective the date that the change takes effect.
+   * @param departement the departement to which the new Commune belongs.
+   * @param tnccoff the type of the official name.
+   * @param nccoff the official name.
+   * @param audit audit details about change.
+   * @param commentaire comment for the new Commune.
+   * @return the new Commune.
+   * @throws InvalidArgumentException if an invalid argument has been passed.
+   */
+  public Commune mod200Creation(String codeInsee, Date dateEffective,
+                                String departement,
+                                String tnccoff, String nccoff,
+                                Audit audit, String commentaire)
+    throws InvalidArgumentException;
 }

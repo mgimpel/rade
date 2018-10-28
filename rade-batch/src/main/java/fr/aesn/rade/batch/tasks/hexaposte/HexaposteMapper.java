@@ -75,7 +75,7 @@ public class HexaposteMapper
   @Override
   public Hexaposte mapFieldSet(final FieldSet fieldSet)
     throws BindException {
-    log.debug("Importing line: {}", fieldSet.toString());
+    log.trace("Importing line: {}", fieldSet.toString());
     Hexaposte hexaposte = new Hexaposte();
     hexaposte.setIdentifiant(fieldSet.readString(0));
     hexaposte.setCodeInseeCommune(fieldSet.readString(1));

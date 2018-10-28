@@ -22,10 +22,19 @@ import static org.mockito.Mockito.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 
 import org.apache.commons.collections4.MapUtils;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.springframework.batch.item.ExecutionContext;
+import org.springframework.batch.item.file.FlatFileItemReader;
+import org.springframework.batch.item.file.mapping.DefaultLineMapper;
 import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
 import org.springframework.validation.BindException;
 
@@ -35,6 +44,7 @@ import fr.aesn.rade.persist.model.TypeNomClair;
 import fr.aesn.rade.service.MetadataService;
 
 import org.springframework.batch.item.file.transform.FieldSet;
+import org.springframework.core.io.ClassPathResource;
 
 /**
  * JUnit Test for CommuneMapper.
@@ -87,35 +97,68 @@ public class TestCommuneMapper {
 
   /**
    * Test mapping one line from the Commune file to import.
+   * @throws BindException Mapper failed to parse test String.
    */
   @Test
-  public void testMapping() {
+  public void testMapping() throws BindException {
     DelimitedLineTokenizer tokenizer = new DelimitedLineTokenizer();
     tokenizer.setDelimiter("\t");
     FieldSet fieldSet = tokenizer.tokenize(TEST_LINE);
     CommuneMapper mapper = new CommuneMapper();
     mapper.setMetadataService(metadataService);
-    try {
-      Commune commune = mapper.mapFieldSet(fieldSet);
-      assertEquals("Entity doesn't match expected value",
-                   "COM", commune.getTypeEntiteAdmin().getCode());
-      assertEquals("Entity doesn't match expected value",
-                   "971", commune.getDepartement());
-      assertEquals("Entity doesn't match expected value",
-                   "97105", commune.getCodeInsee());
-      assertEquals("Entity doesn't match expected value",
-                   "0", commune.getTypeNomClair().getCode());
-      assertEquals("Entity doesn't match expected value",
-                   "BASSE-TERRE", commune.getNomMajuscule());
-      assertEquals("Entity doesn't match expected value",
-                   "", commune.getArticleEnrichi());
-      assertEquals("Entity doesn't match expected value",
-                   "Basse-Terre", commune.getNomEnrichi());
-      assertNull("Entity doesn't match expected null value",
-                 commune.getCommentaire());
-    } catch (BindException e) {
-      fail("Mapper failed to parse test String with BindException: "
-           + e.getMessage());
+    Commune commune = mapper.mapFieldSet(fieldSet);
+    assertEquals("Entity doesn't match expected value",
+                 "COM", commune.getTypeEntiteAdmin().getCode());
+    assertEquals("Entity doesn't match expected value",
+                 "971", commune.getDepartement());
+    assertEquals("Entity doesn't match expected value",
+                 "97105", commune.getCodeInsee());
+    assertEquals("Entity doesn't match expected value",
+                 "0", commune.getTypeNomClair().getCode());
+    assertEquals("Entity doesn't match expected value",
+                 "BASSE-TERRE", commune.getNomMajuscule());
+    assertEquals("Entity doesn't match expected value",
+                 "", commune.getArticleEnrichi());
+    assertEquals("Entity doesn't match expected value",
+                 "Basse-Terre", commune.getNomEnrichi());
+    assertNull("Entity doesn't match expected null value",
+               commune.getCommentaire());
+  }
+
+  /**
+   * Test mapping the whole Commune file to import.
+   * @throws Exception problem reading/mapping input file.
+   */
+  @Test
+  public void testMappingFile() throws Exception {
+    // Configure and open ItemReader (reading test input file)
+    FlatFileItemReader<Commune> reader = new FlatFileItemReader<>();
+    reader.setResource(new ClassPathResource("batchfiles/insee/comsimp2018.txt"));
+    reader.setLinesToSkip(1);
+    DelimitedLineTokenizer tokenizer = new DelimitedLineTokenizer();
+    tokenizer.setDelimiter("\t");
+    CommuneMapper mapper = new CommuneMapper();
+    mapper.setMetadataService(metadataService);
+    DefaultLineMapper<Commune> lineMapper = new DefaultLineMapper<>();
+    lineMapper.setFieldSetMapper(mapper);
+    lineMapper.setLineTokenizer(tokenizer);
+    reader.setLineMapper(lineMapper);
+    reader.afterPropertiesSet();
+    ExecutionContext ec = new ExecutionContext();
+    reader.open(ec);
+    // Configure Validator and validate (@Size, @Min, ...) each line
+    ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+    Validator validator = factory.getValidator();
+    Commune record;
+    Set<ConstraintViolation<Commune>> violations;
+    int i = 0;
+    while((record = reader.read()) != null) {
+      violations = validator.validate(record);
+      assertEquals("Record violates constraints", 0, violations.size());
+      i++;
     }
+    // Check all records from input file have been read
+    assertNull(record);
+    assertEquals(35357, i);
   }
 }

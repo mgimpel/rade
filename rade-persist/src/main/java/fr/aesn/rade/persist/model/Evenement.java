@@ -85,13 +85,11 @@ public class Evenement implements Serializable {
   private EntiteAdministrative entiteAdmin;
 
   /** Statut de Modification de l'évenement. */
-  @Size(max = 1)
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "STATUT_MODIF", nullable = true)
   private StatutModification statutModification;
 
   /** Type de Modification de l'évenement. */
-  @Size(max = 3)
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "TYPE_MODIF", nullable = true)
   private TypeGenealogieEntiteAdmin typeModification;

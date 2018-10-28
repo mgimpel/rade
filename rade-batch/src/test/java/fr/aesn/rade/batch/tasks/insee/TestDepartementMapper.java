@@ -22,10 +22,19 @@ import static org.mockito.Mockito.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 
 import org.apache.commons.collections4.MapUtils;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.springframework.batch.item.ExecutionContext;
+import org.springframework.batch.item.file.FlatFileItemReader;
+import org.springframework.batch.item.file.mapping.DefaultLineMapper;
 import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
 import org.springframework.validation.BindException;
 
@@ -35,6 +44,7 @@ import fr.aesn.rade.persist.model.TypeNomClair;
 import fr.aesn.rade.service.MetadataService;
 
 import org.springframework.batch.item.file.transform.FieldSet;
+import org.springframework.core.io.ClassPathResource;
 
 /**
  * JUnit Test for DepartementMapper.
@@ -87,43 +97,76 @@ public class TestDepartementMapper {
 
   /**
    * Test mapping one line from the Departement file to import.
+   * @throws BindException Mapper failed to parse test String.
    */
   @Test
-  public void testMapping() {
+  public void testMapping() throws BindException {
     DelimitedLineTokenizer tokenizer = new DelimitedLineTokenizer();
     tokenizer.setDelimiter("\t");
     FieldSet fieldSet = tokenizer.tokenize(TEST_LINE);
     DepartementMapper mapper = new DepartementMapper();
     mapper.setMetadataService(metadataService);
-    try {
-      Departement dept = mapper.mapFieldSet(fieldSet);
-      assertEquals("Entity doesn't match expected value",
-                   "DEP", dept.getTypeEntiteAdmin().getCode());
-      assertEquals("Entity doesn't match expected value",
-                   "11", dept.getRegion());
-      assertEquals("Entity doesn't match expected value",
-                   "75", dept.getCodeInsee());
-      assertEquals("Entity doesn't match expected value",
-                   "75056", dept.getChefLieu());
-      assertEquals("Entity doesn't match expected value",
-                   "0", dept.getTypeNomClair().getCode());
-      assertEquals("Entity doesn't match expected value",
-                   "PARIS", dept.getNomMajuscule());
-      assertEquals("Entity doesn't match expected value",
-                   "Paris", dept.getNomEnrichi());
-      assertNull("Entity doesn't match expected null value",
-                 dept.getArticleEnrichi());
-      assertNull("Entity doesn't match expected null value",
-                 dept.getCommentaire());
-      assertNull("Entity doesn't match expected null value",
-                 dept.getDebutValidite());
-      assertNull("Entity doesn't match expected null value",
-                 dept.getFinValidite());
-      assertNull("Entity doesn't match expected null value",
-                 dept.getAudit());
-    } catch (BindException e) {
-      fail("Mapper failed to parse test String with BindException: "
-           + e.getMessage());
+    Departement dept = mapper.mapFieldSet(fieldSet);
+    assertEquals("Entity doesn't match expected value",
+                 "DEP", dept.getTypeEntiteAdmin().getCode());
+    assertEquals("Entity doesn't match expected value",
+                 "11", dept.getRegion());
+    assertEquals("Entity doesn't match expected value",
+                 "75", dept.getCodeInsee());
+    assertEquals("Entity doesn't match expected value",
+                 "75056", dept.getChefLieu());
+    assertEquals("Entity doesn't match expected value",
+                 "0", dept.getTypeNomClair().getCode());
+    assertEquals("Entity doesn't match expected value",
+                 "PARIS", dept.getNomMajuscule());
+    assertEquals("Entity doesn't match expected value",
+                 "Paris", dept.getNomEnrichi());
+    assertNull("Entity doesn't match expected null value",
+               dept.getArticleEnrichi());
+    assertNull("Entity doesn't match expected null value",
+               dept.getCommentaire());
+    assertNull("Entity doesn't match expected null value",
+               dept.getDebutValidite());
+    assertNull("Entity doesn't match expected null value",
+               dept.getFinValidite());
+    assertNull("Entity doesn't match expected null value",
+               dept.getAudit());
+  }
+
+  /**
+   * Test mapping the whole Departement file to import.
+   * @throws Exception problem reading/mapping input file.
+   */
+  @Test
+  public void testMappingFile() throws Exception {
+    // Configure and open ItemReader (reading test input file)
+    FlatFileItemReader<Departement> reader = new FlatFileItemReader<>();
+    reader.setResource(new ClassPathResource("batchfiles/insee/depts2018.txt"));
+    reader.setLinesToSkip(1);
+    DelimitedLineTokenizer tokenizer = new DelimitedLineTokenizer();
+    tokenizer.setDelimiter("\t");
+    DepartementMapper mapper = new DepartementMapper();
+    mapper.setMetadataService(metadataService);
+    DefaultLineMapper<Departement> lineMapper = new DefaultLineMapper<>();
+    lineMapper.setFieldSetMapper(mapper);
+    lineMapper.setLineTokenizer(tokenizer);
+    reader.setLineMapper(lineMapper);
+    reader.afterPropertiesSet();
+    ExecutionContext ec = new ExecutionContext();
+    reader.open(ec);
+    // Configure Validator and validate (@Size, @Min, ...) each line
+    ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+    Validator validator = factory.getValidator();
+    Departement record;
+    Set<ConstraintViolation<Departement>> violations;
+    int i = 0;
+    while((record = reader.read()) != null) {
+      violations = validator.validate(record);
+      assertEquals("Record violates constraints", 0, violations.size());
+      i++;
     }
+    // Check all records from input file have been read
+    assertNull(record);
+    assertEquals(101, i);
   }
 }

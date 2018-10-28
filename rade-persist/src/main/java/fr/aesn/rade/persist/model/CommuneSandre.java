@@ -113,7 +113,6 @@ public class CommuneSandre implements Serializable {
   private String codeEuDistrict;
 
   /** Numéro de la circonscription administrative de bassin. */
-  @Size(max = 2)
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "CIRCONSCRIPTION_BASSIN", nullable = true)
   private CirconscriptionBassin circonscriptionBassin;

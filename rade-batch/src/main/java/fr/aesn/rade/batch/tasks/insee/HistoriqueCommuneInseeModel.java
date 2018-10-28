@@ -18,10 +18,14 @@
 package fr.aesn.rade.batch.tasks.insee;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import lombok.EqualsAndHashCode;
@@ -31,7 +35,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- * Model for the INSEE Commune History file.
+ * Model for an INSEE Commune History record.
  * 
  * Example file:
  * <code>
@@ -109,6 +113,7 @@ public class HistoriqueCommuneInseeModel implements Serializable {
   @Size(max = 43)
   private String dateJO;
 
+  @NotNull
   /** EFF - Date d'effet. */
   private Date dateEffet;
 
@@ -174,4 +179,99 @@ public class HistoriqueCommuneInseeModel implements Serializable {
   /** NCCANC - Ancien Nom. */
   @Size(max = 70)
   private String ancienNom;
+
+  /**
+   * Pair of INSEE Commune History records that are associated.
+   * @author Marc Gimpel (mgimpel@gmail.com)
+   */
+  @Getter @Setter @NoArgsConstructor
+  public static class Pair {
+    /** Parent INSEE Commune History record. */
+    private HistoriqueCommuneInseeModel parent;
+    /** Child INSEE Commune History record. */
+    private HistoriqueCommuneInseeModel enfant;
+    /**
+     * Pair is considered valid if the effective date of the change is the same
+     * and the Commune d'Echange (COMECH) field of one corresponds to the Code
+     * INSEE Commune of the other.
+     * @return true if valid, false otherwise.
+     */
+    public boolean isValid() {
+      return (parent != null && enfant != null
+        && parent.getCommuneEchange() != null
+        && enfant.getCommuneEchange() != null
+        && parent.getDateEffet().equals(enfant.getDateEffet())
+        && parent.getCommuneEchange().equals(enfant.getCodeDepartement()
+                                           + enfant.getCodeCommune())
+        && enfant.getCommuneEchange().equals(parent.getCodeDepartement()
+                                           + parent.getCodeCommune()));
+    }
+    /**
+     * Returns the effective date of the Pair, or null if the pair isn't valid.
+     * @return the effective date of the Pair, or null if the pair isn't valid.
+     */
+    public Date getDateEffet() {
+      return isValid() ? parent.getDateEffet() : null;
+    }
+  }
+
+  /**
+   * Set of INSEE Commune History Pairs that are associated into one Changeset.
+   * @author Marc Gimpel (mgimpel@gmail.com)
+   */
+  public static class Changeset {
+    /** Set of INSEE Commune History Pairs that make up the Changeset. */
+    public List<Pair> pairs;
+    /**
+     * Basic Constructor.
+     */
+    public Changeset() {
+      pairs = new ArrayList<>();
+    }
+    /**
+     * Append the given Pair to the end of the list.
+     * @param pair Pair to be appended to the end of the list.
+     */
+    public void add(Pair pair) {
+      pairs.add(pair);
+    }
+    /**
+     * Append all of the Pairs in the given collection to the end of the list.
+     * @param collection Pairs to be appended to the end of the list.
+     */
+    public void addAll(Collection<Pair> collection) {
+      pairs.addAll(collection);
+    }
+    /**
+     * Changeset is considered valid if all the Pairs are associated, in
+     * particular if they all have the same effective date, and their number
+     * all correspond to their NBCOM field.
+     * @return true if valid, false otherwise.
+     */
+    public boolean isValid() {
+      if (pairs.size() < 1) {
+        return false;
+      }
+      Date eff = pairs.get(0).getDateEffet();
+      Integer nbcom = pairs.get(0).getParent().getNombreCommunes();
+//      nbcom = (nbcom == null ? pairs.get(0).getEnfant().getNombreCommunes() : nbcom);
+      if (eff == null || nbcom == null) {
+        return false;
+      }
+      if (pairs.size() != nbcom 
+          && !pairs.get(0).getParent().getNomOfficiel().equals("Roche-sur-Yon")) {
+        // Le 25/08/1964 Saint-André-d'Ornay (85195) et Bourg-sous-la-Roche-sur-Yon (85032)
+        // ont fusionné avec Roche-sur-Yon (85191) mais tous les deux sont de rang=1 & nb=1
+        return false;
+      }
+      for (Pair pair : pairs) {
+        if (!pair.isValid()
+          || !eff.equals(pair.getDateEffet())
+          || !nbcom.equals(pair.getParent().getNombreCommunes())) {
+          return false;
+        }
+      }
+      return true;
+    }
+  }
 }
