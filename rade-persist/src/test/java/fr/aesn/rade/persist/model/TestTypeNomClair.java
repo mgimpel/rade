@@ -60,17 +60,17 @@ public class TestTypeNomClair extends AbstractTestEntity {
     TypeNomClair obj1 = new TypeNomClair();
     TypeNomClair obj2 = new TypeNomClair();
     obj1.setCode("8");;
-    obj1.setArticle("LOS");
+    obj1.setArticle("Los");
     obj1.setCharniere("DE LOS");
-    obj1.setArticleMaj(null);
+    obj1.setArticleMaj("LOS");
     obj2.setCode("8");
-    obj2.setArticle("LOS");
+    obj2.setArticle("Los");
     obj2.setCharniere("DE LOS");
-    obj2.setArticleMaj(null);
+    obj2.setArticleMaj("LOS");
     assertTrue("String should contain value", obj1.toString().contains(obj1.getCode()));
     assertTrue("String should contain value", obj1.toString().contains(obj1.getArticle()));
     assertTrue("String should contain value", obj1.toString().contains(obj1.getCharniere()));
-    assertTrue("String should contain value", obj1.toString().contains("null"));
+    assertTrue("String should contain value", obj1.toString().contains(obj1.getArticleMaj()));
     assertEquals("Object should be equal to itself", obj1, obj1);
     assertEquals("Identically created Objects are supposed to be equal", obj1, obj2);
     assertEquals("Identically created Objects are supposed to be equal", obj2, obj1);
@@ -92,11 +92,11 @@ public class TestTypeNomClair extends AbstractTestEntity {
     assertEquals("Hibernate returned a TypeNomClair, but the Code doesn't match",
                  "8", typeNomClair.getCode());
     assertEquals("Hibernate returned a TypeNomClair, but the Article doesn't match",
-                 "LOS", typeNomClair.getArticle());
+                 "Los", typeNomClair.getArticle());
     assertEquals("Hibernate returned a TypeNomClair, but the Charniere doesn't match",
                  "DE LOS", typeNomClair.getCharniere());
-    assertNull("Hibernate returned a TypeNomClair, but the Article Majuscule doesn't match",
-               typeNomClair.getArticleMaj());
+    assertEquals("Hibernate returned a TypeNomClair, but the Article Majuscule doesn't match",
+                 "LOS", typeNomClair.getArticleMaj());
   }
 
   /**

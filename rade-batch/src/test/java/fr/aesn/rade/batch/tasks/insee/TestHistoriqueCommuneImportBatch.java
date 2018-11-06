@@ -106,7 +106,7 @@ public class TestHistoriqueCommuneImportBatch {
     jobLauncherTestUtils = new JobLauncherTestUtils();
     jobLauncherTestUtils.setJobRepository(context.getBean("jobRepository", JobRepository.class));
     jobLauncherTestUtils.setJobLauncher(context.getBean("jobLauncher", JobLauncher.class));
-    jobLauncherTestUtils.setJob(context.getBean("importCommuneInseeJob", Job.class));
+    jobLauncherTestUtils.setJob(context.getBean("importCommuneSimpleInseeJob", Job.class));
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     JobParametersBuilder jobBuilder = new JobParametersBuilder();
     jobBuilder.addString("inputFile", "classpath:batchfiles/insee/comsimp2017.txt");
@@ -145,8 +145,8 @@ public class TestHistoriqueCommuneImportBatch {
     JobExecution jobExecution = jobLauncherTestUtils.launchJob(jobParameters);
     assertEquals(BatchStatus.COMPLETED, jobExecution.getStatus());
     assertEquals("The batch imported the wrong number of lines",
-                 initialSizeAll + 16, communeJpaDao.findAll().size());
+                 initialSizeAll + 16 + 2, communeJpaDao.findAll().size());
     assertEquals("Changing Names should not change the number of Valid Communes on any given date",
-                 initialSizeValid, communeJpaDao.findAllValidOnDate(sdf.parse("2018-01-01")).size());
+                 initialSizeValid + 1, communeJpaDao.findAllValidOnDate(sdf.parse("2018-01-01")).size());
   }
 }

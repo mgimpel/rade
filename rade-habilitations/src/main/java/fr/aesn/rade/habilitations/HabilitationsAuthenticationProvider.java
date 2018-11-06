@@ -21,8 +21,6 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -35,6 +33,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import fr.aesn.rade.habilitations.ws.HabilitationException;
 import fr.aesn.rade.habilitations.ws.HabilitationsUtilisateurSrv;
 import fr.aesn.rade.habilitations.ws.RoleBean;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Custom AuthenticationProvider for Spring Security that queries the AESN
@@ -58,13 +58,11 @@ import fr.aesn.rade.habilitations.ws.RoleBean;
  *
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
+@Slf4j
 public class HabilitationsAuthenticationProvider
   extends AbstractUserDetailsAuthenticationProvider {
-  /** SLF4J Logger. */
-  private static final Logger log =
-    LoggerFactory.getLogger(HabilitationsAuthenticationProvider.class);
-
   /** The WebService Stub that queries the Habilitations server. */
+  @Setter
   private HabilitationsUtilisateurSrv habilitationsService;
 
   /**
@@ -191,13 +189,5 @@ public class HabilitationsAuthenticationProvider
       throw new AuthenticationServiceException("Unable to authenticate user "
                                                + name, e);
     }
-  }
-
-  /**
-   * Sets the WebService Stub to be used by this AuthenticationProvider.
-   * @param service The WebService Stub that queries the Habilitations server.
-   */
-  public void setHabilitationsService(HabilitationsUtilisateurSrv service) {
-    this.habilitationsService = service;
   }
 }

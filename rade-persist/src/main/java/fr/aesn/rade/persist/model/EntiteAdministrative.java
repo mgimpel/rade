@@ -54,7 +54,7 @@ import lombok.ToString;
  *   ARTICLE_ENRICHI   varchar(5),
  *   NOM_MAJUSCULE     varchar(70)   NOT NULL,
  *   NOM_ENRICHI       varchar(70)   NOT NULL,
- *   COMMENTAIRE       varchar(4000) NOT NULL,
+ *   COMMENTAIRE       varchar(4000),
  *   TYPE_NOM_CLAIR    varchar(1),
  *   TYPE_ENTITE_ADMIN varchar(3)    NOT NULL,
  *   AUDIT_ID          integer       NOT NULL,
@@ -109,7 +109,7 @@ public class EntiteAdministrative implements Serializable {
 
   /** Commentaire. */
   @Size(max = 4000)
-  @Column(name = "COMMENTAIRE", length = 4000, nullable = false)
+  @Column(name = "COMMENTAIRE", length = 4000, nullable = true)
   private String commentaire;
 
   /** Type de Nom Clair (TNCC) de l'entité. */

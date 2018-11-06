@@ -98,36 +98,126 @@ public interface CommuneService {
   /**
    * Changes the name (MOD=100 : Changement de Nom) of the Commune with the
    * given CodeInsee effective as of the given Date.
-   * @param codeInsee the code of Commune to change.
    * @param dateEffective the date that the change takes effect.
+   * @param audit audit details about change.
+   * @param codeInsee the code of Commune to change.
    * @param tnccoff the type of the official new name.
    * @param nccoff the official new name.
-   * @param audit audit details about change.
    * @param commentaire comment for the genealogie link.
    * @return the new Commune.
    * @throws InvalidArgumentException if an invalid argument has been passed.
    */
-  public Commune mod100ChangementdeNom(String codeInsee, Date dateEffective,
-                                       String tnccoff, String nccoff,
-                                       Audit audit, String commentaire)
+  public Commune mod100ChangementdeNom(Date dateEffective, Audit audit,
+                                       String codeInsee, String tnccoff,
+                                       String nccoff, String commentaire)
     throws InvalidArgumentException;
 
   /**
    * Creates (MOD=200 : Creation) a new Commune with the given CodeInsee and
    * details, effective as of the given Date.
-   * @param codeInsee the code of the new Commune.
    * @param dateEffective the date that the change takes effect.
+   * @param audit audit details about change.
+   * @param codeInsee the code of the new Commune.
    * @param departement the departement to which the new Commune belongs.
    * @param tnccoff the type of the official name.
    * @param nccoff the official name.
-   * @param audit audit details about change.
    * @param commentaire comment for the new Commune.
    * @return the new Commune.
    * @throws InvalidArgumentException if an invalid argument has been passed.
    */
-  public Commune mod200Creation(String codeInsee, Date dateEffective,
-                                String departement,
+  public Commune mod200Creation(Date dateEffective, Audit audit,
+                                String codeInsee, String departement,
                                 String tnccoff, String nccoff,
-                                Audit audit, String commentaire)
+                                String commentaire)
+    throws InvalidArgumentException;
+
+  /**
+   * Recreates (MOD=210 : Retablissement, MOD=230 : Commune se separant) the
+   * given Commune from the given source Commune, effective as of the given
+   * Date.
+   * @param dateEffective the date that the change takes effect.
+   * @param audit audit details about change.
+   * @param com210retabli the new Commune.
+   * @param com230source the source Commune.
+   * @param commentaire comment for the genealogie link.
+   * @throws InvalidArgumentException if an invalid argument has been passed.
+   */
+  public void mod210x230Retablissement(Date dateEffective, Audit audit,
+                                       Commune com210retabli,
+                                       Commune com230source,
+                                       String commentaire)
+    throws InvalidArgumentException;
+
+  /**
+   * Merges (MOD=310 : Fusion Commune absorbe, MOD=320 : Fusion Commune
+   * absorbante) the given Communes, effective as of the given Date.
+   * @param dateEffective the date that the change takes effect.
+   * @param audit audit details about change.
+   * @param com310absorbe list of absorbed Commune.
+   * @param com320absorbant the absorbing Commune.
+   * @param commentaire comment for the genealogie link.
+   * @throws InvalidArgumentException if an invalid argument has been passed.
+   */
+  public void mod310x320Fusion(Date dateEffective, Audit audit,
+                               List<Commune> com310absorbe,
+                               Commune com320absorbant,
+                               String commentaire)
+    throws InvalidArgumentException;
+
+  /**
+   * Merges (MOD=330 : Fusion-association Commune associee, MOD=340 : Fusion-
+   * association Commune absorbante) the given Communes, effective as of the
+   * given Date.
+   * @param dateEffective the date that the change takes effect.
+   * @param audit audit details about change.
+   * @param com330associe list of absorbed Commune.
+   * @param com340absorbant the absorbing Commune.
+   * @param commentaire comment for the genealogie link.
+   * @throws InvalidArgumentException if an invalid argument has been passed.
+   */
+  public void mod330x340FusionAssociation(Date dateEffective, Audit audit,
+                                          List<Commune> com330associe,
+                                          Commune com340absorbant,
+                                          String commentaire)
+    throws InvalidArgumentException;
+
+  /**
+   * Merges (MOD=311 : Commune nouvelle non deleguee, MOD=321 : Commune
+   * nouvelle sans deleguee) the given Communes, effective as of the given
+   * Date.
+   * @param dateEffective the date that the change takes effect.
+   * @param audit audit details about change.
+   * @param com311 list of absorbed Commune.
+   * @param com321nouvelle the new/absorbing Commune.
+   * @param commentaire comment for the genealogie link.
+   * @throws InvalidArgumentException if an invalid argument has been passed.
+   */
+  public void mod311x321FusionSansDeleguee(Date dateEffective, Audit audit,
+                                           List<Commune> com311,
+                                           Commune com321nouvelle,
+                                           String commentaire)
+    throws InvalidArgumentException;
+
+  /**
+   * Merges (MOD=331,332,333,311,312 : Commune absorbe, MOD=341 : Commune
+   * nouvelle avec deleguee) the given Communes, effective as of the given
+   * Date.
+   * @param dateEffective the date that the change takes effect.
+   * @param audit audit details about change.
+   * @param com331x332x333 list of absorbed Commune.
+   * @param com341nouvelle the new/absorbing Commune.
+   * @param commentaire comment for the genealogie link.
+   * @throws InvalidArgumentException if an invalid argument has been passed.
+   */
+  public void mod331x332x333x341FusionAvecDeleguee(Date dateEffective, Audit audit,
+                                                   List<Commune> com331x332x333,
+                                                   Commune com341nouvelle,
+                                                   String commentaire)
+    throws InvalidArgumentException;
+
+  public void mod350x360FusionAssociationSimple(Date dateEffective, Audit audit)
+    throws InvalidArgumentException;
+
+  public void mod351CommuneNouvelle(Date dateEffective, Audit audit)
     throws InvalidArgumentException;
 }

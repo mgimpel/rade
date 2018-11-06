@@ -37,6 +37,7 @@ import fr.aesn.rade.common.InvalidArgumentException;
 import fr.aesn.rade.persist.model.Audit;
 import fr.aesn.rade.service.AuditService;
 import fr.aesn.rade.service.CommuneService;
+import fr.aesn.rade.service.MetadataService;
 import lombok.Setter;
 
 /**
@@ -55,6 +56,9 @@ public class HistoriqueCommuneInseeTasklet
   /** Service for Commune. */
   @Autowired @Setter
   private CommuneService communeService;
+  /** Service for Metadata. */
+  @Autowired @Setter
+  private MetadataService metadataService;
   /** */
   private HistoriqueCommuneInseeImportRules rules;
 
@@ -88,6 +92,7 @@ public class HistoriqueCommuneInseeTasklet
     // Set ImportRules
     rules = new HistoriqueCommuneInseeImportRules();
     rules.setCommuneService(communeService);
+    rules.setMetadataService(metadataService);
     rules.setBatchAudit(batchAudit);
     // Get other Job Parameters
     JobParameters params = stepExecution.getJobParameters();

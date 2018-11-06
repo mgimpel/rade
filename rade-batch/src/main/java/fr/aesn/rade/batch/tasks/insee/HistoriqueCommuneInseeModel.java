@@ -220,8 +220,8 @@ public class HistoriqueCommuneInseeModel implements Serializable {
     }
 
     /**
-     * Returns the effective date of the Pair, or null if the pair isn't valid.
-     * @return the effective date of the Pair, or null if the pair isn't valid.
+     * Returns the effective date of the Pair, or null if the Pair isn't valid.
+     * @return the effective date of the Pair, or null if the Pair isn't valid.
      */
     public Date getDateEffet() {
       return isValid() ? parent.getDateEffet() : null;
@@ -281,6 +281,14 @@ public class HistoriqueCommuneInseeModel implements Serializable {
         }
       }
       return true;
+    }
+
+    /**
+     * Returns the effective date of the Set, or null if the Set isn't valid.
+     * @return the effective date of the Set, or null if the Set isn't valid.
+     */
+    public Date getDateEffet() {
+      return isValid() ? pairs.get(0).getDateEffet() : null;
     }
   }
 }

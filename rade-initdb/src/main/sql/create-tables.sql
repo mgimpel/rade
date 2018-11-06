@@ -162,7 +162,7 @@ CREATE TABLE ZR_ENTITEADMIN (
   ARTICLE_ENRICHI   varchar(5),
   NOM_MAJUSCULE     varchar(70)   NOT NULL,
   NOM_ENRICHI       varchar(70)   NOT NULL,
-  COMMENTAIRE       varchar(4000) NOT NULL,
+  COMMENTAIRE       varchar(4000),
   TYPE_NOM_CLAIR    varchar(1),
   TYPE_ENTITE_ADMIN varchar(3)    NOT NULL,
   AUDIT_ID          integer       NOT NULL,
@@ -223,10 +223,7 @@ CREATE TABLE ZR_COMMUNE (
   ID           integer     NOT NULL PRIMARY KEY,
   CODE         varchar(10) NOT NULL,
   DEPT         varchar(3)  NOT NULL,
-  BASSIN       varchar(2)  NOT NULL,
-  URBAIN_RURAL varchar(1)  NOT NULL,
 --  FOREIGN KEY(DEPT)   REFERENCES ZR_DEPT,
-  FOREIGN KEY(BASSIN) REFERENCES ZR_BASSIN,
   FOREIGN KEY(ID)     REFERENCES ZR_ENTITEADMIN
 );
 /*
@@ -290,4 +287,47 @@ CREATE TABLE ZR_EVENEMENT (
 /*
 COMMENT ON TABLE ZR_EVENEMENT IS
   'Entité [EVENEMENT COMMUNE A CONTROLER]';
+*/
+-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - --
+-- ZR_COMMUNESANDRE : Référentiel des Communes associées à leur circonscription bassin
+-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - --
+CREATE TABLE ZR_COMMUNESANDRE (
+  CODE_COMMUNE           varchar(5)  NOT NULL PRIMARY KEY,
+  LIBELLE_COMMUNE        varchar(45) NOT NULL,
+  STATUT_COMMUNE         varchar(20) NOT NULL,
+  DATE_CREATION_COMMUNE  date,
+  DATE_MAJ_COMMUNE       date        NOT NULL,
+  CODE_BASSIN_DCE        varchar(2)  NOT NULL,
+  CODE_EU_DISTRICT       varchar(24) NOT NULL,
+  CIRCONSCRIPTION_BASSIN varchar(2)  NOT NULL,
+  CODE_COMITE_BASSIN     varchar(8)  NOT NULL,
+  AUDIT_ID               integer     NOT NULL,
+  FOREIGN KEY(CIRCONSCRIPTION_BASSIN) REFERENCES ZR_BASSIN,
+  FOREIGN KEY(AUDIT_ID)               REFERENCES ZR_AUDIT
+);
+/*
+COMMENT ON TABLE ZR_COMMUNESANDRE IS
+  'Entité [COMMUNE SANDRE]';
+*/
+-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - --
+-- ZR_HEXAPOSTE : Référentiel des codes postaux et des codes CEDEX de France
+-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - --
+CREATE TABLE ZR_HEXAPOSTE (
+  IDENTIFIANT                  varchar(6)  NOT NULL PRIMARY KEY,
+  CODE_INSEE_COMMUNE           varchar(5),
+  LIBELLE_COMMUNE              varchar(38),
+  INDICATEUR_PLURIDISTRIBUTION integer     NOT NULL,
+  TYPE_CODE_POSTALE            varchar(1)  NOT NULL,
+  LIBELLE_LIGNE5               varchar(38),
+  CODE_POSTALE                 varchar(5)  NOT NULL,
+  LIBELLE_ACHEMINEMENT         varchar(32) NOT NULL,
+  CODE_INSEE_ANCIENNE_COMMUNE  varchar(5),
+  CODE_MAJ                     varchar(1),
+  CODE_ETENDU_ADRESSE          varchar(10),
+  AUDIT_ID                     integer     NOT NULL,
+  FOREIGN KEY(AUDIT_ID) REFERENCES ZR_AUDIT
+);
+/*
+COMMENT ON TABLE ZR_HEXAPOSTE IS
+  'Entité [HEXAPOSTE]';
 */

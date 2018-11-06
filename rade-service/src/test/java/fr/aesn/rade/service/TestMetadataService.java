@@ -219,11 +219,11 @@ public class TestMetadataService
     assertEquals("Hibernate returned a TypeNomClair, but the Code doesn't match",
                  "8", typeNomClair.getCode());
     assertEquals("Hibernate returned a TypeNomClair, but the Article doesn't match",
-                 "LOS", typeNomClair.getArticle());
+                 "Los", typeNomClair.getArticle());
     assertEquals("Hibernate returned a TypeNomClair, but the Charniere doesn't match",
                  "DE LOS", typeNomClair.getCharniere());
-    assertNull("Hibernate returned a TypeNomClair, but the Article Majuscule doesn't match",
-               typeNomClair.getArticleMaj());
+    assertEquals("Hibernate returned a TypeNomClair, but the Article Majuscule doesn't match",
+                 "LOS", typeNomClair.getArticleMaj());
   }
 
   /**

@@ -31,7 +31,9 @@ import org.slf4j.LoggerFactory;
 
 import fr.aesn.rade.common.InvalidArgumentException;
 import fr.aesn.rade.persist.model.Audit;
+import fr.aesn.rade.persist.model.Commune;
 import fr.aesn.rade.service.CommuneService;
+import fr.aesn.rade.service.MetadataService;
 import lombok.Setter;
 
 /**
@@ -185,6 +187,9 @@ public class HistoriqueCommuneInseeImportRules {
   /** Service for Commune. */
   @Setter
   private CommuneService communeService;
+  /** Service for Metadata. */
+  @Setter
+  private MetadataService metadataService;
   /** Audit details to add to Entity. */
   @Setter
   private Audit batchAudit;
@@ -260,11 +265,11 @@ public class HistoriqueCommuneInseeImportRules {
     for (HistoriqueCommuneInseeModel historique : list) {
       log.trace("Processing elements: {}", historique);
       assert "100".equals(historique.getTypeModification()) : historique.getTypeModification();
-      communeService.mod100ChangementdeNom(historique.getCodeDepartement() + historique.getCodeCommune(),
-                                           historique.getDateEffet(),
+      communeService.mod100ChangementdeNom(historique.getDateEffet(),
+                                           batchAudit,
+                                           historique.getCodeDepartement() + historique.getCodeCommune(),
                                            historique.getTypeNomClair(),
                                            historique.getNomOfficiel(),
-                                           batchAudit,
                                            "");
     }
   }
@@ -276,94 +281,182 @@ public class HistoriqueCommuneInseeImportRules {
     for (HistoriqueCommuneInseeModel historique : list) {
       log.trace("Processing element: {}", historique);
       assert "200".equals(historique.getTypeModification()) : historique.getTypeModification();
-      communeService.mod200Creation(historique.getCodeDepartement() + historique.getCodeCommune(),
-                                    historique.getDateEffet(),
+      communeService.mod200Creation(historique.getDateEffet(),
+                                    batchAudit,
+                                    historique.getCodeDepartement() + historique.getCodeCommune(),
                                     historique.getCodeDepartement(),
                                     historique.getTypeNomClair(),
                                     historique.getNomOfficiel(),
-                                    batchAudit,
                                     "");
     }
   }
 
-  public void processMod210x230(final List<HistoriqueCommuneInseeModel> fullList) {
+  public void processMod210x230(final List<HistoriqueCommuneInseeModel> fullList)
+    throws InvalidArgumentException {
     List<HistoriqueCommuneInseeModel.Pair> pairList = buildMod210x230list(fullList);
     log.debug("Processing MOD 210 & 230, # of pairs: {}", pairList.size());
     for (HistoriqueCommuneInseeModel.Pair pair : pairList) {
       log.trace("Processing pair: {}", pair);
       assert pair.isValid();
-      //TODO
-      //communeService.mod210x230(pair);
+      assert "210".equals(pair.getEnfant().getTypeModification()) : pair.getEnfant().getTypeModification();
+      assert "230".equals(pair.getParent().getTypeModification()) : pair.getParent().getTypeModification();
+      Commune com210retabli = buildCommune(pair.getEnfant());
+      Commune com230source = buildCommune(pair.getParent());
+      communeService.mod210x230Retablissement(pair.getDateEffet(),
+                                              batchAudit,
+                                              com210retabli,
+                                              com230source,
+                                              null);
     }
   }
 
-  public void processMod310x320(final List<HistoriqueCommuneInseeModel> fullList) {
+  public void processMod310x320(final List<HistoriqueCommuneInseeModel> fullList)
+    throws InvalidArgumentException {
     List<HistoriqueCommuneInseeModel.Changeset> setList = buildMod310x320set(buildMod310x320list(fullList));
     log.debug("Processing MOD 310 & 320, # of sets: {}", setList.size());
     for (HistoriqueCommuneInseeModel.Changeset set : setList) {
       log.trace("Processing set: {}", set);
       assert set.isValid();
-      //TODO
-      //communeService.mod310x320(set);
+      for(HistoriqueCommuneInseeModel.Pair pair : set.getPairs()) {
+        assert "310".equals(pair.getEnfant().getTypeModification()) : pair.getEnfant().getTypeModification();
+        assert "320".equals(pair.getParent().getTypeModification()) : pair.getParent().getTypeModification();
+      }
+      List<Commune> com310absorbe = buildCommuneList(buildEnfantList(set));
+      Commune com320absorbant = buildCommune(set.getPairs().get(0).getParent()); //TODO verify all parents have the same details
+      communeService.mod310x320Fusion(set.getDateEffet(),
+                                      batchAudit,
+                                      com310absorbe,
+                                      com320absorbant,
+                                      null);
     }
   }
 
-  public void processMod330x340(final List<HistoriqueCommuneInseeModel> fullList) {
+  public void processMod330x340(final List<HistoriqueCommuneInseeModel> fullList)
+    throws InvalidArgumentException {
     List<HistoriqueCommuneInseeModel.Changeset> setList = buildMod330x340set(buildMod330x340list(fullList));
     log.debug("Processing MOD 330 & 340, # of sets: {}", setList.size());
     for (HistoriqueCommuneInseeModel.Changeset set : setList) {
       log.trace("Processing set: {}", set);
       assert set.isValid();
-      //TODO
-      //communeService.mod330x340(set);
+      for(HistoriqueCommuneInseeModel.Pair pair : set.getPairs()) {
+        assert "330".equals(pair.getEnfant().getTypeModification()) : pair.getEnfant().getTypeModification();
+        assert "340".equals(pair.getParent().getTypeModification()) : pair.getParent().getTypeModification();
+      }
+      List<Commune> com330associe = buildCommuneList(buildEnfantList(set));
+      Commune com340absorbant = buildCommune(set.getPairs().get(0).getParent()); //TODO verify all parents have the same details
+      communeService.mod330x340FusionAssociation(set.getDateEffet(),
+                                                 batchAudit,
+                                                 com330associe,
+                                                 com340absorbant,
+                                                 null);
     }
   }
 
-  public void processMod311x321and331x332x333x341(final List<HistoriqueCommuneInseeModel> fullList) {
+  public void processMod311x321and331x332x333x341(final List<HistoriqueCommuneInseeModel> fullList)
+    throws InvalidArgumentException {
     Pair<List<HistoriqueCommuneInseeModel.Pair>, List<HistoriqueCommuneInseeModel.Pair>> lists = buildMod311x321and331x332x333x341list(fullList);
     processMod311x321(buildMod311x321set(lists.getLeft()));
     processMod331x332x333x341(buildMod331x332x333x341set(lists.getRight()));
   }
 
-  private void processMod311x321(final List<HistoriqueCommuneInseeModel.Changeset> setList) {
+  private void processMod311x321(final List<HistoriqueCommuneInseeModel.Changeset> setList)
+    throws InvalidArgumentException {
     log.debug("Processing MOD 311 & 321, # of sets: {}", setList.size());
     for (HistoriqueCommuneInseeModel.Changeset set : setList) {
       log.trace("Processing set: {}", set);
       assert set.isValid();
-      //TODO
-      //communeService.mod311x321(set);
+      for(HistoriqueCommuneInseeModel.Pair pair : set.getPairs()) {
+        assert "311".equals(pair.getEnfant().getTypeModification()) : pair.getEnfant().getTypeModification();
+        assert "321".equals(pair.getParent().getTypeModification()) : pair.getParent().getTypeModification();
+      }
+      List<Commune> com311 = buildCommuneList(buildEnfantList(set));
+      Commune com321nouvelle = buildCommune(set.getPairs().get(0).getParent()); //TODO verify all parents have the same details
+      communeService.mod311x321FusionSansDeleguee(set.getDateEffet(),
+                                                  batchAudit,
+                                                  com311,
+                                                  com321nouvelle,
+                                                  null);
     }
   }
 
-  private void processMod331x332x333x341(final List<HistoriqueCommuneInseeModel.Changeset> setList) {
+  private void processMod331x332x333x341(final List<HistoriqueCommuneInseeModel.Changeset> setList)
+    throws InvalidArgumentException {
     log.debug("Processing MOD 331 & 332 & 333 & 341, # of sets: {}", setList.size());
     for (HistoriqueCommuneInseeModel.Changeset set : setList) {
       log.trace("Processing set: {}", set);
       assert set.isValid();
-      //TODO
-      //communeService.mod331x332x333x341(set);
+      for(HistoriqueCommuneInseeModel.Pair pair : set.getPairs()) {
+        assert "341".equals(pair.getParent().getTypeModification()) : pair.getParent().getTypeModification();
+      }
+      List<Commune> com331x332x333 = buildCommuneList(buildEnfantList(set));
+      Commune com341nouvelle = buildCommune(set.getPairs().get(0).getParent()); //TODO verify all parents have the same details
+      communeService.mod331x332x333x341FusionAvecDeleguee(set.getDateEffet(),
+                                                          batchAudit,
+                                                          com331x332x333,
+                                                          com341nouvelle,
+                                                          null);
     }
   }
 
-  public void processMod350x360(final List<HistoriqueCommuneInseeModel> fullList) {
+  public void processMod350x360(final List<HistoriqueCommuneInseeModel> fullList)
+    throws InvalidArgumentException {
     List<HistoriqueCommuneInseeModel.Pair> pairList = buildMod350x360list(fullList);
     log.debug("Processing MOD 350 & 360, # of pairs: {}", pairList.size());
     for (HistoriqueCommuneInseeModel.Pair pair : pairList) {
       log.trace("Processing pair: {}", pair);
       assert pair.isValid();
+      assert "350".equals(pair.getEnfant().getTypeModification()) : pair.getEnfant().getTypeModification();
+      assert "360".equals(pair.getParent().getTypeModification()) : pair.getParent().getTypeModification();
       //TODO
-      //communeService.mod350x360(pair);
+      communeService.mod350x360FusionAssociationSimple(pair.getDateEffet(),
+                                                       batchAudit);
     }
   }
 
-  public void processMod351(final List<HistoriqueCommuneInseeModel> fullList) {
+  public void processMod351(final List<HistoriqueCommuneInseeModel> fullList)
+    throws InvalidArgumentException {
     List<HistoriqueCommuneInseeModel> list = buildMod351list(fullList);
     log.debug("Processing MOD 100, # of elements: {}", list.size());
     for (HistoriqueCommuneInseeModel historique : list) {
       log.trace("Processing element: {}", historique);
+      assert "351".equals(historique.getTypeModification()) : historique.getTypeModification();
       //TODO
-      //communeService.mod351(record);
+      communeService.mod351CommuneNouvelle(historique.getDateEffet(),
+                                           batchAudit);
     }
+  }
+
+  private Commune buildCommune(HistoriqueCommuneInseeModel historique) {
+    Commune commune = new Commune();
+    commune.setTypeEntiteAdmin(metadataService.getTypeEntiteAdmin("COM"));
+    commune.setCodeInsee(historique.getCodeDepartement() + historique.getCodeCommune());
+    commune.setDepartement(historique.getCodeDepartement());
+    commune.setTypeNomClair(metadataService.getTypeNomClair(historique.getTypeNomClair()));
+    commune.setNomEnrichi(historique.getNomOfficiel());
+    commune.setDebutValidite(historique.getDateEffet());
+    return commune;
+  }
+
+  private List<Commune> buildCommuneList(List<HistoriqueCommuneInseeModel> historiqueList) {
+    List<Commune> list = new ArrayList<>(historiqueList.size());
+    for (HistoriqueCommuneInseeModel historique : historiqueList) {
+      list.add(buildCommune(historique));
+    }
+    return list;
+  }
+
+  /**
+   * Build a list of all the children in the changeset.
+   * @param set the changeset.
+   * @return a list of all the children in the changeset.
+   */
+  private List<HistoriqueCommuneInseeModel> buildEnfantList(HistoriqueCommuneInseeModel.Changeset set) {
+    List<HistoriqueCommuneInseeModel.Pair> pairs = set.getPairs();
+    List<HistoriqueCommuneInseeModel> parents = new ArrayList<>(pairs.size());
+    for (HistoriqueCommuneInseeModel.Pair pair : pairs) {
+      parents.add(pair.getEnfant());
+    }
+  return parents;
   }
 
   public static final List<HistoriqueCommuneInseeModel> buildMod100list(final List<HistoriqueCommuneInseeModel> list) {

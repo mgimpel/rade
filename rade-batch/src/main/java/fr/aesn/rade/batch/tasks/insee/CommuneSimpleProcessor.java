@@ -37,12 +37,12 @@ import lombok.Setter;
  * Entity (Audit details, Date of beginning of Validity, ...).
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
-public class CommuneProcessor
+public class CommuneSimpleProcessor
   extends EntiteAdminProcessor {
 
   /** SLF4J Logger. */
   private static final Logger log =
-    LoggerFactory.getLogger(CommuneProcessor.class);
+    LoggerFactory.getLogger(CommuneSimpleProcessor.class);
   /** Service for Commune. */
   @Autowired @Setter
   private CommuneService communeService;

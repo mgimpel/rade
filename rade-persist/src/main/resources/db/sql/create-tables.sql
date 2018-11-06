@@ -162,7 +162,7 @@ CREATE TABLE ZR_ENTITEADMIN (
   ARTICLE_ENRICHI   varchar(5),
   NOM_MAJUSCULE     varchar(70)   NOT NULL,
   NOM_ENRICHI       varchar(70)   NOT NULL,
-  COMMENTAIRE       varchar(4000) NOT NULL,
+  COMMENTAIRE       varchar(4000),
   TYPE_NOM_CLAIR    varchar(1),
   TYPE_ENTITE_ADMIN varchar(3)    NOT NULL,
   AUDIT_ID          integer       NOT NULL,

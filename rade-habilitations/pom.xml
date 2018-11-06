@@ -73,10 +73,14 @@
   </build>
 
   <dependencies>
-    <!-- Spring Security -->
+    <!-- Spring -->
     <dependency>
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-web</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-actuator</artifactId>
     </dependency>
     <!-- Apache Axis 1 -->
     <dependency>

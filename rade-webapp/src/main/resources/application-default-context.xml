@@ -168,6 +168,9 @@
   <bean id="authenticationProvider"
         class="fr.aesn.rade.habilitations.HabilitationsAuthenticationProvider"
         p:habilitationsService-ref="habilitationsService"/>
+  <bean id="habilitationsHealthIndicator"
+        class="fr.aesn.rade.habilitations.HabilitationsHealthIndicator"
+        p:factory-ref="habilitationsServiceFactory"/>
 -->
 
   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->

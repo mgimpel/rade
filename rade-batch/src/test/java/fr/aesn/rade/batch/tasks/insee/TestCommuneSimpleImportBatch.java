@@ -55,7 +55,7 @@ import fr.aesn.rade.persist.model.Commune;
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-public class TestCommuneImportBatch {
+public class TestCommuneSimpleImportBatch {
   /** Static Spring Configuration. */
   @Configuration
   @ImportResource(locations = "classpath*:batch-job-insee.xml")
@@ -107,7 +107,7 @@ public class TestCommuneImportBatch {
     jobLauncherTestUtils = new JobLauncherTestUtils();
     jobLauncherTestUtils.setJobRepository(context.getBean("jobRepository", JobRepository.class));
     jobLauncherTestUtils.setJobLauncher(context.getBean("jobLauncher", JobLauncher.class));
-    jobLauncherTestUtils.setJob(context.getBean("importCommuneInseeJob", Job.class));
+    jobLauncherTestUtils.setJob(context.getBean("importCommuneSimpleInseeJob", Job.class));
   }
 
   /**

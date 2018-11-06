@@ -68,14 +68,14 @@
   </bean>
 
   <!-- ItemReader which reads data from INSEE commune file -->
-  <bean id="communeItemReader" scope="step"
+  <bean id="communeSimpleItemReader" scope="step"
         class="org.springframework.batch.item.file.FlatFileItemReader">
     <property name="resource" value="#{jobParameters['inputFile']}"/>
     <property name="linesToSkip" value="1"/>
     <property name="lineMapper">
       <bean class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
         <property name="fieldSetMapper">
-          <bean class="fr.aesn.rade.batch.tasks.insee.CommuneMapper"/>
+          <bean class="fr.aesn.rade.batch.tasks.insee.CommuneSimpleMapper"/>
         </property>
         <property name="lineTokenizer">
           <bean class="org.springframework.batch.item.file.transform.DelimitedLineTokenizer"
@@ -139,8 +139,8 @@
         class="fr.aesn.rade.batch.tasks.insee.DepartementProcessor"/>
 
   <!-- ItemProcessor which processes the data (adds Audit details) -->
-  <bean id="communeItemProcessor" scope="step"
-        class="fr.aesn.rade.batch.tasks.insee.CommuneProcessor"/>
+  <bean id="communeSimpleItemProcessor" scope="step"
+        class="fr.aesn.rade.batch.tasks.insee.CommuneSimpleProcessor"/>
 
   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
   <!-- Tasklets -->
@@ -179,11 +179,11 @@
   </batch:job>
 
   <!-- The Commune INSEE Full Import Job -->
-  <batch:job id="importCommuneInseeJob">
-    <batch:step id="importCommuneInseeStep1">
+  <batch:job id="importCommuneSimpleInseeJob">
+    <batch:step id="importCommuneSimpleInseeStep1">
       <batch:tasklet>
-        <batch:chunk reader="communeItemReader"
-                     processor="communeItemProcessor"
+        <batch:chunk reader="communeSimpleItemReader"
+                     processor="communeSimpleItemProcessor"
                      writer="jpaItemWriter"
                      commit-interval="100"/>
       </batch:tasklet>

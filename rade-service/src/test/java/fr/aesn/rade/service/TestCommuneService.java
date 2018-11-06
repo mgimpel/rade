@@ -266,7 +266,7 @@ public class TestCommuneService
     genealogie = commune.getEnfants();
     assertEquals(0, genealogie.size());
     // Modify the Commune and test it's new values
-    Commune newCommune = service.mod100ChangementdeNom("97105", sdf.parse("2018-06-01"), "0", "Basse-Terre 2", commune.getAudit(), null);
+    Commune newCommune = service.mod100ChangementdeNom(sdf.parse("2018-06-01"), commune.getAudit(), "97105", "0", "Basse-Terre 2", null);
     assertNotNull("Hibernate didn't return a Commune", newCommune);
     assertNotEquals("Hibernate returned a Commune, but the Id doesn't match",
                     135233, newCommune.getId().intValue());
@@ -315,7 +315,7 @@ public class TestCommuneService
   public void testMod200() throws ParseException, InvalidArgumentException {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     Audit audit = service.getCommuneById(135233).getAudit(); // re-use existing Audit
-    Commune newCommune = service.mod200Creation("01999", sdf.parse("2019-01-01"), "01", "0", "Nouvelle Commune", audit, null);
+    Commune newCommune = service.mod200Creation(sdf.parse("2019-01-01"), audit, "01999", "01", "0", "Nouvelle Commune", null);
     Commune commune;
     commune = service.getCommuneByCode("01999", "2018-01-01");
     assertNull(commune);

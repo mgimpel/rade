@@ -19,11 +19,11 @@ package fr.aesn.rade.habilitations;
 
 import javax.xml.rpc.ServiceException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import fr.aesn.rade.habilitations.ws.HabilitationsUtilisateurSrv;
 import fr.aesn.rade.habilitations.ws.HabilitationsUtilisateurSrvServiceLocator;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Factory That builds and returns the Habilitations WebService.
@@ -33,16 +33,14 @@ import fr.aesn.rade.habilitations.ws.HabilitationsUtilisateurSrvServiceLocator;
  * Maven during the build process.
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
+@Slf4j
 public class HabilitationsServiceFactory {
-  /** SLF4J Logger. */
-  private static final Logger log =
-    LoggerFactory.getLogger(HabilitationsServiceFactory.class);
-
   /** Default URL for Habilitations WebService. */
   public static final String DEFAULT_HOMOLOGATION_URL =
     "http://localhost:8080/Habilitations/services/HabilitationsUtilisateurService?wsdl";
 
   /** URL for Habilitations WebService. */
+  @Getter @Setter
   private String habilitationsWsdlUrl = DEFAULT_HOMOLOGATION_URL;
 
   /** The Habilitation WebService that this factory provides. */
@@ -51,6 +49,9 @@ public class HabilitationsServiceFactory {
   /**
    * Return the Habilitation WebService Stub.
    * If it is null (not yet been called), then try to instantiate it.
+   * NB: to use a WSDL URL different from the default value, the
+   * setHabilitationsWsdlUrl(String url) method must be called before this
+   * method is called for the first time.
    * @return the Habilitation WebService Stub.
    */
   public HabilitationsUtilisateurSrv getHabilitationsService() {
@@ -65,14 +66,5 @@ public class HabilitationsServiceFactory {
       }
     }
     return habilitationsService;
-  }
-
-  /**
-   * Sets the URL for Habilitations WebService (replaces default value).
-   * This must be set before getHabilitationsService() is called.
-   * @param url URL for Habilitations WebService.
-   */
-  public void setHabilitationsWsdlUrl(final String url) {
-    this.habilitationsWsdlUrl = url;
   }
 }

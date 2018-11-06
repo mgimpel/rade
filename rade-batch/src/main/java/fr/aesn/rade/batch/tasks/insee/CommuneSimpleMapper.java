@@ -62,12 +62,12 @@ CDC CHEFLIEU REG DEP COM AR CT TNCC ARTMAJ NCC                   ARTMIN NCCENR
  *
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
-public class CommuneMapper
+public class CommuneSimpleMapper
   extends EntiteAdminMapper
   implements FieldSetMapper<Commune> {
   /** SLF4J Logger. */
   private static final Logger log =
-    LoggerFactory.getLogger(CommuneMapper.class);
+    LoggerFactory.getLogger(CommuneSimpleMapper.class);
 
   /**
    * Maps INSEE Departement file lines to Departement Entities.

@@ -51,7 +51,7 @@ import org.springframework.core.io.ClassPathResource;
  *
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
-public class TestCommuneMapper {
+public class TestCommuneSimpleMapper {
   /** Test line from the INSEE Departement file to import. */
   public static final String TEST_LINE =
     "0\t4\t01\t971\t05\t1\t06\t0\t\tBASSE-TERRE\t\tBasse-Terre";
@@ -104,7 +104,7 @@ public class TestCommuneMapper {
     DelimitedLineTokenizer tokenizer = new DelimitedLineTokenizer();
     tokenizer.setDelimiter("\t");
     FieldSet fieldSet = tokenizer.tokenize(TEST_LINE);
-    CommuneMapper mapper = new CommuneMapper();
+    CommuneSimpleMapper mapper = new CommuneSimpleMapper();
     mapper.setMetadataService(metadataService);
     Commune commune = mapper.mapFieldSet(fieldSet);
     assertEquals("Entity doesn't match expected value",
@@ -137,7 +137,7 @@ public class TestCommuneMapper {
     reader.setLinesToSkip(1);
     DelimitedLineTokenizer tokenizer = new DelimitedLineTokenizer();
     tokenizer.setDelimiter("\t");
-    CommuneMapper mapper = new CommuneMapper();
+    CommuneSimpleMapper mapper = new CommuneSimpleMapper();
     mapper.setMetadataService(metadataService);
     DefaultLineMapper<Commune> lineMapper = new DefaultLineMapper<>();
     lineMapper.setFieldSetMapper(mapper);
