@@ -26,8 +26,6 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import fr.aesn.rade.common.InvalidArgumentException;
 import fr.aesn.rade.persist.model.Audit;
@@ -35,6 +33,7 @@ import fr.aesn.rade.persist.model.Commune;
 import fr.aesn.rade.service.CommuneService;
 import fr.aesn.rade.service.MetadataService;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Règles metier pour l'import de l'historique des Communes INSEE.
@@ -179,11 +178,8 @@ import lombok.Setter;
  *
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
+@Slf4j
 public class HistoriqueCommuneInseeImportRules {
-  /** SLF4J Logger. */
-  private static final Logger log =
-    LoggerFactory.getLogger(HistoriqueCommuneInseeImportRules.class);
-
   /** Service for Commune. */
   @Setter
   private CommuneService communeService;

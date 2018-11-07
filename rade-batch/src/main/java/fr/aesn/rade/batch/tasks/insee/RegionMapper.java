@@ -17,13 +17,12 @@
 /* $Id$ */
 package fr.aesn.rade.batch.tasks.insee;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.file.mapping.FieldSetMapper;
 import org.springframework.batch.item.file.transform.FieldSet;
 import org.springframework.validation.BindException;
 
 import fr.aesn.rade.persist.model.Region;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * FieldSetMapper that Maps INSEE Region file lines to Region Entities.
@@ -69,13 +68,10 @@ import fr.aesn.rade.persist.model.Region;
  *
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
+@Slf4j
 public class RegionMapper
   extends EntiteAdminMapper
   implements FieldSetMapper<Region> {
-  /** SLF4J Logger. */
-  private static final Logger log =
-    LoggerFactory.getLogger(RegionMapper.class);
-
   /**
    * Maps INSEE Region file lines to Region Entities.
    * @param fieldSet parsed line from INSEE Region file.

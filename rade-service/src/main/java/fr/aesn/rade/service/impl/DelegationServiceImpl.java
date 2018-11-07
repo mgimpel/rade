@@ -22,8 +22,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +31,7 @@ import fr.aesn.rade.persist.model.Delegation;
 import fr.aesn.rade.service.DelegationService;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Service Implementation for Delegation.
@@ -40,12 +39,9 @@ import lombok.Setter;
  */
 @Service
 @Transactional
-@NoArgsConstructor
+@NoArgsConstructor @Slf4j
 public class DelegationServiceImpl
   implements DelegationService {
-  /** SLF4J Logger. */
-  private static final Logger log =
-    LoggerFactory.getLogger(DelegationServiceImpl.class);
   /** Data Access Object for Delegation. */
   @Autowired @Setter
   private DelegationJpaDao delegationJpaDao;

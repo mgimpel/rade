@@ -17,13 +17,12 @@
 /* $Id$ */
 package fr.aesn.rade.batch.tasks.hexaposte;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.file.mapping.FieldSetMapper;
 import org.springframework.batch.item.file.transform.FieldSet;
 import org.springframework.validation.BindException;
 
 import fr.aesn.rade.persist.model.Hexaposte;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * FieldSetMapper that Maps Hexaposte file lines to Hexaposte Entities.
@@ -61,12 +60,9 @@ import fr.aesn.rade.persist.model.Hexaposte;
  *
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
+@Slf4j
 public class HexaposteMapper
   implements FieldSetMapper<Hexaposte> {
-  /** SLF4J Logger. */
-  private static final Logger log =
-    LoggerFactory.getLogger(HexaposteMapper.class);
-
   /**
    * Maps Hexaposte file lines to Hexaposte Entities.
    * @param fieldSet parsed line from Hexaposte file.

@@ -19,8 +19,6 @@ package fr.aesn.rade.batch.tasks.sandre;
 
 import java.util.Date;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.annotation.BeforeStep;
@@ -31,18 +29,16 @@ import fr.aesn.rade.persist.model.Audit;
 import fr.aesn.rade.persist.model.CommuneSandre;
 import fr.aesn.rade.service.AuditService;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Process CommuneSandre Read from CommuneSandre file and add additional
  * details to the Entity (Audit details, ...).
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
+@Slf4j
 public class CommuneSandreProcessor
   implements ItemProcessor<CommuneSandre, CommuneSandre> {
-
-  /** SLF4J Logger. */
-  private static final Logger log =
-    LoggerFactory.getLogger(CommuneSandreProcessor.class);
   /** Service for Audit. */
   @Autowired @Setter
   private AuditService auditService;

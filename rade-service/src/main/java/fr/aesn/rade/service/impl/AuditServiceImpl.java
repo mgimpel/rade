@@ -20,8 +20,6 @@ package fr.aesn.rade.service.impl;
 import java.util.List;
 import java.util.Optional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +29,7 @@ import fr.aesn.rade.persist.model.Audit;
 import fr.aesn.rade.service.AuditService;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Service Implementation for Audit.
@@ -38,12 +37,9 @@ import lombok.Setter;
  */
 @Service
 @Transactional
-@NoArgsConstructor
+@NoArgsConstructor @Slf4j
 public class AuditServiceImpl
   implements AuditService {
-    /** SLF4J Logger. */
-    private static final Logger log =
-      LoggerFactory.getLogger(AuditServiceImpl.class);
     /** Data Access Object for Audit. */
     @Autowired @Setter
     private AuditJpaDao auditJpaDao;

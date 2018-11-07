@@ -19,8 +19,6 @@ package fr.aesn.rade.webapp.controller;
 
 import java.util.Date;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,17 +31,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import fr.aesn.rade.persist.model.Region;
 import fr.aesn.rade.service.RegionService;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Spring MVC Controller for Rade.
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
+@Slf4j
 @Controller
 @RequestMapping("/referentiel")
 public class ReferentielController {
-  /** SLF4J Logger. */
-  private static final Logger log =
-    LoggerFactory.getLogger(ReferentielController.class);
   /** Service. */
   @Autowired
   private RegionService regionService;

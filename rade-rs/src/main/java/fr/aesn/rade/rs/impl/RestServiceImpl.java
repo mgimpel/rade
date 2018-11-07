@@ -34,9 +34,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import fr.aesn.rade.persist.model.CirconscriptionBassin;
 import fr.aesn.rade.persist.model.Commune;
 import fr.aesn.rade.persist.model.Delegation;
@@ -60,6 +57,7 @@ import fr.aesn.rade.service.DelegationService;
 import fr.aesn.rade.service.DepartementService;
 import fr.aesn.rade.service.RegionService;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * REST WebService Implementation for the Rade Project.
@@ -68,11 +66,9 @@ import lombok.Setter;
  * 
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
+@Slf4j
 public class RestServiceImpl
   implements RestService {
-  /** SLF4J Logger. */
-  private static final Logger log =
-    LoggerFactory.getLogger(RestServiceImpl.class);
   /** Region Service. */
   @Setter
   private RegionService regionService;

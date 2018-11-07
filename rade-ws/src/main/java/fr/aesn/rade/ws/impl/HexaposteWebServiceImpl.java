@@ -22,24 +22,20 @@ import java.util.List;
 
 import javax.jws.WebService;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import fr.aesn.rade.service.HexaposteService;
 import fr.aesn.rade.ws.HexaposteWebService;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Hexaposte WebService Implementation.
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
+@Slf4j
 @WebService(endpointInterface = "fr.aesn.rade.ws.HexaposteWebService",
             serviceName = "HexaposteWebService")
 public class HexaposteWebServiceImpl
   implements HexaposteWebService {
-  /** SLF4J Logger. */
-  private static final Logger log =
-    LoggerFactory.getLogger(HexaposteWebServiceImpl.class);
   /** Hexaposte Service. */
   @Setter
   private HexaposteService hexaposteService;

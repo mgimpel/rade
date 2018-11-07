@@ -22,8 +22,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +31,7 @@ import fr.aesn.rade.persist.model.CirconscriptionBassin;
 import fr.aesn.rade.service.BassinService;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Service Implementation for Circonscription Bassin.
@@ -40,12 +39,9 @@ import lombok.Setter;
  */
 @Service
 @Transactional
-@NoArgsConstructor
+@NoArgsConstructor @Slf4j
 public class BassinServiceImpl
   implements BassinService {
-  /** SLF4J Logger. */
-  private static final Logger log =
-    LoggerFactory.getLogger(BassinServiceImpl.class);
   /** Data Access Object for CirconscriptionBassin. */
   @Autowired @Setter
   private CirconscriptionBassinJpaDao circonscriptionBassinJpaDao;

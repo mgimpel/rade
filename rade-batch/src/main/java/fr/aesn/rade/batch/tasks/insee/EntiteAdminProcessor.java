@@ -19,8 +19,6 @@ package fr.aesn.rade.batch.tasks.insee;
 
 import java.util.Date;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,18 +27,16 @@ import fr.aesn.rade.persist.model.Audit;
 import fr.aesn.rade.persist.model.EntiteAdministrative;
 import fr.aesn.rade.service.AuditService;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Process Entite Admin Read from INSEE file and add additional details to the
  * Entity (Audit details, Date of beginning of Validity, ...).
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
+@Slf4j
 public abstract class EntiteAdminProcessor
   implements ItemProcessor<EntiteAdministrative, EntiteAdministrative> {
-
-  /** SLF4J Logger. */
-  private static final Logger log =
-    LoggerFactory.getLogger(EntiteAdminProcessor.class);
   /** Service for Audit. */
   @Autowired @Setter
   private AuditService auditService;

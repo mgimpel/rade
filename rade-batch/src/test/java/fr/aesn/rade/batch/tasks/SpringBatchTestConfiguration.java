@@ -25,8 +25,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.sql.DataSource;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.configuration.annotation.BatchConfigurer;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.explore.JobExplorer;
@@ -51,6 +49,7 @@ import fr.aesn.rade.persist.model.Audit;
 import fr.aesn.rade.persist.model.EntiteAdministrative;
 import fr.aesn.rade.persist.model.Evenement;
 import fr.aesn.rade.persist.tools.AnnotationUtils;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Spring Batch Configuration for use in JUnit tests.
@@ -67,6 +66,7 @@ import fr.aesn.rade.persist.tools.AnnotationUtils;
  *
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
+@Slf4j
 @Configuration
 @EnableBatchProcessing
 @EnableJpaRepositories(basePackages = "fr.aesn.rade.persist.dao")
@@ -74,9 +74,6 @@ import fr.aesn.rade.persist.tools.AnnotationUtils;
 @ImportResource(locations = "classpath*:batch-context-test.xml")
 public class SpringBatchTestConfiguration
   implements BatchConfigurer {
-  /** SLF4J Logger. */
-  private static final Logger log =
-    LoggerFactory.getLogger(SpringBatchTestConfiguration.class);
 
   /** 
    * GeneratedValue Annotation of type Identity

@@ -20,22 +20,18 @@ package fr.aesn.rade.ws.aramis.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import fr.aesn.rade.common.modelplus.CommunePlus;
 import fr.aesn.rade.persist.model.CirconscriptionBassin;
 import fr.aesn.rade.persist.model.Delegation;
 import fr.aesn.rade.persist.model.Departement;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Mapper class to map Entities (from the service package) to VOs (defined in the WSDL).
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
+@Slf4j
 public final class Entity2VoMapper {
-  /** SLF4J Logger. */
-  private static final Logger log =
-    LoggerFactory.getLogger(Entity2VoMapper.class);
   /** Singleton instance. */
   private static final Entity2VoMapper instance = new Entity2VoMapper();
 

@@ -17,13 +17,12 @@
 /* $Id$ */
 package fr.aesn.rade.batch.tasks.insee;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.file.mapping.FieldSetMapper;
 import org.springframework.batch.item.file.transform.FieldSet;
 import org.springframework.validation.BindException;
 
 import fr.aesn.rade.persist.model.Departement;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * FieldSetMapper that Maps INSEE Departement file lines to Departement
@@ -62,13 +61,10 @@ import fr.aesn.rade.persist.model.Departement;
  *
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
+@Slf4j
 public class DepartementMapper
   extends EntiteAdminMapper
   implements FieldSetMapper<Departement> {
-  /** SLF4J Logger. */
-  private static final Logger log =
-    LoggerFactory.getLogger(DepartementMapper.class);
-
   /**
    * Maps INSEE Departement file lines to Departement Entities.
    * @param fieldSet parsed line from INSEE Departement file.

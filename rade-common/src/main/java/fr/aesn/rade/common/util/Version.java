@@ -21,16 +21,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Project Version Info.
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
+@Slf4j
 public final class Version {
-  /** SLF4J Logger. */
-  private static final Logger log = LoggerFactory.getLogger(Version.class);
   /** Singleton instance. */
   private static final Version instance = new Version();
   /** Properties containing the values loaded from the Version file. */

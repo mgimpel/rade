@@ -17,13 +17,12 @@
 /* $Id$ */
 package fr.aesn.rade.batch.tasks.insee;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.file.mapping.FieldSetMapper;
 import org.springframework.batch.item.file.transform.FieldSet;
 import org.springframework.validation.BindException;
 
 import fr.aesn.rade.persist.model.Commune;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * FieldSetMapper that Maps INSEE Commune file lines to Commune
@@ -62,13 +61,10 @@ CDC CHEFLIEU REG DEP COM AR CT TNCC ARTMAJ NCC                   ARTMIN NCCENR
  *
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
+@Slf4j
 public class CommuneSimpleMapper
   extends EntiteAdminMapper
   implements FieldSetMapper<Commune> {
-  /** SLF4J Logger. */
-  private static final Logger log =
-    LoggerFactory.getLogger(CommuneSimpleMapper.class);
-
   /**
    * Maps INSEE Departement file lines to Departement Entities.
    * @param fieldSet parsed line from INSEE Departement file.

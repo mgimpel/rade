@@ -17,11 +17,11 @@
 /* $Id$ */
 package fr.aesn.rade.batch.tasks.insee;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.file.mapping.FieldSetMapper;
 import org.springframework.batch.item.file.transform.FieldSet;
 import org.springframework.validation.BindException;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * FieldSetMapper that Maps INSEE Commune History file lines to
@@ -59,12 +59,9 @@ import org.springframework.validation.BindException;
  *
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
+@Slf4j
 public class HistoriqueCommuneInseeMapper
   implements FieldSetMapper<HistoriqueCommuneInseeModel> {
-  /** SLF4J Logger. */
-  private static final Logger log =
-    LoggerFactory.getLogger(HistoriqueCommuneInseeMapper.class);
-
   /**
    * Maps INSEE Commune History file lines to HistoriqueCommuneInseeModel.
    * @param fieldSet parsed line from INSEE Commune History file.

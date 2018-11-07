@@ -30,8 +30,6 @@ import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobExecutionException;
@@ -42,16 +40,14 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 import fr.aesn.rade.common.util.Version;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Main class to launch Batch Job.
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
+@Slf4j
 public class SpringBatchApplication {
-  /** SLF4J Logger. */
-  private static final Logger log =
-    LoggerFactory.getLogger(SpringBatchApplication.class);
-
   public static final int DEFAULT_LINE_WIDTH = 120;
   public static final String DEFAULT_CONFIG_FILE = "classpath:batch-context.xml";
   public static final String DEFAULT_JOB_NAME    = "noJob";

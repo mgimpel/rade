@@ -20,8 +20,6 @@ package fr.aesn.rade.batch.tasks.sandre;
 import java.util.Date;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.file.mapping.FieldSetMapper;
 import org.springframework.batch.item.file.transform.FieldSet;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +29,7 @@ import fr.aesn.rade.persist.model.CirconscriptionBassin;
 import fr.aesn.rade.persist.model.CommuneSandre;
 import fr.aesn.rade.service.BassinService;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * FieldSetMapper that Maps CommuneSandre file lines to CommuneSandre Entities.
@@ -71,11 +70,9 @@ import lombok.Setter;
  *
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
+@Slf4j
 public class CommuneSandreMapper
   implements FieldSetMapper<CommuneSandre> {
-  /** SLF4J Logger. */
-  private static final Logger log =
-    LoggerFactory.getLogger(CommuneSandreMapper.class);
   /** Service for Circonscription Bassin. */
   @Autowired @Setter
   private BassinService bassinService;

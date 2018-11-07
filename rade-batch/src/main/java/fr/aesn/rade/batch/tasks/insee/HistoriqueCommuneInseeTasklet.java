@@ -20,8 +20,6 @@ package fr.aesn.rade.batch.tasks.insee;
 import java.util.Date;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.StepContribution;
@@ -39,17 +37,15 @@ import fr.aesn.rade.service.AuditService;
 import fr.aesn.rade.service.CommuneService;
 import fr.aesn.rade.service.MetadataService;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Commune History Tasklet.
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
+@Slf4j
 public class HistoriqueCommuneInseeTasklet
   implements Tasklet, StepExecutionListener {
-
-  /** SLF4J Logger. */
-  private static final Logger log =
-    LoggerFactory.getLogger(HistoriqueCommuneInseeTasklet.class);
   /** Service for Audit. */
   @Autowired @Setter
   private AuditService auditService;

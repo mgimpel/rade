@@ -25,8 +25,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,6 +35,7 @@ import fr.aesn.rade.persist.model.Region;
 import fr.aesn.rade.service.RegionService;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Service Implementation for Region.
@@ -44,12 +43,9 @@ import lombok.Setter;
  */
 @Service
 @Transactional
-@NoArgsConstructor
+@NoArgsConstructor @Slf4j
 public class RegionServiceImpl
   implements RegionService {
-  /** SLF4J Logger. */
-  private static final Logger log =
-    LoggerFactory.getLogger(RegionServiceImpl.class);
   /** Data Access Object for Region. */
   @Autowired @Setter
   private RegionJpaDao regionJpaDao;

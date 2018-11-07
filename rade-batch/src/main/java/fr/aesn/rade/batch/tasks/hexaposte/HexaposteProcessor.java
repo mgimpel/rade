@@ -19,8 +19,6 @@ package fr.aesn.rade.batch.tasks.hexaposte;
 
 import java.util.Date;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.annotation.BeforeStep;
 import org.springframework.batch.item.ItemProcessor;
@@ -30,18 +28,16 @@ import fr.aesn.rade.persist.model.Audit;
 import fr.aesn.rade.persist.model.Hexaposte;
 import fr.aesn.rade.service.AuditService;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Process Hexaposte Read from Hexaposte file and add additional details to the
  * Entity (Audit details, ...).
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
+@Slf4j
 public class HexaposteProcessor
   implements ItemProcessor<Hexaposte, Hexaposte> {
-
-  /** SLF4J Logger. */
-  private static final Logger log =
-    LoggerFactory.getLogger(HexaposteProcessor.class);
   /** Service for Audit. */
   @Autowired @Setter
   private AuditService auditService;

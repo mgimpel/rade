@@ -20,8 +20,6 @@ package fr.aesn.rade.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +29,7 @@ import fr.aesn.rade.persist.model.Hexaposte;
 import fr.aesn.rade.service.HexaposteService;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Service Implementation for Hexaposte.
@@ -38,12 +37,9 @@ import lombok.Setter;
  */
 @Service
 @Transactional
-@NoArgsConstructor
+@NoArgsConstructor @Slf4j
 public class HexaposteServiceImpl
   implements HexaposteService {
-  /** SLF4J Logger. */
-  private static final Logger log =
-    LoggerFactory.getLogger(HexaposteServiceImpl.class);
   /** Data Access Object for CirconscriptionBassin. */
   @Autowired @Setter
   private HexaposteJpaDao hexaposteJpaDao;

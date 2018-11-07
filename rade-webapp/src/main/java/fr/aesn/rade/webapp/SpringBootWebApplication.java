@@ -17,8 +17,6 @@
 /* $Id$ */
 package fr.aesn.rade.webapp;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -26,19 +24,19 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ImportResource;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * Spring Boot Launcher class.
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
+@Slf4j
 @SpringBootApplication
 @ImportResource("classpath:application-context.xml")
 @ComponentScan({"fr.aesn.rade.webapp.config",
                 "fr.aesn.rade.webapp.controller"})
 public class SpringBootWebApplication
   extends SpringBootServletInitializer {
-  /** SLF4J Logger. */
-  private static final Logger log = LoggerFactory.getLogger(SpringBootWebApplication.class);
-
   @Override
   protected SpringApplicationBuilder configure(final SpringApplicationBuilder application) {
     return application.sources(SpringBootWebApplication.class);

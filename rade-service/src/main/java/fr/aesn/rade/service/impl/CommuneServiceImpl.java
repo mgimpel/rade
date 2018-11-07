@@ -25,8 +25,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,6 +42,7 @@ import fr.aesn.rade.service.CommuneService;
 import fr.aesn.rade.service.MetadataService;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Service Implementation for Commune.
@@ -51,12 +50,9 @@ import lombok.Setter;
  */
 @Service
 @Transactional
-@NoArgsConstructor
+@NoArgsConstructor @Slf4j
 public class CommuneServiceImpl
   implements CommuneService {
-  /** SLF4J Logger. */
-  private static final Logger log =
-    LoggerFactory.getLogger(CommuneServiceImpl.class);
   /** Data Access Object for Commune. */
   @Autowired @Setter
   private CommuneJpaDao communeJpaDao;

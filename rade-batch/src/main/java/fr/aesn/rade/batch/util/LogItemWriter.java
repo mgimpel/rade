@@ -19,21 +19,18 @@ package fr.aesn.rade.batch.util;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.ItemWriter;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * ItemWriter that writes items to the logger.
  * 
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
+@Slf4j
 public class LogItemWriter<T>
   implements ItemWriter<T> {
-  /** SLF4J Logger. */
-  private static final Logger log =
-    LoggerFactory.getLogger(LogItemWriter.class);
-
   /**
    * Process the supplied data element.
    * Will not be called with any null items in normal operation.

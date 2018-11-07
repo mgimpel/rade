@@ -19,8 +19,6 @@ package fr.aesn.rade.batch.tasks.insee;
 
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.annotation.AfterStep;
@@ -31,18 +29,16 @@ import fr.aesn.rade.persist.model.EntiteAdministrative;
 import fr.aesn.rade.persist.model.Departement;
 import fr.aesn.rade.service.DepartementService;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Process Departement Read from INSEE file and add additional details to the
  * Entity (Audit details, Date of beginning of Validity, ...).
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
+@Slf4j
 public class DepartementProcessor
   extends EntiteAdminProcessor {
-
-  /** SLF4J Logger. */
-  private static final Logger log =
-    LoggerFactory.getLogger(DepartementProcessor.class);
   /** Service for Departement. */
   @Autowired @Setter
   private DepartementService deptService;

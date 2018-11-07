@@ -22,13 +22,11 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import fr.aesn.rade.service.CommunePlusService;
 import fr.aesn.rade.service.DelegationService;
 import fr.aesn.rade.service.DepartementService;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Concrete Implementation of GeoAdminServiceExterneImpl WSDL for Aramis.
@@ -57,6 +55,7 @@ import lombok.Setter;
  * and re-completed.
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
+@Slf4j
 @javax.jws.WebService(
                       serviceName = "GeoAdminServiceExterneImplService",
                       portName = "GeoAdminServiceExternePort",
@@ -64,9 +63,6 @@ import lombok.Setter;
                       wsdlLocation = "META-INF/wsdl/GeoAdminServiceExterneImpl.wsdl",
                       endpointInterface = "fr.aesn.rade.ws.aramis.impl.GeoAdminServiceExterneImpl")
 public class GeoAdminServiceExternePortImpl implements GeoAdminServiceExterneImpl {
-    /** SLF4J Logger. */
-    private static final Logger log =
-      LoggerFactory.getLogger(GeoAdminServiceExternePortImpl.class);
     /** Departement Service. */
     @Setter
     private DepartementService departementService;
