@@ -189,6 +189,57 @@ public class TestCommuneJpaDao extends AbstractTestJpaDao {
     assertEquals("Hibernate returned the wrong number of results",
                  0, result.size());
   }
+  
+  /**
+   * Test custom repository method.
+   * @throws ParseException failed to parse date.
+   */
+  @Test
+  public void testFindAllByCodedepartementValidOnDate() throws ParseException {
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    List<Commune> result;
+    result = jpaDao.findAllByCodedepartementValidOnDate(sdf.parse("2018-01-01"),"91");
+    assertEquals("Hibernate returned the wrong number of results",
+                 196, result.size());
+    result = jpaDao.findAllByCodedepartementValidOnDate(sdf.parse("2018-01-01"),"90");
+    assertEquals("Hibernate returned the wrong number of results",
+                 0, result.size());
+  }
+  
+  /**
+   * Test custom repository method.
+   * @throws ParseException failed to parse date.
+   */
+  @Test
+  public void testFindAllByCritereValidOnDate() throws ParseException {
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    List<Commune> result;
+    result = jpaDao.findAllByCritereValidOnDate(sdf.parse("2018-01-01"),"91692");
+    assertEquals("Hibernate returned the wrong number of results",
+                 1, result.size());
+    result = jpaDao.findAllByCritereValidOnDate(sdf.parse("2018-01-01"),"SaInt-");
+    assertEquals("Hibernate returned the wrong number of results",
+                 60, result.size());
+    result = jpaDao.findAllByCritereValidOnDate(sdf.parse("2018-01-01"),"aaaa");
+    assertEquals("Hibernate returned the wrong number of results",
+                 0, result.size());
+  }
+  
+  /**
+   * Test custom repository method.
+   * @throws ParseException failed to parse date.
+   */
+  @Test
+  public void testFindAllByCodedepartementAndCritereCodeValidOnDate() throws ParseException {
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    List<Commune> result;
+    result = jpaDao.findAllByCodedepartementAndCritereValidOnDate(sdf.parse("2018-01-01"),"976","dZi");
+    assertEquals("Hibernate returned the wrong number of results",
+                 2, result.size());
+    result = jpaDao.findAllByCodedepartementAndCritereValidOnDate(sdf.parse("2018-01-01"),"90","aaaa");
+    assertEquals("Hibernate returned the wrong number of results",
+                 0, result.size());
+  }
 
   /**
    * Test custom repository method.

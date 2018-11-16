@@ -28,6 +28,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import fr.aesn.rade.common.InvalidArgumentException;
 import fr.aesn.rade.persist.dao.CommuneJpaDao;
@@ -83,6 +84,29 @@ public class CommuneServiceImpl
     log.debug("Commune list requested for Date: date={}", date);
     return communeJpaDao.findAllValidOnDate(date);
   }
+  
+  /**
+   * List all Commune matching the request parameters.
+   * @param date the date at which the code was valid
+   * @param departementcode the Departement INSEE code of the Commune.
+   * @param criteria the Commune INSEE code or a part of the Commune enrich name.
+   * @return a List of all the Commune matching the request parameters.
+   */
+  @Override
+  @Transactional(readOnly = true)
+  public List<Commune> getAllCommune(Date date, String codedepartement, String critere){
+    log.debug("Commune list requested for Date, Codedepartment and Critere: date={}, codedepartement={}, critere={}", date, codedepartement, critere);
+    if ( StringUtils.isEmpty(critere) && StringUtils.isEmpty(codedepartement))
+      return communeJpaDao.findAllValidOnDate(date);
+    else if( StringUtils.isEmpty(critere) && !StringUtils.isEmpty(codedepartement))
+      return communeJpaDao.findAllByCodedepartementValidOnDate(date, codedepartement);
+    else if(StringUtils.isEmpty(codedepartement) && !StringUtils.isEmpty(critere))
+      return communeJpaDao.findAllByCritereValidOnDate(date, critere);
+    else if(!StringUtils.isEmpty(codedepartement) && !StringUtils.isEmpty(critere))
+      return communeJpaDao.findAllByCodedepartementAndCritereValidOnDate(date, codedepartement, critere);
+    return null;
+  }
+
 
   /**
    * Returns a Map of all Commune indexed by ID.

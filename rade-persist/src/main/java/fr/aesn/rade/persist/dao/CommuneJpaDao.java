@@ -47,6 +47,43 @@ public interface CommuneJpaDao
   @Query("SELECT c FROM Commune c WHERE c.debutValidite <= ?1 "
                                + "AND (c.finValidite IS NULL OR c.finValidite > ?1)")
   public List<Commune> findAllValidOnDate(Date date);
+  
+  /**
+   * Returns a List of all Commune matching the request parameters.
+   * @param date the date at which the Commune was valid
+   * @param codedepartement the Departement INSEE code of the Commune.
+   * @return a List of all Commune matching the request parameters.
+   */
+  @Query("SELECT c FROM Commune c WHERE c.debutValidite <= ?1 "
+                               + "AND (c.finValidite IS NULL OR c.finValidite > ?1)"
+                               + "AND (c.departement = ?2)")
+  public List<Commune> findAllByCodedepartementValidOnDate(Date date, String codedepartement);
+  
+  /**
+   * Returns a List of all Commune matching the request parameters.
+   * @param date the date at which the Commune was valid
+   * @param critere the Commune INSEE code or a part of the Commune enrich name.
+   * @return a List of all Commune matching the request parameters.
+   */
+  @Query("SELECT c FROM Commune c WHERE c.debutValidite <= ?1 "
+                               + "AND (c.finValidite IS NULL OR c.finValidite > ?1)"
+                               + "AND ((c.codeInsee = ?2)"
+                               + "OR (LOWER(c.nomEnrichi) LIKE CONCAT('%',LOWER(?2),'%')))")
+  public List<Commune> findAllByCritereValidOnDate(Date date, String critere);
+  
+  /**
+   * Returns a List of all Commune matching the request parameters.
+   * @param date the date at which the Commune was valid
+   * @param codedepartement the Departement INSEE code of the Commune.
+   * @param critere the Commune INSEE code or a part of the Commune enrich name.
+   * @return a List of all Commune matching the request parameters.
+   */
+  @Query("SELECT c FROM Commune c WHERE c.debutValidite <= ?1 "
+                               + "AND (c.finValidite IS NULL OR c.finValidite > ?1)"
+                               + "AND (c.departement = ?2)"
+                               + "AND ((c.codeInsee = ?3)"
+                               + "OR (LOWER(c.nomEnrichi) LIKE CONCAT('%',LOWER(?3),'%')))")
+  public List<Commune> findAllByCodedepartementAndCritereValidOnDate(Date date, String codedepartement, String critere);
 
   /**
    * Returns the Commune with the given CodeInsee valid at the given date.

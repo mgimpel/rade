@@ -101,16 +101,20 @@ public interface RestService {
                                  @QueryParam("date") final String rawdate);
 
   /**
-   * Get all Commune.
+   * Get all Commune matching the request parameters.
    * @param req HTTP Request (for determining base path of Rest Service).
    * @param rawdate the date at which the returned data is valid.
-   * @return list of all Commune.
+   * @param rawcodedepartement the Departement INSEE code of the Commune.
+   * @param rawcritere the Commune INSEE code or a part of the Commune enrich name.
+   * @return list of all Commune matching the request parameters.
    */
   @GET
   @Path(REST_PATH_COMMUNE)
   @Produces(MediaType.APPLICATION_JSON)
   public Response getAllCommune(@Context final HttpServletRequest req,
-                                @QueryParam("date") final String rawdate);
+                                @QueryParam("date") final String rawdate,
+                                @QueryParam("codedepartement") final String rawcodedepartement,
+                                @QueryParam("critere") final String rawcritere);
 
   /**
    * Get the Commune with the given INSEE code.

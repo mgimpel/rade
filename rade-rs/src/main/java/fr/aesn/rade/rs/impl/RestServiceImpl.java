@@ -212,20 +212,26 @@ public class RestServiceImpl
   }
 
   /**
-   * Get all Commune.
+   * Get all Commune matching the request parameters.
    * @param req HTTP Request (for determining base path of Rest Service).
    * @param rawdate the date at which the returned data is valid.
-   * @return list of all Commune.
+   * @param rawcodedepartement the Departement INSEE code of the Commune.
+   * @param rawcritere the Commune INSEE code or a part of the Commune enrich name.
+   * @return list of all Commune matching the request parameters.
    */
   @GET
   @Path(REST_PATH_COMMUNE)
   @Produces(MediaType.APPLICATION_JSON)
   public Response getAllCommune(@Context final HttpServletRequest req,
-                                @QueryParam("date") final String rawdate) {
-    log.info("Executing operation getAllCommune with date {}", rawdate);
+                                @QueryParam("date") final String rawdate,
+                                @QueryParam("codedepartement") final String rawcodedepartement,
+                                @QueryParam("critere") final String rawcritere) {
+    log.info("Executing operation getAllCommune with date {}, codedepartement {} and critere {}", rawdate, rawcodedepartement, rawcritere);
     try {
       Date date = checkDate(rawdate);
-      List<Commune> communes = communeService.getAllCommune(date);
+      String codedepartement = checkFacultativeCriteria(rawcodedepartement);
+      String critere = checkFacultativeCriteria(rawcritere);
+      List<Commune> communes = communeService.getAllCommune(date,codedepartement,critere);
       if (communes.isEmpty()) {
         return Response.status(Response.Status.NOT_FOUND)
                        .build();
@@ -389,6 +395,27 @@ public class RestServiceImpl
       throw new RestRequestException("Could not decode " + rawcode, e);
     }
     return code;
+  }
+  
+  /**
+   * Check and decode the given String.
+   * @param rawfacultativecriteria the String to check and decode.
+   * @return the decoded String.
+   * @throws RestRequestException if the String could not be decoded.
+   */
+  private static final String checkFacultativeCriteria(final String rawfacultativecriteria)
+      throws RestRequestException {
+    String facultativecriteria = null;
+    if (rawfacultativecriteria == null) {
+      facultativecriteria="";
+    }else{
+      try {
+        facultativecriteria = URLDecoder.decode(rawfacultativecriteria, "UTF-8");
+      } catch (UnsupportedEncodingException e) {
+        throw new RestRequestException("Could not decode " + rawfacultativecriteria, e);
+      }
+    }
+    return facultativecriteria;
   }
 
   /**
