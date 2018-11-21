@@ -17,6 +17,12 @@
 /* $Id$ */
 package fr.aesn.rade.batch.tasks.insee;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import org.springframework.batch.item.file.mapping.FieldSetMapper;
 import org.springframework.batch.item.file.transform.FieldSet;
 import org.springframework.validation.BindException;
@@ -66,6 +72,7 @@ public class HistoriqueCommuneInseeMapper
    * Maps INSEE Commune History file lines to HistoriqueCommuneInseeModel.
    * @param fieldSet parsed line from INSEE Commune History file.
    * @return the HistoriqueCommuneInseeModel.
+   * @throws BindException if the FieldSet could not be mapped.
    */
   @Override
   public HistoriqueCommuneInseeModel mapFieldSet(final FieldSet fieldSet)
@@ -77,7 +84,7 @@ public class HistoriqueCommuneInseeMapper
     historique.setCodeCanton(fieldSet.readString(2));
     historique.setCodeCommune(fieldSet.readString(3));
     historique.setTexteLegislative(fieldSet.readString(4));
-    historique.setDateJO(fieldSet.readString(5));
+    historique.setDateJO(buildDateJoList(fieldSet.readString(5)));
     historique.setDateEffet(fieldSet.readDate(6, "dd-MM-yyyy"));
     historique.setDatePlusRecente(fieldSet.readDate(7, "dd-MM-yyyy"));
     historique.setTypeModification(fieldSet.readString(8));
@@ -96,5 +103,29 @@ public class HistoriqueCommuneInseeMapper
     historique.setAncienTypeNomClair(fieldSet.readString(21));
     historique.setAncienNom(fieldSet.readString(22));
     return historique;
+  }
+
+  /**
+   * The Date JO field is a list of between 0 and 4 dates in the format
+   * "dd-MM-yyyy", with no space between them.
+   * @param dateJO the field to parse.
+   * @return a list of Dates parsed from the given String.
+   * @throws IllegalArgumentException if the dates could not be parsed
+   * (just like fieldSet.readDate).
+   */
+  private List<Date> buildDateJoList(String dateJO) {
+    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+    assert dateJO.length() % 10 == 0;
+    int size = dateJO.length() / 10;
+    ArrayList<Date> list = new ArrayList<>(size);
+    for (int i = 0; i < size; i++) {
+      try {
+        list.add(sdf.parse(dateJO.substring(i*10, (i+1)*10)));
+      } catch (ParseException e) {
+        log.info("Error parsing JO date.", e);
+        throw new IllegalArgumentException(e);
+      }
+    }
+    return list;
   }
 }

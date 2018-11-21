@@ -74,7 +74,9 @@ public class TestHistoriqueCommuneInseeMapper {
     assertEquals("Entity doesn't match expected value",
                  "A16-07-1973", historique.getTexteLegislative());
     assertEquals("Entity doesn't match expected value",
-                 "19-08-1973", historique.getDateJO());
+                 1, historique.getDateJO().size());
+    assertEquals("Entity doesn't match expected value",
+                 sdf.parse("19-08-1973"), historique.getDateJO().get(0));
     assertEquals("Entity doesn't match expected value",
                  sdf.parse("01-01-1974"), historique.getDateEffet());
     assertEquals("Entity doesn't match expected value",
