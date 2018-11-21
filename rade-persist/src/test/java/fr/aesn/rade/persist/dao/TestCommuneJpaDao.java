@@ -211,16 +211,13 @@ public class TestCommuneJpaDao extends AbstractTestJpaDao {
    * @throws ParseException failed to parse date.
    */
   @Test
-  public void testFindAllByCritereValidOnDate() throws ParseException {
+  public void testFindAllByNomValidOnDate() throws ParseException {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     List<Commune> result;
-    result = jpaDao.findAllByCritereValidOnDate(sdf.parse("2018-01-01"),"91692");
-    assertEquals("Hibernate returned the wrong number of results",
-                 1, result.size());
-    result = jpaDao.findAllByCritereValidOnDate(sdf.parse("2018-01-01"),"SaInt-");
+    result = jpaDao.findAllByNomValidOnDate(sdf.parse("2018-01-01"),"SaInt-");
     assertEquals("Hibernate returned the wrong number of results",
                  60, result.size());
-    result = jpaDao.findAllByCritereValidOnDate(sdf.parse("2018-01-01"),"aaaa");
+    result = jpaDao.findAllByNomValidOnDate(sdf.parse("2018-01-01"),"aaaa");
     assertEquals("Hibernate returned the wrong number of results",
                  0, result.size());
   }
@@ -230,13 +227,13 @@ public class TestCommuneJpaDao extends AbstractTestJpaDao {
    * @throws ParseException failed to parse date.
    */
   @Test
-  public void testFindAllByCodedepartementAndCritereCodeValidOnDate() throws ParseException {
+  public void testFindAllByCodedepartementAndNomCodeValidOnDate() throws ParseException {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     List<Commune> result;
-    result = jpaDao.findAllByCodedepartementAndCritereValidOnDate(sdf.parse("2018-01-01"),"976","dZi");
+    result = jpaDao.findAllByCodedepartementAndNomValidOnDate(sdf.parse("2018-01-01"),"976","dZi");
     assertEquals("Hibernate returned the wrong number of results",
                  2, result.size());
-    result = jpaDao.findAllByCodedepartementAndCritereValidOnDate(sdf.parse("2018-01-01"),"90","aaaa");
+    result = jpaDao.findAllByCodedepartementAndNomValidOnDate(sdf.parse("2018-01-01"),"90","aaaa");
     assertEquals("Hibernate returned the wrong number of results",
                  0, result.size());
   }

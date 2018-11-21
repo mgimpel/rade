@@ -216,7 +216,7 @@ public class RestServiceImpl
    * @param req HTTP Request (for determining base path of Rest Service).
    * @param rawdate the date at which the returned data is valid.
    * @param rawcodedepartement the Departement INSEE code of the Commune.
-   * @param rawcritere the Commune INSEE code or a part of the Commune enrich name.
+   * @param rawnom a part of the Commune enrich name.
    * @return list of all Commune matching the request parameters.
    */
   @GET
@@ -225,13 +225,13 @@ public class RestServiceImpl
   public Response getAllCommune(@Context final HttpServletRequest req,
                                 @QueryParam("date") final String rawdate,
                                 @QueryParam("codedepartement") final String rawcodedepartement,
-                                @QueryParam("critere") final String rawcritere) {
-    log.info("Executing operation getAllCommune with date {}, codedepartement {} and critere {}", rawdate, rawcodedepartement, rawcritere);
+                                @QueryParam("nom") final String rawnom) {
+    log.info("Executing operation getAllCommune with date {}, codedepartement {} and nom {}", rawdate, rawcodedepartement, rawnom);
     try {
       Date date = checkDate(rawdate);
       String codedepartement = checkFacultativeCriteria(rawcodedepartement);
-      String critere = checkFacultativeCriteria(rawcritere);
-      List<Commune> communes = communeService.getAllCommune(date,codedepartement,critere);
+      String nom = checkFacultativeCriteria(rawnom);
+      List<Commune> communes = communeService.getAllCommune(date,codedepartement,nom);
       if (communes.isEmpty()) {
         return Response.status(Response.Status.NOT_FOUND)
                        .build();

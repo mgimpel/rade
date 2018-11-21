@@ -187,57 +187,25 @@ public class TestCommuneService
     assertEquals(0, list.size());
   }
   
-  /**
-   * Test getting a the list of all Communes.
-   */
-  @Test
-  public void testGettingCommuneList2018crit92075() {
-    Date year2018 = new GregorianCalendar(2018, 1, 1, 0, 0, 0).getTime();
-    List<Commune> list = service.getAllCommune(year2018, "", "92075");
-    assertNotNull("CommuneService returned a null list", list);
-    assertEquals(1, list.size());
-  }
   
   /**
    * Test getting a the list of all Communes.
    */
   @Test
-  public void testGettingCommuneList2018critSaint() {
+  public void testGettingCommuneList2018nomSaint() {
     Date year2018 = new GregorianCalendar(2018, 1, 1, 0, 0, 0).getTime();
     List<Commune> list = service.getAllCommune(year2018, "", "Saint");
     assertNotNull("CommuneService returned a null list", list);
     assertEquals(71, list.size());
   }
-  
+   
   /**
    * Test getting a the list of all Communes.
    */
   @Test
-  public void testGettingCommuneList2018crit99999() {
+  public void testGettingCommuneList2018Dept92nomANTO() {
     Date year2018 = new GregorianCalendar(2018, 1, 1, 0, 0, 0).getTime();
-    List<Commune> list = service.getAllCommune(year2018, "", "99999");
-    assertNotNull("CommuneService returned a null list", list);
-    assertEquals(0, list.size());
-  }
-  
-  /**
-   * Test getting a the list of all Communes.
-   */
-  @Test
-  public void testGettingCommuneList2018Dept91Crit92075() {
-    Date year2018 = new GregorianCalendar(2018, 1, 1, 0, 0, 0).getTime();
-    List<Commune> list = service.getAllCommune(year2018, "91", "92075");
-    assertNotNull("CommuneService returned a null list", list);
-    assertEquals(0, list.size());
-  }
-  
-  /**
-   * Test getting a the list of all Communes.
-   */
-  @Test
-  public void testGettingCommuneList2018Dept92Crit92075() {
-    Date year2018 = new GregorianCalendar(2018, 1, 1, 0, 0, 0).getTime();
-    List<Commune> list = service.getAllCommune(year2018, "92", "92075");
+    List<Commune> list = service.getAllCommune(year2018, "92", "ANTO");
     assertNotNull("CommuneService returned a null list", list);
     assertEquals(1, list.size());
   }

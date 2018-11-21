@@ -105,7 +105,7 @@ public interface RestService {
    * @param req HTTP Request (for determining base path of Rest Service).
    * @param rawdate the date at which the returned data is valid.
    * @param rawcodedepartement the Departement INSEE code of the Commune.
-   * @param rawcritere the Commune INSEE code or a part of the Commune enrich name.
+   * @param rawnom a part of the Commune enrich name.
    * @return list of all Commune matching the request parameters.
    */
   @GET
@@ -114,7 +114,7 @@ public interface RestService {
   public Response getAllCommune(@Context final HttpServletRequest req,
                                 @QueryParam("date") final String rawdate,
                                 @QueryParam("codedepartement") final String rawcodedepartement,
-                                @QueryParam("critere") final String rawcritere);
+                                @QueryParam("nom") final String rawnom);
 
   /**
    * Get the Commune with the given INSEE code.

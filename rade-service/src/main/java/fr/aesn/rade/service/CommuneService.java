@@ -47,10 +47,10 @@ public interface CommuneService {
    * List all Commune matching the request parameters.
    * @param date the date at which the code was valid
    * @param codedepartement the Departement INSEE code of the Commune.
-   * @param critere the Commune INSEE code or a part of the Commune enrich name.
+   * @param nom a part of the Commune enrich name.
    * @return a List of all the Commune matching the request parameters.
    */
-  public List<Commune> getAllCommune(Date date, String codedepartement, String critere);
+  public List<Commune> getAllCommune(Date date, String codedepartement, String nom);
     
   /**
    * Returns a Map of all Commune indexed by ID.

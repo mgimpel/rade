@@ -88,22 +88,22 @@ public class CommuneServiceImpl
   /**
    * List all Commune matching the request parameters.
    * @param date the date at which the code was valid
-   * @param departementcode the Departement INSEE code of the Commune.
-   * @param criteria the Commune INSEE code or a part of the Commune enrich name.
+   * @param codedepartement the Departement INSEE code of the Commune.
+   * @param nom a part of the Commune enrich name.
    * @return a List of all the Commune matching the request parameters.
    */
   @Override
   @Transactional(readOnly = true)
-  public List<Commune> getAllCommune(Date date, String codedepartement, String critere){
-    log.debug("Commune list requested for Date, Codedepartment and Critere: date={}, codedepartement={}, critere={}", date, codedepartement, critere);
-    if ( StringUtils.isEmpty(critere) && StringUtils.isEmpty(codedepartement))
+  public List<Commune> getAllCommune(Date date, String codedepartement, String nom){
+    log.debug("Commune list requested for Date, Codedepartment and Critere: date={}, codedepartement={}, nom={}", date, codedepartement, nom);
+    if ( StringUtils.isEmpty(nom) && StringUtils.isEmpty(codedepartement))
       return communeJpaDao.findAllValidOnDate(date);
-    else if( StringUtils.isEmpty(critere) && !StringUtils.isEmpty(codedepartement))
+    else if( StringUtils.isEmpty(nom) && !StringUtils.isEmpty(codedepartement))
       return communeJpaDao.findAllByCodedepartementValidOnDate(date, codedepartement);
-    else if(StringUtils.isEmpty(codedepartement) && !StringUtils.isEmpty(critere))
-      return communeJpaDao.findAllByCritereValidOnDate(date, critere);
-    else if(!StringUtils.isEmpty(codedepartement) && !StringUtils.isEmpty(critere))
-      return communeJpaDao.findAllByCodedepartementAndCritereValidOnDate(date, codedepartement, critere);
+    else if(StringUtils.isEmpty(codedepartement) && !StringUtils.isEmpty(nom))
+      return communeJpaDao.findAllByNomValidOnDate(date, nom);
+    else if(!StringUtils.isEmpty(codedepartement) && !StringUtils.isEmpty(nom))
+      return communeJpaDao.findAllByCodedepartementAndNomValidOnDate(date, codedepartement, nom);
     return null;
   }
 
