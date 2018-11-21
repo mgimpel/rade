@@ -110,8 +110,8 @@ public class HistoriqueCommuneInseeModel implements Serializable {
   private String texteLegislative;
 
   /** JO - Date de parution au Journal Officiel. */
-  @Size(max = 43)
-  private String dateJO;
+  @Size(min=0, max=4)
+  private List<Date> dateJO;
 
   @NotNull
   /** EFF - Date d'effet. */
