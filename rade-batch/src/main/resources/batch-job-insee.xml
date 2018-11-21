@@ -35,6 +35,7 @@
   <bean id="regionItemReader" scope="step"
         class="org.springframework.batch.item.file.FlatFileItemReader">
     <property name="resource" value="#{jobParameters['inputFile']}"/>
+    <property name="encoding" value="windows-1252"/>
     <property name="linesToSkip" value="1"/>
     <property name="lineMapper">
       <bean class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
@@ -53,6 +54,7 @@
   <bean id="departementItemReader" scope="step"
         class="org.springframework.batch.item.file.FlatFileItemReader">
     <property name="resource" value="#{jobParameters['inputFile']}"/>
+    <property name="encoding" value="windows-1252"/>
     <property name="linesToSkip" value="1"/>
     <property name="lineMapper">
       <bean class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
@@ -71,6 +73,7 @@
   <bean id="communeSimpleItemReader" scope="step"
         class="org.springframework.batch.item.file.FlatFileItemReader">
     <property name="resource" value="#{jobParameters['inputFile']}"/>
+    <property name="encoding" value="windows-1252"/>
     <property name="linesToSkip" value="1"/>
     <property name="lineMapper">
       <bean class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
@@ -89,6 +92,7 @@
   <bean id="historiqueCommuneItemReader" scope="step"
         class="org.springframework.batch.item.file.FlatFileItemReader">
     <property name="resource" value="#{jobParameters['inputFile']}"/>
+    <property name="encoding" value="windows-1252"/>
     <property name="linesToSkip" value="1"/>
     <property name="lineMapper">
       <bean class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
