@@ -536,7 +536,7 @@ public class HistoriqueCommuneInseeImportRules {
     List<HistoriqueCommuneInseeModel> mod312list = buildModFilteredList(list, "312");
     pairListWithLeftovers = buildModFilteredPairListWithLeftovers(pairListWithLeftovers.pairlist, mod312list, pairListWithLeftovers.mod2leftoverlist);
     assert pairListWithLeftovers.mod1leftoverlist.isEmpty();
-    if (mod311leftoverlist != null && mod311leftoverlist.size() > 0) {
+    if (mod311leftoverlist != null && !mod311leftoverlist.isEmpty()) {
       pairListWithLeftovers = buildModFilteredPairListWithLeftovers(pairListWithLeftovers.pairlist, mod311leftoverlist, pairListWithLeftovers.mod2leftoverlist);
       assert pairListWithLeftovers.mod1leftoverlist.isEmpty();
     }

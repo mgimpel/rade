@@ -31,7 +31,8 @@ public final class SharedBusinessRules {
    * Hidden private Constructor makes the class non-instantiable.
    */
   private SharedBusinessRules() {
-    // Empty Constructor.
+    throw new UnsupportedOperationException(
+            "This is a utility class and cannot be instantiated");
   }
 
   /**

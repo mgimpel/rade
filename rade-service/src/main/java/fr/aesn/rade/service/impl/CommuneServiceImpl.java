@@ -418,7 +418,7 @@ public class CommuneServiceImpl
       throw new InvalidArgumentException(
               "The date and audit are mandatory.");
     }
-    if (com310absorbe == null || com310absorbe.size() < 1) {
+    if (com310absorbe == null || com310absorbe.isEmpty()) {
       throw new InvalidArgumentException(
               "Commune absorbé list cannot be null or empty.");
     }
@@ -487,7 +487,7 @@ public class CommuneServiceImpl
       throw new InvalidArgumentException(
               "The date and audit are mandatory.");
     }
-    if (com330associe == null || com330associe.size() < 1) {
+    if (com330associe == null || com330associe.isEmpty()) {
       throw new InvalidArgumentException(
               "Commune absorbé list cannot be null or empty.");
     }
@@ -556,7 +556,7 @@ public class CommuneServiceImpl
       throw new InvalidArgumentException(
               "The date and audit are mandatory.");
     }
-    if (com311 == null || com311.size() < 1) {
+    if (com311 == null || com311.isEmpty()) {
       throw new InvalidArgumentException(
               "Commune absorbé list cannot be null or empty.");
     }
@@ -625,7 +625,7 @@ public class CommuneServiceImpl
       throw new InvalidArgumentException(
               "The date and audit are mandatory.");
     }
-    if (com331x332x333 == null || com331x332x333.size() < 1) {
+    if (com331x332x333 == null || com331x332x333.isEmpty()) {
       throw new InvalidArgumentException(
               "Commune absorbé list cannot be null or empty.");
     }
@@ -665,7 +665,7 @@ public class CommuneServiceImpl
       mod = commune.getCommentaire();
       if (com341nouvelle.getCodeInsee().equals(commune.getCodeInsee())) {
         log.trace("Already invalidated and genealogised commune: {}", com341nouvelle.getCodeInsee());
-      } else if (mod != null && (mod.equals("MOD=332") || mod.equals("MOD=333"))) {
+      } else if (mod != null && ("MOD=332".equals(mod) || "MOD=333".equals(mod))) {
         log.trace("No need to invalidate commune: {}", commune);
       } else {
         parentAbsorbe = invalidateCommune(commune.getCodeInsee(), dateEffective);
@@ -874,8 +874,8 @@ public class CommuneServiceImpl
     commune.setTypeNomClair(tncc);
     commune.setArticleEnrichi(tncc.getArticle());
     commune.setNomEnrichi(nomEnrichi);
-    commune.setNomMajuscule(nomMajuscule == null ? StringUtils.toUpperAsciiWithLookup(nomEnrichi)
-                                                 : nomMajuscule); //TODO check this works
+    commune.setNomMajuscule(nomMajuscule == null ? StringUtils.toUpperAscii(nomEnrichi)
+                                                 : nomMajuscule);
     commune.setCommentaire(commentaire == null ? ""
                                                : commentaire);
     return commune;
