@@ -17,11 +17,7 @@
 /* $Id$ */
 package fr.aesn.rade.common.util;
 
-import java.io.UnsupportedEncodingException;
-import java.math.BigInteger;
 import java.text.Normalizer;
-
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * String Utilities.
@@ -31,19 +27,8 @@ import lombok.extern.slf4j.Slf4j;
  *
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
-@Slf4j
 public class StringUtils {
-  private static final String PLAIN_ASCII =
-      "AaEeIiOoUu"    // grave
-    + "AaEeIiOoUuYy"  // acute
-    + "AaEeIiOoUuYy"  // circumflex
-    + "AaOoNn"        // tilde
-    + "AaEeIiOoUuYy"  // umlaut
-    + "Aa"            // ring
-    + "Cc"            // cedilla
-    + "OoUu"          // double acute
-    + "SsZz"          // hacek
-    ;
+  /** List of Unicode characters with accents and such. */
   private static final String UNICODE =
       "\u00C0\u00E0\u00C8\u00E8\u00CC\u00EC\u00D2\u00F2\u00D9\u00F9"
     + "\u00C1\u00E1\u00C9\u00E9\u00CD\u00ED\u00D3\u00F3\u00DA\u00FA\u00DD\u00FD"
@@ -55,6 +40,19 @@ public class StringUtils {
     + "\u0150\u0151\u0170\u0171"
     + "\u0160\u0161\u017D\u017E"
     ;
+  /** List of characters equivalent to UNICODE without accents. */
+  private static final String PLAIN_ASCII =
+      "AaEeIiOoUu"    // grave
+    + "AaEeIiOoUuYy"  // acute
+    + "AaEeIiOoUuYy"  // circumflex
+    + "AaOoNn"        // tilde
+    + "AaEeIiOoUuYy"  // umlaut
+    + "Aa"            // ring
+    + "Cc"            // cedilla
+    + "OoUu"          // double acute
+    + "SsZz"          // hacek
+    ;
+  /** List of Unicode upper case characters with accents and such. */
   private static final String UPPERCASE_ASCII =
       "AEIOU"  // grave
     + "AEIOUY" // acute
@@ -66,6 +64,7 @@ public class StringUtils {
     + "OU"     // double acute
     + "SZ"     // hacek
     ;
+  /** List of characters equivalent to UPPERCASE_UNICODE without accents. */
   private static final String UPPERCASE_UNICODE =
       "\u00C0\u00C8\u00CC\u00D2\u00D9"
     + "\u00C1\u00C9\u00CD\u00D3\u00DA\u00DD"
@@ -230,16 +229,13 @@ public class StringUtils {
     return sb.toString();
   }
 
-  public static String toHex2(final String s) {
-    try {
-      return String.format("%040x", new BigInteger(1, s.getBytes("UTF-8")));
-    } catch (UnsupportedEncodingException e) {
-      log.warn("This should never happen.");
-      return null;
-    }
-  }
-
-  public static String toHex(final String s) {
+  /**
+   * Convert the given String to Unicode Hexadecimal
+   * @param s the String to process.
+   * @return a String of Hexadecimal digits representing the Unicode for each
+   * character.
+   */
+  public static String toUnicodeHex(final String s) {
     StringBuilder buf = new StringBuilder(200);
     for (char ch: s.toCharArray()) {
       if (buf.length() > 0)

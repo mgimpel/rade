@@ -19,8 +19,15 @@ package fr.aesn.rade.batch.tasks.insee;
 
 import static org.junit.Assert.*;
 
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -35,18 +42,27 @@ import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.repository.JobRepository;
+import org.springframework.batch.item.ExecutionContext;
+import org.springframework.batch.item.file.FlatFileItemReader;
+import org.springframework.batch.item.file.mapping.DefaultLineMapper;
+import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
 import org.springframework.batch.test.JobLauncherTestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.util.ResourceUtils;
 
 import fr.aesn.rade.batch.tasks.SpringBatchTestConfiguration;
+import fr.aesn.rade.common.util.StringUtils;
 import fr.aesn.rade.persist.dao.CommuneJpaDao;
+import fr.aesn.rade.persist.model.Commune;
+import fr.aesn.rade.service.MetadataService;
 
 /**
  * Test the Commune Batch Import Job.
@@ -67,6 +83,9 @@ public class TestHistoriqueCommuneImportBatch {
   /** JPA DAO used to check data imported by Batch. */
   @Autowired
   protected CommuneJpaDao communeJpaDao;
+  /** Metadata Service used to build Communes. */
+  @Autowired
+  protected MetadataService metadataService;
   /** JobLauncherTestUtils for JUnit to test Batch Jobs. */
   protected JobLauncherTestUtils jobLauncherTestUtils;
 
@@ -86,7 +105,10 @@ public class TestHistoriqueCommuneImportBatch {
         .addScript("db/sql/insert-StatutModification.sql")
         .addScript("db/sql/insert-TypeGenealogieEntiteAdmin.sql")
         .addScript("db/sql/insert-Audit.sql")
+        .addScript("db/sql/insert-Region.sql")
+        .addScript("db/sql/insert-Departement.sql")
         .build();
+//    DatabaseManagerSwing.main(new String[] { "--url", "jdbc:derby:memory:testdb", "--user", "sa", "--password", "" });
   }
 
   /**
@@ -99,18 +121,26 @@ public class TestHistoriqueCommuneImportBatch {
 
   /**
    * Set up the Test Environment.
- * @throws Exception 
    */
   @Before
-  public void setUp() throws Exception {
+  public void setUp() {
     jobLauncherTestUtils = new JobLauncherTestUtils();
     jobLauncherTestUtils.setJobRepository(context.getBean("jobRepository", JobRepository.class));
     jobLauncherTestUtils.setJobLauncher(context.getBean("jobLauncher", JobLauncher.class));
+    jobLauncherTestUtils.setJob(context.getBean("importCommuneInseeHistoryJob", Job.class));
+  }
+
+  /**
+   * Fill the database with all the communes valid on January 1st of the given year.
+   * @param year the year.
+   * @throws Exception
+   */
+  public void setUpCommunes(String year) throws Exception {
     jobLauncherTestUtils.setJob(context.getBean("importCommuneSimpleInseeJob", Job.class));
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     JobParametersBuilder jobBuilder = new JobParametersBuilder();
-    jobBuilder.addString("inputFile", "classpath:batchfiles/insee/comsimp2017.txt");
-    jobBuilder.addDate("debutValidite", sdf.parse("2017-01-01"));
+    jobBuilder.addString("inputFile", "classpath:batchfiles/insee/comsimp" + year + ".txt");
+    jobBuilder.addDate("debutValidite", sdf.parse(year + "-01-01"));
     jobBuilder.addString("auditAuteur", "Batch");
     jobBuilder.addDate("auditDate", new Date());
     jobBuilder.addString("auditNote", "Import Test Setup");
@@ -133,20 +163,114 @@ public class TestHistoriqueCommuneImportBatch {
   @Test
   public void testImportDeptJob() throws Exception {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    setUpCommunes("1999");
+    long recordCount = countLines("classpath:batchfiles/insee/comsimp1999.txt") - 1;
     int initialSizeAll = communeJpaDao.findAll().size();
-    int initialSizeValid = communeJpaDao.findAllValidOnDate(sdf.parse("2017-01-01")).size();
+    int initialSizeValid = communeJpaDao.findAllValidOnDate(sdf.parse("1999-01-01")).size();
+    assertEquals("After initialization there should be one record for each line in file (minus 1 for header line)",
+                 recordCount, initialSizeAll);
+    assertEquals("After initialisation all records should be valid.",
+                 initialSizeAll, initialSizeValid);
     JobParametersBuilder jobBuilder = new JobParametersBuilder();
-    jobBuilder.addString("inputFile", "classpath:batchfiles/insee/historiq2018.txt");
-    jobBuilder.addDate("debutValidite", sdf.parse("2017-01-01"));
+    jobBuilder.addString("inputFile", "classpath:batchfiles/insee/historiq2018-modified.txt");
+    jobBuilder.addDate("debutValidite", sdf.parse("1999-01-02"));
     jobBuilder.addString("auditAuteur", "Batch");
     jobBuilder.addDate("auditDate", new Date());
     jobBuilder.addString("auditNote", "Import Test");
     JobParameters jobParameters = jobBuilder.toJobParameters();
     JobExecution jobExecution = jobLauncherTestUtils.launchJob(jobParameters);
     assertEquals(BatchStatus.COMPLETED, jobExecution.getStatus());
-    assertEquals("The batch imported the wrong number of lines",
-                 initialSizeAll + 16 + 2, communeJpaDao.findAll().size());
-    assertEquals("Changing Names should not change the number of Valid Communes on any given date",
-                 initialSizeValid + 1, communeJpaDao.findAllValidOnDate(sdf.parse("2018-01-01")).size());
+    testYear("2000");
+    testYear("2001");
+    testYear("2002");
+    testYear("2003");
+    testYear("2004");
+    testYear("2005");
+    testYear("2006");
+    testYear("2007");
+    testYear("2008");
+    testYear("2009");
+    testYear("2010");
+    testYear("2011");
+    testYear("2012");
+    testYear("2013");
+    testYear("2014");
+    testYear("2015");
+    testYear("2016");
+    testYear("2017");
+    testYear("2018");
+  }
+
+  private void testYear(String year) throws Exception {
+    String file = String.format("batchfiles/insee/comsimp%s.txt", year);
+    Date date = new SimpleDateFormat("yyyy-MM-dd").parse(year + "-01-01");
+    List<Commune> fileList = buildCommuneListFromFile(file);
+    List<Commune> dbList = communeJpaDao.findAllValidOnDate(date);
+    Map<String, Commune> dbMap = buildMapFromList(dbList);
+    Map<String, Commune> fileMap = buildMapFromList(fileList);
+    Commune test;
+    for (Commune commune : fileList) {
+      test = dbMap.get(commune.getCodeInsee());
+      assertNotNull("Not found in db: " + commune, test);
+      assertEquals("Mismatched CodeInsee", commune.getCodeInsee(), test.getCodeInsee());
+      assertEquals("Mismatched Departement", commune.getDepartement(), test.getDepartement());
+//      assertEquals("Mismatched ArticleEnrichi", commune.getArticleEnrichi(), test.getArticleEnrichi());
+      assertEquals("Mismatched NomMajuscule", commune.getNomMajuscule(), test.getNomMajuscule());
+      assertEquals("Mismatched NomEnrichi", commune.getNomEnrichi(), test.getNomEnrichi());
+      assertEquals("Mismatched TypeNomClair fr Commune " + commune.getCodeInsee(), commune.getTypeNomClair(), test.getTypeNomClair());
+    }
+    for (Commune commune : dbList) {
+        test = fileMap.get(commune.getCodeInsee());
+        assertNotNull("Not found in file: " + commune, test);
+        assertEquals("Mismatched CodeInsee", commune.getCodeInsee(), test.getCodeInsee());
+        assertEquals("Mismatched Departement", commune.getDepartement(), test.getDepartement());
+//        assertEquals("Mismatched ArticleEnrichi", commune.getArticleEnrichi(), test.getArticleEnrichi());
+        assertEquals("Mismatched NomMajuscule", commune.getNomMajuscule(), test.getNomMajuscule());
+        assertEquals("Mismatched NomEnrichi", commune.getNomEnrichi(), test.getNomEnrichi());
+        assertEquals("Mismatched TypeNomClair", commune.getTypeNomClair(), test.getTypeNomClair());
+      }
+    assertEquals(fileList.size(), dbList.size());
+  }
+
+  private long countLines(String file) {
+    try {
+      return Files.lines(ResourceUtils.getFile(file).toPath(),
+                         Charset.forName("Cp1252"))
+                  .count();
+    } catch (IOException e) {
+      return 0L;
+    }
+  }
+
+  private List<Commune> buildCommuneListFromFile(String file) throws Exception {
+    FlatFileItemReader<Commune> reader = new FlatFileItemReader<>();
+    reader.setResource(new ClassPathResource(file));
+    reader.setEncoding("windows-1252");
+    reader.setLinesToSkip(1);
+    DelimitedLineTokenizer tokenizer = new DelimitedLineTokenizer();
+    tokenizer.setDelimiter("\t");
+    CommuneSimpleMapper mapper = new CommuneSimpleMapper();
+    mapper.setMetadataService(metadataService);
+    DefaultLineMapper<Commune> lineMapper = new DefaultLineMapper<>();
+    lineMapper.setFieldSetMapper(mapper);
+    lineMapper.setLineTokenizer(tokenizer);
+    reader.setLineMapper(lineMapper);
+    reader.afterPropertiesSet();
+    ExecutionContext ec = new ExecutionContext();
+    reader.open(ec);
+    Commune record;
+    List<Commune> list = new ArrayList<>();
+    while((record = reader.read()) != null) {
+      list.add(record);
+    }
+    return list;
+  }
+
+  private Map<String, Commune> buildMapFromList(List<Commune> list) {
+    HashMap<String, Commune> map = new HashMap<>(list.size());
+    for (Commune item : list) {
+      map.put(item.getCodeInsee(), item);
+    }
+    return map;
   }
 }

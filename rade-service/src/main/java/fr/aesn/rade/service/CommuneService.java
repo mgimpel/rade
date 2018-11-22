@@ -220,4 +220,34 @@ public interface CommuneService {
 
   public void mod351CommuneNouvelle(Date dateEffective, Audit audit)
     throws InvalidArgumentException;
+
+  /**
+   * Changes the departement (MOD=411 : Changement de departement) that the
+   * Commune belongs to (NB: this involves changing it's codeInsee).
+   * @param dateEffective the date that the change takes effect.
+   * @param audit audit details about change.
+   * @param codeInsee the new code of the Commune.
+   * @param departement the new departement to which the Commune belongs.
+   * @param oldCodeInsee the old code for the Commune.
+   * @param commentaire comment for the genealogie link.
+   * @return the new Commune.
+   * @throws InvalidArgumentException if an invalid argument has been passed.
+   */
+  public Commune mod411ChangementDept(Date dateEffective, Audit audit,
+                                      String codeInsee, String departement,
+                                      String oldCodeInsee, String commentaire)
+    throws InvalidArgumentException;
+
+  /**
+   * Removes the Commune (MOD=XXX : custom code).
+   * @param dateEffective the date that the change takes effect.
+   * @param audit audit details about change.
+   * @param codeInsee the code of the Commune to remove.
+   * @param commentaire comment.
+   * @return the invalidated commune.
+   * @throws InvalidArgumentException if an invalid argument has been passed.
+   */
+  public Commune modXXXSupression(Date dateEffective, Audit audit,
+                                  String codeInsee, String commentaire)
+    throws InvalidArgumentException;
 }

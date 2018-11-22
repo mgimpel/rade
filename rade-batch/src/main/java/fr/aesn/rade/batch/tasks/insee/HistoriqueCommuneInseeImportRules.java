@@ -127,18 +127,18 @@ import lombok.extern.slf4j.Slf4j;
  * |Fusion-assoc. se transf. en fusion simple (commune absorbée)   350  360     Voir 360
  * |Commune nouv.: suppression de commune préexistante             351          Traitement ligne simple
  * |Fusion-assoc. se transformant en fusion simple : commune-pôle  360  350     Traitement paire 350-360
- * |Suppression de la fraction cantonale                           370          RAS
+ * |Suppression de la fraction cantonale                           370          N/A
  * |Commune ayant reçu des parcelles suite à une suppression       390
- * |Chgt de région                                                 400          RAS
- * |Chgt de département                                            410          RAS
- * |Chgt de département (lors de création de commune nouv.)        411          RAS
- * |Chgt d'arrondissement                                          420          RAS
- * |Chgt d'arrondissement (lors de création de commune nouv.)      421          RAS
- * |Chgt de canton                                                 430          RAS
- * |Chgt de canton (lors de création de commune nouv.)             431          RAS
- * |Transfert de chef-lieu de commune                              500          RAS
- * |Transfert de bureau centralisateur de canton                   510          RAS
- * |Transfert de chef-lieu d'arrondissement                        520          RAS
+ * |Chgt de région                                                 400          N/A
+ * |Chgt de département                                            410          Traitement ligne simple (non utilisé depuis 1997)
+ * |Chgt de département (lors de création de commune nouv.)        411          Traitement ligne simple
+ * |Chgt d'arrondissement                                          420          N/A
+ * |Chgt d'arrondissement (lors de création de commune nouv.)      421          N/A
+ * |Chgt de canton                                                 430          N/A
+ * |Chgt de canton (lors de création de commune nouv.)             431          N/A
+ * |Transfert de chef-lieu de commune                              500          N/A
+ * |Transfert de bureau centralisateur de canton                   510          N/A
+ * |Transfert de chef-lieu d'arrondissement                        520          N/A
  * |Transfert de chef-lieu de département                          530
  * |Transfert de chef-lieu de région                               540
  * |Cession de parcelles avec incidence démographique              600
@@ -243,8 +243,9 @@ public class HistoriqueCommuneInseeImportRules {
     log.debug("Processing all MODs, for {}", date);
     List<HistoriqueCommuneInseeModel> dateFilteredList =
       filterListByDate(list, date);
-    // Order doesn't matter
+    // Order is important: 411 before 3xx
     processMod100(dateFilteredList);
+    processMod411(dateFilteredList);
     processMod200(dateFilteredList);
     processMod210x230(dateFilteredList);
     processMod310x320(dateFilteredList);
@@ -252,6 +253,7 @@ public class HistoriqueCommuneInseeImportRules {
     processMod311x321and331x332x333x341(dateFilteredList);
     processMod350x360(dateFilteredList);
     processMod351(dateFilteredList);
+    processModXXX(dateFilteredList);
   }
 
   public void processMod100(final List<HistoriqueCommuneInseeModel> fullList)
@@ -384,7 +386,7 @@ public class HistoriqueCommuneInseeImportRules {
       for(HistoriqueCommuneInseeModel.Pair pair : set.getPairs()) {
         assert "341".equals(pair.getParent().getTypeModification()) : pair.getParent().getTypeModification();
       }
-      List<Commune> com331x332x333 = buildCommuneList(buildEnfantList(set));
+      List<Commune> com331x332x333 = buildCommuneListWithModComment(buildEnfantList(set));
       Commune com341nouvelle = buildCommune(set.getPairs().get(0).getParent()); //TODO verify all parents have the same details
       communeService.mod331x332x333x341FusionAvecDeleguee(set.getDateEffet(),
                                                           batchAudit,
@@ -412,7 +414,7 @@ public class HistoriqueCommuneInseeImportRules {
   public void processMod351(final List<HistoriqueCommuneInseeModel> fullList)
     throws InvalidArgumentException {
     List<HistoriqueCommuneInseeModel> list = buildMod351list(fullList);
-    log.debug("Processing MOD 100, # of elements: {}", list.size());
+    log.debug("Processing MOD 351, # of elements: {}", list.size());
     for (HistoriqueCommuneInseeModel historique : list) {
       log.trace("Processing element: {}", historique);
       assert "351".equals(historique.getTypeModification()) : historique.getTypeModification();
@@ -421,6 +423,36 @@ public class HistoriqueCommuneInseeImportRules {
                                            batchAudit);
     }
   }
+
+  public void processMod411(final List<HistoriqueCommuneInseeModel> fullList)
+    throws InvalidArgumentException {
+    List<HistoriqueCommuneInseeModel> list = buildMod411list(fullList);
+    log.debug("Processing MOD 411, # of elements: {}", list.size());
+    for (HistoriqueCommuneInseeModel historique : list) {
+      log.trace("Processing element: {}", historique);
+      assert "411".equals(historique.getTypeModification()) : historique.getTypeModification();
+      communeService.mod411ChangementDept(historique.getDateEffet(),
+                                          batchAudit,
+                                          historique.getCodeDepartement() + historique.getCodeCommune(),
+                                          historique.getCodeDepartement(),
+                                          historique.getAncienCommuneChgmtDept(),
+                                          null);
+    }
+  }
+
+  public void processModXXX(final List<HistoriqueCommuneInseeModel> fullList)
+    throws InvalidArgumentException {
+    List<HistoriqueCommuneInseeModel> list = buildModXXXlist(fullList);
+    log.debug("Processing MOD XXX, # of elements: {}", list.size());
+    for (HistoriqueCommuneInseeModel historique : list) {
+      log.trace("Processing element: {}", historique);
+      assert "XXX".equals(historique.getTypeModification()) : historique.getTypeModification();
+      communeService.modXXXSupression(historique.getDateEffet(),
+                                      batchAudit,
+                                      historique.getCodeDepartement() + historique.getCodeCommune(),
+                                      null);
+          }
+        }
 
   private Commune buildCommune(HistoriqueCommuneInseeModel historique) {
     Commune commune = new Commune();
@@ -437,6 +469,17 @@ public class HistoriqueCommuneInseeImportRules {
     List<Commune> list = new ArrayList<>(historiqueList.size());
     for (HistoriqueCommuneInseeModel historique : historiqueList) {
       list.add(buildCommune(historique));
+    }
+    return list;
+  }
+
+  private List<Commune> buildCommuneListWithModComment(List<HistoriqueCommuneInseeModel> historiqueList) {
+    List<Commune> list = new ArrayList<>(historiqueList.size());
+    Commune commune;
+    for (HistoriqueCommuneInseeModel historique : historiqueList) {
+      commune = buildCommune(historique);
+      commune.setCommentaire("MOD=" + historique.getTypeModification());
+      list.add(commune);
     }
     return list;
   }
@@ -513,6 +556,18 @@ public class HistoriqueCommuneInseeImportRules {
 
   public static final List<HistoriqueCommuneInseeModel> buildMod351list(final List<HistoriqueCommuneInseeModel> list) {
     return buildModFilteredList(list, "351");
+  }
+
+  public static final List<HistoriqueCommuneInseeModel> buildMod410list(final List<HistoriqueCommuneInseeModel> list) {
+    return buildModFilteredList(list, "410");
+  }
+
+  public static final List<HistoriqueCommuneInseeModel> buildMod411list(final List<HistoriqueCommuneInseeModel> list) {
+    return buildModFilteredList(list, "411");
+  }
+
+  public static final List<HistoriqueCommuneInseeModel> buildModXXXlist(final List<HistoriqueCommuneInseeModel> list) {
+    return buildModFilteredList(list, "XXX");
   }
 
   private static final List<HistoriqueCommuneInseeModel> buildModFilteredList(final List<HistoriqueCommuneInseeModel> list, final String mod) {

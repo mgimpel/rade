@@ -41,6 +41,9 @@ public class TestStringUtils {
   private static final String RESULT_ISO_8859_15    = "AAAAAAÆCEEEEIIIIÐNOOOOOØUUUUYÞßaaaaaaæceeeeiiiiðnoooooøuuuuyþy€SsZzŒœY";
 //  private static final String TEST_LIGATURES_FR     = "ÆŒæœ";
 
+  /**
+   * Test toAsciiWithNormalizer.
+   */
   @Test
   public void testToAsciiWithNormalizer() {
     assertEquals("toAsciiWithNormalizer failed", RESULT_VOWELS_FR,
@@ -57,6 +60,9 @@ public class TestStringUtils {
                  StringUtils.toAsciiWithNormalizer(TEST_ISO_8859_15));
   }
 
+  /**
+   * Test toAsciiWithReplaceAll.
+   */
   @Test
   public void testToAsciiWithReplaceAll() {
     assertEquals("toAsciiWithReplaceAll failed", RESULT_VOWELS_FR,
@@ -73,6 +79,9 @@ public class TestStringUtils {
                  StringUtils.toAsciiWithReplaceAll(TEST_ISO_8859_15));
   }
 
+  /**
+   * Test toAsciiWithLookup.
+   */
   @Test
   public void testToAsciiWithLookup() {
     assertEquals("toAsciiWithLookup failed", RESULT_VOWELS_FR,
@@ -89,6 +98,9 @@ public class TestStringUtils {
                  StringUtils.toAsciiWithLookup(TEST_ISO_8859_15));
   }
 
+  /**
+   * Test toUpperAsciiWithNormalizer.
+   */
   @Test
   public void testToUpperAsciiWithNormalizer() {
     assertEquals("toUpperAsciiWithNormalizer failed", RESULT_VOWELS_FR.toUpperCase(),
@@ -105,6 +117,9 @@ public class TestStringUtils {
                  StringUtils.toUpperAsciiWithNormalizer(TEST_ISO_8859_15));
   }
 
+  /**
+   * Test toUpperAsciiWithReplaceAll.
+   */
   @Test
   public void testToUpperAsciiWithReplaceAll() {
     assertEquals("toUpperAsciiWithReplaceAll failed", RESULT_VOWELS_FR.toUpperCase(),
@@ -121,6 +136,9 @@ public class TestStringUtils {
                  StringUtils.toUpperAsciiWithReplaceAll(TEST_ISO_8859_15));
   }
 
+  /**
+   * Test toUpperAsciiWithLookup.
+   */
   @Test
   public void testToUpperAsciiWithLookup() {
     assertEquals("toUpperAsciiWithLookup failed", RESULT_VOWELS_FR.toUpperCase(),
@@ -135,5 +153,17 @@ public class TestStringUtils {
                  StringUtils.toUpperAsciiWithLookup(TEST_ISO_8859_1));
     assertEquals("toUpperAsciiWithLookup failed", RESULT_ISO_8859_15.toUpperCase(),
                  StringUtils.toUpperAsciiWithLookup(TEST_ISO_8859_15));
+  }
+
+  /**
+   * Test toUnicodeHex.
+   */
+  @Test
+  public void testToUnicodeHex() {
+    StringBuffer sb = new StringBuffer();
+    for (String c : StringUtils.toUnicodeHex(TEST_ISO_8859_15).split(" ")) {
+      sb.append((char)Integer.parseInt(c, 16));
+    }
+    assertEquals("toHex failed", TEST_ISO_8859_15, sb.toString());
   }
 }
