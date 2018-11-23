@@ -59,7 +59,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.util.ResourceUtils;
 
 import fr.aesn.rade.batch.tasks.SpringBatchTestConfiguration;
-import fr.aesn.rade.common.util.StringUtils;
 import fr.aesn.rade.persist.dao.CommuneJpaDao;
 import fr.aesn.rade.persist.model.Commune;
 import fr.aesn.rade.service.MetadataService;

@@ -30,7 +30,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import fr.aesn.rade.common.InvalidArgumentException;
-import fr.aesn.rade.common.util.StringUtils;
+import fr.aesn.rade.common.util.StringConversionUtils;
 import fr.aesn.rade.persist.dao.CommuneJpaDao;
 import fr.aesn.rade.persist.dao.GenealogieEntiteAdminJpaDao;
 import fr.aesn.rade.persist.model.Audit;
@@ -371,7 +371,7 @@ public class CommuneServiceImpl
     com230source.setId(null);
     com230source.setDebutValidite(dateEffective);
     if (com230source.getNomMajuscule() == null) {
-      com230source.setNomMajuscule(StringUtils.toUpperAsciiWithLookup(com230source.getNomEnrichi()));
+      com230source.setNomMajuscule(StringConversionUtils.toUpperAsciiWithLookup(com230source.getNomEnrichi()));
     }
     if (com230source.getArticleEnrichi() == null) {
       com230source.setArticleEnrichi(com230source.getTypeNomClair().getArticle());
@@ -385,7 +385,7 @@ public class CommuneServiceImpl
     // create new commune retabli
     com210retabli.setAudit(audit);
     if (com210retabli.getNomMajuscule() == null) {
-      com210retabli.setNomMajuscule(StringUtils.toUpperAsciiWithLookup(com210retabli.getNomEnrichi()));
+      com210retabli.setNomMajuscule(StringConversionUtils.toUpperAsciiWithLookup(com210retabli.getNomEnrichi()));
     }
     if (com210retabli.getArticleEnrichi() == null && com210retabli.getTypeNomClair().getArticleMaj() != null) {
       com210retabli.setArticleEnrichi(com210retabli.getTypeNomClair().getArticle());
@@ -443,7 +443,7 @@ public class CommuneServiceImpl
     Commune parentAbsorbant = invalidateCommune(com320absorbant.getCodeInsee(), dateEffective);
     com320absorbant.setAudit(audit);
     if (com320absorbant.getNomMajuscule() == null) {
-      com320absorbant.setNomMajuscule(StringUtils.toUpperAsciiWithLookup(com320absorbant.getNomEnrichi()));
+      com320absorbant.setNomMajuscule(StringConversionUtils.toUpperAsciiWithLookup(com320absorbant.getNomEnrichi()));
     }
     if (com320absorbant.getArticleEnrichi() == null
             && com320absorbant.getTypeNomClair().getArticleMaj() != null) {
@@ -512,7 +512,7 @@ public class CommuneServiceImpl
     Commune parentAbsorbant = invalidateCommune(com340absorbant.getCodeInsee(), dateEffective);
     com340absorbant.setAudit(audit);
     if (com340absorbant.getNomMajuscule() == null) {
-      com340absorbant.setNomMajuscule(StringUtils.toUpperAsciiWithLookup(com340absorbant.getNomEnrichi()));
+      com340absorbant.setNomMajuscule(StringConversionUtils.toUpperAsciiWithLookup(com340absorbant.getNomEnrichi()));
     }
     if (com340absorbant.getArticleEnrichi() == null
             && com340absorbant.getTypeNomClair().getArticleMaj() != null) {
@@ -581,7 +581,7 @@ public class CommuneServiceImpl
     Commune parentAbsorbant = invalidateCommune(com321nouvelle.getCodeInsee(), dateEffective);
     com321nouvelle.setAudit(audit);
     if (com321nouvelle.getNomMajuscule() == null) {
-      com321nouvelle.setNomMajuscule(StringUtils.toUpperAsciiWithLookup(com321nouvelle.getNomEnrichi()));
+      com321nouvelle.setNomMajuscule(StringConversionUtils.toUpperAsciiWithLookup(com321nouvelle.getNomEnrichi()));
     }
     if (com321nouvelle.getArticleEnrichi() == null
             && com321nouvelle.getTypeNomClair().getArticleMaj() != null) {
@@ -650,7 +650,7 @@ public class CommuneServiceImpl
     Commune parentAbsorbant = invalidateCommune(com341nouvelle.getCodeInsee(), dateEffective);
     com341nouvelle.setAudit(audit);
     if (com341nouvelle.getNomMajuscule() == null) {
-      com341nouvelle.setNomMajuscule(StringUtils.toUpperAsciiWithLookup(com341nouvelle.getNomEnrichi()));
+      com341nouvelle.setNomMajuscule(StringConversionUtils.toUpperAsciiWithLookup(com341nouvelle.getNomEnrichi()));
     }
     if (com341nouvelle.getArticleEnrichi() == null
             && com341nouvelle.getTypeNomClair().getArticleMaj() != null) {
@@ -874,7 +874,7 @@ public class CommuneServiceImpl
     commune.setTypeNomClair(tncc);
     commune.setArticleEnrichi(tncc.getArticle());
     commune.setNomEnrichi(nomEnrichi);
-    commune.setNomMajuscule(nomMajuscule == null ? StringUtils.toUpperAscii(nomEnrichi)
+    commune.setNomMajuscule(nomMajuscule == null ? StringConversionUtils.toUpperAscii(nomEnrichi)
                                                  : nomMajuscule);
     commune.setCommentaire(commentaire == null ? ""
                                                : commentaire);
