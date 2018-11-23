@@ -83,8 +83,7 @@ public final class Version {
    * are not meant to be instantiated.
    */
   private Version() {
-    throw new UnsupportedOperationException(
-            "This is a utility class and cannot be instantiated");
+    // Private constructor to hide the implicit public one.
   }
 
   /**
