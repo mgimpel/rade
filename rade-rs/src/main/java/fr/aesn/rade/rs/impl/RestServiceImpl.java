@@ -98,7 +98,7 @@ public class RestServiceImpl
                                @QueryParam("date") final String rawdate) {
     log.info("Executing operation getAllRegion with date {}", rawdate);
     try {
-      Date date = checkDate(rawdate);
+      Date date = decodeDate(rawdate);
       List<Region> regions = regionService.getAllRegion(date);
       if (regions.isEmpty()) {
         return Response.status(Response.Status.NOT_FOUND)
@@ -130,8 +130,8 @@ public class RestServiceImpl
                             @QueryParam("date") final String rawdate) {
     log.info("Executing operation getRegion with code {} and date {}", rawcode, rawdate);
     try {
-      String code = checkCode(rawcode);
-      Date date = checkDate(rawdate);
+      String code = decodeString(rawcode);
+      Date date = decodeDate(rawdate);
       Region region = regionService.getRegionByCode(code, date);
       if (region == null) {
         return Response.status(Response.Status.NOT_FOUND)
@@ -161,7 +161,7 @@ public class RestServiceImpl
                                     @QueryParam("date") final String rawdate) {
     log.info("Executing operation getAllDepartement with date {}", rawdate);
     try {
-      Date date = checkDate(rawdate);
+      Date date = decodeDate(rawdate);
       List<Departement> depts = departementService.getAllDepartement(date);
       if (depts.isEmpty()) {
         return Response.status(Response.Status.NOT_FOUND)
@@ -193,8 +193,8 @@ public class RestServiceImpl
                                  @QueryParam("date") final String rawdate) {
     log.info("Executing operation getDepartement with code {} and date {}", rawcode, rawdate);
     try {
-      String code = checkCode(rawcode);
-      Date date = checkDate(rawdate);
+      String code = decodeString(rawcode);
+      Date date = decodeDate(rawdate);
       Departement dept = departementService.getDepartementByCode(code, date);
       if (dept == null) {
         return Response.status(Response.Status.NOT_FOUND)
@@ -214,24 +214,25 @@ public class RestServiceImpl
   /**
    * Get all Commune matching the request parameters.
    * @param req HTTP Request (for determining base path of Rest Service).
-   * @param rawdate the date at which the returned data is valid.
-   * @param rawcodedepartement the Departement INSEE code of the Commune.
-   * @param rawnom a part of the Commune enrich name.
+   * @param rawDate the date at which the returned data is valid.
+   * @param rawDept the Departement INSEE code of the Commune.
+   * @param rawNameLike a part of the Commune enrich name.
    * @return list of all Commune matching the request parameters.
    */
   @GET
   @Path(REST_PATH_COMMUNE)
   @Produces(MediaType.APPLICATION_JSON)
   public Response getAllCommune(@Context final HttpServletRequest req,
-                                @QueryParam("date") final String rawdate,
-                                @QueryParam("codedepartement") final String rawcodedepartement,
-                                @QueryParam("nom") final String rawnom) {
-    log.info("Executing operation getAllCommune with date {}, codedepartement {} and nom {}", rawdate, rawcodedepartement, rawnom);
+                                @QueryParam("codedepartement") final String rawDept,
+                                @QueryParam("nom") final String rawNameLike,
+                                @QueryParam("date") final String rawDate) {
+    log.info("Executing operation getAllCommune with dept {}, name like {} and date {}",
+             rawDept, rawNameLike, rawDate);
     try {
-      Date date = checkDate(rawdate);
-      String codedepartement = checkFacultativeCriteria(rawcodedepartement);
-      String nom = checkFacultativeCriteria(rawnom);
-      List<Commune> communes = communeService.getAllCommune(date,codedepartement,nom);
+      Date date = decodeDate(rawDate);
+      String dept = decodeString(rawDept);
+      String nameLike = decodeString(rawNameLike);
+      List<Commune> communes = communeService.getAllCommune(dept, nameLike, date);
       if (communes.isEmpty()) {
         return Response.status(Response.Status.NOT_FOUND)
                        .build();
@@ -262,8 +263,8 @@ public class RestServiceImpl
                              @QueryParam("date") final String rawdate) {
     log.info("Executing operation getCommune with code {} and date {}", rawcode, rawdate);
     try {
-      String code = checkCode(rawcode);
-      Date date = checkDate(rawdate);
+      String code = decodeString(rawcode);
+      Date date = decodeDate(rawdate);
       Commune commune = communeService.getCommuneByCode(code, date);
       if (commune == null) {
         return Response.status(Response.Status.NOT_FOUND)
@@ -313,7 +314,7 @@ public class RestServiceImpl
                                 @PathParam("code") final String rawcode) {
     log.info("Executing operation getDelegation with code {}", rawcode);
     try {
-      String code = checkCode(rawcode);
+      String code = decodeString(rawcode);
       Delegation delegation = delegationService.getDelegationById(code);
       if (delegation == null) {
         return Response.status(Response.Status.NOT_FOUND)
@@ -363,7 +364,7 @@ public class RestServiceImpl
                             @PathParam("code") final String rawcode) {
     log.info("Executing operation getBassin with code {}", rawcode);
     try {
-      String code = checkCode(rawcode);
+      String code = decodeString(rawcode);
       CirconscriptionBassin bassin = bassinService.getBassinByCode(code);
       if (bassin == null) {
         return Response.status(Response.Status.NOT_FOUND)
@@ -382,40 +383,22 @@ public class RestServiceImpl
 
   /**
    * Check and decode the given String.
-   * @param rawcode the String to check and decode.
+   * @param rawString the String to check and decode.
    * @return the decoded String.
    * @throws RestRequestException if the String could not be decoded.
    */
-  private static final String checkCode(final String rawcode)
+  private static final String decodeString(final String rawString)
     throws RestRequestException {
-    String code = null;
+    if (rawString == null) {
+      return "";
+    }
+    String string = null;
     try {
-      code = URLDecoder.decode(rawcode, "UTF-8");
+      string = URLDecoder.decode(rawString, "UTF-8");
     } catch (UnsupportedEncodingException e) {
-      throw new RestRequestException("Could not decode " + rawcode, e);
+      throw new RestRequestException("Could not decode " + rawString, e);
     }
-    return code;
-  }
-  
-  /**
-   * Check and decode the given String.
-   * @param rawfacultativecriteria the String to check and decode.
-   * @return the decoded String.
-   * @throws RestRequestException if the String could not be decoded.
-   */
-  private static final String checkFacultativeCriteria(final String rawfacultativecriteria)
-      throws RestRequestException {
-    String facultativecriteria = null;
-    if (rawfacultativecriteria == null) {
-      facultativecriteria="";
-    }else{
-      try {
-        facultativecriteria = URLDecoder.decode(rawfacultativecriteria, "UTF-8");
-      } catch (UnsupportedEncodingException e) {
-        throw new RestRequestException("Could not decode " + rawfacultativecriteria, e);
-      }
-    }
-    return facultativecriteria;
+    return string;
   }
 
   /**
@@ -424,7 +407,7 @@ public class RestServiceImpl
    * @return the parsed date String.
    * @throws RestRequestException if the date String could not be parsed.
    */
-  private static final Date checkDate(final String rawdate)
+  private static final Date decodeDate(final String rawdate)
     throws RestRequestException {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     Date date = null;

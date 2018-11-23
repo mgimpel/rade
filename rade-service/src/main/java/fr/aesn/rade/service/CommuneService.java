@@ -42,16 +42,17 @@ public interface CommuneService {
    * @return a List of all the Commune.
    */
   public List<Commune> getAllCommune(Date date);
-  
+
   /**
-   * List all Commune matching the request parameters.
-   * @param date the date at which the code was valid
-   * @param codedepartement the Departement INSEE code of the Commune.
-   * @param nom a part of the Commune enrich name.
-   * @return a List of all the Commune matching the request parameters.
+   * Returns a List of all Commune from the given departement, resembling the
+   * given name and valid at the given date.
+   * @param dept the departement of the Communes.
+   * @param nameLike a pattern to search for Communes with a name resembling.
+   * @param date the date at which the Communes were valid.
+   * @return a List of all Commune matching the given parameters.
    */
-  public List<Commune> getAllCommune(Date date, String codedepartement, String nom);
-    
+  public List<Commune> getAllCommune(String codedepartement, String nom, Date date);
+
   /**
    * Returns a Map of all Commune indexed by ID.
    * @return a Map of all Commune indexed by ID.

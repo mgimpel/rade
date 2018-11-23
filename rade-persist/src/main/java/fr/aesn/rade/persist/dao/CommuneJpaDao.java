@@ -44,44 +44,10 @@ public interface CommuneJpaDao
    * @param date the date at which the Commune was valid
    * @return a List of all the valid Commune.
    */
-  @Query("SELECT c FROM Commune c WHERE c.debutValidite <= ?1 "
-                               + "AND (c.finValidite IS NULL OR c.finValidite > ?1)")
+  @Query("SELECT c FROM Commune c"
+               + " WHERE c.debutValidite <= ?1"
+               + " AND (c.finValidite IS NULL OR c.finValidite > ?1)")
   public List<Commune> findAllValidOnDate(Date date);
-  
-  /**
-   * Returns a List of all Commune matching the request parameters.
-   * @param date the date at which the Commune was valid
-   * @param codedepartement the Departement INSEE code of the Commune.
-   * @return a List of all Commune matching the request parameters.
-   */
-  @Query("SELECT c FROM Commune c WHERE c.debutValidite <= ?1 "
-                               + "AND (c.finValidite IS NULL OR c.finValidite > ?1)"
-                               + "AND (c.departement = ?2)")
-  public List<Commune> findAllByCodedepartementValidOnDate(Date date, String codedepartement);
-  
-  /**
-   * Returns a List of all Commune matching the request parameters.
-   * @param date the date at which the Commune was valid
-   * @param nom a part of the Commune enrich name.
-   * @return a List of all Commune matching the request parameters.
-   */
-  @Query("SELECT c FROM Commune c WHERE c.debutValidite <= ?1 "
-                               + "AND (c.finValidite IS NULL OR c.finValidite > ?1)"
-                               + "AND (LOWER(c.nomEnrichi) LIKE CONCAT('%',LOWER(?2),'%'))")
-  public List<Commune> findAllByNomValidOnDate(Date date, String nom);
-  
-  /**
-   * Returns a List of all Commune matching the request parameters.
-   * @param date the date at which the Commune was valid
-   * @param codedepartement the Departement INSEE code of the Commune.
-   * @param nom a part of the Commune enrich name.
-   * @return a List of all Commune matching the request parameters.
-   */
-  @Query("SELECT c FROM Commune c WHERE c.debutValidite <= ?1 "
-                               + "AND (c.finValidite IS NULL OR c.finValidite > ?1)"
-                               + "AND (c.departement = ?2)"
-                               + "AND (LOWER(c.nomEnrichi) LIKE CONCAT('%',LOWER(?3),'%'))")
-  public List<Commune> findAllByCodedepartementAndNomValidOnDate(Date date, String codedepartement, String nom);
 
   /**
    * Returns the Commune with the given CodeInsee valid at the given date.
@@ -89,8 +55,54 @@ public interface CommuneJpaDao
    * @param date the date at which the Commune was valid
    * @return the valid Commune.
    */
-  @Query("SELECT c FROM Commune c WHERE c.codeInsee = ?1 "
-                               + "AND c.debutValidite <= ?2 "
-                               + "AND (c.finValidite IS NULL OR c.finValidite > ?2)")
-  public Commune findByCodeInseeValidOnDate(String codeInsee, Date date);
+  @Query("SELECT c FROM Commune c"
+               + " WHERE c.codeInsee = ?1"
+               + " AND c.debutValidite <= ?2"
+               + " AND (c.finValidite IS NULL OR c.finValidite > ?2)")
+  public Commune findByCodeInseeValidOnDate(String codeInsee,
+                                            Date date);
+
+  /**
+   * Returns a List of from the given departement valid at the given date.
+   * @param dept the departement of the Communes.
+   * @param date the date at which the Communes were valid.
+   * @return a List of all Commune matching the given parameters.
+   */
+  @Query("SELECT c FROM Commune c"
+               + " WHERE c.departement = ?1"
+               + " AND c.debutValidite <= ?2"
+               + " AND (c.finValidite IS NULL OR c.finValidite > ?2)")
+  public List<Commune> findByDepartementValidOnDate(String dept,
+                                                    Date date);
+
+  /**
+   * Returns a List of all Commune resembling the given name and valid at the
+   * given date.
+   * @param nameLike a pattern to search for Communes with a name resembling.
+   * @param date the date at which the Communes were valid.
+   * @return a List of all Commune matching the given parameters.
+   */
+  @Query("SELECT c FROM Commune c"
+               + " WHERE (c.nomMajuscule LIKE '%' || UPPER(?1) || '%')"
+               + " AND c.debutValidite <= ?2"
+               + " AND (c.finValidite IS NULL OR c.finValidite > ?2)")
+  public List<Commune> findByNameLikeValidOnDate(String nameLike,
+                                                 Date date);
+
+  /**
+   * Returns a List of all Commune from the given departement, resembling the
+   * given name and valid at the given date.
+   * @param dept the departement of the Communes.
+   * @param nameLike a pattern to search for Communes with a name resembling.
+   * @param date the date at which the Communes were valid.
+   * @return a List of all Commune matching the given parameters.
+   */
+  @Query("SELECT c FROM Commune c"
+               + " WHERE c.departement = ?1"
+               + " AND (c.nomMajuscule LIKE '%' || UPPER(?2) || '%')"
+               + " AND c.debutValidite <= ?3"
+               + " AND (c.finValidite IS NULL OR c.finValidite > ?3)")
+  public List<Commune> findByDepartementAndNameLikeValidOnDate(String dept,
+                                                               String nameLike,
+                                                               Date date);
 }

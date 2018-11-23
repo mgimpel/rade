@@ -85,29 +85,30 @@ public class CommuneServiceImpl
     log.debug("Commune list requested for Date: date={}", date);
     return communeJpaDao.findAllValidOnDate(date);
   }
-  
+
   /**
-   * List all Commune matching the request parameters.
-   * @param date the date at which the code was valid
-   * @param codedepartement the Departement INSEE code of the Commune.
-   * @param nom a part of the Commune enrich name.
-   * @return a List of all the Commune matching the request parameters.
+   * Returns a List of all Commune from the given departement, resembling the
+   * given name and valid at the given date.
+   * @param dept the departement of the Communes.
+   * @param nameLike a pattern to search for Communes with a name resembling.
+   * @param date the date at which the Communes were valid.
+   * @return a List of all Commune matching the given parameters.
    */
   @Override
   @Transactional(readOnly = true)
-  public List<Commune> getAllCommune(Date date, String codedepartement, String nom){
-    log.debug("Commune list requested for Date, Codedepartment and Critere: date={}, codedepartement={}, nom={}", date, codedepartement, nom);
-    if ( StringUtils.isEmpty(nom) && StringUtils.isEmpty(codedepartement))
+  public List<Commune> getAllCommune(String dept, String nameLike, Date date){
+    log.debug("Commune list requested for Date, Department and Name: date={}, departement={}, name like={}",
+              date, dept, nameLike);
+    if (StringUtils.isEmpty(dept) && StringUtils.isEmpty(nameLike))
       return communeJpaDao.findAllValidOnDate(date);
-    else if( StringUtils.isEmpty(nom) && !StringUtils.isEmpty(codedepartement))
-      return communeJpaDao.findAllByCodedepartementValidOnDate(date, codedepartement);
-    else if(StringUtils.isEmpty(codedepartement) && !StringUtils.isEmpty(nom))
-      return communeJpaDao.findAllByNomValidOnDate(date, nom);
-    else if(!StringUtils.isEmpty(codedepartement) && !StringUtils.isEmpty(nom))
-      return communeJpaDao.findAllByCodedepartementAndNomValidOnDate(date, codedepartement, nom);
+    else if(!StringUtils.isEmpty(dept) && StringUtils.isEmpty(nameLike))
+      return communeJpaDao.findByDepartementValidOnDate(dept, date);
+    else if(StringUtils.isEmpty(dept) && !StringUtils.isEmpty(nameLike))
+      return communeJpaDao.findByNameLikeValidOnDate(nameLike, date);
+    else if(!StringUtils.isEmpty(dept) && !StringUtils.isEmpty(nameLike))
+      return communeJpaDao.findByDepartementAndNameLikeValidOnDate(dept, nameLike, date);
     return null;
   }
-
 
   /**
    * Returns a Map of all Commune indexed by ID.

@@ -189,54 +189,6 @@ public class TestCommuneJpaDao extends AbstractTestJpaDao {
     assertEquals("Hibernate returned the wrong number of results",
                  0, result.size());
   }
-  
-  /**
-   * Test custom repository method.
-   * @throws ParseException failed to parse date.
-   */
-  @Test
-  public void testFindAllByCodedepartementValidOnDate() throws ParseException {
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-    List<Commune> result;
-    result = jpaDao.findAllByCodedepartementValidOnDate(sdf.parse("2018-01-01"),"91");
-    assertEquals("Hibernate returned the wrong number of results",
-                 196, result.size());
-    result = jpaDao.findAllByCodedepartementValidOnDate(sdf.parse("2018-01-01"),"90");
-    assertEquals("Hibernate returned the wrong number of results",
-                 0, result.size());
-  }
-  
-  /**
-   * Test custom repository method.
-   * @throws ParseException failed to parse date.
-   */
-  @Test
-  public void testFindAllByNomValidOnDate() throws ParseException {
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-    List<Commune> result;
-    result = jpaDao.findAllByNomValidOnDate(sdf.parse("2018-01-01"),"SaInt-");
-    assertEquals("Hibernate returned the wrong number of results",
-                 60, result.size());
-    result = jpaDao.findAllByNomValidOnDate(sdf.parse("2018-01-01"),"aaaa");
-    assertEquals("Hibernate returned the wrong number of results",
-                 0, result.size());
-  }
-  
-  /**
-   * Test custom repository method.
-   * @throws ParseException failed to parse date.
-   */
-  @Test
-  public void testFindAllByCodedepartementAndNomCodeValidOnDate() throws ParseException {
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-    List<Commune> result;
-    result = jpaDao.findAllByCodedepartementAndNomValidOnDate(sdf.parse("2018-01-01"),"976","dZi");
-    assertEquals("Hibernate returned the wrong number of results",
-                 2, result.size());
-    result = jpaDao.findAllByCodedepartementAndNomValidOnDate(sdf.parse("2018-01-01"),"90","aaaa");
-    assertEquals("Hibernate returned the wrong number of results",
-                 0, result.size());
-  }
 
   /**
    * Test custom repository method.
@@ -274,5 +226,53 @@ public class TestCommuneJpaDao extends AbstractTestJpaDao {
                  "971", com.getDepartement());
     com = jpaDao.findByCodeInseeValidOnDate("97105", sdf.parse("2010-01-01"));
     assertNull("Hibernate return a Commune it shouldn't have", com);
+  }
+
+  /**
+   * Test custom repository method.
+   * @throws ParseException failed to parse date.
+   */
+  @Test
+  public void testFindByDepartementValidOnDate() throws ParseException {
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    List<Commune> result;
+    result = jpaDao.findByDepartementValidOnDate("91", sdf.parse("2018-01-01"));
+    assertEquals("Hibernate returned the wrong number of results",
+                 196, result.size());
+    result = jpaDao.findByDepartementValidOnDate("90", sdf.parse("2018-01-01"));
+    assertEquals("Hibernate returned the wrong number of results",
+                 0, result.size());
+  }
+
+  /**
+   * Test custom repository method.
+   * @throws ParseException failed to parse date.
+   */
+  @Test
+  public void testFindByNameLikeValidOnDate() throws ParseException {
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    List<Commune> result;
+    result = jpaDao.findByNameLikeValidOnDate("SaInt-", sdf.parse("2018-01-01"));
+    assertEquals("Hibernate returned the wrong number of results",
+                 60, result.size());
+    result = jpaDao.findByNameLikeValidOnDate("aaaa", sdf.parse("2018-01-01"));
+    assertEquals("Hibernate returned the wrong number of results",
+                 0, result.size());
+  }
+
+  /**
+   * Test custom repository method.
+   * @throws ParseException failed to parse date.
+   */
+  @Test
+  public void testFindByDepartementAndNameLikeValidOnDate() throws ParseException {
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    List<Commune> result;
+    result = jpaDao.findByDepartementAndNameLikeValidOnDate("976", "dZi", sdf.parse("2018-01-01"));
+    assertEquals("Hibernate returned the wrong number of results",
+                 2, result.size());
+    result = jpaDao.findByDepartementAndNameLikeValidOnDate("90", "aaaa", sdf.parse("2018-01-01"));
+    assertEquals("Hibernate returned the wrong number of results",
+                 0, result.size());
   }
 }
