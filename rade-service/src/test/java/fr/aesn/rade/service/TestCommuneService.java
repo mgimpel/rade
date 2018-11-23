@@ -153,6 +153,62 @@ public class TestCommuneService
     assertNotNull("CommuneService returned a null list", list);
     assertEquals(0, list.size());
   }
+  
+  /**
+   * Test getting a the list of all Communes.
+   */
+  @Test
+  public void testGettingCommuneList2018dept91() {
+    Date year2018 = new GregorianCalendar(2018, 1, 1, 0, 0, 0).getTime();
+    List<Commune> list = service.getAllCommune(year2018, "91", "");
+    assertNotNull("CommuneService returned a null list", list);
+    assertEquals(196, list.size());
+  }
+  
+  /**
+   * Test getting a the list of all Communes.
+   */
+  @Test
+  public void testGettingCommuneList2018dept99() {
+    Date year2018 = new GregorianCalendar(2018, 1, 1, 0, 0, 0).getTime();
+    List<Commune> list = service.getAllCommune(year2018, "99", "");
+    assertNotNull("CommuneService returned a null list", list);
+    assertEquals(0, list.size());
+  }
+  
+  /**
+   * Test getting a the list of all Communes.
+   */
+  @Test
+  public void testGettingCommuneList2017dept91() {
+    Date year2017 = new GregorianCalendar(2017, 1, 1, 0, 0, 0).getTime();
+    List<Commune> list = service.getAllCommune(year2017, "91", "");
+    assertNotNull("CommuneService returned a null list", list);
+    assertEquals(0, list.size());
+  }
+  
+  
+  /**
+   * Test getting a the list of all Communes.
+   */
+  @Test
+  public void testGettingCommuneList2018nomSaint() {
+    Date year2018 = new GregorianCalendar(2018, 1, 1, 0, 0, 0).getTime();
+    List<Commune> list = service.getAllCommune(year2018, "", "Saint");
+    assertNotNull("CommuneService returned a null list", list);
+    assertEquals(71, list.size());
+  }
+   
+  /**
+   * Test getting a the list of all Communes.
+   */
+  @Test
+  public void testGettingCommuneList2018Dept92nomANTO() {
+    Date year2018 = new GregorianCalendar(2018, 1, 1, 0, 0, 0).getTime();
+    List<Commune> list = service.getAllCommune(year2018, "92", "ANTO");
+    assertNotNull("CommuneService returned a null list", list);
+    assertEquals(1, list.size());
+  }
 
   /**
    * Test getting a Communes.
