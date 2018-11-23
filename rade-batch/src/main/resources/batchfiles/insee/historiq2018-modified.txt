@@ -16289,157 +16289,157 @@ DEP	AR	CT	COM	LEG	JO	EFF	DTR	MOD	C_LOFF	C_LANC	NBCOM	RANGCOM	COMECH	POPECH	SUECH
 974	4	03	08	A30-06-2006		01-09-2006	01-09-2006	420									9741		3	Possession		
 974	2	96	14	A05-02-1965	10-03-1965	05-02-1965	05-02-1965	220					97424						0	Saint-Louis		
 974	2	16	24	A05-02-1965	10-03-1965	05-02-1965	05-02-1965	200			1	1	97414						0	Cilaos		
-971	3	25	23			15-07-2007	15-07-2007	XXX											0	Saint-Barthélemy		
-971	3	89	27			15-07-2007	15-07-2007	XXX											0	Saint-Martin		
-05	1	13	161			01-01-2009	01-01-2009	100											3	Salle-les-Alpes	3	Salle les Alpes
-16	1	21	052			01-01-2009	01-01-2009	100											0	Bors (Canton de Montmoreau-Saint-Cybard)	0	Bors(Canton de Montmoreau-Saint-Cybard)
-16	2	05	053			01-01-2009	01-01-2009	100											0	Bors (Canton de Baignes-Sainte-Radegonde)	0	Bors(Canton de Baignes-Sainte-Radegonde)
-28	4	23	387			01-01-2009	01-01-2009	100											0	Thiron-Gardais	0	Thiron Gardais
-37	1	20	005			01-01-2009	01-01-2009	100											1	Antogny-le-Tillac	1	Antogny le Tillac
-58	1	03	062			01-01-2009	01-01-2009	100											0	Château-Chinon (Ville)	0	Château-Chinon(Ville)
-58	1	03	063			01-01-2009	01-01-2009	100											0	Château-Chinon (Campagne)	0	Château-Chinon(Campagne)
-64	3	03	181			01-01-2009	01-01-2009	100											0	Castillon (Canton d'Arthez-de-Béarn)	0	Castillon(Canton d'Arthez-de-Béarn)
-64	3	18	182			01-01-2009	01-01-2009	100											0	Castillon (Canton de Lembeye)	0	Castillon(Canton de Lembeye)
-73	3	25	116			01-01-2009	01-01-2009	100											0	Fontcouverte-la-Toussuire	0	Fontcouverte-la Toussuire
-73	3	11	231			01-01-2010	01-01-2010	100											0	Saint-Étienne-de-Cuines	0	Saint-Etienne-de-Cuines
-74	3	11	220			01-01-2010	01-01-2010	100											0	Reignier-Ésery	0	Reignier-Esery
-82	2	19	161			01-01-2010	01-01-2010	100											0	Saint-Étienne-de-Tulmont	0	Saint-Etienne-de-Tulmont
-78	2	15	683			01-01-2012	01-01-2012	100											0	Villiers-Saint-Frédéric	0	Villiers-Saint-Fréderic
-06	2	20	106			01-01-2013	01-01-2013	100											0	Roquestéron	0	Roquesteron
-28	1		361			01-01-2013	01-01-2013	100											0	Bleury-Saint-Symphorien	0	Bleury - Saint-Symphorien
-29	1	21	021			01-01-2013	01-01-2013	100											0	Brignogan-Plages	0	Brignogan-Plage
-29	4	32	236			01-01-2013	01-01-2013	100											0	Riec-sur-Bélon	0	Riec-sur-Belon
-76	3	60	108			01-01-2013	01-01-2013	100											0	Bois-Guillaume-Bihorel	0	Bois-Guillaume - Bihorel
-02	4	20	201			01-01-2016	01-01-2016	100											0	Cœuvres-et-Valsery	0	Cœuvres-et-Valsery
-02	2	06	565			01-01-2016	01-01-2016	100											1	Œuilly	1	Œuilly
-11	1	19	232			01-01-2016	01-01-2016	100											0	Miraval-Cabardès	0	Miraval-Cabardes
-14	2	13	087			01-01-2016	01-01-2016	100											0	Bonnœil	0	Bonnœil
-14	3	19	201			01-01-2016	01-01-2016	100											0	Crèvecœur-en-Auge	0	Crèvecœur-en-Auge
-14	3	15	202			01-01-2016	01-01-2016	100											0	Cricquebœuf	0	Cricquebœuf
-14	2	13	452			01-01-2016	01-01-2016	100											0	Morteaux-Coulibœuf	0	Morteaux-Coulibœuf
-16	3	06	225			01-01-2016	01-01-2016	100											0	Montembœuf	0	Montembœuf
-16	1	04	418			01-01-2016	01-01-2016	100											0	Vœuil-et-Giget	0	Vœuil-et-Giget
-17	5	18	139			01-01-2016	01-01-2016	100											0	Dœuil-sur-le-Mignon	0	Dœuil-sur-le-Mignon
-19	2	02	133			01-01-2016	01-01-2016	100											0	Mercœur	0	Mercœur
-21	2	18	132			01-01-2016	01-01-2016	100											0	Chambœuf	0	Chambœuf
-21	2	23	553			01-01-2016	01-01-2016	100											0	Saint-Jean-de-Bœuf	0	Saint-Jean-de-Bœuf
-22	4	15	059			01-01-2016	01-01-2016	100											2	Fœil	2	Fœil
-22	4	13	203			01-01-2016	01-01-2016	100											0	Plœuc-sur-Lié	0	Plœuc-sur-Lié
-27	3	20	301			01-01-2016	01-01-2016	100											0	Grossœuvre	0	Grossœuvre
-27	1	19	672			01-01-2016	01-01-2016	100											0	Vascœuil	0	Vascœuil
-27	3	16	696			01-01-2016	01-01-2016	100											0	Villiers-en-Désœuvre	0	Villiers-en-Désœuvre
-32	1	11	123			01-01-2016	01-01-2016	100											1	Escornebœuf	1	Escornebœuf
-33	2	11	496			01-01-2016	01-01-2016	100											0	Sallebœuf	0	Sallebœuf
-35	2	02	343			01-01-2016	01-01-2016	100											0	Tresbœuf	0	Tresbœuf
-36	2	12	232			01-01-2016	01-01-2016	100											0	Vendœuvres	0	Vendœuvres
-41	1	08	281			01-01-2016	01-01-2016	100											0	Villefrancœur	0	Villefrancœur
-42	1	01	043			01-01-2016	01-01-2016	100											0	Chambœuf	0	Chambœuf
-42	3	08	272			01-01-2016	01-01-2016	100											0	Saint-Pierre-de-Bœuf	0	Saint-Pierre-de-Bœuf
-43	1	10	133			01-01-2016	01-01-2016	100											0	Mercœur	0	Mercœur
-44	4	01	017			01-01-2016	01-01-2016	100											0	Bonnœuvre	0	Bonnœuvre
-44	3	23	116			01-01-2016	01-01-2016	100											0	Paimbœuf	0	Paimbœuf
-47	3	12	309			01-01-2016	01-01-2016	100											0	Tombebœuf	0	Tombebœuf
-49	4	21	335			01-01-2016	01-01-2016	100											0	Sœurdres	0	Sœurdres
-51	2	21	369			01-01-2016	01-01-2016	100											0	Mœurs-Verdey	0	Mœurs-Verdey
-51	2	06	410			01-01-2016	01-01-2016	100											1	Œuilly	1	Œuilly
-51	1	05	574			01-01-2016	01-01-2016	100											0	Togny-aux-Bœufs	0	Togny-aux-Bœufs
-51	3	14	631			01-01-2016	01-01-2016	100											0	Villers-aux-Nœuds	0	Villers-aux-Nœuds
-53	1	15	027			01-01-2016	01-01-2016	100											0	Beaumont-Pied-de-Bœuf	0	Beaumont-Pied-de-Bœuf
-53	3	09	263			01-01-2016	01-01-2016	100											0	Thubœuf	0	Thubœuf
-54	1	17	280			01-01-2016	01-01-2016	100											0	Jœuf	0	Jœuf
-54	3	10	291			01-01-2016	01-01-2016	100											0	Lalœuf	0	Lalœuf
-54	3	22	547			01-01-2016	01-01-2016	100											0	Vandœuvre-lès-Nancy	0	Vandœuvre-lès-Nancy
-55	2	08	263			01-01-2016	01-01-2016	100											0	Kœur-la-Grande	0	Kœur-la-Grande
-55	2	08	264			01-01-2016	01-01-2016	100											0	Kœur-la-Petite	0	Kœur-la-Petite
-56	1	17	085			01-01-2016	01-01-2016	100											0	Hœdic	0	Hœdic
-57	7	14	370			01-01-2016	01-01-2016	100											0	Kœnigsmacker	0	Kœnigsmacker
-57	3	08	521			01-01-2016	01-01-2016	100											1	Œting	1	Œting
-57	3	08	638			01-01-2016	01-01-2016	100											0	Schœneck	0	Schœneck
-57	3	04	749			01-01-2016	01-01-2016	100											0	Vœlfling-lès-Bouzonville	0	Vœlfling-lès-Bouzonville
-57	6	22	750			01-01-2016	01-01-2016	100											0	Wœlfling-lès-Sarreguemines	0	Wœlfling-lès-Sarreguemines
-59	5	02	011			01-01-2016	01-01-2016	100											1	Annœullin	1	Annœullin
-59	2	10	161			01-01-2016	01-01-2016	100											0	Crèvecœur-sur-l'Escaut	0	Crèvecœur-sur-l'Escaut
-59	2	09	206			01-01-2016	01-01-2016	100											1	Escaudœuvres	1	Escaudœuvres
-59	1	07	218			01-01-2016	01-01-2016	100											1	Étrœungt	1	Étrœungt
-59	3	01	263			01-01-2016	01-01-2016	100											0	Gœulzin	0	Gœulzin
-59	5	24	378			01-01-2016	01-01-2016	100											0	Marcq-en-Barœul	0	Marcq-en-Barœul
-59	2	09	405			01-01-2016	01-01-2016	100											0	Mœuvres	0	Mœuvres
-59	5	25	410			01-01-2016	01-01-2016	100											0	Mons-en-Barœul	0	Mons-en-Barœul
-59	6	14	504			01-01-2016	01-01-2016	100											0	Rœulx	0	Rœulx
-60	3	17	037			01-01-2016	01-01-2016	100											0	Babœuf	0	Babœuf
-60	1	19	178			01-01-2016	01-01-2016	100											0	Crèvecœur-le-Grand	0	Crèvecœur-le-Grand
-60	2	10	179			01-01-2016	01-01-2016	100											0	Crèvecœur-le-Petit	0	Crèvecœur-le-Petit
-60	1	02	586			01-01-2016	01-01-2016	100											0	Saint-Martin-le-Nœud	0	Saint-Martin-le-Nœud
-61	3	01	432			01-01-2016	01-01-2016	100											0	Saint-Michel-Tubœuf	0	Saint-Michel-Tubœuf
-62	5	25	267			01-01-2016	01-01-2016	100											0	Dennebrœucq	0	Dennebrœucq
-62	5	33	308			01-01-2016	01-01-2016	100											1	Escœuilles	1	Escœuilles
-62	1	38	467			01-01-2016	01-01-2016	100											1	Humerœuille	1	Humerœuille
-62	1	02	557			01-01-2016	01-01-2016	100											0	Marœuil	0	Marœuil
-62	1	06	616			01-01-2016	01-01-2016	100											0	Nœux-lès-Auxi	0	Nœux-lès-Auxi
-62	2	35	617			01-01-2016	01-01-2016	100											0	Nœux-les-Mines	0	Nœux-les-Mines
-62	1	38	633			01-01-2016	01-01-2016	100											1	Œuf-en-Ternois	1	Œuf-en-Ternois
-62	1	06	683			01-01-2016	01-01-2016	100											0	Quœux-Haut-Maînil	0	Quœux-Haut-Maînil
-62	1	15	718			01-01-2016	01-01-2016	100											0	Rœux	0	Rœux
-62	4	06	745			01-01-2016	01-01-2016	100											0	Saint-Denœux	0	Saint-Denœux
-67	3	10	052			01-01-2016	01-01-2016	100											0	Bœrsch	0	Bœrsch
-67	5	16	053			01-01-2016	01-01-2016	100											0	Bœsenbiesen	0	Bœsenbiesen
-67	2	23	079			01-01-2016	01-01-2016	100											0	Crœttwiller	0	Crœttwiller
-67	2	13	093			01-01-2016	01-01-2016	100											0	Dieffenbach-lès-Wœrth	0	Dieffenbach-lès-Wœrth
-67	2	13	147			01-01-2016	01-01-2016	100											0	Frœschwiller	0	Frœschwiller
-67	4	08	159			01-01-2016	01-01-2016	100											0	Gœrlingen	0	Gœrlingen
-67	2	13	160			01-01-2016	01-01-2016	100											0	Gœrsdorf	0	Gœrsdorf
-67	8	06	204			01-01-2016	01-01-2016	100											0	Hœnheim	0	Hœnheim
-67	2	03	205			01-01-2016	01-01-2016	100											0	Hœrdt	0	Hœrdt
-67	3	14	208			01-01-2016	01-01-2016	100											0	Hohengœft	0	Hohengœft
-67	4	14	244			01-01-2016	01-01-2016	100											0	Kleingœft	0	Kleingœft
-67	3	14	245			01-01-2016	01-01-2016	100											0	Knœrsheim	0	Knœrsheim
-67	2	23	330			01-01-2016	01-01-2016	100											0	Niederrœdern	0	Niederrœdern
-67	2	23	349			01-01-2016	01-01-2016	100											1	Oberrœdern	1	Oberrœdern
-67	2	01	405			01-01-2016	01-01-2016	100											0	Rœschwoog	0	Rœschwoog
-67	5	16	453			01-01-2016	01-01-2016	100											0	Schœnau	0	Schœnau
-67	4	08	454			01-01-2016	01-01-2016	100											0	Schœnbourg	0	Schœnbourg
-67	2	23	455			01-01-2016	01-01-2016	100											0	Schœnenbourg	0	Schœnenbourg
-67	4	08	508			01-01-2016	01-01-2016	100											0	Vœllerdingen	0	Vœllerdingen
-67	2	13	550			01-01-2016	01-01-2016	100											0	Wœrth	0	Wœrth
-67	4	02	560			01-01-2016	01-01-2016	100											0	Zœbersdorf	0	Zœbersdorf
-68	1	01	099			01-01-2016	01-01-2016	100											0	Frœningen	0	Frœningen
-68	4	14	168			01-01-2016	01-01-2016	100											0	Knœringue	0	Knœringue
-68	1	01	169			01-01-2016	01-01-2016	100											0	Kœstlach	0	Kœstlach
-68	4	02	170			01-01-2016	01-01-2016	100											0	Kœtzingue	0	Kœtzingue
-68	1	01	212			01-01-2016	01-01-2016	100											0	Mœrnach	0	Mœrnach
-68	2	16	350			01-01-2016	01-01-2016	100											0	Vœgtlinshoffen	0	Vœgtlinshoffen
-70	2	01	305			01-01-2016	01-01-2016	100											0	Lœuilley	0	Lœuilley
-72	1	03	028			01-01-2016	01-01-2016	100											0	Beaumont-Pied-de-Bœuf	0	Beaumont-Pied-de-Bœuf
-72	3	01	099			01-01-2016	01-01-2016	100											0	Courcebœufs	0	Courcebœufs
-77	3	08	144			01-01-2016	01-01-2016	100											0	Crèvecœur-en-Brie	0	Crèvecœur-en-Brie
-77	1	06	526			01-01-2016	01-01-2016	100											0	Vincy-Manœuvre	0	Vincy-Manœuvre
-80	2	04	024			01-01-2016	01-01-2016	100											1	Argœuves	1	Argœuves
-80	1	02	287			01-01-2016	01-01-2016	100											1	Estrébœuf	1	Estrébœuf
-80	4	20	472			01-01-2016	01-01-2016	100											0	Lesbœufs	0	Lesbœufs
-80	2	03	485			01-01-2016	01-01-2016	100											0	Lœuilly	0	Lœuilly
-80	2	03	594			01-01-2016	01-01-2016	100											0	Neuville-lès-Lœuilly	0	Neuville-lès-Lœuilly
-80	4	20	629			01-01-2016	01-01-2016	100											0	Pœuilly	0	Pœuilly
-80	1	02	764			01-01-2016	01-01-2016	100											0	Tœufles	0	Tœufles
-80	2	12	791			01-01-2016	01-01-2016	100											0	Vers-sur-Selle	0	Vers-sur-Selles
-88	1	02	454			01-01-2016	01-01-2016	100											0	Sercœur	0	Sercœur
-89	3	06	048			01-01-2016	01-01-2016	100											0	Bœurs-en-Othe	0	Bœurs-en-Othe
-972	1		29			01-01-2016	01-01-2016	100											0	Schœlcher	0	Schœlcher
-37	1	08	232			01-01-2018	01-01-2018	100											0	Coteaux-sur-Loire	0	Côteaux-sur-Loire
-976		01	01			01-01-2012	01-01-2012	200											1	Acoua		
-976		02	02			01-01-2012	01-01-2012	200											0	Bandraboua		
-976		03	03			01-01-2012	01-01-2012	200											0	Bandrele		
-976		04	04			01-01-2012	01-01-2012	200											0	Bouéni		
-976		05	05			01-01-2012	01-01-2012	200											0	Chiconi		
-976		06	06			01-01-2012	01-01-2012	200											0	Chirongui		
-976		07	07			01-01-2012	01-01-2012	200											0	Dembeni		
-976		08	08			01-01-2012	01-01-2012	200											0	Dzaoudzi		
-976		09	09			01-01-2012	01-01-2012	200											0	Kani-Kéli		
-976		10	10			01-01-2012	01-01-2012	200											0	Koungou		
-976		99	11			01-01-2012	01-01-2012	200											0	Mamoudzou		
-976		14	12			01-01-2012	01-01-2012	200											0	Mtsamboro		
-976		15	13			01-01-2012	01-01-2012	200											0	M'Tsangamouji		
-976		16	14			01-01-2012	01-01-2012	200											1	Ouangani		
-976		17	15			01-01-2012	01-01-2012	200											0	Pamandzi		
-976		18	16			01-01-2012	01-01-2012	200											0	Sada		
-976		19	17			01-01-2012	01-01-2012	200											0	Tsingoni		
-14	3	18	697			01-01-2016	01-01-2016	XXX											5	Oudon		
+971	3	25	23			15-07-2007	15-07-2007	X30											0	Saint-Barthélemy		
+971	3	89	27			15-07-2007	15-07-2007	X30											0	Saint-Martin		
+05	1	13	161			01-01-2009	01-01-2009	X10											3	Salle-les-Alpes	3	Salle les Alpes
+16	1	21	052			01-01-2009	01-01-2009	X10											0	Bors (Canton de Montmoreau-Saint-Cybard)	0	Bors(Canton de Montmoreau-Saint-Cybard)
+16	2	05	053			01-01-2009	01-01-2009	X10											0	Bors (Canton de Baignes-Sainte-Radegonde)	0	Bors(Canton de Baignes-Sainte-Radegonde)
+28	4	23	387			01-01-2009	01-01-2009	X10											0	Thiron-Gardais	0	Thiron Gardais
+37	1	20	005			01-01-2009	01-01-2009	X10											1	Antogny-le-Tillac	1	Antogny le Tillac
+58	1	03	062			01-01-2009	01-01-2009	X10											0	Château-Chinon (Ville)	0	Château-Chinon(Ville)
+58	1	03	063			01-01-2009	01-01-2009	X10											0	Château-Chinon (Campagne)	0	Château-Chinon(Campagne)
+64	3	03	181			01-01-2009	01-01-2009	X10											0	Castillon (Canton d'Arthez-de-Béarn)	0	Castillon(Canton d'Arthez-de-Béarn)
+64	3	18	182			01-01-2009	01-01-2009	X10											0	Castillon (Canton de Lembeye)	0	Castillon(Canton de Lembeye)
+73	3	25	116			01-01-2009	01-01-2009	X10											0	Fontcouverte-la-Toussuire	0	Fontcouverte-la Toussuire
+73	3	11	231			01-01-2010	01-01-2010	X10											0	Saint-Étienne-de-Cuines	0	Saint-Etienne-de-Cuines
+74	3	11	220			01-01-2010	01-01-2010	X10											0	Reignier-Ésery	0	Reignier-Esery
+82	2	19	161			01-01-2010	01-01-2010	X10											0	Saint-Étienne-de-Tulmont	0	Saint-Etienne-de-Tulmont
+78	2	15	683			01-01-2012	01-01-2012	X10											0	Villiers-Saint-Frédéric	0	Villiers-Saint-Fréderic
+06	2	20	106			01-01-2013	01-01-2013	X10											0	Roquestéron	0	Roquesteron
+28	1		361			01-01-2013	01-01-2013	X10											0	Bleury-Saint-Symphorien	0	Bleury - Saint-Symphorien
+29	1	21	021			01-01-2013	01-01-2013	X10											0	Brignogan-Plages	0	Brignogan-Plage
+29	4	32	236			01-01-2013	01-01-2013	X10											0	Riec-sur-Bélon	0	Riec-sur-Belon
+76	3	60	108			01-01-2013	01-01-2013	X10											0	Bois-Guillaume-Bihorel	0	Bois-Guillaume - Bihorel
+02	4	20	201			01-01-2016	01-01-2016	X10											0	Cœuvres-et-Valsery	0	Cœuvres-et-Valsery
+02	2	06	565			01-01-2016	01-01-2016	X10											1	Œuilly	1	Œuilly
+11	1	19	232			01-01-2016	01-01-2016	X10											0	Miraval-Cabardès	0	Miraval-Cabardes
+14	2	13	087			01-01-2016	01-01-2016	X10											0	Bonnœil	0	Bonnœil
+14	3	19	201			01-01-2016	01-01-2016	X10											0	Crèvecœur-en-Auge	0	Crèvecœur-en-Auge
+14	3	15	202			01-01-2016	01-01-2016	X10											0	Cricquebœuf	0	Cricquebœuf
+14	2	13	452			01-01-2016	01-01-2016	X10											0	Morteaux-Coulibœuf	0	Morteaux-Coulibœuf
+16	3	06	225			01-01-2016	01-01-2016	X10											0	Montembœuf	0	Montembœuf
+16	1	04	418			01-01-2016	01-01-2016	X10											0	Vœuil-et-Giget	0	Vœuil-et-Giget
+17	5	18	139			01-01-2016	01-01-2016	X10											0	Dœuil-sur-le-Mignon	0	Dœuil-sur-le-Mignon
+19	2	02	133			01-01-2016	01-01-2016	X10											0	Mercœur	0	Mercœur
+21	2	18	132			01-01-2016	01-01-2016	X10											0	Chambœuf	0	Chambœuf
+21	2	23	553			01-01-2016	01-01-2016	X10											0	Saint-Jean-de-Bœuf	0	Saint-Jean-de-Bœuf
+22	4	15	059			01-01-2016	01-01-2016	X10											2	Fœil	2	Fœil
+22	4	13	203			01-01-2016	01-01-2016	X10											0	Plœuc-sur-Lié	0	Plœuc-sur-Lié
+27	3	20	301			01-01-2016	01-01-2016	X10											0	Grossœuvre	0	Grossœuvre
+27	1	19	672			01-01-2016	01-01-2016	X10											0	Vascœuil	0	Vascœuil
+27	3	16	696			01-01-2016	01-01-2016	X10											0	Villiers-en-Désœuvre	0	Villiers-en-Désœuvre
+32	1	11	123			01-01-2016	01-01-2016	X10											1	Escornebœuf	1	Escornebœuf
+33	2	11	496			01-01-2016	01-01-2016	X10											0	Sallebœuf	0	Sallebœuf
+35	2	02	343			01-01-2016	01-01-2016	X10											0	Tresbœuf	0	Tresbœuf
+36	2	12	232			01-01-2016	01-01-2016	X10											0	Vendœuvres	0	Vendœuvres
+41	1	08	281			01-01-2016	01-01-2016	X10											0	Villefrancœur	0	Villefrancœur
+42	1	01	043			01-01-2016	01-01-2016	X10											0	Chambœuf	0	Chambœuf
+42	3	08	272			01-01-2016	01-01-2016	X10											0	Saint-Pierre-de-Bœuf	0	Saint-Pierre-de-Bœuf
+43	1	10	133			01-01-2016	01-01-2016	X10											0	Mercœur	0	Mercœur
+44	4	01	017			01-01-2016	01-01-2016	X10											0	Bonnœuvre	0	Bonnœuvre
+44	3	23	116			01-01-2016	01-01-2016	X10											0	Paimbœuf	0	Paimbœuf
+47	3	12	309			01-01-2016	01-01-2016	X10											0	Tombebœuf	0	Tombebœuf
+49	4	21	335			01-01-2016	01-01-2016	X10											0	Sœurdres	0	Sœurdres
+51	2	21	369			01-01-2016	01-01-2016	X10											0	Mœurs-Verdey	0	Mœurs-Verdey
+51	2	06	410			01-01-2016	01-01-2016	X10											1	Œuilly	1	Œuilly
+51	1	05	574			01-01-2016	01-01-2016	X10											0	Togny-aux-Bœufs	0	Togny-aux-Bœufs
+51	3	14	631			01-01-2016	01-01-2016	X10											0	Villers-aux-Nœuds	0	Villers-aux-Nœuds
+53	1	15	027			01-01-2016	01-01-2016	X10											0	Beaumont-Pied-de-Bœuf	0	Beaumont-Pied-de-Bœuf
+53	3	09	263			01-01-2016	01-01-2016	X10											0	Thubœuf	0	Thubœuf
+54	1	17	280			01-01-2016	01-01-2016	X10											0	Jœuf	0	Jœuf
+54	3	10	291			01-01-2016	01-01-2016	X10											0	Lalœuf	0	Lalœuf
+54	3	22	547			01-01-2016	01-01-2016	X10											0	Vandœuvre-lès-Nancy	0	Vandœuvre-lès-Nancy
+55	2	08	263			01-01-2016	01-01-2016	X10											0	Kœur-la-Grande	0	Kœur-la-Grande
+55	2	08	264			01-01-2016	01-01-2016	X10											0	Kœur-la-Petite	0	Kœur-la-Petite
+56	1	17	085			01-01-2016	01-01-2016	X10											0	Hœdic	0	Hœdic
+57	7	14	370			01-01-2016	01-01-2016	X10											0	Kœnigsmacker	0	Kœnigsmacker
+57	3	08	521			01-01-2016	01-01-2016	X10											1	Œting	1	Œting
+57	3	08	638			01-01-2016	01-01-2016	X10											0	Schœneck	0	Schœneck
+57	3	04	749			01-01-2016	01-01-2016	X10											0	Vœlfling-lès-Bouzonville	0	Vœlfling-lès-Bouzonville
+57	6	22	750			01-01-2016	01-01-2016	X10											0	Wœlfling-lès-Sarreguemines	0	Wœlfling-lès-Sarreguemines
+59	5	02	011			01-01-2016	01-01-2016	X10											1	Annœullin	1	Annœullin
+59	2	10	161			01-01-2016	01-01-2016	X10											0	Crèvecœur-sur-l'Escaut	0	Crèvecœur-sur-l'Escaut
+59	2	09	206			01-01-2016	01-01-2016	X10											1	Escaudœuvres	1	Escaudœuvres
+59	1	07	218			01-01-2016	01-01-2016	X10											1	Étrœungt	1	Étrœungt
+59	3	01	263			01-01-2016	01-01-2016	X10											0	Gœulzin	0	Gœulzin
+59	5	24	378			01-01-2016	01-01-2016	X10											0	Marcq-en-Barœul	0	Marcq-en-Barœul
+59	2	09	405			01-01-2016	01-01-2016	X10											0	Mœuvres	0	Mœuvres
+59	5	25	410			01-01-2016	01-01-2016	X10											0	Mons-en-Barœul	0	Mons-en-Barœul
+59	6	14	504			01-01-2016	01-01-2016	X10											0	Rœulx	0	Rœulx
+60	3	17	037			01-01-2016	01-01-2016	X10											0	Babœuf	0	Babœuf
+60	1	19	178			01-01-2016	01-01-2016	X10											0	Crèvecœur-le-Grand	0	Crèvecœur-le-Grand
+60	2	10	179			01-01-2016	01-01-2016	X10											0	Crèvecœur-le-Petit	0	Crèvecœur-le-Petit
+60	1	02	586			01-01-2016	01-01-2016	X10											0	Saint-Martin-le-Nœud	0	Saint-Martin-le-Nœud
+61	3	01	432			01-01-2016	01-01-2016	X10											0	Saint-Michel-Tubœuf	0	Saint-Michel-Tubœuf
+62	5	25	267			01-01-2016	01-01-2016	X10											0	Dennebrœucq	0	Dennebrœucq
+62	5	33	308			01-01-2016	01-01-2016	X10											1	Escœuilles	1	Escœuilles
+62	1	38	467			01-01-2016	01-01-2016	X10											1	Humerœuille	1	Humerœuille
+62	1	02	557			01-01-2016	01-01-2016	X10											0	Marœuil	0	Marœuil
+62	1	06	616			01-01-2016	01-01-2016	X10											0	Nœux-lès-Auxi	0	Nœux-lès-Auxi
+62	2	35	617			01-01-2016	01-01-2016	X10											0	Nœux-les-Mines	0	Nœux-les-Mines
+62	1	38	633			01-01-2016	01-01-2016	X10											1	Œuf-en-Ternois	1	Œuf-en-Ternois
+62	1	06	683			01-01-2016	01-01-2016	X10											0	Quœux-Haut-Maînil	0	Quœux-Haut-Maînil
+62	1	15	718			01-01-2016	01-01-2016	X10											0	Rœux	0	Rœux
+62	4	06	745			01-01-2016	01-01-2016	X10											0	Saint-Denœux	0	Saint-Denœux
+67	3	10	052			01-01-2016	01-01-2016	X10											0	Bœrsch	0	Bœrsch
+67	5	16	053			01-01-2016	01-01-2016	X10											0	Bœsenbiesen	0	Bœsenbiesen
+67	2	23	079			01-01-2016	01-01-2016	X10											0	Crœttwiller	0	Crœttwiller
+67	2	13	093			01-01-2016	01-01-2016	X10											0	Dieffenbach-lès-Wœrth	0	Dieffenbach-lès-Wœrth
+67	2	13	147			01-01-2016	01-01-2016	X10											0	Frœschwiller	0	Frœschwiller
+67	4	08	159			01-01-2016	01-01-2016	X10											0	Gœrlingen	0	Gœrlingen
+67	2	13	160			01-01-2016	01-01-2016	X10											0	Gœrsdorf	0	Gœrsdorf
+67	8	06	204			01-01-2016	01-01-2016	X10											0	Hœnheim	0	Hœnheim
+67	2	03	205			01-01-2016	01-01-2016	X10											0	Hœrdt	0	Hœrdt
+67	3	14	208			01-01-2016	01-01-2016	X10											0	Hohengœft	0	Hohengœft
+67	4	14	244			01-01-2016	01-01-2016	X10											0	Kleingœft	0	Kleingœft
+67	3	14	245			01-01-2016	01-01-2016	X10											0	Knœrsheim	0	Knœrsheim
+67	2	23	330			01-01-2016	01-01-2016	X10											0	Niederrœdern	0	Niederrœdern
+67	2	23	349			01-01-2016	01-01-2016	X10											1	Oberrœdern	1	Oberrœdern
+67	2	01	405			01-01-2016	01-01-2016	X10											0	Rœschwoog	0	Rœschwoog
+67	5	16	453			01-01-2016	01-01-2016	X10											0	Schœnau	0	Schœnau
+67	4	08	454			01-01-2016	01-01-2016	X10											0	Schœnbourg	0	Schœnbourg
+67	2	23	455			01-01-2016	01-01-2016	X10											0	Schœnenbourg	0	Schœnenbourg
+67	4	08	508			01-01-2016	01-01-2016	X10											0	Vœllerdingen	0	Vœllerdingen
+67	2	13	550			01-01-2016	01-01-2016	X10											0	Wœrth	0	Wœrth
+67	4	02	560			01-01-2016	01-01-2016	X10											0	Zœbersdorf	0	Zœbersdorf
+68	1	01	099			01-01-2016	01-01-2016	X10											0	Frœningen	0	Frœningen
+68	4	14	168			01-01-2016	01-01-2016	X10											0	Knœringue	0	Knœringue
+68	1	01	169			01-01-2016	01-01-2016	X10											0	Kœstlach	0	Kœstlach
+68	4	02	170			01-01-2016	01-01-2016	X10											0	Kœtzingue	0	Kœtzingue
+68	1	01	212			01-01-2016	01-01-2016	X10											0	Mœrnach	0	Mœrnach
+68	2	16	350			01-01-2016	01-01-2016	X10											0	Vœgtlinshoffen	0	Vœgtlinshoffen
+70	2	01	305			01-01-2016	01-01-2016	X10											0	Lœuilley	0	Lœuilley
+72	1	03	028			01-01-2016	01-01-2016	X10											0	Beaumont-Pied-de-Bœuf	0	Beaumont-Pied-de-Bœuf
+72	3	01	099			01-01-2016	01-01-2016	X10											0	Courcebœufs	0	Courcebœufs
+77	3	08	144			01-01-2016	01-01-2016	X10											0	Crèvecœur-en-Brie	0	Crèvecœur-en-Brie
+77	1	06	526			01-01-2016	01-01-2016	X10											0	Vincy-Manœuvre	0	Vincy-Manœuvre
+80	2	04	024			01-01-2016	01-01-2016	X10											1	Argœuves	1	Argœuves
+80	1	02	287			01-01-2016	01-01-2016	X10											1	Estrébœuf	1	Estrébœuf
+80	4	20	472			01-01-2016	01-01-2016	X10											0	Lesbœufs	0	Lesbœufs
+80	2	03	485			01-01-2016	01-01-2016	X10											0	Lœuilly	0	Lœuilly
+80	2	03	594			01-01-2016	01-01-2016	X10											0	Neuville-lès-Lœuilly	0	Neuville-lès-Lœuilly
+80	4	20	629			01-01-2016	01-01-2016	X10											0	Pœuilly	0	Pœuilly
+80	1	02	764			01-01-2016	01-01-2016	X10											0	Tœufles	0	Tœufles
+80	2	12	791			01-01-2016	01-01-2016	X10											0	Vers-sur-Selle	0	Vers-sur-Selles
+88	1	02	454			01-01-2016	01-01-2016	X10											0	Sercœur	0	Sercœur
+89	3	06	048			01-01-2016	01-01-2016	X10											0	Bœurs-en-Othe	0	Bœurs-en-Othe
+972	1		29			01-01-2016	01-01-2016	X10											0	Schœlcher	0	Schœlcher
+37	1	08	232			01-01-2018	01-01-2018	X10											0	Coteaux-sur-Loire	0	Côteaux-sur-Loire
+976		01	01			01-01-2012	01-01-2012	X20											1	Acoua		
+976		02	02			01-01-2012	01-01-2012	X20											0	Bandraboua		
+976		03	03			01-01-2012	01-01-2012	X20											0	Bandrele		
+976		04	04			01-01-2012	01-01-2012	X20											0	Bouéni		
+976		05	05			01-01-2012	01-01-2012	X20											0	Chiconi		
+976		06	06			01-01-2012	01-01-2012	X20											0	Chirongui		
+976		07	07			01-01-2012	01-01-2012	X20											0	Dembeni		
+976		08	08			01-01-2012	01-01-2012	X20											0	Dzaoudzi		
+976		09	09			01-01-2012	01-01-2012	X20											0	Kani-Kéli		
+976		10	10			01-01-2012	01-01-2012	X20											0	Koungou		
+976		99	11			01-01-2012	01-01-2012	X20											0	Mamoudzou		
+976		14	12			01-01-2012	01-01-2012	X20											0	Mtsamboro		
+976		15	13			01-01-2012	01-01-2012	X20											0	M'Tsangamouji		
+976		16	14			01-01-2012	01-01-2012	X20											1	Ouangani		
+976		17	15			01-01-2012	01-01-2012	X20											0	Pamandzi		
+976		18	16			01-01-2012	01-01-2012	X20											0	Sada		
+976		19	17			01-01-2012	01-01-2012	X20											0	Tsingoni		
+14	3	18	697			01-01-2016	01-01-2016	X30											5	Oudon		

@@ -764,7 +764,7 @@ public class CommuneServiceImpl
    * @return the invalidated commune.
    * @throws InvalidArgumentException if an invalid argument has been passed.
    */
-  public Commune modXXXSupression(Date dateEffective, Audit audit,
+  public Commune modX30Supression(Date dateEffective, Audit audit,
                                   String codeInsee, String commentaire)
     throws InvalidArgumentException {
     // validate arguments

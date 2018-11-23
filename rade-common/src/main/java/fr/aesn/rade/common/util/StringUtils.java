@@ -28,16 +28,6 @@ import java.text.Normalizer;
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
 public class StringUtils {
-  /**
-   * Hidden private Constructor makes the class non-instantiable.
-   * Utility classes, which are a collection of static members,
-   * are not meant to be instantiated.
-   */
-  private StringUtils() {
-    throw new UnsupportedOperationException(
-            "This is a utility class and cannot be instantiated");
-  }
-
   /** List of Unicode characters with accents and such. */
   private static final String UNICODE =
       "\u00C0\u00E0\u00C8\u00E8\u00CC\u00EC\u00D2\u00F2\u00D9\u00F9"
@@ -86,6 +76,16 @@ public class StringUtils {
     + "\u0150\u0170"
     + "\u0160\u017D"
     ;
+
+  /**
+   * Hidden private Constructor makes the class non-instantiable.
+   * Utility classes, which are a collection of static members,
+   * are not meant to be instantiated.
+   */
+  private StringUtils() {
+    throw new UnsupportedOperationException(
+            "This is a utility class and cannot be instantiated");
+  }
 
   /**
    * Remove accents (acute, grave, circumflex, tilde, umlaut, ...)

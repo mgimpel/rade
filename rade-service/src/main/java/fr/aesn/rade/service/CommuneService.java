@@ -239,7 +239,7 @@ public interface CommuneService {
     throws InvalidArgumentException;
 
   /**
-   * Removes the Commune (MOD=XXX : custom code).
+   * Removes the Commune (MOD=X30 : Supression).
    * @param dateEffective the date that the change takes effect.
    * @param audit audit details about change.
    * @param codeInsee the code of the Commune to remove.
@@ -247,7 +247,7 @@ public interface CommuneService {
    * @return the invalidated commune.
    * @throws InvalidArgumentException if an invalid argument has been passed.
    */
-  public Commune modXXXSupression(Date dateEffective, Audit audit,
+  public Commune modX30Supression(Date dateEffective, Audit audit,
                                   String codeInsee, String commentaire)
     throws InvalidArgumentException;
 }
