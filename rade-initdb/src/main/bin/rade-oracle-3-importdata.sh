@@ -30,7 +30,6 @@ iconv -f UTF-8 -t ISO_8859-15 -o $DUMP_DIR/rade-$DATE/insert-Audit-iso885915.sql
 iconv -f UTF-8 -t ISO_8859-15 -o $DUMP_DIR/rade-$DATE/insert-CirconscriptionBassin-iso885915.sql $DUMP_DIR/rade-$DATE/insert-CirconscriptionBassin.sql
 iconv -f UTF-8 -t ISO_8859-15 -o $DUMP_DIR/rade-$DATE/insert-Region-iso885915.sql $DUMP_DIR/rade-$DATE/insert-Region.sql
 iconv -f UTF-8 -t ISO_8859-15 -o $DUMP_DIR/rade-$DATE/insert-Departement-iso885915.sql $DUMP_DIR/rade-$DATE/insert-Departement.sql
-iconv -f UTF-8 -t ISO_8859-15 -o $DUMP_DIR/rade-$DATE/insert-Commune-iso885915.sql $DUMP_DIR/rade-$DATE/insert-Commune.sql
 iconv -f UTF-8 -t ISO_8859-15 -o $DUMP_DIR/rade-$DATE/insert-RegionGenealogie-iso885915.sql $DUMP_DIR/rade-$DATE/insert-RegionGenealogie.sql
 iconv -f UTF-8 -t ISO_8859-15 -o $DUMP_DIR/rade-$DATE/insert-DepartementGenealogie-iso885915.sql $DUMP_DIR/rade-$DATE/insert-DepartementGenealogie.sql
 iconv -f UTF-8 -t ISO_8859-15 -o $DUMP_DIR/rade-$DATE/insert-Delegation-iso885915.sql $DUMP_DIR/rade-$DATE/insert-Delegation.sql
@@ -38,13 +37,10 @@ iconv -f UTF-8 -t ISO_8859-15 -o $DUMP_DIR/rade-$DATE/insert-Delegation-iso88591
 sed -i -e "s/'2018-04-01 00:00:00'/TO_TIMESTAMP\('2018-04-01 00:00:00', 'yyyy-mm-dd HH24:MI:SS'\)/" $DUMP_DIR/rade-$DATE/insert-Audit-iso885915.sql
 sed -i -e "s/'[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}'/TO_DATE\(&, 'yyyy-mm-dd'\)/g" $DUMP_DIR/rade-$DATE/insert-Region-iso885915.sql
 sed -i -e "s/'[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}'/TO_DATE\(&, 'yyyy-mm-dd'\)/g" $DUMP_DIR/rade-$DATE/insert-Departement-iso885915.sql
-sed -i -e "s/'[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}'/TO_DATE\(&, 'yyyy-mm-dd'\)/g" $DUMP_DIR/rade-$DATE/insert-Commune-iso885915.sql
 sed -i -e "s/'',/'-',/" $DUMP_DIR/rade-$DATE/insert-Region-iso885915.sql
 sed -i -e "s/'',/'-',/" $DUMP_DIR/rade-$DATE/insert-Departement-iso885915.sql
-sed -i -e "s/'',/'-',/" $DUMP_DIR/rade-$DATE/insert-Commune-iso885915.sql
 sed -i -e "/^ALTER TABLE/d" $DUMP_DIR/rade-$DATE/insert-Region-iso885915.sql
 sed -i -e "/^ALTER TABLE/d" $DUMP_DIR/rade-$DATE/insert-Departement-iso885915.sql
-sed -i -e "/^ALTER TABLE/d" $DUMP_DIR/rade-$DATE/insert-Commune-iso885915.sql
 cat >> $DUMP_DIR/rade-$DATE/insert-Commune-iso885915.sql << EOF
 ALTER SEQUENCE entiteadmin_seq INCREMENT BY 135500;
 SELECT entiteadmin_seq.NEXTVAL FROM dual;
@@ -60,16 +56,38 @@ START $DUMP_DIR/rade-$DATE/insert-Audit-iso885915.sql
 START $DUMP_DIR/rade-$DATE/insert-CirconscriptionBassin-iso885915.sql
 START $DUMP_DIR/rade-$DATE/insert-Region-iso885915.sql
 START $DUMP_DIR/rade-$DATE/insert-Departement-iso885915.sql
-START $DUMP_DIR/rade-$DATE/insert-Commune-iso885915.sql
 START $DUMP_DIR/rade-$DATE/insert-RegionGenealogie-iso885915.sql
 START $DUMP_DIR/rade-$DATE/insert-DepartementGenealogie-iso885915.sql
 START $DUMP_DIR/rade-$DATE/insert-Delegation-iso885915.sql
-update ZR_ENTITEADMIN set DEBUT_VALIDITE=TO_DATE('2017-01-01', 'yyyy-mm-dd') where TYPE_ENTITE_ADMIN='COM';
 SPOOL OFF
 EXIT;
 EOF
 
 # Batch Scripts to import data
-
-#java -jar ..\rade-batch\target\rade-batch.jar -i file:../../rade/misc/sandre/COM_20181016_SANDRE.csv -j importCommuneSandreJob
-#java -jar ..\rade-batch\target\rade-batch.jar -i file:../../rade/misc/hexaposte/AMAHXP38c-201809-NOV2011.txt -j importHexaposteJob
+BATCH_PROPERTIES=/tmp/batch.properties
+BATCH_CONTEXT=/tmp/batch-context.xml
+cat > $BATCH_PROPERTIES << EOF
+db.driver=oracle.jdbc.OracleDriver
+db.jdbcurl=$JDBC_URL
+db.username=$DB_USER
+db.password=$DB_PASSWORD
+EOF
+cat > $BATCH_CONTEXT << EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+         http://www.springframework.org/schema/beans
+         http://www.springframework.org/schema/beans/spring-beans.xsd">
+  <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    <property name="locations" value="file:$BATCH_PROPERTIES"/>
+  </bean>
+  <import resource="classpath:batch-default-context.xml"/>
+</beans>
+EOF
+java -jar ../../../../rade-batch/target/rade-batch.jar -c file:$BATCH_CONTEXT -i file:../resources/batchfiles/sandre/COM_20181016_SANDRE.csv -j importCommuneSandreJob
+java -jar ../../../../rade-batch/target/rade-batch.jar -c file:$BATCH_CONTEXT -i file:../resources/batchfiles/hexaposte/AMAHXP38c-201809-NOV2011.txt -j importHexaposteJob
+java -jar ../../../../rade-batch/target/rade-batch.jar -c file:$BATCH_CONTEXT -i file:../resources/batchfiles/insee/comsimp1999.txt -d 1999-01-01 -j importCommuneSimpleInseeJob
+java -jar ../../../../rade-batch/target/rade-batch.jar -c file:$BATCH_CONTEXT -i file:../resources/batchfiles/insee/historiq2018-modified.txt -d 1999-01-02 -j importCommuneInseeHistoryJob
+rm $BATCH_PROPERTIES
+rm $BATCH_CONTEXT
