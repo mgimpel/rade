@@ -198,7 +198,7 @@ public class SpringBatchApplication {
     JobParameters jobParameters = jobBuilder.toJobParameters();
     try {
       JobExecution execution = jobLauncher.run(job, jobParameters);
-      log.info("Job Exit Status : {}", execution.getStatus());
+      log.info("Job {} : Exit Status : {}", jobName, execution.getStatus());
     } catch (JobExecutionException e) {
       log.error("Job failed", e);
     }

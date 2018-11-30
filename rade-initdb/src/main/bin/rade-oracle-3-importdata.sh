@@ -59,6 +59,9 @@ START $DUMP_DIR/rade-$DATE/insert-Departement-iso885915.sql
 START $DUMP_DIR/rade-$DATE/insert-RegionGenealogie-iso885915.sql
 START $DUMP_DIR/rade-$DATE/insert-DepartementGenealogie-iso885915.sql
 START $DUMP_DIR/rade-$DATE/insert-Delegation-iso885915.sql
+ALTER SEQUENCE entiteadmin_seq INCREMENT BY 1000;
+SELECT entiteadmin_seq.NEXTVAL FROM dual;
+ALTER SEQUENCE entiteadmin_seq INCREMENT BY 1;
 SPOOL OFF
 EXIT;
 EOF
