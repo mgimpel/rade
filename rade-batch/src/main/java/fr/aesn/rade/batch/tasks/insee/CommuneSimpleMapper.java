@@ -80,8 +80,21 @@ public class CommuneSimpleMapper
     commune.setCodeInsee(fieldSet.readString(3)+fieldSet.readString(4));
     commune.setTypeNomClair(getTypeNomClair(fieldSet.readString(7)));
     commune.setNomMajuscule(fieldSet.readString(9));
-    commune.setArticleEnrichi(fieldSet.readString(10));
+    commune.setArticleEnrichi(stripParenthesis(fieldSet.readString(10)));
     commune.setNomEnrichi(fieldSet.readString(11));
     return commune;
+  }
+
+  /**
+   * If the given String is surrounded by parenthesis "()", then they are
+   * stripped away.
+   * @param field the String to test and strip of parenthesis.
+   * @return the given String without surrounding parenthesis.
+   */
+  private String stripParenthesis(final String field) {
+    if (field.startsWith("(") && field.endsWith(")")) {
+      return field.substring(1, field.length() - 1);
+    }
+    return field;
   }
 }

@@ -82,15 +82,15 @@ public class TestDepartementMapper {
     when(metadataService.getTypeEntiteAdminMap()).thenReturn(tea);
     Map<String, TypeNomClair> tncc = MapUtils.putAll(new HashMap<String, TypeNomClair>(),
                                                      new Object[][] {
-        {"0", TypeNomClair.of("0", null, "DE", null)},
-        {"1", TypeNomClair.of("1", null, "D'", null)},
-        {"2", TypeNomClair.of("2", "LE", "DU", null)},
-        {"3", TypeNomClair.of("3", "LA", "DE LA", null)},
-        {"4", TypeNomClair.of("4", "LES", "DES", null)},
-        {"5", TypeNomClair.of("5", "L'", "DE L'", null)},
-        {"6", TypeNomClair.of("6", "AUX", "DES", null)},
-        {"7", TypeNomClair.of("7", "LAS", "DE LAS", null)},
-        {"8", TypeNomClair.of("8", "LOS", "DE LOS", null)}
+        {"0", TypeNomClair.of("0", "", "DE", "")},
+        {"1", TypeNomClair.of("1", "", "D'", "")},
+        {"2", TypeNomClair.of("2", "Le", "DU", "LE")},
+        {"3", TypeNomClair.of("3", "La", "DE LA", "LA")},
+        {"4", TypeNomClair.of("4", "Les", "DES", "LES")},
+        {"5", TypeNomClair.of("5", "L'", "DE L'", "L'")},
+        {"6", TypeNomClair.of("6", "Aux", "DES", "AUX")},
+        {"7", TypeNomClair.of("7", "Las", "DE LAS", "LAS")},
+        {"8", TypeNomClair.of("8", "Los", "DE LOS", "LOS")}
     });
     when(metadataService.getTypeNomClairMap()).thenReturn(tncc);
   }
