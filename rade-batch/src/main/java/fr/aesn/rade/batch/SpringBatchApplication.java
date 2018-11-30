@@ -76,7 +76,7 @@ public class SpringBatchApplication {
                             .build());
     options.addOption(Option.builder("c").longOpt(OPTION_CONFIG)
                             .hasArg().argName("configfile")
-                            .desc("use the give Spring configuration file")
+                            .desc("use the given Spring configuration file")
                             .build());
     options.addOption(Option.builder("l").longOpt(OPTION_LIST)
                             .hasArg(false)

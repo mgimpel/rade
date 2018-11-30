@@ -29,6 +29,7 @@ export PG_DATABASE=radedb
 export PG_USER=radeuser
 export PG_PASSWORD=password
 export PG_DUMP_DIR=/tmp
+export PG_JDBC_URL=jdbc:postgresql://localhost/radedb
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Oracle
@@ -43,3 +44,4 @@ export NLS_LANG=FRENCH_FRANCE.WE8ISO8859P15
 export DUMP_DIR=/u01/dump
 export DB_USER=RADE_DEV
 export DB_PASSWORD=password
+export JDBC_URL=jdbc:oracle:thin:@RAD-DB-DEV.aesn.fr:1521/AESNDEV

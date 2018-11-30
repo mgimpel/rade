@@ -19,14 +19,30 @@
 <!-- $Id$ -->
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:batch="http://www.springframework.org/schema/batch"
        xsi:schemaLocation="
          http://www.springframework.org/schema/beans
-         http://www.springframework.org/schema/beans/spring-beans.xsd">
+         http://www.springframework.org/schema/beans/spring-beans.xsd
+         http://www.springframework.org/schema/batch
+         http://www.springframework.org/schema/batch/spring-batch.xsd">
 
-  <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-    <property name="locations" value="classpath:batch.properties"/>
-  </bean>
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+  <!-- Tasklets -->
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
-  <import resource="classpath:batch-default-context.xml"/>
+  <!-- Info Tasklet -->
+  <bean id="infoTasklet" scope="step"
+        class="fr.aesn.rade.batch.tasks.info.InfoTasklet"/>
 
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+  <!-- Jobs -->
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+  <!-- Info Job -->
+  <batch:job id="infoJob">
+    <batch:step id="infoStep1">
+      <batch:tasklet ref="infoTasklet"/>
+    </batch:step>
+  </batch:job>
 </beans>
