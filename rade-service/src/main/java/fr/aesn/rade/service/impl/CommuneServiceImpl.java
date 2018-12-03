@@ -397,18 +397,18 @@ public class CommuneServiceImpl
    */
   @Override
   @Transactional(readOnly = false)
-  public void mod310x320Fusion(final Date dateEffective,
-                               final Audit audit,
-                               final List<Commune> com310absorbe,
-                               final Commune com320absorbant,
-                               final String commentaire)
+  public Commune mod310x320Fusion(final Date dateEffective,
+                                  final Audit audit,
+                                  final List<Commune> com310absorbe,
+                                  final Commune com320absorbant,
+                                  final String commentaire)
     throws InvalidArgumentException {
-    mergeCommunes(dateEffective,
-                  audit,
-                  com310absorbe,
-                  com320absorbant,
-                  commentaire,
-                  "320");
+    return mergeCommunes(dateEffective,
+                         audit,
+                         com310absorbe,
+                         com320absorbant,
+                         commentaire,
+                         "320");
   }
 
   /**
@@ -424,18 +424,18 @@ public class CommuneServiceImpl
    */
   @Override
   @Transactional(readOnly = false)
-  public void mod330x340FusionAssociation(final Date dateEffective,
-                                          final Audit audit,
-                                          final List<Commune> com330associe,
-                                          final Commune com340absorbant,
-                                          final String commentaire)
+  public Commune mod330x340FusionAssociation(final Date dateEffective,
+                                             final Audit audit,
+                                             final List<Commune> com330associe,
+                                             final Commune com340absorbant,
+                                             final String commentaire)
     throws InvalidArgumentException {
-    mergeCommunes(dateEffective,
-                  audit,
-                  com330associe,
-                  com340absorbant,
-                  commentaire,
-                  "340");
+    return mergeCommunes(dateEffective,
+                         audit,
+                         com330associe,
+                         com340absorbant,
+                         commentaire,
+                         "340");
   }
 
   /**
@@ -451,18 +451,18 @@ public class CommuneServiceImpl
    */
   @Override
   @Transactional(readOnly = false)
-  public void mod311x321FusionSansDeleguee(final Date dateEffective,
-                                           final Audit audit,
-                                           final List<Commune> com311,
-                                           final Commune com321nouvelle,
-                                           final String commentaire)
+  public Commune mod311x321FusionSansDeleguee(final Date dateEffective,
+                                              final Audit audit,
+                                              final List<Commune> com311,
+                                              final Commune com321nouvelle,
+                                              final String commentaire)
     throws InvalidArgumentException {
-    mergeCommunes(dateEffective,
-                  audit,
-                  com311,
-                  com321nouvelle,
-                  commentaire,
-                  "321");
+    return mergeCommunes(dateEffective,
+                         audit,
+                         com311,
+                         com321nouvelle,
+                         commentaire,
+                         "321");
   }
 
   /**
@@ -478,18 +478,18 @@ public class CommuneServiceImpl
    */
   @Override
   @Transactional(readOnly = false)
-  public void mod331x332x333x341FusionAvecDeleguee(final Date dateEffective,
-                                                   final Audit audit,
-                                                   final List<Commune> com331x332x333,
-                                                   final Commune com341nouvelle,
-                                                   final String commentaire)
+  public Commune mod331x332x333x341FusionAvecDeleguee(final Date dateEffective,
+                                                      final Audit audit,
+                                                      final List<Commune> com331x332x333,
+                                                      final Commune com341nouvelle,
+                                                      final String commentaire)
     throws InvalidArgumentException {
-    mergeCommunes(dateEffective,
-                  audit,
-                  com331x332x333,
-                  com341nouvelle,
-                  commentaire,
-                  "341");
+    return mergeCommunes(dateEffective,
+                         audit,
+                         com331x332x333,
+                         com341nouvelle,
+                         commentaire,
+                         "341");
   }
 
   /**
@@ -651,7 +651,6 @@ public class CommuneServiceImpl
    * @return the new Commune.
    * @throws InvalidArgumentException if an invalid argument has been passed.
    */
-  @Transactional(readOnly = false)
   private Commune changeCommuneName(final Date dateEffective,
                                     final Audit audit,
                                     final String codeInsee,
@@ -709,7 +708,6 @@ public class CommuneServiceImpl
    * @return the new Commune.
    * @throws InvalidArgumentException if an invalid argument has been passed.
    */
-  @Transactional(readOnly = false)
   private Commune createCommune(final Date dateEffective,
                                 final Audit audit,
                                 final String codeInsee,
@@ -765,7 +763,6 @@ public class CommuneServiceImpl
    * @return the newly merged Commune.
    * @throws InvalidArgumentException if an invalid argument has been passed.
    */
-  @Transactional(readOnly = false)
   private Commune mergeCommunes(final Date dateEffective,
                              final Audit audit,
                              final List<Commune> comAbsorbe,

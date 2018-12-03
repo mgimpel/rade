@@ -168,10 +168,10 @@ public interface CommuneService {
    * @param commentaire comment for the genealogie link.
    * @throws InvalidArgumentException if an invalid argument has been passed.
    */
-  public void mod310x320Fusion(Date dateEffective, Audit audit,
-                               List<Commune> com310absorbe,
-                               Commune com320absorbant,
-                               String commentaire)
+  public Commune mod310x320Fusion(Date dateEffective, Audit audit,
+                                  List<Commune> com310absorbe,
+                                  Commune com320absorbant,
+                                  String commentaire)
     throws InvalidArgumentException;
 
   /**
@@ -185,10 +185,10 @@ public interface CommuneService {
    * @param commentaire comment for the genealogie link.
    * @throws InvalidArgumentException if an invalid argument has been passed.
    */
-  public void mod330x340FusionAssociation(Date dateEffective, Audit audit,
-                                          List<Commune> com330associe,
-                                          Commune com340absorbant,
-                                          String commentaire)
+  public Commune mod330x340FusionAssociation(Date dateEffective, Audit audit,
+                                             List<Commune> com330associe,
+                                             Commune com340absorbant,
+                                             String commentaire)
     throws InvalidArgumentException;
 
   /**
@@ -202,10 +202,10 @@ public interface CommuneService {
    * @param commentaire comment for the genealogie link.
    * @throws InvalidArgumentException if an invalid argument has been passed.
    */
-  public void mod311x321FusionSansDeleguee(Date dateEffective, Audit audit,
-                                           List<Commune> com311,
-                                           Commune com321nouvelle,
-                                           String commentaire)
+  public Commune mod311x321FusionSansDeleguee(Date dateEffective, Audit audit,
+                                              List<Commune> com311,
+                                              Commune com321nouvelle,
+                                              String commentaire)
     throws InvalidArgumentException;
 
   /**
@@ -219,10 +219,11 @@ public interface CommuneService {
    * @param commentaire comment for the genealogie link.
    * @throws InvalidArgumentException if an invalid argument has been passed.
    */
-  public void mod331x332x333x341FusionAvecDeleguee(Date dateEffective, Audit audit,
-                                                   List<Commune> com331x332x333,
-                                                   Commune com341nouvelle,
-                                                   String commentaire)
+  public Commune mod331x332x333x341FusionAvecDeleguee(Date dateEffective,
+                                                      Audit audit,
+                                                      List<Commune> com331x332x333,
+                                                      Commune com341nouvelle,
+                                                      String commentaire)
     throws InvalidArgumentException;
 
   /**
