@@ -101,3 +101,8 @@ Insert into ZR_REGION (ID,CODE,CHEF_LIEU) values (40,'44','67482');
 Insert into ZR_REGION (ID,CODE,CHEF_LIEU) values (41,'75','33063');
 Insert into ZR_REGION (ID,CODE,CHEF_LIEU) values (42,'76','31555');
 ALTER TABLE ZR_ENTITEADMIN ALTER ID RESTART WITH 50;
+-- For Oracle
+--ALTER SEQUENCE entiteadmin_seq INCREMENT BY 50;
+--SELECT entiteadmin_seq.NEXTVAL FROM dual;
+--ALTER SEQUENCE entiteadmin_seq INCREMENT BY 1;
+--COMMIT;

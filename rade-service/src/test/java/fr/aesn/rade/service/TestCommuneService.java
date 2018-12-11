@@ -329,8 +329,8 @@ public class TestCommuneService
                  sdf.parse("2018-06-01"), newCommune.getDebutValidite());
     assertNull("Hibernate returned a Commune, but a field doesn't match",
                newCommune.getFinValidite());
-    assertNull("Hibernate returned a Commune, but a field doesn't match",
-               newCommune.getArticleEnrichi());
+    assertEquals("Hibernate returned a Commune, but a field doesn't match",
+                 "", newCommune.getArticleEnrichi());
     assertEquals("Hibernate returned a Commune, but a field doesn't match",
                  "BASSE-TERRE 2", newCommune.getNomMajuscule());
     assertEquals("Hibernate returned a Commune, but a field doesn't match",

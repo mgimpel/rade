@@ -51,7 +51,7 @@ public interface CommuneService {
    * @param date the date at which the Communes were valid.
    * @return a List of all Commune matching the given parameters.
    */
-  public List<Commune> getAllCommune(String codedepartement, String nom, Date date);
+  public List<Commune> getAllCommune(String dept, String nameLike, Date date);
 
   /**
    * Returns a Map of all Commune indexed by ID.
@@ -168,10 +168,10 @@ public interface CommuneService {
    * @param commentaire comment for the genealogie link.
    * @throws InvalidArgumentException if an invalid argument has been passed.
    */
-  public void mod310x320Fusion(Date dateEffective, Audit audit,
-                               List<Commune> com310absorbe,
-                               Commune com320absorbant,
-                               String commentaire)
+  public Commune mod310x320Fusion(Date dateEffective, Audit audit,
+                                  List<Commune> com310absorbe,
+                                  Commune com320absorbant,
+                                  String commentaire)
     throws InvalidArgumentException;
 
   /**
@@ -185,10 +185,10 @@ public interface CommuneService {
    * @param commentaire comment for the genealogie link.
    * @throws InvalidArgumentException if an invalid argument has been passed.
    */
-  public void mod330x340FusionAssociation(Date dateEffective, Audit audit,
-                                          List<Commune> com330associe,
-                                          Commune com340absorbant,
-                                          String commentaire)
+  public Commune mod330x340FusionAssociation(Date dateEffective, Audit audit,
+                                             List<Commune> com330associe,
+                                             Commune com340absorbant,
+                                             String commentaire)
     throws InvalidArgumentException;
 
   /**
@@ -202,10 +202,10 @@ public interface CommuneService {
    * @param commentaire comment for the genealogie link.
    * @throws InvalidArgumentException if an invalid argument has been passed.
    */
-  public void mod311x321FusionSansDeleguee(Date dateEffective, Audit audit,
-                                           List<Commune> com311,
-                                           Commune com321nouvelle,
-                                           String commentaire)
+  public Commune mod311x321FusionSansDeleguee(Date dateEffective, Audit audit,
+                                              List<Commune> com311,
+                                              Commune com321nouvelle,
+                                              String commentaire)
     throws InvalidArgumentException;
 
   /**
@@ -219,16 +219,11 @@ public interface CommuneService {
    * @param commentaire comment for the genealogie link.
    * @throws InvalidArgumentException if an invalid argument has been passed.
    */
-  public void mod331x332x333x341FusionAvecDeleguee(Date dateEffective, Audit audit,
-                                                   List<Commune> com331x332x333,
-                                                   Commune com341nouvelle,
-                                                   String commentaire)
-    throws InvalidArgumentException;
-
-  public void mod350x360FusionAssociationSimple(Date dateEffective, Audit audit)
-    throws InvalidArgumentException;
-
-  public void mod351CommuneNouvelle(Date dateEffective, Audit audit)
+  public Commune mod331x332x333x341FusionAvecDeleguee(Date dateEffective,
+                                                      Audit audit,
+                                                      List<Commune> com331x332x333,
+                                                      Commune com341nouvelle,
+                                                      String commentaire)
     throws InvalidArgumentException;
 
   /**
@@ -249,6 +244,42 @@ public interface CommuneService {
     throws InvalidArgumentException;
 
   /**
+   * Changes the name (MOD=X10 : Changement d'orthographe) of the Commune with
+   * the given CodeInsee effective as of the given Date.
+   * @param dateEffective the date that the change takes effect.
+   * @param audit audit details about change.
+   * @param codeInsee the code of Commune to change.
+   * @param tnccoff the type of the official new name.
+   * @param nccoff the official new name.
+   * @param commentaire comment for the genealogie link.
+   * @return the new Commune.
+   * @throws InvalidArgumentException if an invalid argument has been passed.
+   */
+  public Commune modX10ChangementdeNom(Date dateEffective, Audit audit,
+                                       String codeInsee, String tnccoff,
+                                       String nccoff, String commentaire)
+    throws InvalidArgumentException;
+
+  /**
+   * Creates (MOD=X20 : Creation) a new Commune with the given CodeInsee and
+   * details, effective as of the given Date.
+   * @param dateEffective the date that the change takes effect.
+   * @param audit audit details about change.
+   * @param codeInsee the code of the new Commune.
+   * @param departement the departement to which the new Commune belongs.
+   * @param tnccoff the type of the official name.
+   * @param nccoff the official name.
+   * @param commentaire comment for the new Commune.
+   * @return the new Commune.
+   * @throws InvalidArgumentException if an invalid argument has been passed.
+   */
+  public Commune modX20Creation(Date dateEffective, Audit audit,
+                                String codeInsee, String departement,
+                                String tnccoff, String nccoff,
+                                String commentaire)
+    throws InvalidArgumentException;
+
+  /**
    * Removes the Commune (MOD=X30 : Supression).
    * @param dateEffective the date that the change takes effect.
    * @param audit audit details about change.
@@ -257,8 +288,8 @@ public interface CommuneService {
    * @return the invalidated commune.
    * @throws InvalidArgumentException if an invalid argument has been passed.
    */
-  public Commune modX30Supression(Date dateEffective, Audit audit,
-                                  String codeInsee, String commentaire)
+  public Commune modX30Suppression(Date dateEffective, Audit audit,
+                                   String codeInsee, String commentaire)
     throws InvalidArgumentException;
   
   public List<Commune> getCommuneByCriteria(final String codeInsee, 

@@ -76,7 +76,7 @@ public class SpringBatchApplication {
                             .build());
     options.addOption(Option.builder("c").longOpt(OPTION_CONFIG)
                             .hasArg().argName("configfile")
-                            .desc("use the give Spring configuration file")
+                            .desc("use the given Spring configuration file")
                             .build());
     options.addOption(Option.builder("l").longOpt(OPTION_LIST)
                             .hasArg(false)
@@ -198,7 +198,7 @@ public class SpringBatchApplication {
     JobParameters jobParameters = jobBuilder.toJobParameters();
     try {
       JobExecution execution = jobLauncher.run(job, jobParameters);
-      log.info("Job Exit Status : {}", execution.getStatus());
+      log.info("Job {} : Exit Status : {}", jobName, execution.getStatus());
     } catch (JobExecutionException e) {
       log.error("Job failed", e);
     }

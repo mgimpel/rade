@@ -235,10 +235,6 @@ COMMENT ON COLUMN ZR_COMMUNE.CODE IS
   '[Identifiant INSEE Commune] vers l''entité [CODE INSEE COMMUNE] par l''association [CODE INSEE DE LA COMMUNE]';
 COMMENT ON COLUMN ZR_COMMUNE.DEPT IS
   '[Identifiant entité administrative] vers l''entité [DEPARTEMENT] par l''association [COMMUNE APPARTIENT A DEPARTEMENT]';
-COMMENT ON COLUMN ZR_COMMUNE.BASSIN IS
-  '[Code INSEE bassin] vers l''entité [CIRCONSCRIPTION DE BASSIN] par l''association [APPARTENANCE COMMUNE BASSIN]';
-COMMENT ON COLUMN ZR_COMMUNE.URBAIN_RURAL IS
-  '[Indicateur Urbaine/Rurale] de l''entité [COMMUNE]';
 */
 -- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - --
 -- ZR_GENEALOGIE : Association sur la généalogie de l'entité administrative

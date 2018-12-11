@@ -213,7 +213,7 @@ public class TestHistoriqueCommuneImportBatch {
       assertNotNull("Not found in db: " + commune, test);
       assertEquals("Mismatched CodeInsee", commune.getCodeInsee(), test.getCodeInsee());
       assertEquals("Mismatched Departement", commune.getDepartement(), test.getDepartement());
-//      assertEquals("Mismatched ArticleEnrichi", commune.getArticleEnrichi(), test.getArticleEnrichi());
+      assertEquals("Mismatched ArticleEnrichi", commune.getArticleEnrichi(), test.getArticleEnrichi());
       assertEquals("Mismatched NomMajuscule", commune.getNomMajuscule(), test.getNomMajuscule());
       assertEquals("Mismatched NomEnrichi", commune.getNomEnrichi(), test.getNomEnrichi());
       assertEquals("Mismatched TypeNomClair fr Commune " + commune.getCodeInsee(), commune.getTypeNomClair(), test.getTypeNomClair());
@@ -223,7 +223,7 @@ public class TestHistoriqueCommuneImportBatch {
         assertNotNull("Not found in file: " + commune, test);
         assertEquals("Mismatched CodeInsee", commune.getCodeInsee(), test.getCodeInsee());
         assertEquals("Mismatched Departement", commune.getDepartement(), test.getDepartement());
-//        assertEquals("Mismatched ArticleEnrichi", commune.getArticleEnrichi(), test.getArticleEnrichi());
+        assertEquals("Mismatched ArticleEnrichi", commune.getArticleEnrichi(), test.getArticleEnrichi());
         assertEquals("Mismatched NomMajuscule", commune.getNomMajuscule(), test.getNomMajuscule());
         assertEquals("Mismatched NomEnrichi", commune.getNomEnrichi(), test.getNomEnrichi());
         assertEquals("Mismatched TypeNomClair", commune.getTypeNomClair(), test.getTypeNomClair());

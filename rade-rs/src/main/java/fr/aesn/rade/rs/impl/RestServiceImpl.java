@@ -223,8 +223,8 @@ public class RestServiceImpl
   @Path(REST_PATH_COMMUNE)
   @Produces(MediaType.APPLICATION_JSON)
   public Response getAllCommune(@Context final HttpServletRequest req,
-                                @QueryParam("codedepartement") final String rawDept,
-                                @QueryParam("nom") final String rawNameLike,
+                                @QueryParam("dept") final String rawDept,
+                                @QueryParam("namelike") final String rawNameLike,
                                 @QueryParam("date") final String rawDate) {
     log.info("Executing operation getAllCommune with dept {}, name like {} and date {}",
              rawDept, rawNameLike, rawDate);

@@ -19,78 +19,14 @@
 <!-- $Id$ -->
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:p="http://www.springframework.org/schema/p"
-       xmlns:context="http://www.springframework.org/schema/context"
-       xmlns:tx="http://www.springframework.org/schema/tx"
-       xmlns:jpa="http://www.springframework.org/schema/data/jpa"
-       xmlns:batch="http://www.springframework.org/schema/batch"
        xsi:schemaLocation="
          http://www.springframework.org/schema/beans
-         http://www.springframework.org/schema/beans/spring-beans.xsd
-         http://www.springframework.org/schema/context
-         http://www.springframework.org/schema/context/spring-context.xsd
-         http://www.springframework.org/schema/tx
-         http://www.springframework.org/schema/tx/spring-tx.xsd
-         http://www.springframework.org/schema/data/jpa 
-         http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
-         http://www.springframework.org/schema/batch
-         http://www.springframework.org/schema/batch/spring-batch.xsd">
-  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-  <!-- Persistence (Database & Hibernate) & Service Layers -->
-  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-  <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close"
-        p:driverClassName="oracle.jdbc.OracleDriver"
-        p:url="jdbc:oracle:thin:@RAD-DB-DEV.aesn.fr:1521/AESNDEV"
-        p:username="RADE_DEV2"
-        p:password="password"/>
-<!--
-  <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close"
-        p:driverClassName="org.postgresql.Driver"
-        p:url="jdbc:postgresql://localhost/radedb"
-        p:username="radeuser"
-        p:password="password"/>
--->
+         http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-  <!-- Create default configuration for Hibernate -->
-  <bean id="jpaVendorAdapter" 
-        class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
+  <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    <property name="locations" value="classpath:batch.properties"/>
+  </bean>
 
-  <!-- Configure the entity manager factory bean -->
-  <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
-        p:dataSource-ref="dataSource"
-        p:packagesToScan="fr.aesn.rade.persist.model"
-        p:jpaVendorAdapter-ref="jpaVendorAdapter"/>
-
-  <bean id="entityManager"
-        factory-bean="entityManagerFactory"
-        factory-method="createEntityManager"/>
-
-  <!-- Configure the transaction manager bean -->
-  <bean id="transactionManager"
-        class="org.springframework.orm.jpa.JpaTransactionManager"
-        p:entityManagerFactory-ref="entityManagerFactory"/>
-
-  <!-- Enable annotation driven transaction management -->
-  <tx:annotation-driven/>
-
-  <!-- Configure Spring Data JPA -->
-  <jpa:repositories base-package="fr.aesn.rade.persist.dao"/>
-
-  <!-- Service Layer -->
-  <context:component-scan base-package="fr.aesn.rade.service"/>
-
-  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-  <!-- Batch -->
-  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-
-  <!--This repository is only really intended for use in testing and rapid prototyping-->
-  <bean id="jobRepository" class="org.springframework.batch.core.repository.support.MapJobRepositoryFactoryBean"/>
-
-  <bean id="jobLauncher" class="org.springframework.batch.core.launch.support.SimpleJobLauncher"
-        p:jobRepository-ref="jobRepository"/>
-
-  <import resource="classpath*:batch-job-insee.xml"/>
-  <import resource="classpath*:batch-job-sandre.xml"/>
-  <import resource="classpath*:batch-job-hexaposte.xml"/>
+  <import resource="classpath:batch-default-context.xml"/>
 
 </beans>
