@@ -31,12 +31,14 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 
 import fr.aesn.rade.persist.model.Commune;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * JUnit Test for CommuneJpaDao.
  * 
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
+@Slf4j
 public class TestCommuneJpaDao extends AbstractTestJpaDao {
   /** DAO to be tested. */
   @Autowired
@@ -59,6 +61,7 @@ public class TestCommuneJpaDao extends AbstractTestJpaDao {
         .addScript("db/sql/insert-CirconscriptionBassin.sql")
         .addScript("db/sql/insert-Region.sql")
         .addScript("db/sql/insert-Departement.sql")
+        .addScript("db/sql/insert-CommuneSandre-Test.sql")
         .addScript("db/sql/insert-Commune-Test.sql")
         .build();
   }
@@ -274,5 +277,50 @@ public class TestCommuneJpaDao extends AbstractTestJpaDao {
     result = jpaDao.findByDepartementAndNameLikeValidOnDate("90", "aaaa", sdf.parse("2018-01-01"));
     assertEquals("Hibernate returned the wrong number of results",
                  0, result.size());
+  }
+  
+  /**
+   * Test custom repository method.
+   * @throws ParseException failed to parse date.
+   */
+//  @Test
+//  public void testFindByLocalisationAndNameLikeValidOnDate() throws ParseException {
+//    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+//    List<Commune> result;
+//    result = jpaDao.findByLocalisationAndNameLikeValidOnDate("976", "dZi", sdf.parse("2018-01-01"),"","");
+//    assertEquals("Hibernate returned the wrong number of results",
+//                 1, result.size());
+////    result = jpaDao.findByLocalisationAndNameLikeValidOnDate("90", "aaaa", sdf.parse("2018-01-01"), "06","11");
+////    assertEquals("Hibernate returned the wrong number of results",
+////                 0, result.size());
+//  }
+  
+  /**
+   * Test custom repository method.
+   * @throws ParseException failed to parse date.
+   */
+  @Test
+  public void testFindByLocalisationAndNameLike() throws ParseException {
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    List<Commune> result;
+    result = jpaDao.findByBassinRegionAndNameLike(" ", "06","dZi");   
+    assertEquals("Hibernate returned the wrong number of results",
+                 2, result.size());    
+    result = jpaDao.findByBassinRegionAndNameLikeValidOnDate(" ", "06","dZi",
+            sdf.parse("2018-01-01"));   
+    assertEquals("Hibernate returned the wrong number of results",
+                 2, result.size());
+    result = jpaDao.findByDeptBassinAndNameLike("976"," ", "éni");
+    assertEquals("Hibernate returned the wrong number of results",
+                 1, result.size());
+   result = jpaDao.findByDeptBassinAndNameLikeValidOnDate("976"," ", "éni",
+            sdf.parse("2019-01-01"));
+    assertEquals("Hibernate returned the wrong number of results",
+                 1, result.size());
+
+    
+//    result = jpaDao.findByLocalisationAndNameLike("90", "aaaa", sdf.parse("2018-01-01"));
+//    assertEquals("Hibernate returned the wrong number of results",
+//                 0, result.size());)
   }
 }

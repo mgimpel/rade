@@ -213,6 +213,12 @@
       <artifactId>commons-dbcp2</artifactId>
       <scope>runtime</scope>
     </dependency>
+    <dependency>
+        <groupId>org.apache.poi</groupId>
+        <artifactId>poi</artifactId>
+        <scope>compile</scope>
+        <version>3.5-FINAL</version>
+    </dependency>
 
     <!-- Servlet -->
     <dependency>
