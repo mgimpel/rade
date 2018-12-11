@@ -55,23 +55,6 @@ public class SearchCommune {
     String hasError;
     String page;
     
-    public int getBegin(){
-        Integer page = Integer.parseInt(this.page);
-        if(page <= 0) page = 1;
-        
-        if(listeResultats != null && listeResultats.size() / 10 > page){
-            log.info("Begin : " + (page * 10 - 10));
-            return page * 10 - 10;
-        }
-        log.info("begin : " + 1);
-        return 0;
-    }
-    
-    public int getEnd(){
-        log.info("end : " + (getBegin() + 9));
-        return getBegin() + 9;
-    }
-    
     public String formatDate(Date date){
         String formatDate = null;
         if(date != null){

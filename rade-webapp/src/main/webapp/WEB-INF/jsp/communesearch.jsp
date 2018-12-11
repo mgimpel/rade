@@ -98,7 +98,7 @@
                         <td style="text-align: right"><form:label path="codeCirconscription">Circonscription bassin :</form:label></td>
                         <td>
                             <form:select  style="width:300px"  path="codeCirconscription">
-                                <form:option value="-1" label="Sélectionner une conscription..." />
+                                <form:option value="-1" label="Sélectionner une circonscription..." />
                                 <form:options  items="${listeCirconscriptions}" itemLabel="libelleLong" itemValue="code"  />
                             </form:select>
                         </td>

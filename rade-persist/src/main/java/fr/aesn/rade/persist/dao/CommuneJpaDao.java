@@ -117,7 +117,7 @@ public interface CommuneJpaDao
    */
   @Query("SELECT DISTINCT(c) FROM Commune c"
                + " WHERE (?1 = ' ' OR c.departement = ?1)"
-               + " AND (?2 = ' ' OR c.codeInsee IN(SELECT s.codeCommune FROM CommuneSandre s WHERE s.codeCommune = ?2))"
+               + " AND (?2 = ' ' OR c.codeInsee IN(SELECT s.codeCommune FROM CommuneSandre s WHERE s.circonscriptionBassin = ?2))"
                + " AND (?3 = ' ' OR ((UPPER(c.nomMajuscule) LIKE '%' || UPPER(?3) || '%') OR (UPPER(c.nomEnrichi) LIKE '%' || UPPER(?3) || '%')))")
   public List<Commune> findByDeptBassinAndNameLike(String dept, 
                                              String bassin,
@@ -135,7 +135,7 @@ public interface CommuneJpaDao
    */
   @Query("SELECT DISTINCT(c) FROM Commune c"
                + " WHERE (?1 = ' ' OR c.departement = ?1)"
-               + " AND (?2 = ' ' OR c.codeInsee IN(SELECT s.codeCommune FROM CommuneSandre s WHERE s.codeCommune = ?2))"
+               + " AND (?2 = ' ' OR c.codeInsee IN(SELECT s.codeCommune FROM CommuneSandre s WHERE s.circonscriptionBassin = ?2))"
                + " AND (?3 = ' ' OR ((UPPER(c.nomMajuscule) LIKE '%' || UPPER(?3) || '%') OR (UPPER(c.nomEnrichi) LIKE '%' || UPPER(?3) || '%')))" 
                + " AND (c.debutValidite <= ?4)"
                + " AND (c.finValidite IS NULL OR c.finValidite > ?4)")
@@ -157,7 +157,7 @@ public interface CommuneJpaDao
    */
   @Query("SELECT DISTINCT(c) FROM Commune c, Departement d"
                + " WHERE c.departement = d.codeInsee"
-               + " AND (?1 = ' ' OR c.codeInsee IN(SELECT s.codeCommune FROM CommuneSandre s WHERE s.codeCommune = ?1))"
+               + " AND (?1 = ' ' OR c.codeInsee IN(SELECT s.codeCommune FROM CommuneSandre s WHERE s.circonscriptionBassin = ?1))"
                + " AND (?2 = ' ' OR d.region = ?2)"
                + " AND (?3 = ' ' OR ((UPPER(c.nomMajuscule) LIKE '%' || UPPER(?3) || '%') OR (UPPER(c.nomEnrichi) LIKE '%' || UPPER(?3) || '%')))")
   public List<Commune> findByBassinRegionAndNameLike(String bassin,
@@ -176,7 +176,7 @@ public interface CommuneJpaDao
    */
   @Query("SELECT DISTINCT(c) FROM Commune c, Departement d"
                + " WHERE c.departement = d.codeInsee"
-               + " AND (?1 = ' ' OR c.codeInsee IN(SELECT s.codeCommune FROM CommuneSandre s WHERE s.codeCommune = ?1))"
+               + " AND (?1 = ' ' OR c.codeInsee IN(SELECT s.codeCommune FROM CommuneSandre s WHERE s.circonscriptionBassin = ?1))"
                + " AND (?2 = ' ' OR d.region = ?2)"
                + " AND (?3 = ' ' OR ((UPPER(c.nomMajuscule) LIKE '%' || UPPER(?3) || '%') OR (UPPER(c.nomEnrichi) LIKE '%' || UPPER(?3) || '%')))" 
                + " AND (c.debutValidite <= ?4)"

@@ -260,4 +260,8 @@ public interface CommuneService {
   public Commune modX30Supression(Date dateEffective, Audit audit,
                                   String codeInsee, String commentaire)
     throws InvalidArgumentException;
+  
+  public List<Commune> getCommuneByCriteria(final String codeInsee, 
+          final String codeDept, final String codeRegion, 
+          final String codeBassin, final String nomCommune, final Date dateEffet);
 }

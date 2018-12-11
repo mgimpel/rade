@@ -184,4 +184,20 @@ public class CommunePlus {
     }
     return insee.getTypeNomClair();
   }
+  
+  /**
+   * Gets Sandre de l'entité.
+   * @return Sandre de l'entité.
+   */
+  public CommuneSandre getCommuneSandre(){
+      return sandre;
+  }
+  
+  /**
+   * Gets Commune de l'entité.
+   * @return Commune de l'entité.
+   */
+  public Commune getCommuneInsee(){
+      return insee;
+  }
 }

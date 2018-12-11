@@ -21,6 +21,9 @@ import fr.aesn.rade.persist.dao.DepartementJpaDao;
 import fr.aesn.rade.persist.dao.RegionJpaDao;
 import fr.aesn.rade.persist.model.EntiteAdministrative;
 import fr.aesn.rade.persist.model.GenealogieEntiteAdmin;
+import fr.aesn.rade.service.CommuneService;
+import fr.aesn.rade.service.DepartementService;
+import fr.aesn.rade.service.RegionService;
 import java.util.Date;
 import java.util.Set;
 import lombok.EqualsAndHashCode;
@@ -54,9 +57,9 @@ public class DisplayCommune {
     @DateTimeFormat(pattern="dd/MM/yyyy")
     Date dateCreation, dateModification, debutValidite, finValidite;
 
-    CommuneJpaDao communeDao;
-    RegionJpaDao regionJpaDao;
-    DepartementJpaDao departementJpaDao;
+    CommuneService communeService;
+    RegionService regionService;
+    DepartementService departementService;
 
     Set<GenealogieEntiteAdmin> parents;
     Set<GenealogieEntiteAdmin> enfants;
@@ -65,11 +68,11 @@ public class DisplayCommune {
         if(entite != null){
             switch(entite.getTypeEntiteAdmin().getCode()){
                 case "COM":
-                    return communeDao.getOne(entite.getId()).getCodeInsee();
+                    return communeService.getCommuneById(entite.getId()).getCodeInsee();
                 case "REG":
-                    return regionJpaDao.getOne(entite.getId()).getCodeInsee();
+                    return regionService.getRegionById(entite.getId()).getCodeInsee();
                 case "DEP":
-                    return departementJpaDao.getOne(entite.getId()).getCodeInsee();
+                    return departementService.getDepartementById(entite.getId()).getCodeInsee();
             }
         }
 

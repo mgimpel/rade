@@ -17,6 +17,7 @@
 /* $Id$ */
 package fr.aesn.rade.webapp.controller;
 
+import fr.aesn.rade.common.modelplus.CommunePlus;
 import fr.aesn.rade.persist.model.Commune;
 import java.util.Date;
 
@@ -36,11 +37,6 @@ import fr.aesn.rade.service.CommuneService;
 import fr.aesn.rade.service.DepartementService;
 import fr.aesn.rade.service.RegionService;
 import fr.aesn.rade.webapp.model.SearchCommune;
-import fr.aesn.rade.persist.dao.CommuneJpaDao;
-import fr.aesn.rade.persist.dao.CommuneSandreJpaDao;
-import fr.aesn.rade.persist.dao.DepartementJpaDao;
-import fr.aesn.rade.persist.dao.GenealogieEntiteAdminJpaDao;
-import fr.aesn.rade.persist.dao.RegionJpaDao;
 import fr.aesn.rade.persist.model.CirconscriptionBassin;
 import fr.aesn.rade.persist.model.CommuneSandre;
 import fr.aesn.rade.persist.model.Departement;
@@ -52,12 +48,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import javax.persistence.EntityNotFoundException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -76,15 +68,9 @@ public class ReferentielController {
   @Autowired
   private DepartementService departementService;
   @Autowired
-  private CommuneSandreJpaDao communeSandreJpaDao;
-  @Autowired
-  private CommuneJpaDao communeDao;
-  @Autowired
-  private RegionJpaDao regionJpaDao;
-  @Autowired
-  private DepartementJpaDao departementJpaDao;
-  @Autowired
   private BassinService bassinService;
+  @Autowired
+  private CommunePlusService communePlusService;
 
   /**
    * Region Search mapping.
@@ -206,53 +192,92 @@ public class ReferentielController {
       return "error";
     }
     
+    String view = "communesearch";
+    
     // 1. recherche de la commune
     List<Commune> communes = null;
-    if(criteria.getCodeInsee() != null && !criteria.getCodeInsee().equals("")){
-        if(criteria.getDateEffet() != null){
-            Commune commune = communeService.getCommuneByCode(criteria.getCodeInsee(), criteria.getDateEffet());
-            if(commune != null){
-                communes = new ArrayList<Commune>();
-                communes.add(commune);
-            }
-        }else{
-            communes = communeDao.findByCodeInsee(criteria.getCodeInsee());
+    
+    if(!(criteria.getCodeInsee() == null 
+            && criteria.getCodeDepartement() == "-1" 
+            && criteria.getCodeCirconscription() == "-1" 
+            && criteria.getCodeRegion()  == "-1" 
+            && (criteria.getNomEnrichi() == null || criteria.getNomEnrichi().equals("")) 
+            && criteria.getDateEffet() == null)){
+        communes = communeService.getCommuneByCriteria(criteria.getCodeInsee(), 
+                                                       criteria.getCodeDepartement(), 
+                                                       criteria.getCodeRegion(), 
+                                                       criteria.getCodeCirconscription(), 
+                                                       criteria.getNomEnrichi(), 
+                                                       criteria.getDateEffet());
+        if(communes == null || communes.size() == 0){
+            model.addAttribute("errorRecherche", "La recherche n'a donné aucun résultat.");
         }
     }else{
-        String codeDepartement = criteria.getCodeDepartement().equals("-1") ? " " : criteria.getCodeDepartement();
-        String codeRegion = criteria.getCodeRegion().equals("-1") ? " " : criteria.getCodeRegion();
-        String codeBassin = criteria.getCodeCirconscription().equals("-1") ? " " : criteria.getCodeCirconscription();
-        String nameLike = criteria.getNomEnrichi() == null ? " " : criteria.getNomEnrichi();
-        
-         if(criteria.getDateEffet() == null){
-             if(codeRegion.equals(" ")){
-                 log.info("Recherche par dept, bassin et namelike : " + codeDepartement +' ' + codeBassin + ' ' + nameLike.trim());
-                    communes = communeDao.findByDeptBassinAndNameLike(codeDepartement,codeBassin, nameLike.trim());
-             }else{
-                 log.info("Recherche par bassin, region et namelike : " + codeBassin +' ' + codeRegion + ' ' + nameLike.trim());
-                    communes = communeDao.findByBassinRegionAndNameLike(codeBassin,codeRegion, nameLike.trim());
-             }
-         }else{
-             if(codeRegion.equals(" ")){
-                 if(codeBassin.equals(" ")){
-                     communes = communeDao.findByDepartementAndNameLikeValidOnDate(codeDepartement,nameLike.trim(),criteria.getDateEffet());
-                 }else{
-                     communes = communeDao.findByDeptBassinAndNameLikeValidOnDate(codeDepartement,codeBassin,nameLike.trim(),criteria.getDateEffet());
-                 }
-             }else{
-                 communes = communeDao.findByBassinRegionAndNameLikeValidOnDate(nameLike.trim(),codeBassin, codeRegion,criteria.getDateEffet());
-             }
-         }
+        model.addAttribute("errorRecherche", "Au moins un des champs doit être renseigné"); 
     }
     
-    
-    
-    String view = "communesearch";
+
+//    List<Commune> communes = null;
+//    if(criteria.getCodeInsee() != null && !criteria.getCodeInsee().equals("")){
+//        if(criteria.getDateEffet() != null){
+//            Commune commune = communeService.getCommuneByCode(criteria.getCodeInsee(), criteria.getDateEffet());
+//            if(commune != null){
+//                communes = new ArrayList<Commune>();
+//                communes.add(commune);
+//            }
+//        }else{
+//            communes = communeDao.findByCodeInsee(criteria.getCodeInsee());
+//        }
+//    }else{
+//        String codeDepartement = criteria.getCodeDepartement().equals("-1") ? " " : criteria.getCodeDepartement();
+//        String codeRegion = criteria.getCodeRegion().equals("-1") ? " " : criteria.getCodeRegion();
+//        String codeBassin = criteria.getCodeCirconscription().equals("-1") ? " " : criteria.getCodeCirconscription();
+//        String nameLike = criteria.getNomEnrichi() == null ||  criteria.getNomEnrichi().trim().equals("") ? " " : criteria.getNomEnrichi();
+//        
+//        if(!(codeDepartement.equals(" ") && codeRegion.equals(" ") && codeBassin.equals(" ") && nameLike.equals(" ") && criteria.getDateEffet() == null)){
+//            if(criteria.getDateEffet() == null){
+//                 if(codeRegion.equals(" ") || !codeDepartement.equals(" ") ){
+//                     log.info("Recherche par dept, bassin et namelike : " + codeDepartement +' ' + codeBassin + ' ' + nameLike.trim());
+//                        communes = communeDao.findByDeptBassinAndNameLike(codeDepartement,codeBassin, nameLike.trim());
+//                 }else{
+//                     log.info("Recherche par bassin, region et namelike : " + codeBassin +' ' + codeRegion + ' ' + nameLike.trim());
+//                        communes = communeDao.findByBassinRegionAndNameLike(codeBassin,codeRegion, nameLike.trim());
+//                 }
+//             }else{
+//                 if(codeRegion.equals(" ")){
+//                     if(codeBassin.equals(" ")){
+//                         if(codeDepartement.equals(" ")){
+//                             log.info("Recherche par dept, namelike et date d'effet : " + codeDepartement +' ' + nameLike.trim() + ' ' + criteria.getDateEffet());
+//                             communes = communeDao.findByNameLikeValidOnDate(nameLike.trim(),criteria.getDateEffet());
+//                         }else{
+//                             if(nameLike.equals(" ")){
+//                                 log.info("Recherche par dept et date d'effet : " + codeDepartement +' ' + nameLike.trim() + ' ' + criteria.getDateEffet());
+//                                 communes = communeDao.findByDepartementValidOnDate(codeDepartement,criteria.getDateEffet());
+//                             }else{
+//                                 log.info("Recherche par dept, namelike et date d'effet : " + codeDepartement +' ' + nameLike.trim() + ' ' + criteria.getDateEffet());
+//                                 communes = communeDao.findByDepartementAndNameLikeValidOnDate(codeDepartement,nameLike.trim(),criteria.getDateEffet());
+//                             }
+//                         }
+//                     }else{
+//                         log.info("Recherche par dept, bassin, nameLike et date d'effet : " + codeDepartement + " " + codeBassin +' ' + nameLike.trim() + ' ' + criteria.getDateEffet());
+//                         communes = communeDao.findByDeptBassinAndNameLikeValidOnDate(codeDepartement,codeBassin,nameLike.trim(),criteria.getDateEffet());
+//                     }
+//                 }else{
+//                     log.info("Recherche par dept, bassin, region, namelike et date d'effet : " + nameLike.trim() +' ' + codeBassin + " " + codeRegion + ' ' + criteria.getDateEffet());
+//                     communes = communeDao.findByBassinRegionAndNameLikeValidOnDate(codeBassin, codeRegion,nameLike.trim(), criteria.getDateEffet());
+//                 }
+//             }
+//            if(communes == null || communes.size() == 0){
+//                 model.addAttribute("errorRecherche", "La recherche n'a donné aucun résultat.");
+//            }
+//        }else{
+//            model.addAttribute("errorRecherche", "Au moins un des champs doit être renseigné");
+//        }
+//    }
 
     // 2. redirection et construction du model en fonction du resultat
     if(communes == null || communes.size() == 0){
-        // affichage d'un message d'erreur
-        model.addAttribute("errorRecherche", "La recherche n'a donné aucun résultat.");
+        model.addAttribute("searchCommune", criteria);
         List<Region> regions = regionService.getAllRegion();
         List<Departement> departements = departementService.getAllDepartement();
         List<CirconscriptionBassin> bassins = bassinService.getAllBassin();
@@ -292,9 +317,9 @@ public class ReferentielController {
             List<DisplayCommune> listeResultats = new ArrayList();
             for(Commune commune : communes){
                 DisplayCommune displayCommune = new DisplayCommune();
-                displayCommune.setDepartementJpaDao(departementJpaDao);
-                displayCommune.setCommuneDao(communeDao);
-                displayCommune.setRegionJpaDao(regionJpaDao);
+                displayCommune.setDepartementService(departementService);
+                displayCommune.setCommuneService(communeService);
+                displayCommune.setRegionService(regionService);
                 displayCommune.setNomEnrichi(commune.getNomEnrichi());
                 displayCommune.setCodeInsee(commune.getCodeInsee());
                 displayCommune.setDebutValidite(commune.getDebutValidite());
@@ -310,8 +335,6 @@ public class ReferentielController {
             model.addAttribute("titre", "Liste des résultats");
             model.addAttribute("searchResult", criteria);
             view = "communeresults";
-            
-            
         }
     }
     
@@ -324,7 +347,7 @@ public class ReferentielController {
     String view = "communesearch";
     log.info("Display commune: {}", code);
     if (code != null) {        
-        List<Commune> communes = communeDao.findByCodeInsee(code);
+        List<Commune> communes = communeService.getCommuneByCode(code);
         
         if(communes != null && communes.size() > 0){
             
@@ -337,9 +360,9 @@ public class ReferentielController {
                 
                 for(Commune commune : communes){
                     DisplayCommune displayCommune = new DisplayCommune();
-                    displayCommune.setDepartementJpaDao(departementJpaDao);
-                    displayCommune.setCommuneDao(communeDao);
-                    displayCommune.setRegionJpaDao(regionJpaDao);
+                    displayCommune.setDepartementService(departementService);
+                    displayCommune.setCommuneService(communeService);
+                    displayCommune.setRegionService(regionService);
                     displayCommune.setNomEnrichi(commune.getNomEnrichi());
                     displayCommune.setCodeInsee(commune.getCodeInsee());
                     displayCommune.setDebutValidite(commune.getDebutValidite());
@@ -370,42 +393,42 @@ public class ReferentielController {
   public String communedisplay(@PathVariable("code") String code, @PathVariable("date") String date,
                               Model model) {
     String view = "communesearch";
-    Commune commune = communeService.getCommuneByCode(code, date);
-    log.info("Commune + date " + commune);
-    if(commune != null){
+      CommunePlus communePlus = communePlusService.getCommuneByCode(code, date);
+      Commune communeInsee = communePlus.getCommuneInsee();
+      log.info("Commune + date " + communeInsee);
+    if(communeInsee != null){
         log.info("Display commune: {}", code);
         DisplayCommune displayCommune = new DisplayCommune();
-        displayCommune.setDepartementJpaDao(departementJpaDao);
-        displayCommune.setCommuneDao(communeDao);
-        displayCommune.setRegionJpaDao(regionJpaDao);
-        displayCommune.setCodeInsee(commune.getCodeInsee());
-        displayCommune.setNomEnrichi(commune.getNomEnrichi());
-        displayCommune.setNomMajuscule(commune.getNomMajuscule());
-        displayCommune.setDebutValidite(commune.getDebutValidite());
-        displayCommune.setFinValidite(commune.getFinValidite());
-        displayCommune.setArticle(commune.getTypeNomClair().getArticle());
-        displayCommune.setArticleEnrichi(commune.getArticleEnrichi());
-        displayCommune.setEnfants(commune.getEnfants());
-        displayCommune.setParents(commune.getParents());
+        displayCommune.setDepartementService(departementService);
+        displayCommune.setCommuneService(communeService);
+        displayCommune.setRegionService(regionService);
+        displayCommune.setCodeInsee(communeInsee.getCodeInsee());
+        displayCommune.setNomEnrichi(communeInsee.getNomEnrichi());
+        displayCommune.setNomMajuscule(communeInsee.getNomMajuscule());
+        displayCommune.setDebutValidite(communeInsee.getDebutValidite());
+        displayCommune.setFinValidite(communeInsee.getFinValidite());
+        displayCommune.setArticle(communeInsee.getTypeNomClair().getArticle());
+        displayCommune.setArticleEnrichi(communeInsee.getArticleEnrichi());
+        displayCommune.setEnfants(communeInsee.getEnfants());
+        displayCommune.setParents(communeInsee.getParents());
         if(displayCommune.getParents().size() > 0){
             GenealogieEntiteAdmin parent = displayCommune.getParents().iterator().next();
             displayCommune.setMotifModification(parent.getTypeGenealogie().getLibelleLong());
             displayCommune.setCommentaireModification(parent.getCommentaire());
         }
-        try{
-            CommuneSandre communeSandre = communeSandreJpaDao.getOne(commune.getCodeInsee());
+        
+        CommuneSandre communeSandre = communePlus.getCommuneSandre();
+        if(communeSandre != null){
             displayCommune.setNomBassin(communeSandre.getCirconscriptionBassin().getLibelleLong());
             displayCommune.setDateCreation(communeSandre.getDateCreationCommune());
             displayCommune.setDateModification(communeSandre.getDateMajCommune());
             displayCommune.setCodeBassin(communeSandre.getCirconscriptionBassin().getCode());
-        }catch(EntityNotFoundException ex){
-            log.info("Impossible de charger la commune Sandre " + commune.getCodeInsee());
         }
-        
-        Departement departement = departementService.getDepartementByCode(commune.getDepartement(), commune.getDebutValidite());
+         
+        Departement departement = departementService.getDepartementByCode(communeInsee.getDepartement(), communeInsee.getDebutValidite());
         displayCommune.setNomDepartement(departement.getNomEnrichi());
         displayCommune.setCodeDepartement(departement.getCodeInsee());
-        displayCommune.setNomRegion(regionService.getRegionByCode(departement.getRegion(), commune.getDebutValidite()).getNomEnrichi());
+        displayCommune.setNomRegion(regionService.getRegionByCode(departement.getRegion(), communeInsee.getDebutValidite()).getNomEnrichi());
         
         view = communedisplay(displayCommune,  model);
     }else{
