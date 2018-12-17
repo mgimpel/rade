@@ -40,6 +40,7 @@ import fr.aesn.rade.webapp.model.SearchCommune;
 import fr.aesn.rade.persist.model.CirconscriptionBassin;
 import fr.aesn.rade.persist.model.CommuneSandre;
 import fr.aesn.rade.persist.model.Departement;
+import fr.aesn.rade.webapp.model.SearchEntite;
 import fr.aesn.rade.persist.model.GenealogieEntiteAdmin;
 import fr.aesn.rade.service.BassinService;
 import fr.aesn.rade.webapp.model.DisplayCommune;
@@ -48,9 +49,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
-import javax.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 /**
  * Spring MVC Controller for Rade.
@@ -71,6 +72,11 @@ public class ReferentielController {
   private BassinService bassinService;
   @Autowired
   private CommunePlusService communePlusService;
+  
+  private final static String REGION  = "region";
+  private final static String DEPT  = "dept";
+  private final static String COMMUNE  = "commune";
+  private final static String BASSIN  = "bassin";
 
   /**
    * Region Search mapping.
@@ -141,7 +147,28 @@ public class ReferentielController {
     return "regiondisplay";
   }
   
-  
+  /**   
+   * Entite search mapping
+   * Recherche d'entité (commune, région, département, bassin, délégation) par code
+   * @param entite
+   * @param model
+   * @return redirect to the suitable entity search
+   */
+  @RequestMapping("/entiteSearch")
+  public String entiteSearch(SearchEntite entite, Model model) {
+
+	log.info("Recherche d'entités, type : " + entite.getType() + ", code :" + entite.getCode());
+        String view = "home";        
+        // une fois la combo des types dégrisée, décommenter la ligne suivante
+        String type = "commune"; // entite.getType();        
+        if(COMMUNE.equalsIgnoreCase(type)) {
+            view = communedisplay(entite.getCode(), model); 
+        }
+	model.addAttribute("entite", new SearchEntite());
+	return view;
+    }
+
+    
   /**
    * Commune Search mapping.
    * @return View for the Login page.
@@ -180,6 +207,8 @@ public class ReferentielController {
     model.addAttribute("listeDepartements", departementsByCodeInsee);
     model.addAttribute("listeCirconscriptions", bassins);
     model.addAttribute("dateEffet", new Date());
+    
+    model.addAttribute("entite", new SearchEntite());
     return "communesearch";
   }
 
