@@ -78,7 +78,7 @@ public class SearchCommune {
            if(numPage <= getPageMax()){
                this.page = page;
            }
-       }catch(Exception e){
+       }catch(NumberFormatException e){
            log.error("Paramètre non valide");
        }
     }

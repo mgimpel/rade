@@ -19,3 +19,4 @@ target/
 
 # Test logs #
 logs/
+/rade-persist/nbproject/

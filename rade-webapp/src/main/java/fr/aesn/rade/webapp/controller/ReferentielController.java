@@ -46,6 +46,7 @@ import fr.aesn.rade.service.BassinService;
 import fr.aesn.rade.webapp.model.DisplayCommune;
 import fr.aesn.rade.webapp.export.ExportExcel;
 import fr.aesn.rade.webapp.export.Export;
+import fr.aesn.rade.webapp.model.SearchEntite;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -76,6 +77,11 @@ public class ReferentielController {
   private BassinService bassinService;
   @Autowired
   private CommunePlusService communePlusService;
+  
+  private final static String REGION  = "region";
+  private final static String DEPT  = "dept";
+  private final static String COMMUNE  = "commune";
+  private final static String BASSIN  = "bassin";
 
   /**
    * Region Search mapping.
@@ -145,6 +151,27 @@ public class ReferentielController {
     model.addAttribute("region", region);
     return "regiondisplay";
   }
+  
+  /**   
+   * Entite search mapping
+   * Recherche d'entité (commune, région, département, bassin, délégation) par code
+   * @param entite
+   * @param model
+   * @return redirect to the suitable entity search
+   */
+  @RequestMapping("/entiteSearch")
+  public String entiteSearch(@ModelAttribute("entite") SearchEntite entite, Model model) {
+	log.info("Recherche d'entités, type : " + entite.getType() + ", code :" + entite.getCode());
+        String view = "home";        
+        // une fois la combo des types dégrisée, décommenter la ligne suivante
+        String type = "commune"; // entite.getType();        
+        if(COMMUNE.equalsIgnoreCase(type)) {
+            view = communedisplay(entite.getCode(), model); 
+        }
+	model.addAttribute("entite", new SearchEntite());
+	return view;
+  }
+  
   
   /**
    * Export de la liste des communes au format Excel
@@ -503,5 +530,14 @@ public class ReferentielController {
    @ModelAttribute("searchCommune")
    public SearchCommune searchCommune() {
       return new SearchCommune();
+   }
+   
+   /**
+   * Attribut de session du contrôleur
+   * @return Objet de recherche de commune
+   */
+   @ModelAttribute("entite")
+   public SearchEntite searchEntite() {
+      return new SearchEntite();
    }
 }

@@ -144,7 +144,7 @@
         </div>
                 
         <c:if test="${displayCommune.genealogieParentCodeInsee != null && displayCommune.genealogieParentCodeInsee.size() > 0}">
-            <div class="demi pave" style="font-size: 12px; width: auto">
+            <div class="<c:if test="${displayCommune.genealogieEnfantCodeInsee != null && displayCommune.genealogieEnfantCodeInsee.size() > 0}">demi</c:if> pave" style="font-size: 12px; width: auto">
                 <fieldset>
                     <legend>Entités mères</legend>
                     <table>
@@ -166,7 +166,7 @@
             </div> 
         </c:if>
         <c:if test="${displayCommune.genealogieEnfantCodeInsee != null && displayCommune.genealogieEnfantCodeInsee.size() > 0}">   
-            <div class="demi pave" style="clear: none;font-size: 12px; width: auto;">
+            <div class="<c:if test="${displayCommune.genealogieParentCodeInsee != null && displayCommune.genealogieParentCodeInsee.size() > 0}">demi</c:if> pave" style="clear: none;font-size: 12px; width: auto;">
                 <fieldset>
                     <legend>Entités filles</legend>
 
