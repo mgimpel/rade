@@ -35,8 +35,6 @@ import fr.aesn.rade.persist.dao.CommuneSandreJpaDao;
 import fr.aesn.rade.persist.model.Commune;
 import fr.aesn.rade.persist.model.CommuneSandre;
 import fr.aesn.rade.service.CommunePlusService;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -146,78 +144,5 @@ public class CommunePlusServiceImpl
       log.warn("Commune requested by code and date: Exception parsing date {}", date, e);
       return null;
     }
-  }
-  
-  @Override
-  public List<CommunePlus> getCommuneByCriteria(final String codeInsee, 
-                                            final String codeDept, 
-                                            final String codeRegion, 
-                                            final String codeBassin, 
-                                            final String nomCommune, 
-                                            final Date dateEffet){
-      List<Commune> communes = null;
-      if(codeInsee != null && !codeInsee.equals("")){
-        if(dateEffet != null){
-            Commune commune = communeJpaDao.findByCodeInseeValidOnDate(codeInsee, dateEffet);
-            if(commune != null){
-                communes = new ArrayList<>();
-                communes.add(commune);
-            }
-        }else{
-            communes = communeJpaDao.findByCodeInsee(codeInsee);
-        }
-    }else{
-        String departement = codeDept.equals("-1") ? " " : codeDept;
-        String region = codeRegion.equals("-1") ? " " : codeRegion;
-        String bassin = codeBassin.equals("-1") ? " " : codeBassin;
-        String nameLike = nomCommune == null ||  nomCommune.trim().equals("") ? " " : nomCommune;
-        
-        log.info("Criteria : departement:" + departement + " | region: " + region + " | bassin : " + bassin + " | nameLike : " + nameLike);
-        
-        if(!(departement.equals(" ") && region.equals(" ") && bassin.equals(" ") && nameLike.equals(" ") && dateEffet == null)){
-            if(dateEffet == null){
-                 if(region.equals(" ") || !(departement.equals(" ")) ){
-                     log.info("Recherche par dept, bassin et namelike : " + departement +' ' + bassin + ' ' + nameLike.trim());
-                        communes = communeJpaDao.findByDeptBassinAndNameLike(departement,bassin, nameLike.trim());
-                 }else{
-                     log.info("Recherche par bassin, region et namelike : " + bassin +' ' + region + ' ' + nameLike.trim());
-                        communes = communeJpaDao.findByBassinRegionAndNameLike(bassin,region, nameLike.trim());
-                 }
-             }else{
-                 if(region.equals(" ")){
-                     if(bassin.equals(" ")){
-                         if(departement.equals(" ")){
-                             communes = communeJpaDao.findByNameLikeValidOnDate(nameLike.trim(),dateEffet);
-                         }else{
-                             if(nameLike.equals(" ")){
-                                 communes = communeJpaDao.findByDepartementValidOnDate(departement,dateEffet);
-                             }else{
-                                 communes = communeJpaDao.findByDepartementAndNameLikeValidOnDate(departement,nameLike.trim(),dateEffet);
-                             }
-                         }
-                     }else{
-                        communes = communeJpaDao.findByDeptBassinAndNameLikeValidOnDate(departement,bassin,nameLike.trim(),dateEffet);
-                     }
-                 }else{
-                     communes = communeJpaDao.findByBassinRegionAndNameLikeValidOnDate(bassin, region,nameLike.trim(), dateEffet);
-                 }
-             }
-        }
-    }
-      List<CommunePlus> communesPlus = new ArrayList<>();
-      for(Commune commune : communes){
-          CommunePlus comPlus = new CommunePlus();
-          try {
-              comPlus.setCommuneSandre(communeSandreJpaDao.findByCodeInseeValidOnDate(commune.getCodeInsee(), commune.getDebutValidite()));
-              comPlus.setCommuneInsee(commune);
-              comPlus.setCode(commune.getCodeInsee());
-          } catch (InvalidArgumentException ex) {
-              log.debug(codeDept);
-          }
-          communesPlus.add(new CommunePlus());
-      }
-      
-      return communesPlus;
-      
   }
 }

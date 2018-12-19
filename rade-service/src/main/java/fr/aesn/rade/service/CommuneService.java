@@ -292,7 +292,17 @@ public interface CommuneService {
                                    String codeInsee, String commentaire)
     throws InvalidArgumentException;
   
-  public List<Commune> getCommuneByCriteria(final String codeInsee, 
-          final String codeDept, final String codeRegion, 
-          final String codeBassin, final String nomCommune, final Date dateEffet);
+  /**
+   * Returns a List of all Commune from the given codeInsee, departement, 
+   * region, circonscription, commune name and/or date.
+   * @param codeInsee the code of the Communes.
+   * @param codeDept the departement of the Communes.
+   * @param codeRegion the region of the Communes.
+   * @param nomCommune a pattern to search for Communes with a name resembling.
+   * @param dateEffet the date at which the Communes were valid.
+   * @return a List of all Commune matching the given parameters.
+   */
+  public List<Commune> getCommuneByCriteria(String codeInsee, String codeDept, 
+                                            String codeRegion, String codeBassin, 
+                                            String nomCommune, Date dateEffet);
 }

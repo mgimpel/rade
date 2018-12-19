@@ -988,8 +988,8 @@ public class CommuneServiceImpl
   @Override
   public List<Commune> getCommuneByCriteria(final String codeInsee, 
                                             final String codeDept, 
-                                            final String codeRegion, 
                                             final String codeBassin, 
+                                            final String codeRegion, 
                                             final String nomCommune, 
                                             final Date dateEffet){
       List<Commune> communes = null;
@@ -1004,39 +1004,35 @@ public class CommuneServiceImpl
             communes = communeJpaDao.findByCodeInsee(codeInsee);
         }
     }else{
-        String departement = codeDept.equals("-1") ? " " : codeDept;
-        String region = codeRegion.equals("-1") ? " " : codeRegion;
-        String bassin = codeBassin.equals("-1") ? " " : codeBassin;
-        String nameLike = nomCommune == null ||  nomCommune.trim().equals("") ? " " : nomCommune;
-        
-        log.info("Criteria : departement:" + departement + " | region: " + region + " | bassin : " + bassin + " | nameLike : " + nameLike);
+        String departement = codeDept == null || codeDept.equals("-1")  ? " " : codeDept;
+        String region = codeRegion == null || codeRegion.equals("-1")  ? " " : codeRegion;
+        String bassin = codeBassin == null || codeBassin.equals("-1")  ? " " : codeBassin;
+        String nameLike = nomCommune == null ||  nomCommune.trim().equals("") ? " " : nomCommune.trim();
         
         if(!(departement.equals(" ") && region.equals(" ") && bassin.equals(" ") && nameLike.equals(" ") && dateEffet == null)){
             if(dateEffet == null){
                  if(region.equals(" ") || !(departement.equals(" ")) ){
-                     log.info("Recherche par dept, bassin et namelike : " + departement +' ' + bassin + ' ' + nameLike.trim());
-                        communes = communeJpaDao.findByDeptBassinAndNameLike(departement,bassin, nameLike.trim());
+                    communes = communeJpaDao.findByDepartementBassinAndNameLike(departement,bassin, nameLike);
                  }else{
-                     log.info("Recherche par bassin, region et namelike : " + bassin +' ' + region + ' ' + nameLike.trim());
-                        communes = communeJpaDao.findByBassinRegionAndNameLike(bassin,region, nameLike.trim());
+                    communes = communeJpaDao.findByBassinRegionAndNameLike(bassin,region, nameLike.trim());
                  }
              }else{
                  if(region.equals(" ")){
                      if(bassin.equals(" ")){
-                         if(departement.equals(" ")){
-                             communes = communeJpaDao.findByNameLikeValidOnDate(nameLike.trim(),dateEffet);
+                         if(departement.equals(" ") || !nameLike.equals(" ")){
+                             communes = communeJpaDao.findByDepartementBassinAndNameLikeValidOnDate(departement,bassin, nameLike,dateEffet);
                          }else{
-                             if(nameLike.equals(" ")){
-                                 communes = communeJpaDao.findByDepartementValidOnDate(departement,dateEffet);
-                             }else{
-                                 communes = communeJpaDao.findByDepartementAndNameLikeValidOnDate(departement,nameLike.trim(),dateEffet);
-                             }
+                             communes = communeJpaDao.findByDepartementValidOnDate(departement,dateEffet);
                          }
                      }else{
-                        communes = communeJpaDao.findByDeptBassinAndNameLikeValidOnDate(departement,bassin,nameLike.trim(),dateEffet);
+                        communes = communeJpaDao.findByDepartementBassinAndNameLikeValidOnDate(departement,bassin,nameLike,dateEffet);
                      }
                  }else{
-                     communes = communeJpaDao.findByBassinRegionAndNameLikeValidOnDate(bassin, region,nameLike.trim(), dateEffet);
+                     if(departement.equals(" ")){
+                        communes = communeJpaDao.findByBassinRegionAndNameLikeValidOnDate(bassin, region,nameLike, dateEffet);
+                     }else{
+                        communes = communeJpaDao.findByDepartementBassinAndNameLikeValidOnDate(departement,bassin,nameLike, dateEffet);
+                     }
                  }
              }
         }

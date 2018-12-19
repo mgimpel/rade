@@ -20,7 +20,11 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <jsp:include page="aesn_header.jsp" />
-    <script>        
+    <script>  
+        
+        
+        
+        
         function validerForm(){
             // Code INSEE
             var nomEnrichi = document.getElementById("nomEnrichi").value;
@@ -29,8 +33,8 @@
             var circonscription = document.getElementById("codeCirconscription").value;
             var codeInsee = document.getElementById("codeInsee").value;
             if(codeInsee != "" && codeInsee != null){
-                if(!/^[0-9]{5}$/.test(codeInsee)){
-                    alert("Le code INSEE doit être composé de cinq chiffres");
+                if(!/^[0-9a-zA-Z]{2}[0-9]{3}$/.test(codeInsee)){
+                    alert("Le code INSEE doit être composé de cinq chiffres ou lettres");
                     return false;
                 }
             }
@@ -54,15 +58,52 @@
     </script>
     <tr>
         <td colspan="2">
-            <c:if test="${errorRecherche != null && !errorRecherche.equals('')}">
-                <script>
-                    window.onload = function(){
-                        alert("${errorRecherche}");
-                    }
-                </script>
-            </c:if>
             
-            <form:form id="formCommune" method="POST" action="/referentiel/commune" modelAttribute="searchCommune">
+            <script>
+                window.onload = function(){
+                    loadDepartement();
+                    <c:if test="${errorRecherche != null && !errorRecherche.equals('')}">
+                        alert("${errorRecherche}");
+                    </c:if>
+
+                    document.getElementById("codeRegion").onchange = function(){
+                        loadDepartement();
+                    }
+                }
+                
+                function loadDepartement() {
+                    var regionId = document.getElementById("codeRegion").value;
+                    
+                    var xhttp = new XMLHttpRequest();
+                    
+                    xhttp.onreadystatechange = function() {
+                      if (this.readyState == 4 && this.status == 200) {
+                        listeDeptJson = JSON.parse(this.responseText);
+                        
+                        var departementSelected = document.getElementById("codeDepartement").value;
+                        var listeDepartement= document.getElementById("codeDepartement");
+                        var option = "<option value='-1'>Sélectionner un département...</option>";
+                        listeDepartement.innerHTML = "";
+                        
+                        for(var codeInseeDept in listeDeptJson) {
+                            var nomDept = listeDeptJson[codeInseeDept];
+                            if(departementSelected !== codeInseeDept){
+                                option = option + "<option value='" + codeInseeDept + "'>" + nomDept + "</option>";
+                            }else{
+                                option = option + "<option value='" + codeInseeDept + "' selected='selected'>" + nomDept + "</option>";
+                            }
+                        }
+                        
+                        listeDepartement.innerHTML = option;
+                      }
+                    };
+                    xhttp.open("GET", "/referentiel/commune/dep/" + regionId, true);
+                    xhttp.send();
+                  }
+            </script>
+            
+            
+            <form:form id="formCommune" method="POST" action="/referentiel/commune/resultats" modelAttribute="searchCommune">
                 <table  class="prez" style="margin-left:auto;margin-right:auto;">
                     <tr>
                         <td style="text-align: right"><form:label path="codeInsee">Code INSEE :</form:label></td>
@@ -77,9 +118,9 @@
                     <tr>
                         <td style="text-align: right"><form:label path="codeRegion">Region :</form:label></td>
                         <td>
-                            <form:select  style="width:300px"  path="codeRegion">
+                            <form:select style="width:300px"  path="codeRegion">
                                 <form:option value="-1" label="Sélectionner une région..." />
-                                <form:options  items="${listeRegions}"  />
+                                <form:options  items="${searchCommune.regionsByCodeInsee}"  />
                             </form:select>
                         </td>
                     </tr>
@@ -89,7 +130,7 @@
                         <td>
                             <form:select style="width:300px" path="codeDepartement">
                                 <form:option value="-1" label="Sélectionner un département..." />
-                                <form:options  items="${listeDepartements}"  />
+                                <form:options  items="${searchCommune.departementsByCodeInsee}"  />
                             </form:select>
                         </td>
                     </tr>
@@ -99,7 +140,7 @@
                         <td>
                             <form:select  style="width:300px"  path="codeCirconscription">
                                 <form:option value="-1" label="Sélectionner une circonscription..." />
-                                <form:options  items="${listeCirconscriptions}" itemLabel="libelleLong" itemValue="code"  />
+                                <form:options  items="${searchCommune.circonscriptionByCode}"  />
                             </form:select>
                         </td>
                     </tr>

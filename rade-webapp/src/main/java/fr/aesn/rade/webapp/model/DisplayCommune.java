@@ -16,31 +16,21 @@
  */
 package fr.aesn.rade.webapp.model;
 
-import fr.aesn.rade.persist.dao.CommuneJpaDao;
-import fr.aesn.rade.persist.dao.DepartementJpaDao;
-import fr.aesn.rade.persist.dao.RegionJpaDao;
 import fr.aesn.rade.persist.model.EntiteAdministrative;
 import fr.aesn.rade.persist.model.GenealogieEntiteAdmin;
-import fr.aesn.rade.service.CommuneService;
-import fr.aesn.rade.service.DepartementService;
-import fr.aesn.rade.service.RegionService;
+import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Set;
-import lombok.EqualsAndHashCode;
+import java.util.HashMap;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  *
  * @author sophie.belin
  */
-@Slf4j
 @Getter @Setter @NoArgsConstructor
-@ToString @EqualsAndHashCode
 public class DisplayCommune {
     String codeInsee;
     String motifModification;
@@ -56,39 +46,64 @@ public class DisplayCommune {
     String nomRegion;
     @DateTimeFormat(pattern="dd/MM/yyyy")
     Date dateCreation, dateModification, debutValidite, finValidite;
-
-    CommuneService communeService;
-    RegionService regionService;
-    DepartementService departementService;
-
-    Set<GenealogieEntiteAdmin> parents;
-    Set<GenealogieEntiteAdmin> enfants;
+    HashMap<GenealogieEntiteAdmin, String> genealogieParentCodeInsee;
+    HashMap<GenealogieEntiteAdmin, String> genealogieEnfantCodeInsee;
     
-    public String findCodeInsee(EntiteAdministrative entite){      
-        if(entite != null){
-            switch(entite.getTypeEntiteAdmin().getCode()){
-                case "COM":
-                    return communeService.getCommuneById(entite.getId()).getCodeInsee();
-                case "REG":
-                    return regionService.getRegionById(entite.getId()).getCodeInsee();
-                case "DEP":
-                    return departementService.getDepartementById(entite.getId()).getCodeInsee();
-            }
+   /**
+   * @param finValidite 
+   * @return date
+   */
+    public String getDateEffet(Date finValidite){
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        
+        if(finValidite != null){
+            date.setTime(finValidite.getTime() - 86400000);
         }
-
+        return sdf.format(date);
+    }
+    
+    /**
+   * Renvoie la date formaté au format dd/MM/yyyy 
+   * ou un département
+   * @param date 
+   * @return date formatée
+   */
+    public String formatDate(Date date){
+        if(date != null){
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            return sdf.format(date);
+        }
         return null;
     }
     
-    public String findPage(EntiteAdministrative entite){
+    /**
+   * Renvoie l'url correspondant à l'entité
+   * @param entite 
+   * @return L'url permettant d'afficher l'entité
+   */
+    public String entiteUrl(EntiteAdministrative entite, String codeInsee){
         if(entite != null){
+            String typeCommune = null;
             switch(entite.getTypeEntiteAdmin().getCode()){
                 case "COM":
-                    return "/referentiel/commune/" + findCodeInsee(entite) + "/" + entite.getDebutValidite();
+                    typeCommune = "commune";
+                    break;
                 case "REG":
-                    return "/referentiel/region/" + findCodeInsee(entite);
+                    typeCommune = "departement";
+                    break;
                 case "DEP":
-                    return "/referentiel/departement/" + findCodeInsee(entite);
+                    typeCommune = "region";
             }
+            
+            StringBuilder sb = new StringBuilder();
+            sb.append("/referentiel/");
+            sb.append(typeCommune);
+            sb.append("/");
+            sb.append(codeInsee);
+            sb.append("/");
+            sb.append(getDateEffet(entite.getFinValidite()));
+            return sb.toString();
         }
         return null;
     }

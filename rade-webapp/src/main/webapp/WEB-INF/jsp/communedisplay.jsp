@@ -39,7 +39,7 @@
         padding: 13px;
     }
 </style>
-    <div class="cadre">
+    <div class="cadre" style="padding: 15px;">
         <div class="demi pave">
             <fieldset>
                 <legend>Attributs commune</legend>
@@ -92,7 +92,7 @@
                     <c:if test="${displayCommune.nomBassin != null}">
                         <tr>
                             <td><label>Bassin : </label></td>
-                            <td>${displayCommune.nomBassin} <span style="font-size: 10px">(${displayCommune.codeBassin})</span></td>  
+                            <td>${displayCommune.nomBassin} <span style="font-size: 12px">(${displayCommune.codeBassin})</span></td>  
                         </tr>
                     </c:if>
                 </table>
@@ -105,10 +105,10 @@
                 <table style="height: 105px;">
                     <tr>
                         <td  width="18%"><label>Début validité : </label></td>
-                        <td>${displayCommune.debutValidite}</td>  
+                        <td>${displayCommune.formatDate(displayCommune.debutValidite)}</td>  
                         <c:if test="${displayCommune.finValidite != null}">
                             <td width="18%"><label>Fin validité : </label><td>
-                            <td>${displayCommune.finValidite}</td>  
+                            <td>${displayCommune.formatDate(displayCommune.finValidite)}</td>  
                         </c:if>
                     </tr>
 
@@ -122,14 +122,14 @@
                     <c:if test="${displayCommune.dateModification != '' && displayCommune.dateModification != null}">
                         <tr>
                             <td><label>Date modification : </label></td>
-                            <td>${displayCommune.dateModification}</td>  
+                            <td>${displayCommune.formatDate(displayCommune.dateModification)}</td>  
                         </tr>
                     </c:if>
                     
                     <c:if test="${displayCommune.dateCreation != '' && displayCommune.dateCreation != null}">
                         <tr>
                             <td><label>Date de création : </label></td>
-                            <td>${displayCommune.dateCreation}</td>  
+                            <td>${displayCommune.formatDate(displayCommune.dateCreation)}</td>  
                         </tr>
                     </c:if>
                         
@@ -143,42 +143,50 @@
             </fieldset>
         </div>
                 
-                
-        <div class="demi pave" style=font-size: 10px">
-            <fieldset>
-                <legend>Entités mères</legend>
-                <table>
-                    <tr>
-                        <td>
-                            <c:if test="${displayCommune.parents != null && displayCommune.parents.size() == 0}">
-                                Aucune entité mère
-                            </c:if>
-                            <c:forEach items="${displayCommune.parents}" var="parent">
-                                <div><a href="${displayCommune.findPage(parent.parentEnfant.parent)}">${displayCommune.findCodeInsee(parent.parentEnfant.parent)} - ${parent.parentEnfant.parent.nomEnrichi} (${parent.parentEnfant.parent.debutValidite}) ${parent.typeGenealogie.libelleLong}</a></div>
-                            </c:forEach>
-                        </td>
-                    </tr>
-                </table>
-            </fieldset>
-        </div>   
-                        
-        <div class="demi pave" style="clear: none;font-size: 10px">
-            <fieldset>
-                <legend>Entités filles</legend>
-                
-                <table>
-                    <tr>
-                        <td> 
-                            <c:if test="${displayCommune.enfants != null && displayCommune.enfants.size() == 0}">
-                                Aucune entité fille
-                            </c:if>
-                            <c:forEach items="${displayCommune.enfants}" var="enfant">
-                                <div><a href="${displayCommune.findPage(enfant.parentEnfant.enfant)}">${displayCommune.findCodeInsee(enfant.parentEnfant.enfant)} - ${enfant.parentEnfant.enfant.nomEnrichi} (${enfant.parentEnfant.enfant.debutValidite}) ${enfant.typeGenealogie.libelleLong}</a></div>
-                            </c:forEach>
-                        </td>
-                    </tr>
-                </table>
-            </fieldset>
-        </div>
+        <c:if test="${displayCommune.genealogieParentCodeInsee != null && displayCommune.genealogieParentCodeInsee.size() > 0}">
+            <div class="demi pave" style="font-size: 12px; width: auto">
+                <fieldset>
+                    <legend>Entités mères</legend>
+                    <table>
+                        <tr>
+                            <td>
+                                <c:forEach items="${displayCommune.genealogieParentCodeInsee}" var="genealogieParent">
+                                    <div>
+                                        <a href="${displayCommune.entiteUrl(genealogieParent.key.parentEnfant.parent, genealogieParent.value)}">
+                                            ${genealogieParent.value} - ${genealogieParent.key.parentEnfant.parent.nomEnrichi} 
+                                            (${displayCommune.formatDate(genealogieParent.key.parentEnfant.parent.debutValidite)}) 
+                                            ${genealogieParent.key.typeGenealogie.libelleLong}
+                                        </a>
+                                    </div>
+                                </c:forEach>
+                            </td>
+                        </tr>
+                    </table>
+                </fieldset>
+            </div> 
+        </c:if>
+        <c:if test="${displayCommune.genealogieEnfantCodeInsee != null && displayCommune.genealogieEnfantCodeInsee.size() > 0}">   
+            <div class="demi pave" style="clear: none;font-size: 12px; width: auto;">
+                <fieldset>
+                    <legend>Entités filles</legend>
+
+                    <table>
+                        <tr>
+                            <td> 
+                                <c:forEach items="${displayCommune.genealogieEnfantCodeInsee}" var="genealogieEnfant">
+                                    <div>
+                                        <a href="${displayCommune.entiteUrl(genealogieEnfant.key.parentEnfant.enfant, genealogieEnfant.value)}">
+                                            ${genealogieEnfant.value} - ${genealogieEnfant.key.parentEnfant.enfant.nomEnrichi} 
+                                            (${displayCommune.formatDate(genealogieEnfant.key.parentEnfant.enfant.debutValidite)}) 
+                                            ${genealogieEnfant.key.typeGenealogie.libelleLong}
+                                        </a>
+                                    </div>
+                                </c:forEach>
+                            </td>
+                        </tr>
+                    </table>
+                </fieldset>
+            </div>
+        </c:if>
     </div>
 <jsp:include page="aesn_footer.jsp" />

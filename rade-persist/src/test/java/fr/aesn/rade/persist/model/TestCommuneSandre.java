@@ -155,7 +155,7 @@ public class TestCommuneSandre extends AbstractTestEntity {
     List<CommuneSandre> objs = entityManager.createQuery("FROM CommuneSandre", CommuneSandre.class).getResultList();
     assertNotNull("Hibernate didn't return a List", objs);
     assertEquals("Hibernate returned a List, but the wrong size",
-                 101, objs.size());
+                 102, objs.size());
     for (CommuneSandre obj: objs) {
       assertNotNull("Hibernate returned a List but an Entity is null", obj);
     }

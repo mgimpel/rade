@@ -90,8 +90,8 @@ public interface CommuneJpaDao
                                                  Date date);
 
   /**
-   * Returns a List of all Commune from the given departement, resembling the
-   * given name and valid at the given date.
+   * Returns a List of all Commune from the given departement, commune name 
+   * and/or date.
    * @param dept the departement of the Communes.
    * @param nameLike a pattern to search for Communes with a name resembling.
    * @param date the date at which the Communes were valid.
@@ -107,84 +107,102 @@ public interface CommuneJpaDao
                                                                Date date);
   
     /**
-   * Returns a List of all Commune from the given departement, region and circoncription
-   * resembling the given name.
+   * Returns a List of all Commune from the given departement, circoncription
+   * rand/or commune
    * @param dept the departement of the Communes.
-   * @param nameLike a pattern to search for Communes with a name resembling.
-   * @param region the region of the Communes.
    * @param bassin the circonscription of the Communes.
+   * @param nameLike a pattern to search for Communes with a name resembling.
    * @return a List of all Commune matching the given parameters.
    */
   @Query("SELECT DISTINCT(c) FROM Commune c"
                + " WHERE (?1 = ' ' OR c.departement = ?1)"
-               + " AND (?2 = ' ' OR c.codeInsee IN(SELECT s.codeCommune FROM CommuneSandre s WHERE s.circonscriptionBassin = ?2))"
-               + " AND (?3 = ' ' OR ((UPPER(c.nomMajuscule) LIKE '%' || UPPER(?3) || '%') OR (UPPER(c.nomEnrichi) LIKE '%' || UPPER(?3) || '%')))")
-  public List<Commune> findByDeptBassinAndNameLike(String dept, 
-                                             String bassin,
-                                             String nameLike);
+               + " AND (?2 = ' ' OR c.codeInsee IN("
+                    + "SELECT s.codeCommune "
+                    + "FROM CommuneSandre s "
+                    + "WHERE s.circonscriptionBassin = ?2))"
+               + " AND (?3 = ' ' OR ((UPPER(c.nomMajuscule) LIKE '%' "
+                    + "|| UPPER(?3) || '%') OR (UPPER(c.nomEnrichi) LIKE '%' "
+                    + "|| UPPER(?3) || '%')))"
+               + " ORDER BY c.nomEnrichi")
+  public List<Commune> findByDepartementBassinAndNameLike(String dept, 
+                                                          String bassin,
+                                                          String nameLike);
   
   /**
-   * Returns a List of all Commune from the given departement, region and circoncription
-   * resembling the given name and valid at the given date.
+   * Returns a List of all Commune from the given departement, circoncription
+   * commune name and/or date.
    * @param dept the departement of the Communes.
+   * @param bassin the circonscription of the Communes.
    * @param nameLike a pattern to search for Communes with a name resembling.
    * @param date the date at which the Communes were valid.
-   * @param region the region of the Communes.
-   * @param bassin the circonscription of the Communes.
    * @return a List of all Commune matching the given parameters.
    */
   @Query("SELECT DISTINCT(c) FROM Commune c"
                + " WHERE (?1 = ' ' OR c.departement = ?1)"
-               + " AND (?2 = ' ' OR c.codeInsee IN(SELECT s.codeCommune FROM CommuneSandre s WHERE s.circonscriptionBassin = ?2))"
-               + " AND (?3 = ' ' OR ((UPPER(c.nomMajuscule) LIKE '%' || UPPER(?3) || '%') OR (UPPER(c.nomEnrichi) LIKE '%' || UPPER(?3) || '%')))" 
+               + " AND (?2 = ' ' OR c.codeInsee IN("
+                   + "SELECT s.codeCommune "
+                   + "FROM CommuneSandre s WHERE s.circonscriptionBassin = ?2))"
+               + " AND (?3 = ' ' OR ((UPPER(c.nomMajuscule) LIKE '%' || UPPER(?3) "
+                    + "|| '%') OR (UPPER(c.nomEnrichi) LIKE '%' || UPPER(?3) || '%')))" 
                + " AND (c.debutValidite <= ?4)"
-               + " AND (c.finValidite IS NULL OR c.finValidite > ?4)")
-  public List<Commune> findByDeptBassinAndNameLikeValidOnDate(String dept, 
-                                             String bassin,
-                                             String nameLike, 
-                                             Date date);
+               + " AND (c.finValidite IS NULL OR c.finValidite > ?4)"
+               + " ORDER BY c.nomEnrichi")
+  public List<Commune> findByDepartementBassinAndNameLikeValidOnDate(String dept, 
+                                                                     String bassin,
+                                                                     String nameLike, 
+                                                                     Date date);
   
   
     
   /**
-   * Returns a List of all Commune from the given departement, region and circoncription
-   * resembling the given name.
-   * @param dept the departement of the Communes.
-   * @param nameLike a pattern to search for Communes with a name resembling.
-   * @param region the region of the Communes.
+   * Returns a List of all Commune from the given circonscription, region and/or
+   * commune name
    * @param bassin the circonscription of the Communes.
+   * @param region the region of the Communes.
+   * @param nameLike a pattern to search for Communes with a name resembling.
    * @return a List of all Commune matching the given parameters.
    */
   @Query("SELECT DISTINCT(c) FROM Commune c, Departement d"
                + " WHERE c.departement = d.codeInsee"
-               + " AND (?1 = ' ' OR c.codeInsee IN(SELECT s.codeCommune FROM CommuneSandre s WHERE s.circonscriptionBassin = ?1))"
+               + " AND (?1 = ' ' OR c.codeInsee IN("
+                    + "SELECT s.codeCommune "
+                    + "FROM CommuneSandre s "
+                    + "WHERE s.circonscriptionBassin = ?1))"
                + " AND (?2 = ' ' OR d.region = ?2)"
-               + " AND (?3 = ' ' OR ((UPPER(c.nomMajuscule) LIKE '%' || UPPER(?3) || '%') OR (UPPER(c.nomEnrichi) LIKE '%' || UPPER(?3) || '%')))")
+               + " AND (?3 = ' ' OR ((UPPER(c.nomMajuscule) LIKE '%' || UPPER(?3) "
+                    + " || '%') OR (UPPER(c.nomEnrichi) LIKE '%' || UPPER(?3) "
+                    + " || '%')))"
+               + " ORDER BY c.nomEnrichi")
   public List<Commune> findByBassinRegionAndNameLike(String bassin,
-                                             String region,
-                                             String nameLike);
+                                                     String region,
+                                                     String nameLike);
   
   /**
-   * Returns a List of all Commune from the given departement, region and circoncription
-   * resembling the given name and valid at the given date.
-   * @param dept the departement of the Communes.
+   * Returns a List of all Commune from the given circoncription, region, commune name 
+   * and/or date.
+   * @param bassin the circonscription of the Communes.
+   * @param region the region of the Communes.
    * @param nameLike a pattern to search for Communes with a name resembling.
    * @param date the date at which the Communes were valid.
-   * @param region the region of the Communes.
-   * @param bassin the circonscription of the Communes.
    * @return a List of all Commune matching the given parameters.
    */
   @Query("SELECT DISTINCT(c) FROM Commune c, Departement d"
                + " WHERE c.departement = d.codeInsee"
-               + " AND (?1 = ' ' OR c.codeInsee IN(SELECT s.codeCommune FROM CommuneSandre s WHERE s.circonscriptionBassin = ?1))"
+               + " AND (?1 = ' ' OR c.codeInsee IN("
+                    + "SELECT s.codeCommune "
+                    + "FROM CommuneSandre s "
+                    + "WHERE s.circonscriptionBassin = ?1))"
                + " AND (?2 = ' ' OR d.region = ?2)"
-               + " AND (?3 = ' ' OR ((UPPER(c.nomMajuscule) LIKE '%' || UPPER(?3) || '%') OR (UPPER(c.nomEnrichi) LIKE '%' || UPPER(?3) || '%')))" 
+               + " AND (?3 = ' ' OR ((UPPER(c.nomMajuscule) LIKE '%'"
+                    + " || UPPER(?3) || '%') OR (UPPER(c.nomEnrichi) LIKE '%' "
+                    + " || UPPER(?3) || '%')))" 
                + " AND (c.debutValidite <= ?4)"
-               + " AND (c.finValidite IS NULL OR c.finValidite > ?4)")
+               + " AND (c.finValidite IS NULL OR c.finValidite > ?4)"
+               + " ORDER BY c.nomEnrichi")
   public List<Commune> findByBassinRegionAndNameLikeValidOnDate(String bassin, 
-                                             String region,
-                                             String nameLike, 
-                                             Date date);
+                                                                String region,
+                                                                String nameLike, 
+                                                                Date date);
 
   
   

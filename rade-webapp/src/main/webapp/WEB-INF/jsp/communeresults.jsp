@@ -34,29 +34,29 @@
     <tr>
         <td colspan="2">
            
-            <table class="prez" style="margin-left:auto;margin-right:auto;">
+            <table class="prez" style="margin-left:auto;margin-right:auto;padding-bottom: 4px;">
                 <tr>
-                    <c:if test="${searchCommune.codeInsee != '' && searchCommune.codeInsee != null}">
+                    <c:if test="${!searchCommune.codeInsee.equals('') && searchCommune.codeInsee != null}">
                         <td style="text-align: right; width: 100px"><strong>Code INSEE :</strong></td>
                         <td>${searchCommune.codeInsee}</td>
                     </c:if>
-                    <c:if test="${searchCommune.nomEnrichi != '' && searchCommune.nomEnrichi != null}">
+                    <c:if test="${!searchCommune.nomEnrichi.equals('') && searchCommune.nomEnrichi != null}">
                         <td style="text-align: right; width: 100px"><strong>Nom : </strong></td>
                         <td>${searchCommune.nomEnrichi}</td>
                     </c:if>
-                    <c:if test="${searchCommune.codeRegion != -1 && searchCommune.codeRegion != null}">
+                    <c:if test="${!searchCommune.codeRegion.equals('-1') && searchCommune.codeRegion != null}">
                         <td style="text-align: right;width: 100px"><strong>Région : </strong></td>
                         <td>${searchCommune.codeRegion}</td>
                     </c:if>
-                    <c:if test="${searchCommune.codeDepartement != -1 && searchCommune.codeDepartement != null}">
+                    <c:if test="${!searchCommune.codeDepartement.equals('-1') && searchCommune.codeDepartement != null}">
                         <td style="text-align: right;width: 100px"><strong>Département : </strong></td>
                         <td>${searchCommune.codeDepartement}</td>
                     </c:if>
-                    <c:if test="${searchCommune.codeCirconscription != -1 && searchCommune.codeCirconscription != null}">
+                    <c:if test="${!searchCommune.codeCirconscription.equals('-1') && searchCommune.codeCirconscription != null}">
                         <td style="text-align: right;width: 100px"><strong>Circonscription : </strong></td>
                         <td>${searchCommune.codeCirconscription}</td>
                     </c:if>
-                    <c:if test="${searchCommune.dateEffet != '' && searchCommune.dateEffet != null}">
+                    <c:if test="${!searchCommune.dateEffet.equals('') && searchCommune.dateEffet != null}">
                         <td style="text-align: right;width: 100px"><strong>Date d'effet : </strong></td>
                         <td>${searchCommune.formatDate(searchCommune.dateEffet)}</td>
                     </c:if>
@@ -67,37 +67,123 @@
     
     <tr>
         <td colspan="2">
+            <div style="text-align:right">
+                <c:if test="${searchCommune.getPageMax() > 1}">
+                    <c:if test="${searchCommune.getPage() > 1}">
+                        <a href="/referentiel/commune/resultats?page=1">&lt;&lt;</a>
+                        <a href="/referentiel/commune/resultats?page=${searchCommune.getPage()-1}">&lt;</a>
+                    </c:if>
+                        
+                    <c:if test="${searchCommune.getPage() == 1}">
+                        <b>&lt;&lt;</b>
+                        <b>&lt;</b>
+                    </c:if>
+
+                    <c:forEach begin="1" end="${searchCommune.getPageMax()}" step="1" var="numPage">
+                        <c:if test="${(numPage > 2 && numPage == searchCommune.getPage() - 2) 
+                                      || (numPage == searchCommune.getPage() + 2 
+                                      && numPage <= searchCommune.getPageMax() - 2)}">
+                                ..
+                        </c:if>  
+                        <c:if test="${numPage <= 2 
+                                      || numPage >= searchCommune.getPageMax() -1 
+                                      || (numPage >= searchCommune.getPage() - 1 
+                                      && numPage <= searchCommune.getPage())
+                                      || (numPage >= searchCommune.getPage() 
+                                      && numPage <= searchCommune.getPage() + 1)}">
+                            
+                            <c:if test="${numPage == searchCommune.getPage()}">
+                                <b>${numPage}</b>
+                            </c:if>
+                            <c:if test="${numPage != searchCommune.getPage()}">
+                                <a href="/referentiel/commune/resultats?page=${numPage}">${numPage}</a>
+                            </c:if>
+                        </c:if>
+                    </c:forEach>
+                    
+                     <c:if test="${searchCommune.getPage() < searchCommune.getPageMax()}">
+                        <a href="/referentiel/commune/resultats?page=${searchCommune.getPage()+1}">&gt;</a>
+                        <a href="/referentiel/commune/resultats?page=${searchCommune.getPageMax()}">&gt;&gt;</a>
+                    </c:if>
+                        
+                    <c:if test="${searchCommune.getPage() == searchCommune.getPageMax()}">
+                        <b>&gt;</b>
+                        <b>&gt;&gt;</b>
+                    </c:if>
+                </c:if>
+            </div>
             <table class="tableauResultat" style=" border-collapse: collapse; width: 100%">
                 <tr style="background-color: #0365ab; color: white;padding: 5px 0; margin: -1px; text-align: center; vertical-align: middle;">
-                    <th>Code</th>
-                    <th>Nom</th>
-                    <th>Début validité</th>
-                    <th>Fin validité</th>
-                    <th>Entité mère</th>
+                    <th colspan="4" style="width: 50%">Commune</th>
+                    <th colspan="2">Entités mères</th>
                 </tr>
+                <tr style="background-color: #0365ab; color: white;padding: 5px 0; margin: -1px; text-align: center; vertical-align: middle;">
+                    <th style="width: 6%">Code</th>
+                    <th>Nom</th>
+                    <th style="width: 75px">Début validité</th>
+                    <th style="width: 75px">Fin validité</th>
+                    <th>Motif de modification</th>
+                    <th style="width: 25%">Code INSEE</th>
+                </tr>
+                
                 <c:forEach items="${searchCommune.listeResultats}" var="communeDisplay">
                    <tr>
-                       <td><a href="/referentiel/commune/${communeDisplay.codeInsee}/${communeDisplay.debutValidite}">${communeDisplay.codeInsee}</a></td>
-                       <td><a href="/referentiel/commune/${communeDisplay.codeInsee}/${communeDisplay.debutValidite}">${communeDisplay.nomEnrichi}</a></td>
-                       <td>${communeDisplay.debutValidite}</td>
-                       <td>${communeDisplay.finValidite}</td>
+                       <td style="text-align: center">
+                           <a href="/referentiel/commune/${communeDisplay.codeInsee}/${communeDisplay.getDateEffet(communeDisplay.finValidite)}">
+                               ${communeDisplay.codeInsee}
+                           </a>
+                       </td>
+                       <td><a href="/referentiel/commune/${communeDisplay.codeInsee}/${communeDisplay.getDateEffet(communeDisplay.finValidite)}">${communeDisplay.nomEnrichi}</a></td>
+                       <td style="text-align: center">${communeDisplay.formatDate(communeDisplay.debutValidite)}</td>
+                       <td style="text-align: center">${communeDisplay.formatDate(communeDisplay.finValidite)}</td>
+                       <td style="text-align: center">${communeDisplay.motifModification}</td>
                        <td>
-                           <table style="border: none">
-                                <c:forEach items="${communeDisplay.parents}" var="parent">
-                                    <tr>
-                                        <td style="border: 0px;">
-                                            <a href="${communeDisplay.findPage(parent.parentEnfant.parent)}">${communeDisplay.findCodeInsee(parent.parentEnfant.parent)}</a>
-                                        </td>
-                                        <td style="border: 0px;">
-                                            ${parent.typeGenealogie.libelleLong}
-                                        </td>
-                                    </tr>
-                                 </c:forEach>
-                           </table>
+                            <c:forEach items="${communeDisplay.genealogieParentCodeInsee}" var="genealogieParent">
+                                <a href="${communeDisplay.entiteUrl(genealogieParent.key.parentEnfant.parent, genealogieParent.value)}">${genealogieParent.value}</a>
+                             </c:forEach>
                        </td>
                    </tr>
                </c:forEach>
             </table>
+            <div style="text-align:right">
+                <c:if test="${searchCommune.getPageMax() > 1}">
+                    <c:if test="${searchCommune.getPage() > 1}">
+                        <a href="/referentiel/commune/resultats?page=1">&lt;&lt;</a>
+                        <a href="/referentiel/commune/resultats?page=${searchCommune.getPage()-1}">&lt;</a>
+                    </c:if>
+                        
+                    <c:if test="${searchCommune.getPage() == 1}">
+                        <b>&lt;&lt;</b>
+                        <b>&lt;</b>
+                    </c:if>
+
+                    <c:forEach begin="1" end="${searchCommune.getPageMax()}" step="1" var="numPage">
+                        <c:if test="${(numPage > 2 && numPage == searchCommune.getPage() - 2) || (numPage == searchCommune.getPage() + 2 && numPage <= searchCommune.getPageMax() - 2)}">
+                                ..
+                        </c:if>  
+                        <c:if test="${numPage <= 2 
+                                      || numPage >= searchCommune.getPageMax() -1 
+                                      || (numPage >= searchCommune.getPage() - 1 
+                                      && numPage <= searchCommune.getPage())
+                                      || (numPage >= searchCommune.getPage() 
+                                      && numPage <= searchCommune.getPage() + 1)}">
+                            
+                            <c:if test="${numPage == searchCommune.getPage()}"><b>${numPage}</b></c:if>
+                            <c:if test="${numPage != searchCommune.getPage()}"><a href="/referentiel/commune/resultats?page=${numPage}">${numPage}</a></c:if>
+                        </c:if>
+                    </c:forEach>
+                    
+                     <c:if test="${searchCommune.getPage() < searchCommune.getPageMax()}">
+                        <a href="/referentiel/commune/resultats?page=${searchCommune.getPage()+1}">&gt;</a>
+                        <a href="/referentiel/commune/resultats?page=${searchCommune.getPageMax()}">&gt;&gt;</a>
+                    </c:if>
+                        
+                    <c:if test="${searchCommune.getPage() == searchCommune.getPageMax()}">
+                        <b>&gt;</b>
+                        <b>&gt;&gt;</b>
+                    </c:if>
+                </c:if>
+            </div>
             <form:form method="POST" id="formExcel" action="/referentiel/commune/export">
                 <div id="retour">
                     <a href="/referentiel/commune" onclick="">&lt;&lt; Retour</a>

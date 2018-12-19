@@ -50,12 +50,4 @@ public interface CommunePlusService {
    * @return the Commune with the given code at the given date.
    */
   public CommunePlus getCommuneByCode(String code, String date);
-  
-  
-  public List<CommunePlus> getCommuneByCriteria(final String codeInsee, 
-                                            final String codeDept, 
-                                            final String codeRegion, 
-                                            final String codeBassin, 
-                                            final String nomCommune, 
-                                            final Date dateEffet);
 }

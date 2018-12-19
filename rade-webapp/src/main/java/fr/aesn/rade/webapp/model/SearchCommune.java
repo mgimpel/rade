@@ -16,23 +16,21 @@
  */
 package fr.aesn.rade.webapp.model;
 
+import fr.aesn.rade.persist.model.CirconscriptionBassin;
+import fr.aesn.rade.persist.model.Commune;
+import fr.aesn.rade.persist.model.Departement;
+import fr.aesn.rade.persist.model.Region;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
-import javafx.scene.control.Cell;
-import lombok.EqualsAndHashCode;
+import java.util.Map;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.Font;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
@@ -42,7 +40,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 @Slf4j
 @Getter @Setter @NoArgsConstructor
-@ToString @EqualsAndHashCode
 public class SearchCommune {
     String codeRegion;
     String codeDepartement;
@@ -51,10 +48,20 @@ public class SearchCommune {
     Date dateEffet;
     String codeInsee;
     String nomEnrichi;
-    String errorMessage;
-    String hasError;
-    String page;
+    String page = "1";
+    List<Departement> departements;
+    Map<String,String> departementsByCodeInsee;
+    Map<String,String> regionsByCodeInsee;
+    Map<String, String> circonscriptionByCode;
+    List<DisplayCommune> listeResultats;
+    List<Commune> communes;
     
+    /**
+   * Renvoie la date au format dd/MM/yyyy 
+   * ou un département
+   * @param date 
+   * @return Date
+   */
     public String formatDate(Date date){
         String formatDate = null;
         if(date != null){
@@ -64,38 +71,113 @@ public class SearchCommune {
         return formatDate;
     }
     
-    List<DisplayCommune> listeResultats;
-    List<DisplayCommune> listeResultatsOfPage;
+
+    public void setPage(String page){
+        try{
+           int numPage = Integer.parseInt(page);
+           if(numPage <= getPageMax()){
+               this.page = page;
+           }
+       }catch(Exception e){
+           log.error("Paramètre non valide");
+       }
+    }
+
+    /**
+   * Renvoie l'index de la première commune
+   * @return Index 
+   */
+    public int getFirstCommuneIndex(){
+        int index = 1;
+        if(communes != null && communes.size() > 0){
+            try{
+                index = Integer.parseInt(page) * 10 - 10;
+            }catch(NumberFormatException ne){
+                page = "1";
+            }
+            if(index > communes.size()){
+                index = this.communes.size();
+            }
+        }
+        return index;  
+    }
     
-    private void generateXls(){
-//        Workbook lClasseurExcel = new HSSFWorkbook();
-//        Sheet lFeuilleExcelErreur = lClasseurExcel.createSheet("Liste des resultats");
-//        List<Cell> listeAttributsCells = new ArrayList<Cell>();
-//        // Style pour l'entete des colonnes
-//        CellStyle lStyle = setStyle(lClasseurExcel);
-//        CellStyle lStyleEntete = setStyleEntete(lClasseurExcel);
-//        CellStyle lStyleErreur = setStyleErreur(lClasseurExcel);
-//        CellStyle redBackground = setredBackground(lClasseurExcel);
-//
-//        // Style pour le corps du fichier
-//        Font lFontCorps = lClasseurExcel.createFont();
-//        lFontCorps.setFontName("Arial");
-//        CellStyle lStyleCorps = lClasseurExcel.createCellStyle();
-//        lStyleCorps.setFont(lFontCorps);
-//        // lStyleCorps.setFillForegroundColor(new HSSFColor.WHITE().getIndex());
-//        lStyleCorps.setAlignment(HSSFCellStyle.ALIGN_CENTER);
-//
-//        Set<String> casesTraitees = new HashSet<String>();
-//        if (TypeFichier.CODE_SITOU.equals(fichesuivi.getTypeFichier().getCodeType())) {
-//                traitementSitou(lFeuilleExcelErreur, fichesuivi, lStyle, fichierSrv, lStyleEntete, fichier,
-//                                lStyleCorps, listeAttributsCells, lStyleErreur, lClasseurExcel,
-//                                redBackground, casesTraitees);
-//        } else if (TypeFichier.CODE_LIAISON.equals(fichesuivi.getTypeFichier().getCodeType())) {
-//                traitementLiaison(fichier, lFeuilleExcelErreur, fichesuivi, lStyle, fichierSrv,
-//                                lStyleEntete, lStyleCorps, listeAttributsCells, lStyleErreur, lClasseurExcel,
-//                                redBackground, casesTraitees);
-//        }
-//        return lClasseurExcel;
+    /**
+   * Renvoie l'index de la dernière commune
+   * @return Index
+   */
+     public int getLastCommuneIndex(){
+        int index = 1;
+        if(communes != null && communes.size() > 0){
+            index = getFirstCommuneIndex() + 10;
+            if(index > this.communes.size()){
+                index = this.communes.size();
+            }
+        }
+        return index;  
+    }
+     
+     /**
+   * Renvoie le nombre de pages au total pour afficher l'ensemble des comunes
+   * ou un département
+   * @return Nombre de page
+   */
+      public int getPageMax(){
+        if(this.communes != null && this.communes.size() > 0){
+            return (int) Math.ceil((double)this.communes.size() / (double)10);
+        }else{
+            return 1;
+        }
+      }
+      
+    public void setRegionsByCodeInsee(List<Region> regions){
+        regionsByCodeInsee = new HashMap<>();
+        if(regions != null){
+            for(Region r : regions){
+                if(!regionsByCodeInsee.containsKey(r.getCodeInsee())){
+                    regionsByCodeInsee.put(r.getCodeInsee(), r.getNomEnrichi() );
+                }
+            }    
+
+            regionsByCodeInsee = sortByValue(regionsByCodeInsee);
+        }
+    }
+    
+    public void setDepartementsByCodeInsee(List<Departement> departements){
+        departementsByCodeInsee = new HashMap<>();
+        if(departements != null){
+            for(Departement r : departements){
+                if(!departementsByCodeInsee.containsKey(r.getCodeInsee())){
+                    departementsByCodeInsee.put(r.getCodeInsee(), r.getNomEnrichi() );
+                }
+            }    
+            this.departementsByCodeInsee = sortByValue(departementsByCodeInsee);
+            this.departements = departements;
+        }
+    }
+
+    public void setCirconscriptionByCode(List<CirconscriptionBassin> circonscriptions){
+        circonscriptionByCode = new HashMap<>();
+        if(circonscriptions != null){
+            for(CirconscriptionBassin c : circonscriptions){
+                if(!circonscriptionByCode.containsKey(c.getCode())){
+                    circonscriptionByCode.put(c.getCode(), c.getLibelleLong());
+                }
+            }  
+            this.circonscriptionByCode = sortByValue(circonscriptionByCode);
+        }
+    }
+      
+    public static <K, V extends Comparable<? super V>> Map<K, V> sortByValue(Map<K, V> map) {
+        List<Map.Entry<K, V>> list = new ArrayList<>(map.entrySet());
+        list.sort(Map.Entry.comparingByValue());
+
+        Map<K, V> result = new LinkedHashMap<>();
+        for (Map.Entry<K, V> entry : list) {
+            result.put(entry.getKey(), entry.getValue());
+        }
+
+        return result;
     }
 }
 

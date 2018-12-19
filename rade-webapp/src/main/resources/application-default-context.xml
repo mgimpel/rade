@@ -127,13 +127,6 @@
         p:regionService-ref="regionServiceImpl"
         p:bassinService-ref="bassinServiceImpl"/>
   
-
-    <bean class="org.springframework.web.servlet.view.XmlViewResolver">
-        <property name="location">
-                <value>/WEB-INF/views-excel.xml</value>
-        </property>
-    </bean>
-  
   <jaxrs:server id="RestService"
                 address="/rest">
     <jaxrs:serviceBeans>

@@ -279,48 +279,140 @@ public class TestCommuneJpaDao extends AbstractTestJpaDao {
                  0, result.size());
   }
   
-  /**
-   * Test custom repository method.
-   * @throws ParseException failed to parse date.
-   */
-//  @Test
-//  public void testFindByLocalisationAndNameLikeValidOnDate() throws ParseException {
-//    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-//    List<Commune> result;
-//    result = jpaDao.findByLocalisationAndNameLikeValidOnDate("976", "dZi", sdf.parse("2018-01-01"),"","");
-//    assertEquals("Hibernate returned the wrong number of results",
-//                 1, result.size());
-////    result = jpaDao.findByLocalisationAndNameLikeValidOnDate("90", "aaaa", sdf.parse("2018-01-01"), "06","11");
-////    assertEquals("Hibernate returned the wrong number of results",
-////                 0, result.size());
-//  }
-  
-  /**
-   * Test custom repository method.
-   * @throws ParseException failed to parse date.
-   */
   @Test
-  public void testFindByLocalisationAndNameLike() throws ParseException {
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-    List<Commune> result;
-    result = jpaDao.findByBassinRegionAndNameLike(" ", "06","dZi");   
-    assertEquals("Hibernate returned the wrong number of results",
-                 2, result.size());    
-    result = jpaDao.findByBassinRegionAndNameLikeValidOnDate(" ", "06","dZi",
-            sdf.parse("2018-01-01"));   
-    assertEquals("Hibernate returned the wrong number of results",
+  public void testFindByDepartementBassinAndNameLike(){
+      List<Commune> result;
+      
+      result = jpaDao.findByDepartementBassinAndNameLike("91"," "," ");
+      assertEquals("Hibernate returned the wrong number of results",
+                 196, result.size());   
+      result = jpaDao.findByDepartementBassinAndNameLike("91","03"," ");
+      assertEquals("Hibernate returned the wrong number of results",
+                 1, result.size());   
+      result = jpaDao.findByDepartementBassinAndNameLike("91","03","éVi");
+      assertEquals("Hibernate returned the wrong number of results",
+                 1, result.size());   
+      result = jpaDao.findByDepartementBassinAndNameLike(" ","03"," ");
+      assertEquals("Hibernate returned the wrong number of results",
+                 1, result.size());   
+      result = jpaDao.findByDepartementBassinAndNameLike(" ","03","éVi");
+      assertEquals("Hibernate returned the wrong number of results",
+                 1, result.size());   
+      result = jpaDao.findByDepartementBassinAndNameLike(" "," ","éVi");
+      assertEquals("Hibernate returned the wrong number of results",
+                 3, result.size());   
+      result = jpaDao.findByDepartementBassinAndNameLike("91"," ","éVi");
+      assertEquals("Hibernate returned the wrong number of results",
                  2, result.size());
-    result = jpaDao.findByDeptBassinAndNameLike("976"," ", "éni");
-    assertEquals("Hibernate returned the wrong number of results",
+      result = jpaDao.findByDepartementBassinAndNameLike("91","03","éVi");
+      assertEquals("Hibernate returned the wrong number of results",
                  1, result.size());
-   result = jpaDao.findByDeptBassinAndNameLikeValidOnDate("976"," ", "éni",
-            sdf.parse("2019-01-01"));
-    assertEquals("Hibernate returned the wrong number of results",
-                 1, result.size());
-
+      result = jpaDao.findByDepartementBassinAndNameLike("91","03","aaa");
+      assertEquals("Hibernate returned the wrong number of results",
+                 0, result.size());
+  }
+  
+  @Test
+  public void testFindByDepartementBassinAndNameLikeValidOnDate() throws ParseException{
+      List<Commune> result;
+      SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+      result = jpaDao.findByDepartementBassinAndNameLikeValidOnDate("91"," "," ", sdf.parse("2018-01-01"));
+      assertEquals("Hibernate returned the wrong number of results",
+                 196, result.size());   
+      result = jpaDao.findByDepartementBassinAndNameLikeValidOnDate("91","03"," ",sdf.parse("2018-01-01"));
+      assertEquals("Hibernate returned the wrong number of results",
+                 1, result.size());   
+      result = jpaDao.findByDepartementBassinAndNameLikeValidOnDate("91","03","évi",sdf.parse("2018-01-01"));
+      assertEquals("Hibernate returned the wrong number of results",
+                 1, result.size());   
+      result = jpaDao.findByDepartementBassinAndNameLikeValidOnDate(" ","03"," ",sdf.parse("2018-01-01"));
+      assertEquals("Hibernate returned the wrong number of results",
+                 1, result.size());   
+      result = jpaDao.findByDepartementBassinAndNameLikeValidOnDate(" ","03","évi",sdf.parse("2018-01-01"));
+      assertEquals("Hibernate returned the wrong number of results",
+                 1, result.size());   
+      result = jpaDao.findByDepartementBassinAndNameLikeValidOnDate(" "," ","évi",sdf.parse("2018-01-01"));
+      assertEquals("Hibernate returned the wrong number of results",
+                 3, result.size());  
+      result = jpaDao.findByDepartementBassinAndNameLikeValidOnDate("91"," ","évi",sdf.parse("2018-01-01"));
+      assertEquals("Hibernate returned the wrong number of results",
+                 2, result.size()); 
+      result = jpaDao.findByDepartementBassinAndNameLikeValidOnDate("91","03","évi",sdf.parse("2018-01-01"));
+      assertEquals("Hibernate returned the wrong number of results",
+                 1, result.size()); 
+      result = jpaDao.findByDepartementBassinAndNameLikeValidOnDate(" "," "," ",sdf.parse("2018-01-01"));
+      assertEquals("Hibernate returned the wrong number of results",
+                 632, result.size()); 
+      result = jpaDao.findByDepartementBassinAndNameLikeValidOnDate("91","03","aaa",sdf.parse("2018-01-01"));
+      assertEquals("Hibernate returned the wrong number of results",
+                 0, result.size()); 
+  }
     
-//    result = jpaDao.findByLocalisationAndNameLike("90", "aaaa", sdf.parse("2018-01-01"));
-//    assertEquals("Hibernate returned the wrong number of results",
-//                 0, result.size());)
+  @Test
+  public void testFindByBassinRegionAndNameLike(){
+      List<Commune> result;
+      result = jpaDao.findByBassinRegionAndNameLike("03"," "," ");
+      assertEquals("Hibernate returned the wrong number of results",
+                 1, result.size());   
+      result = jpaDao.findByBassinRegionAndNameLike("03","11"," ");
+      assertEquals("Hibernate returned the wrong number of results",
+                 1, result.size());   
+      result = jpaDao.findByBassinRegionAndNameLike("03","11","évi");
+      assertEquals("Hibernate returned the wrong number of results",
+                 1, result.size());   
+      result = jpaDao.findByBassinRegionAndNameLike(" ","11"," ");
+      assertEquals("Hibernate returned the wrong number of results",
+                 503, result.size());   
+      result = jpaDao.findByBassinRegionAndNameLike(" ","11","éVi");
+      assertEquals("Hibernate returned the wrong number of results",
+                 3, result.size());   
+       result = jpaDao.findByBassinRegionAndNameLike(" "," ","éVi");
+      assertEquals("Hibernate returned the wrong number of results",
+                 3, result.size()); 
+      result = jpaDao.findByBassinRegionAndNameLike("03"," ","éVi");
+      assertEquals("Hibernate returned the wrong number of results",
+                 1, result.size());  
+      result = jpaDao.findByBassinRegionAndNameLike("03","11","éVi");
+      assertEquals("Hibernate returned the wrong number of results",
+                 1, result.size());  
+      result = jpaDao.findByBassinRegionAndNameLike("03","11","aaa");
+      assertEquals("Hibernate returned the wrong number of results",
+                 0, result.size());  
+  }
+  
+  @Test
+  public void findByBassinRegionAndNameLikeValidOnDate() throws ParseException{
+      List<Commune> result;
+      SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+      result = jpaDao.findByBassinRegionAndNameLikeValidOnDate("03"," "," ", sdf.parse("2018-01-01"));
+      assertEquals("Hibernate returned the wrong number of results",
+                 1, result.size());   
+      result = jpaDao.findByBassinRegionAndNameLikeValidOnDate("03","11"," ",sdf.parse("2018-01-01"));
+      assertEquals("Hibernate returned the wrong number of results",
+                 1, result.size());   
+      result = jpaDao.findByBassinRegionAndNameLikeValidOnDate("03","11","éVi",sdf.parse("2018-01-01"));
+      assertEquals("Hibernate returned the wrong number of results",
+                 1, result.size());   
+      result = jpaDao.findByBassinRegionAndNameLikeValidOnDate(" ","11"," ",sdf.parse("2018-01-01"));
+     assertEquals("Hibernate returned the wrong number of results",
+                 503, result.size());   
+      result = jpaDao.findByBassinRegionAndNameLikeValidOnDate(" ","11","éVi",sdf.parse("2018-01-01"));
+      assertEquals("Hibernate returned the wrong number of results",
+                 3, result.size());   
+      result = jpaDao.findByBassinRegionAndNameLikeValidOnDate(" "," ","éVi",sdf.parse("2018-01-01"));
+     assertEquals("Hibernate returned the wrong number of results",
+                 3, result.size());   
+     result = jpaDao.findByBassinRegionAndNameLikeValidOnDate("03"," ","éVi",sdf.parse("2018-01-01"));
+     assertEquals("Hibernate returned the wrong number of results",
+                 1, result.size());
+     result = jpaDao.findByBassinRegionAndNameLikeValidOnDate("03","11","éVi",sdf.parse("2018-01-01"));
+     assertEquals("Hibernate returned the wrong number of results",
+                 1, result.size());
+     result = jpaDao.findByBassinRegionAndNameLikeValidOnDate(" "," "," ",sdf.parse("2018-01-01"));
+     assertEquals("Hibernate returned the wrong number of results",
+                 632, result.size());
+     result = jpaDao.findByBassinRegionAndNameLikeValidOnDate("03","11","aaa",sdf.parse("2018-01-01"));
+     assertEquals("Hibernate returned the wrong number of results",
+                 0, result.size());
   }
 }
