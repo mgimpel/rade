@@ -94,7 +94,20 @@ public class StringConversionUtils {
    * @return the String without any accents.
    */
   public static String toAscii(String s) {
-    return toAsciiWithNormalizer(s);
+    // toAsciiWithLookup, toAsciiWithNormalizer and toAsciiWithReplaceAll
+    // are all 3 just about equivalent methods as far as general French text
+    // is concerned (maybe different it Korean, or other UTF8 script is used),
+    // but with the following differences:
+    // toAsciiWithLookup     : Requires building UTF8 lookup tables (constants)
+    // toAsciiWithNormalizer : Most generic and shortest code but obscure
+    // toAsciiWithReplaceAll : Easiest to understand
+    // They have been benchmarked using JMH (Java Microbenchmark Harness)
+    // with the following conclusions:
+    // toAsciiWithLookup     : ~ 245'000 ops/s
+    // toAsciiWithNormalizer : ~  75'000 ops/s
+    // toAsciiWithReplaceAll : ~  20'000 ops/s
+    // We'll use the fastest.
+    return toAsciiWithLookup(s);
   }
 
   /**
@@ -104,6 +117,7 @@ public class StringConversionUtils {
    * @return the upper case String without any accents.
    */
   public static String toUpperAscii(String s) {
+    // Similar benchmarks then for toAscii(s), again we'll use the fastest.
     return toUpperAsciiWithLookup(s);
   }
 

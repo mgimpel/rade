@@ -48,6 +48,6 @@ public class SpringBootWebApplication
    */
   public static void main(final String[] args) {
     SpringApplication.run(SpringBootWebApplication.class, args);
-    log.info("Starting Rade ... with args: {}", String.join(",", args));
+    log.info("Rade started with args: {}", String.join(",", args));
   }
 }

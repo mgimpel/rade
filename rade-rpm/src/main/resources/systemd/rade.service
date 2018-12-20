@@ -1,11 +1,24 @@
-# /usr/lib/systemd/system/rade.service
+# It's not recommended to modify "/usr/lib/systemd/system/rade.service",
+# because it will be overwritten during package upgrades.
+# If you want to customize the service, the best way is to create a directory
+# "/etc/systemd/system/rade.service.d/" and add a file with the new
+# configuration.
+#
+# For example to change the Java configuration, create a file named
+# "/etc/systemd/system/rade.service.d/java.conf" containing:
+#     [Service]
+#     Environment=JAVA_EXEC="/usr/lib/jvm/jre-1.8.0/bin/java"
+#     Environment=JAVA_OPTS="-Xmx512m"
+# This will override the setting appearing below.
 
 [Unit]
-Description=Rade
+Description=Rade: Referentiel Administrative
 Requires=network.target
 After=syslog.target network.target
+Documentation=https://github.com/mgimpel/rade/
 
 [Service]
+Type=simple
 WorkingDirectory=/etc/rade
 Environment=BINARY="/usr/lib/rade/rade-webapp.war"
 Environment=JAVA_EXEC="/usr/bin/java"
@@ -19,6 +32,7 @@ StandardOutput=journal
 StandardError=journal
 SyslogIdentifier=rade
 SuccessExitStatus=143
+Restart=on-failure
 
 [Install]
 WantedBy=multi-user.target

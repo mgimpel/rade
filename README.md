@@ -15,6 +15,13 @@ Le projet est compilé et packagé avec Apache Maven 3. Il suffit d'executer la 
 $ mvn install
 ```
 
+NB: le projet requiert les drivers JDBC Oracle pour le build. Si votre repository ne le fourni pas (comme c'est le cas des repository publique par défaut de Maven) vous pouvez l'installer en local manuellement de la façon suivante:
+* Télécharger le JAR "ojdbc6.jar" sur le site de Oracle: https://www.oracle.com/technetwork/apps-tech/jdbc-112010-090769.html
+* Installer localement:
+```sh
+$ mvn install:install-file -Dfile=/path/to/ojdbc6.jar -DgroupId=com.oracle -DartifactId=ojdbc6 -Dversion=11.2.0.4.0 -Dpackaging=jar
+```
+
 # Run
 
 Le projet est conçu autour des librairies Spring, en particulier Spring-Boot pour l'application web et Spring-Batch pour les batchs.
