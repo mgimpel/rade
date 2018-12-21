@@ -17,7 +17,6 @@
 /* $Id$ */
 package fr.aesn.rade.ws.aramis.impl;
 
-import java.time.Year;
 import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -95,16 +94,21 @@ public class GeoAdminServiceExternePortImpl implements GeoAdminServiceExterneImp
      */
     public java.util.List<fr.aesn.rade.ws.aramis.impl.CommuneVO> findAllCommunes(java.lang.Integer annee) {
         log.info("Processing WebService findAllCommunes for year {}", annee);
+        Date date;
         if (annee == null) {
-          // Si l'annee n'est pas fourni, on suppose l'annee précédent l'annee en cours 
-          annee = Year.now().getValue() - 1;
+            // Si l'annee n'est pas fourni, on recherche toutes les Communes
+            // valide a la date de la requête.
+            date = new Date();
+        } else {
+            // Si l'annee est fourni, on recherche toutes les Communes valide au
+            // 1er Janvier de l'annee fourni.
+            date = new GregorianCalendar(annee, 1, 1).getTime();
         }
         try {
             if (communePlusService == null) {
                 log.error("Could not findAllCommunes, service was null (configuration error)");
                 return Collections.<fr.aesn.rade.ws.aramis.impl.CommuneVO>emptyList();
             }
-            Date date = new GregorianCalendar(annee, 1, 2, 12, 0, 0).getTime(); // January 2nd, 12:00
             return Entity2VoMapper.communePlusEntity2VoList(communePlusService.getAllCommune(date));
         } catch (java.lang.Exception ex) {
             log.error("Unexpected Exception while processing WebService Request (this should never happen)", ex);
