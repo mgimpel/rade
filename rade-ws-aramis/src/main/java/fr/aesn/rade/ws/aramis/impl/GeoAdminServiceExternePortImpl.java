@@ -102,7 +102,7 @@ public class GeoAdminServiceExternePortImpl implements GeoAdminServiceExterneImp
         } else {
             // Si l'annee est fourni, on recherche toutes les Communes valide au
             // 1er Janvier de l'annee fourni.
-            date = new GregorianCalendar(annee, 1, 1).getTime();
+            date = new GregorianCalendar(annee, 1, 1, 12, 0, 0).getTime(); // January 1st, 12:00
         }
         try {
             if (communePlusService == null) {
