@@ -19,7 +19,7 @@ NB: le projet requiert les drivers JDBC Oracle pour le build. Si votre repositor
 * Télécharger le JAR "ojdbc6.jar" sur le site de Oracle: https://www.oracle.com/technetwork/apps-tech/jdbc-112010-090769.html
 * Installer localement:
 ```sh
-$ mvn install:install-file -Dfile=/path/to/ojdbc6.jar -DgroupId=com.oracle -DartifactId=ojdbc6 -Dversion=11.2.0.4.0 -Dpackaging=jar
+$ mvn install:install-file -Dfile="/path/to/ojdbc6.jar" -DgroupId="com.oracle" -DartifactId="ojdbc6" -Dversion="11.2.0.4.0" -Dpackaging="jar"
 ```
 
 # Run
