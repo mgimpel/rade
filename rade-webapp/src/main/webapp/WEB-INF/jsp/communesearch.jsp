@@ -26,7 +26,6 @@
         
         
         function validerForm(){
-            // Code INSEE
             var nomEnrichi = document.getElementById("nomEnrichi").value;
             var codeRegion = document.getElementById("codeRegion").value;
             var codeDepartement = document.getElementById("codeDepartement").value;
@@ -38,8 +37,7 @@
                     return false;
                 }
             }
-            
-            // Date
+
             var dateEffet = document.getElementById("dateEffet").value;
             if(dateEffet != "" && dateEffet != null){
                 if(!/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(dateEffet)){
@@ -48,7 +46,7 @@
                 }
             }
             
-            if(codeInsee == "" && nomEnrichi == "" && codeRegion == -1 && codeDepartement == -1 && circonscription == ""){
+            if(codeInsee == "" && nomEnrichi == "" && codeRegion == "-1" && codeDepartement == "-1" && circonscription == "-1"){
                 alert("Au moins un des champs doit être renseigné");
                 return false;
             }
@@ -147,7 +145,7 @@
 
                     <tr>
                         <td style="text-align: right"><label for="dateEffet">Date d'effet : </label></td>
-                        <td><form:input type="date" style="width:95px"  path="dateEffet"/></td>
+                        <td><form:input type="date" style="width:110px"  path="dateEffet"/></td>
                     </tr>
                 </table>
                 <div class="action"><input type="submit" name="submit" value="Rechercher" onclick="return validerForm();"></div>

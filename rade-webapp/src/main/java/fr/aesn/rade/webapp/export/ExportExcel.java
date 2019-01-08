@@ -16,7 +16,6 @@
  */
 package fr.aesn.rade.webapp.export;
 
-import fr.aesn.rade.persist.model.Commune;
 import fr.aesn.rade.webapp.controller.ReferentielController;
 import fr.aesn.rade.webapp.model.DisplayCommune;
 import fr.aesn.rade.webapp.model.SearchCommune;
