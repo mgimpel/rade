@@ -47,7 +47,7 @@ public class SpringBootWebApplication
    * @param args Command line arguments
    */
   public static void main(final String[] args) {
-    log.info("Starting Rade ...");
     SpringApplication.run(SpringBootWebApplication.class, args);
+    log.info("Rade started with args: {}", String.join(",", args));
   }
 }

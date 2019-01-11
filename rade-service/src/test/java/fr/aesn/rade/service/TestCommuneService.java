@@ -34,6 +34,7 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 
 import fr.aesn.rade.common.InvalidArgumentException;
+import fr.aesn.rade.common.util.StringConversionUtils;
 import fr.aesn.rade.persist.dao.CommuneJpaDao;
 import fr.aesn.rade.persist.dao.GenealogieEntiteAdminJpaDao;
 import fr.aesn.rade.persist.dao.StatutModificationJpaDao;
@@ -43,6 +44,8 @@ import fr.aesn.rade.persist.dao.TypeNomClairJpaDao;
 import fr.aesn.rade.persist.model.Audit;
 import fr.aesn.rade.persist.model.Commune;
 import fr.aesn.rade.persist.model.GenealogieEntiteAdmin;
+import fr.aesn.rade.persist.model.TypeEntiteAdmin;
+import fr.aesn.rade.persist.model.TypeNomClair;
 import fr.aesn.rade.service.impl.CommuneServiceImpl;
 import fr.aesn.rade.service.impl.MetadataServiceImpl;
 
@@ -314,7 +317,8 @@ public class TestCommuneService
    * CommuneService request.
    */
   @Test
-  public void testMod100() throws ParseException, InvalidArgumentException {
+  public void testMod100()
+    throws ParseException, InvalidArgumentException {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     Set<GenealogieEntiteAdmin> genealogie;
     // Check the commune has no children
@@ -368,7 +372,8 @@ public class TestCommuneService
    * CommuneService request.
    */
   @Test
-  public void testMod200() throws ParseException, InvalidArgumentException {
+  public void testMod200()
+    throws ParseException, InvalidArgumentException {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     Audit audit = service.getCommuneById(135233).getAudit(); // re-use existing Audit
     Commune newCommune = service.mod200Creation(sdf.parse("2019-01-01"), audit, "01999", "01", "0", "Nouvelle Commune", null);
@@ -431,4 +436,52 @@ public class TestCommuneService
       communes = service.getCommuneByCriteria(null,"91",null,"11","éVi",new SimpleDateFormat("yyyy-MM-dd").parse("2018-01-01"));
       assertEquals("Hibernate returned the wrong number of results",2, communes.size());
   }
+
+  /**
+   * Tests MOD=210 : Retablissement, MOD=230 : Commune se separant.
+   * @throws ParseException failed to parse date.
+   * @throws InvalidArgumentException passed wrong arguments during
+   * CommuneService request.
+   */
+  @Test
+  public void testMod210x230()
+    throws ParseException, InvalidArgumentException {
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    Audit audit = service.getCommuneById(135233).getAudit(); // re-use existing Audit
+    Commune communeSource = service.getCommuneById(135008); // Chevilly-Larue
+    Commune com210retabli = buildCommune("94100",
+                                         communeSource.getDepartement(),
+                                         sdf.parse("2019-01-01"),
+                                         communeSource.getTypeNomClair(),
+                                         "Larue", null, null);
+    Commune com230source = buildCommune(communeSource.getCodeInsee(),
+                                        communeSource.getDepartement(),
+                                        sdf.parse("2019-01-01"),
+                                        communeSource.getTypeNomClair(),
+                                        "Chevilly", null, null);
+    service.mod210x230Retablissement(sdf.parse("2019-01-01"), audit, com210retabli, com230source, null);
+  }
+
+  private Commune buildCommune(final String codeInsee,
+                               final String departement,
+                               final Date debutValidite,
+                               final TypeNomClair tncc,
+                               final String nomEnrichi,
+                               final String nomMajuscule,
+                               final String commentaire)
+    throws InvalidArgumentException {
+    Commune commune = new Commune();
+    commune.setTypeEntiteAdmin(TypeEntiteAdmin.of("COM", "Commune"));
+    commune.setCodeInsee(codeInsee);
+    commune.setDepartement(departement);
+    commune.setDebutValidite(debutValidite);
+    commune.setTypeNomClair(tncc);
+    commune.setArticleEnrichi(tncc.getArticle());
+    commune.setNomEnrichi(nomEnrichi);
+    commune.setNomMajuscule(nomMajuscule == null ? StringConversionUtils.toUpperAscii(nomEnrichi)
+                                : nomMajuscule);
+    commune.setCommentaire(commentaire == null ? ""
+                              : commentaire);
+    return commune;
+}
 }

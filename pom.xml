@@ -48,13 +48,13 @@
     <!-- Major dependency versions to ensure coherence among subprojects -->
     <java.version>1.8</java.version>
     <spring.version>5.1.3.RELEASE</spring.version>
-    <spring-boot.version>2.1.0.RELEASE</spring-boot.version>
+    <spring-boot.version>2.1.1.RELEASE</spring-boot.version>
     <spring-data.version>2.1.3.RELEASE</spring-data.version>
     <spring-security.version>5.1.2.RELEASE</spring-security.version>
     <spring-batch.version>4.1.0.RELEASE</spring-batch.version>
-    <hibernate.version>5.3.7.Final</hibernate.version>
+    <hibernate.version>5.4.0.Final</hibernate.version>
     <cxf.version>3.2.7</cxf.version>
-    <cglib.version>3.2.9</cglib.version>
+    <cglib.version>3.2.10</cglib.version>
     <slf4j.version>1.7.25</slf4j.version>
     <logback.version>1.2.3</logback.version>
     <!-- Other properties -->
@@ -238,6 +238,11 @@
         <artifactId>jaxws-api</artifactId>
         <version>2.3.0</version>
       </dependency>
+      <dependency>
+        <groupId>com.sun.xml.ws</groupId>
+        <artifactId>jaxws-rt</artifactId>
+        <version>2.3.0</version>
+      </dependency>
       <!-- Apache Axis 1 -->
       <dependency>
         <groupId>org.apache.axis</groupId>
@@ -346,7 +351,7 @@
       <dependency>
         <groupId>org.apache.tomcat.embed</groupId>
         <artifactId>tomcat-embed-jasper</artifactId>
-        <version>8.5.34</version>
+        <version>8.5.35</version>
         <scope>provided</scope>
       </dependency>
       <dependency>

@@ -36,7 +36,9 @@ public interface CommuneSandreJpaDao
    * @param date the date at which the Commune was valid
    * @return a List of all the valid Commune.
    */
-  @Query("SELECT c FROM CommuneSandre c WHERE c.dateCreationCommune <= ?1")
+  @Query("SELECT c FROM CommuneSandre c"
+               + " WHERE (c.dateCreationCommune IS NULL"
+                   + " OR c.dateCreationCommune <= ?1)")
   public List<CommuneSandre> findAllValidOnDate(Date date);
 
   /**
@@ -45,7 +47,9 @@ public interface CommuneSandreJpaDao
    * @param date the date at which the Commune was valid
    * @return the valid Commune.
    */
-  @Query("SELECT c FROM CommuneSandre c WHERE c.codeCommune = ?1 "
-                               + "AND c.dateCreationCommune <= ?2")
+  @Query("SELECT c FROM CommuneSandre c"
+               + " WHERE c.codeCommune = ?1"
+               + " AND (c.dateCreationCommune IS NULL"
+                 + " OR c.dateCreationCommune <= ?2)")
   public CommuneSandre findByCodeInseeValidOnDate(String codeInsee, Date date);
 }

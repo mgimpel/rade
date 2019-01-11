@@ -45,7 +45,7 @@ public interface CommuneJpaDao
    * @return a List of all the valid Commune.
    */
   @Query("SELECT c FROM Commune c"
-               + " WHERE c.debutValidite <= ?1"
+               + " WHERE (c.debutValidite IS NULL OR c.debutValidite <= ?1)"
                + " AND (c.finValidite IS NULL OR c.finValidite > ?1)")
   public List<Commune> findAllValidOnDate(Date date);
 
@@ -57,7 +57,7 @@ public interface CommuneJpaDao
    */
   @Query("SELECT c FROM Commune c"
                + " WHERE c.codeInsee = ?1"
-               + " AND c.debutValidite <= ?2"
+               + " AND (c.debutValidite IS NULL OR c.debutValidite <= ?2)"
                + " AND (c.finValidite IS NULL OR c.finValidite > ?2)")
   public Commune findByCodeInseeValidOnDate(String codeInsee,
                                             Date date);
@@ -70,7 +70,7 @@ public interface CommuneJpaDao
    */
   @Query("SELECT c FROM Commune c"
                + " WHERE c.departement = ?1"
-               + " AND c.debutValidite <= ?2"
+               + " AND (c.debutValidite IS NULL OR c.debutValidite <= ?2)"
                + " AND (c.finValidite IS NULL OR c.finValidite > ?2)")
   public List<Commune> findByDepartementValidOnDate(String dept,
                                                     Date date);
@@ -84,7 +84,7 @@ public interface CommuneJpaDao
    */
   @Query("SELECT c FROM Commune c"
                + " WHERE (c.nomMajuscule LIKE '%' || UPPER(?1) || '%')"
-               + " AND c.debutValidite <= ?2"
+               + " AND (c.debutValidite IS NULL OR c.debutValidite <= ?2)"
                + " AND (c.finValidite IS NULL OR c.finValidite > ?2)")
   public List<Commune> findByNameLikeValidOnDate(String nameLike,
                                                  Date date);
@@ -100,7 +100,7 @@ public interface CommuneJpaDao
   @Query("SELECT c FROM Commune c"
                + " WHERE c.departement = ?1"
                + " AND (c.nomMajuscule LIKE '%' || UPPER(?2) || '%')"
-               + " AND c.debutValidite <= ?3"
+               + " AND (c.debutValidite IS NULL OR c.debutValidite <= ?3)"
                + " AND (c.finValidite IS NULL OR c.finValidite > ?3)")
   public List<Commune> findByDepartementAndNameLikeValidOnDate(String dept,
                                                                String nameLike,
