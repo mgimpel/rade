@@ -54,8 +54,8 @@ public class ReferentielController {
   private final static String DEPT  = "dept";
   private final static String COMMUNE  = "commune";
   private final static String BASSIN  = "bassin"; 
-  
-    /**   
+
+  /**
    * Entite search mapping
    * Recherche d'entité (commune, région, département, bassin, délégation) par code
    * @param entite
@@ -64,18 +64,18 @@ public class ReferentielController {
    */
   @RequestMapping("/entiteSearch")
   public String entiteSearch(@ModelAttribute("entite") SearchEntite entite, Model model) {
-	log.info("Recherche d'entités, type : " + entite.getType() + ", code :" + entite.getCode());
-        String view = "home";        
-        if(!StringUtils.isEmpty(entite.getCode())){
-            // une fois la combo des types dégrisée, décommenter la ligne suivante
-            String type = "commune"; // entite.getType();        
-            if(COMMUNE.equalsIgnoreCase(type)) {
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                view = "redirect:/referentiel/commune/" + entite.getCode() + "/" + sdf.format(new Date());
-            }
-            model.addAttribute("entite", new SearchEntite());
-        }
-	return view;
+    log.info("Recherche d'entités, type : " + entite.getType() + ", code :" + entite.getCode());
+    String view = "home";
+    if(!StringUtils.isEmpty(entite.getCode())){
+      // une fois la combo des types dégrisée, décommenter la ligne suivante
+      String type = "commune"; // entite.getType();
+      if(COMMUNE.equalsIgnoreCase(type)) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        view = "redirect:/referentiel/commune/" + entite.getCode() + "/" + sdf.format(new Date());
+      }
+      model.addAttribute("entite", new SearchEntite());
+    }
+    return view;
   }
 
   /**
@@ -146,13 +146,13 @@ public class ReferentielController {
     model.addAttribute("region", region);
     return "regiondisplay";
   }  
-  
-     /**
+
+  /**
    * Attribut de session du contrôleur
    * @return Objet de recherche de commune
    */
-   @ModelAttribute("entite")
-   public SearchEntite searchEntite() {
-      return new SearchEntite();
-   }
+  @ModelAttribute("entite")
+  public SearchEntite searchEntite() {
+    return new SearchEntite();
+  }
 }

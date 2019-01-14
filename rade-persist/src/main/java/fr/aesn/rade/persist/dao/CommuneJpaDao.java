@@ -108,7 +108,7 @@ public interface CommuneJpaDao
   
     /**
    * Returns a List of all Commune from the given departement, circoncription
-   * rand/or commune
+   * and/or commune
    * @param dept the departement of the Communes.
    * @param bassin the circonscription of the Communes.
    * @param nameLike a pattern to search for Communes with a name resembling.
@@ -203,7 +203,5 @@ public interface CommuneJpaDao
                                                                 String region,
                                                                 String nameLike, 
                                                                 Date date);
-
-  
   
 }

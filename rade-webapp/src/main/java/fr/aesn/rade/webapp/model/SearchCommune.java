@@ -41,143 +41,143 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Slf4j
 @Getter @Setter @NoArgsConstructor
 public class SearchCommune {
-    String codeRegion;
-    String codeDepartement;
-    String codeCirconscription;
-    @DateTimeFormat(pattern="yyyy-MM-dd")
-    Date dateEffet;
-    String codeInsee;
-    String nomEnrichi;
-    String page = "1";
-    List<Departement> departements;
-    Map<String,String> departementsByCodeInsee;
-    Map<String,String> regionsByCodeInsee;
-    Map<String, String> circonscriptionByCode;
-    List<DisplayCommune> listeResultats;
-    List<Commune> communes;
-    
-    /**
+  String codeRegion;
+  String codeDepartement;
+  String codeCirconscription;
+  @DateTimeFormat(pattern="yyyy-MM-dd")
+  Date dateEffet;
+  String codeInsee;
+  String nomEnrichi;
+  String page = "1";
+  List<Departement> departements;
+  Map<String,String> departementsByCodeInsee;
+  Map<String,String> regionsByCodeInsee;
+  Map<String, String> circonscriptionByCode;
+  List<DisplayCommune> listeResultats;
+  List<Commune> communes;
+
+  /**
    * Renvoie la date au format dd/MM/yyyy 
    * ou un département
    * @param date 
    * @return Date
    */
-    public String formatDate(Date date){
-        String formatDate = null;
-        if(date != null){
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-            formatDate = sdf.format(date);
-        }
-        return formatDate;
+  public String formatDate(Date date){
+    String formatDate = null;
+    if(date != null){
+      SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+      formatDate = sdf.format(date);
     }
-    
+    return formatDate;
+  }
 
-    public void setPage(String page){
-        try{
-           int numPage = Integer.parseInt(page);
-           if(numPage <= getPageMax()){
-               this.page = page;
-           }
-       }catch(NumberFormatException e){
-           log.error("Paramètre non valide");
-       }
+
+  public void setPage(String page){
+    try{
+      int numPage = Integer.parseInt(page);
+      if(numPage <= getPageMax()){
+        this.page = page;
+      }
+    }catch(NumberFormatException e){
+      log.error("Paramètre non valide");
     }
+  }
 
-    /**
+  /**
    * Renvoie l'index de la première commune
    * @return Index 
    */
-    public int getFirstCommuneIndex(){
-        int index = 1;
-        if(communes != null && communes.size() > 0){
-            try{
-                index = Integer.parseInt(page) * 10 - 10;
-            }catch(NumberFormatException ne){
-                page = "1";
-            }
-            if(index > communes.size()){
-                index = this.communes.size();
-            }
-        }
-        return index;  
+  public int getFirstCommuneIndex(){
+    int index = 1;
+    if(communes != null && communes.size() > 0){
+      try{
+        index = Integer.parseInt(page) * 10 - 10;
+      }catch(NumberFormatException ne){
+        page = "1";
+      }
+      if(index > communes.size()){
+        index = this.communes.size();
+      }
     }
-    
-    /**
+    return index;
+  }
+
+  /**
    * Renvoie l'index de la dernière commune
    * @return Index
    */
-     public int getLastCommuneIndex(){
-        int index = 1;
-        if(communes != null && communes.size() > 0){
-            index = getFirstCommuneIndex() + 10;
-            if(index > this.communes.size()){
-                index = this.communes.size();
-            }
-        }
-        return index;  
+  public int getLastCommuneIndex(){
+    int index = 1;
+    if(communes != null && communes.size() > 0){
+      index = getFirstCommuneIndex() + 10;
+      if(index > this.communes.size()){
+        index = this.communes.size();
+      }
     }
-     
-     /**
+    return index;
+  }
+
+  /**
    * Renvoie le nombre de pages au total pour afficher l'ensemble des comunes
    * ou un département
    * @return Nombre de page
    */
-      public int getPageMax(){
-        if(this.communes != null && this.communes.size() > 0){
-            return (int) Math.ceil((double)this.communes.size() / (double)10);
-        }else{
-            return 1;
+  public int getPageMax(){
+    if(this.communes != null && this.communes.size() > 0){
+      return (int) Math.ceil((double)this.communes.size() / (double)10);
+    }else{
+      return 1;
+    }
+  }
+
+  public void setRegionsByCodeInsee(List<Region> regions){
+    regionsByCodeInsee = new HashMap<>();
+    if(regions != null){
+      for(Region r : regions){
+        if(!regionsByCodeInsee.containsKey(r.getCodeInsee())){
+          regionsByCodeInsee.put(r.getCodeInsee(), r.getNomEnrichi() );
         }
       }
-      
-    public void setRegionsByCodeInsee(List<Region> regions){
-        regionsByCodeInsee = new HashMap<>();
-        if(regions != null){
-            for(Region r : regions){
-                if(!regionsByCodeInsee.containsKey(r.getCodeInsee())){
-                    regionsByCodeInsee.put(r.getCodeInsee(), r.getNomEnrichi() );
-                }
-            }    
 
-            regionsByCodeInsee = sortByValue(regionsByCodeInsee);
-        }
+      regionsByCodeInsee = sortByValue(regionsByCodeInsee);
     }
-    
-    public void setDepartementsByCodeInsee(List<Departement> departements){
-        departementsByCodeInsee = new HashMap<>();
-        if(departements != null){
-            for(Departement r : departements){
-                if(!departementsByCodeInsee.containsKey(r.getCodeInsee())){
-                    departementsByCodeInsee.put(r.getCodeInsee(), r.getNomEnrichi() );
-                }
-            }    
-            this.departementsByCodeInsee = sortByValue(departementsByCodeInsee);
-            this.departements = departements;
+  }
+
+  public void setDepartementsByCodeInsee(List<Departement> departements){
+    departementsByCodeInsee = new HashMap<>();
+    if(departements != null){
+      for(Departement r : departements){
+        if(!departementsByCodeInsee.containsKey(r.getCodeInsee())){
+          departementsByCodeInsee.put(r.getCodeInsee(), r.getNomEnrichi() );
         }
+      }
+      this.departementsByCodeInsee = sortByValue(departementsByCodeInsee);
+      this.departements = departements;
+    }
+  }
+
+  public void setCirconscriptionByCode(List<CirconscriptionBassin> circonscriptions){
+    circonscriptionByCode = new HashMap<>();
+    if(circonscriptions != null){
+      for(CirconscriptionBassin c : circonscriptions){
+        if(!circonscriptionByCode.containsKey(c.getCode())){
+          circonscriptionByCode.put(c.getCode(), c.getLibelleLong());
+        }
+      }
+      this.circonscriptionByCode = sortByValue(circonscriptionByCode);
+    }
+  }
+
+  public static <K, V extends Comparable<? super V>> Map<K, V> sortByValue(Map<K, V> map) {
+    List<Map.Entry<K, V>> list = new ArrayList<>(map.entrySet());
+    list.sort(Map.Entry.comparingByValue());
+
+    Map<K, V> result = new LinkedHashMap<>();
+    for (Map.Entry<K, V> entry : list) {
+      result.put(entry.getKey(), entry.getValue());
     }
 
-    public void setCirconscriptionByCode(List<CirconscriptionBassin> circonscriptions){
-        circonscriptionByCode = new HashMap<>();
-        if(circonscriptions != null){
-            for(CirconscriptionBassin c : circonscriptions){
-                if(!circonscriptionByCode.containsKey(c.getCode())){
-                    circonscriptionByCode.put(c.getCode(), c.getLibelleLong());
-                }
-            }  
-            this.circonscriptionByCode = sortByValue(circonscriptionByCode);
-        }
-    }
-      
-    public static <K, V extends Comparable<? super V>> Map<K, V> sortByValue(Map<K, V> map) {
-        List<Map.Entry<K, V>> list = new ArrayList<>(map.entrySet());
-        list.sort(Map.Entry.comparingByValue());
-
-        Map<K, V> result = new LinkedHashMap<>();
-        for (Map.Entry<K, V> entry : list) {
-            result.put(entry.getKey(), entry.getValue());
-        }
-
-        return result;
-    }
+    return result;
+  }
 }
 

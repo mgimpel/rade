@@ -32,79 +32,78 @@ import org.springframework.format.annotation.DateTimeFormat;
  */
 @Getter @Setter @NoArgsConstructor
 public class DisplayCommune {
-    String codeInsee;
-    String motifModification;
-    String nomEnrichi;
-    String commentaireModification;
-    String article;
-    String articleEnrichi;
-    String codeBassin;
-    String nomBassin;
-    String codeDepartement;
-    String nomDepartement;
-    String nomMajuscule;
-    String nomRegion;
-    @DateTimeFormat(pattern="dd/MM/yyyy")
-    Date dateCreation, dateModification, debutValidite, finValidite;
-    HashMap<GenealogieEntiteAdmin, String> genealogieParentCodeInsee;
-    HashMap<GenealogieEntiteAdmin, String> genealogieEnfantCodeInsee;
-    
-   /**
+  String codeInsee;
+  String motifModification;
+  String nomEnrichi;
+  String commentaireModification;
+  String article;
+  String articleEnrichi;
+  String codeBassin;
+  String nomBassin;
+  String codeDepartement;
+  String nomDepartement;
+  String nomMajuscule;
+  String nomRegion;
+  @DateTimeFormat(pattern="dd/MM/yyyy")
+  Date dateCreation, dateModification, debutValidite, finValidite;
+  HashMap<GenealogieEntiteAdmin, String> genealogieParentCodeInsee;
+  HashMap<GenealogieEntiteAdmin, String> genealogieEnfantCodeInsee;
+
+  /**
    * @param finValidite 
    * @return date
    */
-    public String getDateEffet(Date finValidite){
-        Date date = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        
-        if(finValidite != null){
-            date.setTime(finValidite.getTime() - 86400000);
-        }
-        return sdf.format(date);
+  public String getDateEffet(Date finValidite){
+    Date date = new Date();
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+    if(finValidite != null){
+      date.setTime(finValidite.getTime() - 86400000);
     }
-    
-    /**
-   * Renvoie la date formaté au format dd/MM/yyyy 
-   * ou un département
+    return sdf.format(date);
+  }
+
+  /**
+   * Renvoie la date formatée au format dd/MM/yyyy
    * @param date 
    * @return date formatée
    */
-    public String formatDate(Date date){
-        if(date != null){
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-            return sdf.format(date);
-        }
-        return null;
+  public String formatDate(Date date){
+    if(date != null){
+      SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+      return sdf.format(date);
     }
-    
-    /**
+    return null;
+  }
+
+  /**
    * Renvoie l'url correspondant à l'entité
    * @param entite 
    * @return L'url permettant d'afficher l'entité
    */
-    public String entiteUrl(EntiteAdministrative entite, String codeInsee){
-        if(entite != null){
-            String typeCommune = null;
-            switch(entite.getTypeEntiteAdmin().getCode()){
-                case "COM":
-                    typeCommune = "commune";
-                    break;
-                case "REG":
-                    typeCommune = "departement";
-                    break;
-                case "DEP":
-                    typeCommune = "region";
-            }
-            
-            StringBuilder sb = new StringBuilder();
-            sb.append("/referentiel/");
-            sb.append(typeCommune);
-            sb.append("/");
-            sb.append(codeInsee);
-            sb.append("/");
-            sb.append(getDateEffet(entite.getFinValidite()));
-            return sb.toString();
-        }
-        return null;
+  public String entiteUrl(EntiteAdministrative entite, String codeInsee){
+    if(entite != null){
+      String typeCommune = null;
+      switch(entite.getTypeEntiteAdmin().getCode()){
+      case "COM":
+        typeCommune = "commune";
+        break;
+      case "REG":
+        typeCommune = "departement";
+        break;
+      case "DEP":
+        typeCommune = "region";
+      }
+
+      StringBuilder sb = new StringBuilder();
+      sb.append("/referentiel/");
+      sb.append(typeCommune);
+      sb.append("/");
+      sb.append(codeInsee);
+      sb.append("/");
+      sb.append(getDateEffet(entite.getFinValidite()));
+      return sb.toString();
     }
+    return null;
+  }
 }

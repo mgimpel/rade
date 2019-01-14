@@ -114,6 +114,72 @@ public class CommuneServiceImpl
   }
 
   /**
+   * Returns a List of all Commune from the given codeInsee, departement,
+   * region, circonscription, commune name and/or date.
+   * @param codeInsee the code of the Communes.
+   * @param codeDept the departement of the Communes.
+   * @param codeRegion the region of the Communes.
+   * @param nomCommune a pattern to search for Communes with a name resembling.
+   * @param dateEffet the date at which the Communes were valid.
+   * @return a List of all Commune matching the given parameters.
+   */
+  @Override
+  @Transactional(readOnly = true)
+  public List<Commune> getCommuneByCriteria(final String codeInsee,
+                                            final String codeDept,
+                                            final String codeBassin,
+                                            final String codeRegion,
+                                            final String nomCommune,
+                                            final Date dateEffet){
+    List<Commune> communes = null;
+    if(codeInsee != null && !codeInsee.equals("")){
+      if(dateEffet != null){
+        Commune commune = communeJpaDao.findByCodeInseeValidOnDate(codeInsee, dateEffet);
+        if(commune != null){
+          communes = new ArrayList<>();
+          communes.add(commune);
+        }
+      }else{
+        communes = communeJpaDao.findByCodeInsee(codeInsee);
+      }
+    }else{
+      String departement = codeDept == null || codeDept.equals("-1")  ? " " : codeDept;
+      String region = codeRegion == null || codeRegion.equals("-1")  ? " " : codeRegion;
+      String bassin = codeBassin == null || codeBassin.equals("-1")  ? " " : codeBassin;
+      String nameLike = nomCommune == null ||  nomCommune.trim().equals("") ? " " : nomCommune.trim();
+
+      if(!(departement.equals(" ") && region.equals(" ") && bassin.equals(" ") && nameLike.equals(" ") && dateEffet == null)){
+        if(dateEffet == null){
+          if(region.equals(" ") || !(departement.equals(" ")) ){
+            communes = communeJpaDao.findByDepartementBassinAndNameLike(departement,bassin, nameLike);
+          }else{
+            communes = communeJpaDao.findByBassinRegionAndNameLike(bassin,region, nameLike.trim());
+          }
+        }else{
+          if(region.equals(" ")){
+            if(bassin.equals(" ")){
+              if(departement.equals(" ") || !nameLike.equals(" ")){
+                communes = communeJpaDao.findByDepartementBassinAndNameLikeValidOnDate(departement,bassin, nameLike,dateEffet);
+              }else{
+                communes = communeJpaDao.findByDepartementValidOnDate(departement,dateEffet);
+              }
+            }else{
+              communes = communeJpaDao.findByDepartementBassinAndNameLikeValidOnDate(departement,bassin,nameLike,dateEffet);
+            }
+          }else{
+            if(departement.equals(" ")){
+              communes = communeJpaDao.findByBassinRegionAndNameLikeValidOnDate(bassin, region,nameLike, dateEffet);
+            }else{
+              communes = communeJpaDao.findByDepartementBassinAndNameLikeValidOnDate(departement,bassin,nameLike, dateEffet);
+            }
+          }
+        }
+      }
+    }
+    return communes;
+  }
+
+  /**
    * Returns a Map of all Commune indexed by ID.
    * @return a Map of all Commune indexed by ID.
    */
@@ -983,61 +1049,5 @@ public class CommuneServiceImpl
     }
     commune.setFinValidite(dateEffective);
     return communeJpaDao.save(commune);
-  }
-  
-  @Override
-  public List<Commune> getCommuneByCriteria(final String codeInsee, 
-                                            final String codeDept, 
-                                            final String codeBassin, 
-                                            final String codeRegion, 
-                                            final String nomCommune, 
-                                            final Date dateEffet){
-      List<Commune> communes = null;
-      if(codeInsee != null && !codeInsee.equals("")){
-        if(dateEffet != null){
-            Commune commune = communeJpaDao.findByCodeInseeValidOnDate(codeInsee, dateEffet);
-            if(commune != null){
-                communes = new ArrayList<>();
-                communes.add(commune);
-            }
-        }else{
-            communes = communeJpaDao.findByCodeInsee(codeInsee);
-        }
-    }else{
-        String departement = codeDept == null || codeDept.equals("-1")  ? " " : codeDept;
-        String region = codeRegion == null || codeRegion.equals("-1")  ? " " : codeRegion;
-        String bassin = codeBassin == null || codeBassin.equals("-1")  ? " " : codeBassin;
-        String nameLike = nomCommune == null ||  nomCommune.trim().equals("") ? " " : nomCommune.trim();
-        
-        if(!(departement.equals(" ") && region.equals(" ") && bassin.equals(" ") && nameLike.equals(" ") && dateEffet == null)){
-            if(dateEffet == null){
-                 if(region.equals(" ") || !(departement.equals(" ")) ){
-                    communes = communeJpaDao.findByDepartementBassinAndNameLike(departement,bassin, nameLike);
-                 }else{
-                    communes = communeJpaDao.findByBassinRegionAndNameLike(bassin,region, nameLike.trim());
-                 }
-             }else{
-                 if(region.equals(" ")){
-                     if(bassin.equals(" ")){
-                         if(departement.equals(" ") || !nameLike.equals(" ")){
-                             communes = communeJpaDao.findByDepartementBassinAndNameLikeValidOnDate(departement,bassin, nameLike,dateEffet);
-                         }else{
-                             communes = communeJpaDao.findByDepartementValidOnDate(departement,dateEffet);
-                         }
-                     }else{
-                        communes = communeJpaDao.findByDepartementBassinAndNameLikeValidOnDate(departement,bassin,nameLike,dateEffet);
-                     }
-                 }else{
-                     if(departement.equals(" ")){
-                        communes = communeJpaDao.findByBassinRegionAndNameLikeValidOnDate(bassin, region,nameLike, dateEffet);
-                     }else{
-                        communes = communeJpaDao.findByDepartementBassinAndNameLikeValidOnDate(departement,bassin,nameLike, dateEffet);
-                     }
-                 }
-             }
-        }
-    }
-      return communes;
-      
   }
 }

@@ -44,7 +44,7 @@ public class MainController {
    */
   @RequestMapping("/")
   public String home(Model model) {
-      model.addAttribute("entite", new SearchEntite());
+    model.addAttribute("entite", new SearchEntite());
     return "home";
   }
 

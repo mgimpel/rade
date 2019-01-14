@@ -24,6 +24,6 @@ import javax.servlet.http.HttpServletResponse;
  * @author sophie.belin
  */
 public interface Export {
-    public void exportCommune(HttpServletResponse response, 
-            SearchCommune searchCommune);
+  public void exportCommune(HttpServletResponse response,
+      SearchCommune searchCommune);
 }

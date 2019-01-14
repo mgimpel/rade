@@ -65,5 +65,4 @@ public class Commune extends EntiteAdministrative {
   @Size(max = 3)
   @Column(name = "DEPT", length = 3, nullable = false)
   private String departement;
-
 }

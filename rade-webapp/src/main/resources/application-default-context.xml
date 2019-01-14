@@ -52,7 +52,7 @@
   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
   <!-- Configure the data source bean -->
-  <!--<jdbc:embedded-database id="dataSource" type="DERBY">
+  <jdbc:embedded-database id="dataSource" type="DERBY">
     <jdbc:script location="classpath:db/sql/create-tables.sql" />
     <jdbc:script location="classpath:db/sql/insert-TypeEntiteAdmin.sql" />
     <jdbc:script location="classpath:db/sql/insert-TypeNomClair.sql" />
@@ -60,17 +60,17 @@
     <jdbc:script location="classpath:db/sql/insert-CirconscriptionBassin.sql" />
     <jdbc:script location="classpath:db/sql/insert-Region.sql" />
     <jdbc:script location="classpath:db/sql/insert-Departement.sql" />
-    <jdbc:script location="classpath:db/sql/insert-Commune.sql" />
+    <!--jdbc:script location="classpath:db/sql/insert-Commune.sql" /-->
     <jdbc:script location="classpath:db/sql/insert-Delegation.sql" />
-    <jdbc:script location="classpath:db/sql/insert-Hexaposte.sql" />
-  </jdbc:embedded-database>-->
-
+    <!--jdbc:script location="classpath:db/sql/insert-Hexaposte.sql" /-->
+  </jdbc:embedded-database>
+<!--
   <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close"
         p:driverClassName="${db.driver}"
         p:url="${db.jdbcurl}"
         p:username="${db.username}"
         p:password="${db.password}"/>
-
+-->
 
   <!-- Create default configuration for Hibernate -->
   <bean id="jpaVendorAdapter" 
@@ -126,7 +126,6 @@
         p:departementService-ref="departementServiceImpl"
         p:regionService-ref="regionServiceImpl"
         p:bassinService-ref="bassinServiceImpl"/>
-  
   <jaxrs:server id="RestService"
                 address="/rest">
     <jaxrs:serviceBeans>

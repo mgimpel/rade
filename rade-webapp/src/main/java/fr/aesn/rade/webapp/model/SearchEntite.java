@@ -26,8 +26,8 @@ import lombok.Setter;
  */
 @Getter @Setter
 public class SearchEntite implements Serializable {
-    
-    private String code;
-    
-    private String type;
+
+  private String code;
+
+  private String type;
 }

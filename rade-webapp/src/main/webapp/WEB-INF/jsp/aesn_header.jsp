@@ -68,30 +68,30 @@
 				<h1>${appname}</h1>
 			</div>
 			<div id="chemin_nav">Vous êtes ici : &nbsp;${titre}&nbsp;</div>
-                        <div style="clear:both;" ></div>
-                        <div style="float:right; clear:both;">
-                            <form:form method="POST" action="/referentiel/entiteSearch" modelAttribute="entite">
-                                <table>
-                                    <tr>
-                                        <td><b>Code :</b></td>
-                                        <td><form:input  style="width:40px"  path="code" maxlength="5"/></td>                                    
-                                        
-                                        <td><b>Type :</b></td>
-                                        <td>
-                                           <form:select path="type" disabled="true">
-                                                <form:option value="region">Région</form:option>
-                                                <form:option value="dept">Département</form:option>
-                                                <form:option selected="selected" value="commune">Commune</form:option>
-                                                <form:option value="bassin">Bassin</form:option>
-                                                <form:option value="delegation">Délégation</form:option>
-                                           </form:select>
-                                        </td>
-                                        <td><input type="submit" name="submit" value="Rechercher"></td>
-                                    </tr>                                    
-                                </table>                                
-                            </form:form>
-                        </div>
-                        <div style="clear:both;" ></div>
+						<div style="clear:both;" ></div>
+						<div style="float:right; clear:both;">
+							<form:form method="POST" action="/referentiel/entiteSearch" modelAttribute="entite">
+								<table>
+									<tr>
+										<td><b>Code :</b></td>
+										<td><form:input  style="width:40px"  path="code" maxlength="5"/></td>
+										
+										<td><b>Type :</b></td>
+										<td>
+											<form:select path="type" disabled="true">
+												<form:option value="region">Région</form:option>
+												<form:option value="dept">Département</form:option>
+												<form:option selected="selected" value="commune">Commune</form:option>
+												<form:option value="bassin">Bassin</form:option>
+												<form:option value="delegation">Délégation</form:option>
+											</form:select>
+										</td>
+										<td><input type="submit" name="submit" value="Rechercher"></td>
+									</tr>
+								</table>
+							</form:form>
+						</div>
+						<div style="clear:both;" ></div>
 			<ul id="nav">
 				<li><a href='<%=request.getContextPath()%>/'>Référentiel</a>
 					<ul>
