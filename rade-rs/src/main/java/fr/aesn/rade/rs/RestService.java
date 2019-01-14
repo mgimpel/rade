@@ -17,6 +17,8 @@
 /* $Id$ */
 package fr.aesn.rade.rs;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -103,18 +105,23 @@ public interface RestService {
   /**
    * Get all Commune matching the request parameters.
    * @param req HTTP Request (for determining base path of Rest Service).
-   * @param rawdate the date at which the returned data is valid.
-   * @param rawcodedepartement the Departement INSEE code of the Commune.
-   * @param rawnom a part of the Commune enrich name.
+   * @param rawCodes list of INSEE code of the Commune
+   * (if no codes are given dept and namelike are used). 
+   * @param rawDept the Departement INSEE code of the Commune
+   * (not used if codes are given).
+   * @param rawNameLike a part of the Commune enrich name
+   * (not used if codes are given).
+   * @param rawDate the date at which the returned data is valid.
    * @return list of all Commune matching the request parameters.
    */
   @GET
   @Path(REST_PATH_COMMUNE)
   @Produces(MediaType.APPLICATION_JSON)
   public Response getAllCommune(@Context final HttpServletRequest req,
-                                @QueryParam("date") final String rawdate,
-                                @QueryParam("codedepartement") final String rawcodedepartement,
-                                @QueryParam("nom") final String rawnom);
+                                @QueryParam("code") final List<String> rawCodes,
+                                @QueryParam("dept") final String rawDept,
+                                @QueryParam("namelike") final String rawNameLike,
+                                @QueryParam("date") final String rawDate);
 
   /**
    * Get the Commune with the given INSEE code.

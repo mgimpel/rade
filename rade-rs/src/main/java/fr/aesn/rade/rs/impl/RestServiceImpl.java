@@ -21,6 +21,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -214,26 +215,51 @@ public class RestServiceImpl
   /**
    * Get all Commune matching the request parameters.
    * @param req HTTP Request (for determining base path of Rest Service).
+   * @param rawCodes list of INSEE code of the Commune
+   * (if no codes are given dept and namelike are used). 
+   * @param rawDept the Departement INSEE code of the Commune
+   * (not used if codes are given).
+   * @param rawNameLike a part of the Commune enrich name
+   * (not used if codes are given).
    * @param rawDate the date at which the returned data is valid.
-   * @param rawDept the Departement INSEE code of the Commune.
-   * @param rawNameLike a part of the Commune enrich name.
    * @return list of all Commune matching the request parameters.
    */
   @GET
   @Path(REST_PATH_COMMUNE)
   @Produces(MediaType.APPLICATION_JSON)
   public Response getAllCommune(@Context final HttpServletRequest req,
+                                @QueryParam("code") final List<String> rawCodes,
                                 @QueryParam("dept") final String rawDept,
                                 @QueryParam("namelike") final String rawNameLike,
                                 @QueryParam("date") final String rawDate) {
-    log.info("Executing operation getAllCommune with dept {}, name like {} and date {}",
-             rawDept, rawNameLike, rawDate);
+    log.info("Executing operation getAllCommune with code {}, dept {}, name like {} and date {}",
+             rawCodes, rawDept, rawNameLike, rawDate);
+    List<Commune> communes = null;
     try {
       Date date = decodeDate(rawDate);
-      String dept = decodeString(rawDept);
-      String nameLike = decodeString(rawNameLike);
-      List<Commune> communes = communeService.getAllCommune(dept, nameLike, date);
-      if (communes.isEmpty()) {
+      // if Query Parameter "code" is present, ignore "dept" and "namelike"
+      if (rawCodes != null && !rawCodes.isEmpty()) {
+        String code = null;
+        Commune commune = null;
+        communes = new ArrayList<>(rawCodes.size());
+        for (String rawCode : rawCodes) {
+          code = decodeString(rawCode);
+          commune = communeService.getCommuneByCode(code, date);
+          if (commune != null) {
+            communes.add(commune);
+          }
+        }
+        log.debug("found {} communes for the given codes", communes.size());
+      }
+      // if Query Parameter "code" is NOT present, use "dept" and "namelike"
+      else {
+        String dept = decodeString(rawDept);
+        String nameLike = decodeString(rawNameLike);
+        communes = communeService.getAllCommune(dept, nameLike, date);
+        log.debug("found {} communes for the given criteria", communes.size());
+      }
+      // send response
+      if (communes == null || communes.isEmpty()) {
         return Response.status(Response.Status.NOT_FOUND)
                        .build();
       } else {
