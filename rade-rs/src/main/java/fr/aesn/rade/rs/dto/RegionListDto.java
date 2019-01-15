@@ -47,7 +47,9 @@ public class RegionListDto {
   public static RegionListDto fromEntityList(final List<Region> regions) {
     List<RegionDto> dtos = new ArrayList<>(regions.size());
     for (Region region : regions) {
-      dtos.add(RegionDto.fromEntity(region));
+      if (region != null) {
+        dtos.add(RegionDto.fromEntity(region));
+      }
     }
     RegionListDto dto = new RegionListDto();
     dto.setRegions(dtos);

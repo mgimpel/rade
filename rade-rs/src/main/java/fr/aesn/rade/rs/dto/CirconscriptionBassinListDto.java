@@ -47,7 +47,9 @@ public class CirconscriptionBassinListDto {
   public static CirconscriptionBassinListDto fromEntityList(final List<CirconscriptionBassin> bassins) {
     List<CirconscriptionBassinDto> dtos = new ArrayList<>(bassins.size());
     for (CirconscriptionBassin bassin : bassins) {
-      dtos.add(CirconscriptionBassinDto.fromEntity(bassin));
+      if (bassin != null) {
+        dtos.add(CirconscriptionBassinDto.fromEntity(bassin));
+      }
     }
     CirconscriptionBassinListDto dto = new CirconscriptionBassinListDto();
     dto.setBassins(dtos);
