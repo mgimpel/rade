@@ -21,7 +21,6 @@ import java.util.Date;
 import java.util.List;
 
 import fr.aesn.rade.common.modelplus.CommunePlus;
-import fr.aesn.rade.persist.model.Commune;
 
 /**
  * Service Interface for CommunePlus.

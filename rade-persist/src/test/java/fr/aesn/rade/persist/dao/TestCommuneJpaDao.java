@@ -31,14 +31,12 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 
 import fr.aesn.rade.persist.model.Commune;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * JUnit Test for CommuneJpaDao.
  * 
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
-@Slf4j
 public class TestCommuneJpaDao extends AbstractTestJpaDao {
   /** DAO to be tested. */
   @Autowired
