@@ -38,6 +38,7 @@
     <module>rade-habilitations</module>
     <module>rade-webapp</module>
     <module>rade-batch</module>
+    <module>rade-batchrunner</module>
     <module>rade-rpm</module>
   </modules>
 

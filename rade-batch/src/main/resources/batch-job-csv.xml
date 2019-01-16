@@ -31,52 +31,55 @@
   <!-- Readers -->
   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
-  <!-- ItemReader which reads data from Hexaposte file -->
-  <bean id="hexaposteItemReader" scope="step"
-        class="org.springframework.batch.item.file.FlatFileItemReader">
-    <property name="resource" value="#{jobParameters['inputFile']}"/>
-    <property name="linesToSkip" value="1"/>
-    <property name="lineMapper">
-      <bean class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
-        <property name="lineTokenizer">
-          <bean class="org.springframework.batch.item.file.transform.FixedLengthTokenizer"
-                p:columns="1-6,7-11,12-49,50,51,52-89,90-94,95-126,127-131,132,133-142"/>
-        </property>
-        <property name="fieldSetMapper">
-          <bean class="fr.aesn.rade.batch.tasks.hexaposte.HexaposteMapper"/>
-        </property>
-      </bean>
-    </property>
+  <bean id="csvDelegationJpaItemReader" scope="step"
+        class="org.springframework.batch.item.database.JpaPagingItemReader">
+    <property name="entityManagerFactory" ref="entityManagerFactory" />
+    <property name="queryString" value="SELECT d FROM Delegation d" />
   </bean>
 
   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
   <!-- Writers -->
   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
-  <!-- ItemWriter which writes the data to the database -->
-  <bean id="hexaposteItemWriter" scope="step"
-        class="org.springframework.batch.item.database.JpaItemWriter"
-        p:entityManagerFactory-ref="entityManagerFactory"/>
+  <bean id="csvDelegationFileItemWriter" scope="step"
+        class="org.springframework.batch.item.file.FlatFileItemWriter">
+    <property name="resource" value="#{jobParameters['outputFile']}" />
+    <property name="shouldDeleteIfExists" value="true" />
+    <property name="lineAggregator">
+      <bean class="org.springframework.batch.item.file.transform.DelimitedLineAggregator">
+        <property name="delimiter" value=";" />
+        <property name="fieldExtractor">
+          <bean class="org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor">
+            <property name="names" value="code, libelle, acheminement, adresse1, adresse2, adresse3, adresse4, adresse5, codePostal, email, fax, siteWeb, telephone, telephone2, telephone3" />
+          </bean>
+        </property>
+      </bean>
+    </property>
+    <property name="headerCallback">
+      <bean class="fr.aesn.rade.batch.util.StringHeaderWriter">
+        <property name="header" value="//code, libelle, acheminement, adresse1, adresse2, adresse3, adresse4, adresse5, codePostal, email, fax, siteWeb, telephone, telephone2, telephone3" />
+      </bean>
+    </property>
+  </bean>
 
   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
   <!-- Processors -->
   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
-  <!-- ItemProcessor which processes the data (adds Audit details) -->
-  <bean id="hexaposteItemProcessor" scope="step"
-        class="fr.aesn.rade.batch.tasks.hexaposte.HexaposteProcessor"/>
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+  <!-- Tasklets -->
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
   <!-- Jobs -->
   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
-  <!-- The Hexaposte Full Import Job -->
-  <batch:job id="importHexaposteJob">
-    <batch:step id="importHexaposteStep1">
-      <batch:tasklet>
-        <batch:chunk reader="hexaposteItemReader"
-                     processor="hexaposteItemProcessor"
-                     writer="hexaposteItemWriter"
+  <!-- Info Job -->
+  <batch:job id="csvDelegationExportJob">
+    <batch:step id="csvDelegationExportStep1">
+      <batch:tasklet transaction-manager="transactionManager">
+        <batch:chunk reader="csvDelegationJpaItemReader"
+                     writer="csvDelegationFileItemWriter"
                      commit-interval="100"/>
       </batch:tasklet>
     </batch:step>

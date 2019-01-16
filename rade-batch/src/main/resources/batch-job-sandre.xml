@@ -27,6 +27,10 @@
          http://www.springframework.org/schema/batch
          http://www.springframework.org/schema/batch/spring-batch.xsd">
 
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+  <!-- Readers -->
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
   <!-- ItemReader which reads data from Sandre commune file -->
   <bean id="communeSandreItemReader" scope="step"
         class="org.springframework.batch.item.file.FlatFileItemReader">
@@ -46,14 +50,26 @@
     </property>
   </bean>
 
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+  <!-- Writers -->
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
   <!-- ItemWriter which writes the data to the database -->
   <bean id="communeSandreItemWriter" scope="step"
         class="org.springframework.batch.item.database.JpaItemWriter"
         p:entityManagerFactory-ref="entityManagerFactory"/>
 
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+  <!-- Processors -->
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
   <!-- ItemProcessor which processes the data (adds Audit details) -->
   <bean id="communeSandreItemProcessor" scope="step"
         class="fr.aesn.rade.batch.tasks.sandre.CommuneSandreProcessor"/>
+
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+  <!-- Jobs -->
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
   <!-- The Commune Sandre Full Import Job -->
   <batch:job id="importCommuneSandreJob">
