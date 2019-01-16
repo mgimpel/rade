@@ -30,6 +30,10 @@
 
   <name>Rade WebApp</name>
 
+  <properties>
+    <start-class>fr.aesn.rade.webapp.SpringBootWebApplication</start-class>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>fr.aesn.rade</groupId>
@@ -49,6 +53,11 @@
     <dependency>
       <groupId>fr.aesn.rade</groupId>
       <artifactId>rade-rs</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>fr.aesn.rade</groupId>
+      <artifactId>rade-batch</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>

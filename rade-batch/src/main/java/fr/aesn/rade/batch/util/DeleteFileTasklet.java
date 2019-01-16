@@ -15,16 +15,11 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 /* $Id$ */
-package fr.aesn.rade.batch.tasks.info;
+package fr.aesn.rade.batch.util;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 
 import org.springframework.batch.core.ExitStatus;
-import org.springframework.batch.core.JobParameter;
 import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.StepExecutionListener;
@@ -33,67 +28,49 @@ import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
-import org.springframework.util.ResourceUtils;
 
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Info Tasklet that prints out all the details of the Batch Task.
+ * Delete File Tasklet that deletes the given file.
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
 @Slf4j
-public class InfoTasklet
+public class DeleteFileTasklet
   implements Tasklet, StepExecutionListener {
-
+  /** Name of the file to be deleted by the Tasklet. */
+  private String filename;
+  
   /**
-   * Recover and print Job Details and Parameters Before Step Execution starts.
+   * Initialize the Tasklet by getting the file to delete from JobParameters.
    * @param stepExecution Spring Batch stepExecution Object.
    */
   @Override
   public void beforeStep(StepExecution stepExecution) {
-    log.info("Job Summary: {}", stepExecution.getSummary());
-    log.info("Version: {}", stepExecution.getVersion());
-    Map<String, JobParameter> params = stepExecution.getJobParameters().getParameters();
-    for (Entry<String, JobParameter> entry : params.entrySet()) {
-      log.info("Job Parameter {}: {}", entry.getKey(), entry.getValue());
-    }
-    if (params.containsKey("inputFile")) {
-      String param = params.get("inputFile").toString();
-      log.info("Resource details: param: {}", param);
-      try {
-        log.info("Resource details: URI: {}", ResourceUtils.toURI(param));
-        Resource resource = new DefaultResourceLoader().getResource(param);
-        log.info("Resource details: Resource exists: {}", resource.exists());
-        if (resource.exists()) {
-          log.info("Resource details: Resource size: {}", resource.contentLength());
-        }
-      } catch (IOException e) {
-        log.info("File details: IOException: {}", e.getMessage());
-      } catch (URISyntaxException e) {
-        log.info("File details: URISyntaxException: {}", e.getMessage());
-      }
-    }
-    Set<Entry<String, Object>> entries = stepExecution.getExecutionContext().entrySet();
-    for (Entry<String, Object> entry : entries) {
-      log.info("Job Context entry {}: {}", entry.getKey(), entry.getValue());
-    }
+    stepExecution.getJobParameters().getString("inputFile");
+    log.info("Delete File Tasket for file: {}", filename);
   }
 
   /**
-   * Given the current context in the form of a step contribution, do whatever
-   * is necessary to process this unit inside a transaction.
-   *
-   * Implementations return RepeatStatus.FINISHED if finished. If not they
-   * return RepeatStatus.CONTINUABLE. On failure throws an exception.
-   *
+   * Try to delete the given file.
    * @param contribution mutable state to be passed back to update the current
    * step execution.
    * @param chunkContext attributes shared between invocations but not between
    * restarts.
    */
   @Override
-  public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext)
-    throws Exception {
+  public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) {
+    Resource resource = new DefaultResourceLoader().getResource(filename);
+    if (resource.exists() && resource.isFile()) {
+      try {
+        resource.getFile().delete();
+        log.info("Deleted file: {}", resource);
+      } catch (IOException e) {
+        log.info("Error trying to delete file: {}", resource);
+      }
+    } else {
+      log.info("Resource does not appear to exist or be a file.");
+    }
     return RepeatStatus.FINISHED;
   }
 

@@ -18,10 +18,12 @@
 package fr.aesn.rade.webapp;
 
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.batch.BatchAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +33,8 @@ import lombok.extern.slf4j.Slf4j;
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
 @Slf4j
-@SpringBootApplication
+@Configuration
+@EnableAutoConfiguration(exclude={BatchAutoConfiguration.class})
 @ImportResource("classpath:application-context.xml")
 @ComponentScan({"fr.aesn.rade.webapp.config",
                 "fr.aesn.rade.webapp.controller"})

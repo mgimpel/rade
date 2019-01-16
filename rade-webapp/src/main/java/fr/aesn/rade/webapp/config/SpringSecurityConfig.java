@@ -62,6 +62,7 @@ public class SpringSecurityConfig
           .antMatchers("/css/**", "/img/**", "/resources/**", "/favicon.ico").permitAll()
           // Admin files : require administrator role
           .antMatchers("/admin/**").hasAnyAuthority("RAD_ADMIN")
+          .antMatchers("/batch/**").hasAnyAuthority("RAD_ADMIN")
           // User files : require user role
           .antMatchers("/user/**").hasAnyAuthority("RAD_CONSULT")
           // All other files : authenticated user
