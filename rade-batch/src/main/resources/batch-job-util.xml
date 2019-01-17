@@ -31,7 +31,7 @@
   <!-- Tasklets -->
   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
-  <!-- Info Tasklet -->
+  <!-- Delete File Tasklet -->
   <bean id="deleteFileTasklet" scope="step"
         class="fr.aesn.rade.batch.util.DeleteFileTasklet"/>
 

@@ -146,8 +146,7 @@
   <bean id="jobLauncher" class="org.springframework.batch.core.launch.support.SimpleJobLauncher"
         p:jobRepository-ref="jobRepository"/>
 
-  <import resource="classpath*:/**/batch-job-info.xml"/>
-  <import resource="classpath*:/**/batch-job-util.xml"/>
+  <import resource="classpath*:/**/batch-job-webapp.xml"/>
 
   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
   <!-- Spring Security -->

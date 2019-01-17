@@ -19,7 +19,7 @@
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <jsp:include page="aesn_header.jsp" />
-<form name="batchForm" action="<c:url value="/batch/upload"/>" method="post" enctype="multipart/form-data">
+<form name="batchForm" action="<c:url value="/batch/info"/>" method="post" enctype="multipart/form-data">
 <table style="margin-left:auto;margin-right:auto;">
 	<tr>
 		<td><label for="file">Select a file to upload:</label></td>

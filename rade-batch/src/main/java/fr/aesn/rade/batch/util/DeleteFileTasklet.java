@@ -47,7 +47,7 @@ public class DeleteFileTasklet
    */
   @Override
   public void beforeStep(StepExecution stepExecution) {
-    stepExecution.getJobParameters().getString("inputFile");
+    filename = stepExecution.getJobParameters().getString("inputFile");
     log.info("Delete File Tasket for file: {}", filename);
   }
 
