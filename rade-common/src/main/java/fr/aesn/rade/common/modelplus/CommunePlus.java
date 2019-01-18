@@ -24,7 +24,9 @@ import fr.aesn.rade.common.util.SharedBusinessRules;
 import fr.aesn.rade.persist.model.CirconscriptionBassin;
 import fr.aesn.rade.persist.model.Commune;
 import fr.aesn.rade.persist.model.CommuneSandre;
+import fr.aesn.rade.persist.model.GenealogieEntiteAdmin;
 import fr.aesn.rade.persist.model.TypeNomClair;
+import java.util.Set;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -185,19 +187,27 @@ public class CommunePlus {
     return insee.getTypeNomClair();
   }
   
-  /**
-   * Gets Sandre de l'entité.
-   * @return Sandre de l'entité.
-   */
-  public CommuneSandre getCommuneSandre(){
-      return sandre;
+  public Date getDebutValidite(){
+      return insee.getDebutValidite();
   }
   
-  /**
-   * Gets Commune de l'entité.
-   * @return Commune de l'entité.
-   */
-  public Commune getCommuneInsee(){
-      return insee;
+  public Date getFinValidite(){
+      return insee.getFinValidite();
+  }
+  
+  public Date getDateCreationCommune(){
+      return sandre.getDateCreationCommune();
+  }
+  
+  public Date getDateMajCommune(){
+      return sandre.getDateMajCommune();
+  }
+  
+  public Set<GenealogieEntiteAdmin> getParents(){
+      return insee.getParents();
+  }
+  
+  public Set<GenealogieEntiteAdmin> getEnfants(){
+      return insee.getEnfants();
   }
 }

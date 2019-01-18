@@ -145,4 +145,74 @@ public class CommunePlusServiceImpl
       return null;
     }
   }
+  
+  /**
+   * Returns a List of all Commune from the given codeInsee, departement,
+   * region, circonscription, commune name and/or date.
+   * @param codeInsee the code of the Communes.
+   * @param codeDept the departement of the Communes.
+   * @param codeBassin the circonscription of the Communes.
+   * @param codeRegion the region of the Communes.
+   * @param nomCommune a pattern to search for Communes with a name resembling.
+   * @param dateEffet the date at which the Communes were valid.
+   * @return a List of all Commune matching the given parameters.
+   */
+  @Override
+  @Transactional(readOnly = true)
+  public List<CommunePlus> getCommuneByCriteria(String codeInsee,
+                                            String codeDept,
+                                            String codeBassin,
+                                            String codeRegion,
+                                            String nomCommune,
+                                            Date dateEffet){
+        List<Commune> communes = null;
+
+        codeInsee = codeInsee.isEmpty() ? "%" : codeInsee;
+        nomCommune = nomCommune.isEmpty() ? "%" : "%" + nomCommune + "%";
+        if(codeRegion == null || codeRegion.isEmpty()){
+            codeDept = codeDept == null || codeDept.isEmpty() ? "%" : codeDept;   
+        }
+        
+        if(dateEffet == null){
+            if(codeRegion == null || codeRegion.isEmpty()){
+                communes = communeJpaDao.findByCodeInseeLikeAndDepartementLikeAndAndNomEnrichiLikeIgnoreCase(codeInsee, codeDept, nomCommune);
+            }else{
+                communes = communeJpaDao.findByCodeInseeLikeAndRegionLikeAndNomEnrichiLikeIgnoreCase(codeInsee, codeRegion, nomCommune);
+            }
+        }else{
+            if(codeRegion == null || codeRegion.isEmpty()){
+                communes = communeJpaDao.findByCodeInseeLikeAndDepartementLikeAndNomEnrichiIgnoreCaseLikeValidOnDate(codeInsee, codeDept, nomCommune, dateEffet);
+            }else{
+                communes = communeJpaDao.findByCodeInseeLikeAndRegionLikeAndNomEnrichiLikeIgnoreCaseValidOnDate(codeInsee, codeRegion, nomCommune, dateEffet);
+            }
+        }
+
+        List<CommunePlus> communesPlus = new ArrayList<>();
+
+        for(Commune commune : communes){       
+            CommunePlus cp = new CommunePlus(commune.getCodeInsee(), dateEffet != null ? dateEffet : commune.getDebutValidite());
+            
+            try {
+              cp.setCommuneInsee(commune);
+              CommuneSandre cs = null;
+
+              if(codeBassin != null && !codeBassin.isEmpty()){ 
+                  cs = communeSandreJpaDao.findByCirconscriptionBassin_CodeAndCodeCommune(codeBassin, commune.getCodeInsee());
+
+                  if(cs != null && dateEffet != null && cs.getDateCreationCommune().getTime() > dateEffet.getTime()){
+                      cs = null;
+                  }
+                  if(cs == null){
+                    continue;
+                  }
+                  cp.setCommuneSandre(cs);  
+              }
+              communesPlus.add(cp);
+              
+            }catch(Exception e){
+                log.error(e.getMessage(), e);
+            }
+        }
+        return communesPlus;
+  }
 }

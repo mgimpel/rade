@@ -386,58 +386,6 @@ public class TestCommuneService
   }
   
   /**
-   * Test de la recherche par critères multiples
-   */
-  @Test
-  public void getCommuneByCriteria() throws ParseException{
-      List<Commune> communes;
-      communes = service.getCommuneByCriteria("91001",null,null,null,null,null);
-      assertEquals("Hibernate returned the wrong number of results",1, communes.size());
-      communes = service.getCommuneByCriteria("91001",null,null,null,null,new SimpleDateFormat("yyyy-MM-dd").parse("2018-01-01"));
-      assertEquals("Hibernate returned the wrong number of results",1, communes.size());
-      communes = service.getCommuneByCriteria(null,"91",null,null,null,null);
-      assertEquals("Hibernate returned the wrong number of results",196, communes.size());
-      communes = service.getCommuneByCriteria(null,"91",null,null,"éVi",null);
-      assertEquals("Hibernate returned the wrong number of results",2, communes.size());
-      communes = service.getCommuneByCriteria(null,"91","03",null,null,null);
-      assertEquals("Hibernate returned the wrong number of results",1, communes.size());
-      communes = service.getCommuneByCriteria(null,"91","03",null,null, new SimpleDateFormat("yyyy-MM-dd").parse("2018-01-01"));
-      assertEquals("Hibernate returned the wrong number of results",1, communes.size());
-      communes = service.getCommuneByCriteria(null,"91","03",null,"éVi",null);
-      assertEquals("Hibernate returned the wrong number of results",1, communes.size());
-      communes = service.getCommuneByCriteria(null,"91","03",null,"éVi", new SimpleDateFormat("yyyy-MM-dd").parse("2018-01-01"));
-      assertEquals("Hibernate returned the wrong number of results",1, communes.size());
-      communes = service.getCommuneByCriteria(null,"91","03",null,"éVi", new SimpleDateFormat("yyyy-MM-dd").parse("2018-01-01"));
-      assertEquals("Hibernate returned the wrong number of results",1, communes.size());
-      communes = service.getCommuneByCriteria(null,null,null,"11",null,null);
-      assertEquals("Hibernate returned the wrong number of results",503, communes.size());
-      communes = service.getCommuneByCriteria(null,null,"03","11",null,null);
-      assertEquals("Hibernate returned the wrong number of results",1, communes.size());
-       communes = service.getCommuneByCriteria(null,null,"03","11","éVi",null);
-      assertEquals("Hibernate returned the wrong number of results",1, communes.size());;
-      communes = service.getCommuneByCriteria(null,null,"03","11","éVi",new SimpleDateFormat("yyyy-MM-dd").parse("2018-01-01"));
-      assertEquals("Hibernate returned the wrong number of results",1, communes.size());;
-      communes = service.getCommuneByCriteria(null,null,"03","11",null,new SimpleDateFormat("yyyy-MM-dd").parse("2018-01-01"));
-      assertEquals("Hibernate returned the wrong number of results",1, communes.size());
-      communes = service.getCommuneByCriteria(null,null,"03",null,"éVi",null);
-      assertEquals("Hibernate returned the wrong number of results",1, communes.size());
-       communes = service.getCommuneByCriteria(null,null,"03",null,"éVi",new SimpleDateFormat("yyyy-MM-dd").parse("2018-01-01"));
-      assertEquals("Hibernate returned the wrong number of results",1, communes.size());
-      communes = service.getCommuneByCriteria(null,null,null,null,"éVi",null);
-      assertEquals("Hibernate returned the wrong number of results",3, communes.size());
-      communes = service.getCommuneByCriteria(null,null,null,null,"éVi",new SimpleDateFormat("yyyy-MM-dd").parse("2018-01-01"));
-      assertEquals("Hibernate returned the wrong number of results",3, communes.size());
-      communes = service.getCommuneByCriteria(null,null,null,null,null,new SimpleDateFormat("yyyy-MM-dd").parse("2018-01-01"));
-      assertEquals("Hibernate returned the wrong number of results",632, communes.size());
-      communes = service.getCommuneByCriteria("91001","91","03","11","éVi",new SimpleDateFormat("yyyy-MM-dd").parse("2018-01-01"));
-      assertEquals("Hibernate returned the wrong number of results",1, communes.size());
-      communes = service.getCommuneByCriteria(null,"91","03","11","aaa",new SimpleDateFormat("yyyy-MM-dd").parse("2018-01-01"));
-      assertEquals("Hibernate returned the wrong number of results",0, communes.size());
-      communes = service.getCommuneByCriteria(null,"91",null,"11","éVi",new SimpleDateFormat("yyyy-MM-dd").parse("2018-01-01"));
-      assertEquals("Hibernate returned the wrong number of results",2, communes.size());
-  }
-
-  /**
    * Tests MOD=210 : Retablissement, MOD=230 : Commune se separant.
    * @throws ParseException failed to parse date.
    * @throws InvalidArgumentException passed wrong arguments during

@@ -49,4 +49,21 @@ public interface CommunePlusService {
    * @return the Commune with the given code at the given date.
    */
   public CommunePlus getCommuneByCode(String code, String date);
+  
+  /**
+   * Returns a List of all Commune from the given codeInsee, departement, 
+   * region, circonscription, commune name and/or date.
+   * @param codeInsee the code of the Communes.
+   * @param codeDept the departement of the Communes.
+   * @param codeRegion the region of the Communes.
+   * @param nomCommune a pattern to search for Communes with a name resembling.
+   * @param dateEffet the date at which the Communes were valid.
+   * @return a List of all Commune matching the given parameters.
+   */
+  public List<CommunePlus> getCommuneByCriteria(String codeInsee,
+                                            String codeDept,
+                                            String codeBassin,
+                                            String codeRegion,
+                                            String nomCommune,
+                                            Date dateEffet);
 }

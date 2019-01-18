@@ -106,81 +106,59 @@ public interface CommuneJpaDao
                                                                String nameLike,
                                                                Date date);
   
-    /**
-   * Returns a List of all Commune from the given departement, circoncription
-   * and/or commune
-   * @param dept the departement of the Communes.
-   * @param bassin the circonscription of the Communes.
+
+  /**
+   * Returns a List of all Commune using the given Code INSEE, department and 
+   * commune name 
+   * @param codeInsee the code INSEE of the Communes.
+   * @param departement the department of the Communes.
    * @param nameLike a pattern to search for Communes with a name resembling.
    * @return a List of all Commune matching the given parameters.
    */
-  @Query("SELECT DISTINCT(c) FROM Commune c"
-               + " WHERE (?1 = ' ' OR c.departement = ?1)"
-               + " AND (?2 = ' ' OR c.codeInsee IN("
-                    + "SELECT s.codeCommune "
-                    + "FROM CommuneSandre s "
-                    + "WHERE s.circonscriptionBassin = ?2))"
-               + " AND (?3 = ' ' OR ((UPPER(c.nomMajuscule) LIKE '%' "
-                    + "|| UPPER(?3) || '%') OR (UPPER(c.nomEnrichi) LIKE '%' "
-                    + "|| UPPER(?3) || '%')))"
-               + " ORDER BY c.nomEnrichi")
-  public List<Commune> findByDepartementBassinAndNameLike(String dept, 
-                                                          String bassin,
-                                                          String nameLike);
-  
+  public List<Commune> findByCodeInseeLikeAndDepartementLikeAndAndNomEnrichiLikeIgnoreCase(String codeInsee,
+                                                                                           String departement, 
+                                                                                           String nameLike);
   /**
-   * Returns a List of all Commune from the given departement, circoncription
-   * commune name and/or date.
-   * @param dept the departement of the Communes.
-   * @param bassin the circonscription of the Communes.
+   * Returns a List of all Commune using the given Code INSEE, department, commune 
+   * name and a date
+   * @param codeInsee the code INSEE of the Communes.
+   * @param departement the department of the Communes.
    * @param nameLike a pattern to search for Communes with a name resembling.
    * @param date the date at which the Communes were valid.
    * @return a List of all Commune matching the given parameters.
    */
   @Query("SELECT DISTINCT(c) FROM Commune c"
-               + " WHERE (?1 = ' ' OR c.departement = ?1)"
-               + " AND (?2 = ' ' OR c.codeInsee IN("
-                   + "SELECT s.codeCommune "
-                   + "FROM CommuneSandre s WHERE s.circonscriptionBassin = ?2))"
-               + " AND (?3 = ' ' OR ((UPPER(c.nomMajuscule) LIKE '%' || UPPER(?3) "
-                    + "|| '%') OR (UPPER(c.nomEnrichi) LIKE '%' || UPPER(?3) || '%')))" 
+               + " WHERE (c.codeInsee LIKE ?1)"
+               + " AND (c.departement LIKE ?2)"
+               + " AND (UPPER(c.nomMajuscule) LIKE UPPER(?3) OR UPPER(c.nomEnrichi) LIKE UPPER(?3))" 
                + " AND (c.debutValidite <= ?4)"
                + " AND (c.finValidite IS NULL OR c.finValidite > ?4)"
                + " ORDER BY c.nomEnrichi")
-  public List<Commune> findByDepartementBassinAndNameLikeValidOnDate(String dept, 
-                                                                     String bassin,
-                                                                     String nameLike, 
-                                                                     Date date);
-  
-  
-    
+  public List<Commune> findByCodeInseeLikeAndDepartementLikeAndNomEnrichiIgnoreCaseLikeValidOnDate(String codeInsee,
+                                                                                         String departement, 
+                                                                                         String nameLike, 
+                                                                                         Date date);
   /**
-   * Returns a List of all Commune from the given circonscription, region and/or
-   * commune name
-   * @param bassin the circonscription of the Communes.
+   * Returns a List of all Commune using the given Code INSEE, department and commune
+   * name 
+   * @param codeInsee the code INSEE of the Communes.
    * @param region the region of the Communes.
    * @param nameLike a pattern to search for Communes with a name resembling.
    * @return a List of all Commune matching the given parameters.
    */
   @Query("SELECT DISTINCT(c) FROM Commune c, Departement d"
                + " WHERE c.departement = d.codeInsee"
-               + " AND (?1 = ' ' OR c.codeInsee IN("
-                    + "SELECT s.codeCommune "
-                    + "FROM CommuneSandre s "
-                    + "WHERE s.circonscriptionBassin = ?1))"
-               + " AND (?2 = ' ' OR d.region = ?2)"
-               + " AND (?3 = ' ' OR ((UPPER(c.nomMajuscule) LIKE '%' || UPPER(?3) "
-                    + " || '%') OR (UPPER(c.nomEnrichi) LIKE '%' || UPPER(?3) "
-                    + " || '%')))"
+               + " AND (c.codeInsee LIKE ?1)"
+               + " AND (d.region LIKE ?2)"
+               + " AND (UPPER(c.nomMajuscule) LIKE UPPER(?3) OR UPPER(c.nomEnrichi) LIKE UPPER(?3))" 
                + " ORDER BY c.nomEnrichi")
-  public List<Commune> findByBassinRegionAndNameLike(String bassin,
-                                                     String region,
-                                                     String nameLike);
-  
+  public List<Commune> findByCodeInseeLikeAndRegionLikeAndNomEnrichiLikeIgnoreCase(String codeInsee,
+                                                                         String region, 
+                                                                         String nameLike);
   /**
-   * Returns a List of all Commune from the given circoncription, region, commune name 
-   * and/or date.
-   * @param bassin the circonscription of the Communes.
+   * Returns a List of all Commune using the given Code INSEE, region, commune name
+   * and a date
+   * @param codeInsee the code INSEE of the Communes.
    * @param region the region of the Communes.
    * @param nameLike a pattern to search for Communes with a name resembling.
    * @param date the date at which the Communes were valid.
@@ -188,20 +166,15 @@ public interface CommuneJpaDao
    */
   @Query("SELECT DISTINCT(c) FROM Commune c, Departement d"
                + " WHERE c.departement = d.codeInsee"
-               + " AND (?1 = ' ' OR c.codeInsee IN("
-                    + "SELECT s.codeCommune "
-                    + "FROM CommuneSandre s "
-                    + "WHERE s.circonscriptionBassin = ?1))"
-               + " AND (?2 = ' ' OR d.region = ?2)"
-               + " AND (?3 = ' ' OR ((UPPER(c.nomMajuscule) LIKE '%'"
-                    + " || UPPER(?3) || '%') OR (UPPER(c.nomEnrichi) LIKE '%' "
-                    + " || UPPER(?3) || '%')))" 
+               + " AND (c.codeInsee LIKE ?1)"
+               + " AND (d.region LIKE ?2)"
+               + " AND (UPPER(c.nomMajuscule) LIKE UPPER(?3) OR UPPER(c.nomEnrichi) LIKE UPPER(?3))" 
                + " AND (c.debutValidite <= ?4)"
                + " AND (c.finValidite IS NULL OR c.finValidite > ?4)"
                + " ORDER BY c.nomEnrichi")
-  public List<Commune> findByBassinRegionAndNameLikeValidOnDate(String bassin, 
-                                                                String region,
-                                                                String nameLike, 
-                                                                Date date);
+  public List<Commune> findByCodeInseeLikeAndRegionLikeAndNomEnrichiLikeIgnoreCaseValidOnDate(String codeInsee,
+                                                                                    String region, 
+                                                                                    String nameLike, 
+                                                                                    Date date);
   
 }

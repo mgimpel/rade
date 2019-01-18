@@ -16,8 +16,8 @@
  */
 package fr.aesn.rade.webapp.model;
 
+import fr.aesn.rade.common.modelplus.CommunePlus;
 import fr.aesn.rade.persist.model.CirconscriptionBassin;
-import fr.aesn.rade.persist.model.Commune;
 import fr.aesn.rade.persist.model.Departement;
 import fr.aesn.rade.persist.model.Region;
 import java.text.SimpleDateFormat;
@@ -54,7 +54,7 @@ public class SearchCommune {
   Map<String,String> regionsByCodeInsee;
   Map<String, String> circonscriptionByCode;
   List<DisplayCommune> listeResultats;
-  List<Commune> communes;
+  List<CommunePlus> communes;
 
   /**
    * Renvoie la date au format dd/MM/yyyy 

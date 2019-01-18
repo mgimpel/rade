@@ -18,7 +18,6 @@ package fr.aesn.rade.webapp.controller;
 
 import fr.aesn.rade.common.modelplus.CommunePlus;
 import fr.aesn.rade.persist.model.Commune;
-import fr.aesn.rade.persist.model.CommuneSandre;
 import fr.aesn.rade.persist.model.Departement;
 import fr.aesn.rade.persist.model.EntiteAdministrative;
 import fr.aesn.rade.persist.model.GenealogieEntiteAdmin;
@@ -130,7 +129,7 @@ public class CommuneController {
 
     String view = "communesearch";
 
-    List<Commune> communes = null;
+    List<CommunePlus> communes = null;
 
     if(!(criteria.getCodeInsee() == null
         && criteria.getCodeDepartement().equals("-1")
@@ -138,12 +137,18 @@ public class CommuneController {
         && criteria.getCodeRegion().equals("-1")
         && (criteria.getNomEnrichi() == null || criteria.getNomEnrichi().equals(""))
         && criteria.getDateEffet() == null)){
-      communes = communeService.getCommuneByCriteria(criteria.getCodeInsee(),
-          criteria.getCodeDepartement(),
-          criteria.getCodeCirconscription(),
-          criteria.getCodeRegion(),
+        
+      String codeDepartement = criteria.getCodeDepartement().equals("-1") ? null : criteria.getCodeDepartement();
+      String codeRegion = criteria.getCodeRegion().equals("-1") ? null : criteria.getCodeRegion();
+      String codeBassin =  criteria.getCodeCirconscription().equals("-1") ? null : criteria.getCodeCirconscription();
+        
+      communes = communePlusService.getCommuneByCriteria(criteria.getCodeInsee(),
+          codeDepartement,
+          codeBassin,
+          codeRegion,
           criteria.getNomEnrichi(),
           criteria.getDateEffet());
+      
       if(communes == null || communes.isEmpty()){
         model.addAttribute("errorRecherche", "La recherche n'a donné aucun résultat.");
       }
@@ -155,7 +160,7 @@ public class CommuneController {
       view = initRechercheCommuneView(criteria, model);
     }else{
       if(communes.size() == 1){
-        Commune commune = communes.iterator().next();
+        CommunePlus commune = communes.iterator().next();
         Date date = new Date();
         if(commune.getFinValidite() != null){
           date.setTime(commune.getFinValidite().getTime() - 86400000);
@@ -186,7 +191,7 @@ public class CommuneController {
     String view = "communesearch";
     log.debug("Display commune: {}", code);
     if (code != null) {
-      List<Commune> communes = communeService.getCommuneByCode(code);
+      List<CommunePlus> communes = communePlusService.getCommuneByCriteria(code, null,null,null,null,null);
 
       if(communes != null && communes.size() > 0){
         if(communes.size() == 1){
@@ -227,20 +232,17 @@ public class CommuneController {
     CommunePlus communePlus = communePlusService.getCommuneByCode(code, date);
 
     if(communePlus != null){
-      Commune communeInsee = communePlus.getCommuneInsee();
-
-      if(communeInsee != null){
         DisplayCommune displayCommune = new DisplayCommune();
-        displayCommune.setCodeInsee(communeInsee.getCodeInsee());
-        displayCommune.setNomEnrichi(communeInsee.getNomEnrichi());
-        displayCommune.setNomMajuscule(communeInsee.getNomMajuscule());
-        displayCommune.setDebutValidite(communeInsee.getDebutValidite());
-        displayCommune.setFinValidite(communeInsee.getFinValidite());
-        displayCommune.setArticle(communeInsee.getTypeNomClair().getArticle());
-        displayCommune.setArticleEnrichi(communeInsee.getArticleEnrichi());
+        displayCommune.setCodeInsee(communePlus.getCodeInsee());
+        displayCommune.setNomEnrichi(communePlus.getNomEnrichi());
+        displayCommune.setNomMajuscule(communePlus.getNomMajuscule());
+        displayCommune.setDebutValidite(communePlus.getDebutValidite());
+        displayCommune.setFinValidite(communePlus.getFinValidite());
+        displayCommune.setArticle(communePlus.getTypeNomClair().getArticle());
+        displayCommune.setArticleEnrichi(communePlus.getArticleEnrichi());
         displayCommune.setGenealogieParentCodeInsee(new HashMap<>());
 
-        for(GenealogieEntiteAdmin genealogieParent : communeInsee.getParents()){
+        for(GenealogieEntiteAdmin genealogieParent : communePlus.getParents()){
           displayCommune.setMotifModification(genealogieParent.getTypeGenealogie().getLibelleLong());
           displayCommune.setCommentaireModification(genealogieParent.getCommentaire());
           String codeInsee = null;
@@ -258,7 +260,7 @@ public class CommuneController {
         }
 
         displayCommune.setGenealogieEnfantCodeInsee(new HashMap<>());
-        for(GenealogieEntiteAdmin genealogieEnfant : communeInsee.getEnfants()){
+        for(GenealogieEntiteAdmin genealogieEnfant : communePlus.getEnfants()){
           String codeInsee = null;
           switch(genealogieEnfant.getParentEnfant().getEnfant().getTypeEntiteAdmin().getCode()){
           case "COM":
@@ -273,30 +275,25 @@ public class CommuneController {
           displayCommune.getGenealogieEnfantCodeInsee().put(genealogieEnfant, codeInsee);
         }
 
-        if(communeInsee.getParents().size() > 0){
-          GenealogieEntiteAdmin parent = communeInsee.getParents().iterator().next();
+        if(communePlus.getParents().size() > 0){
+          GenealogieEntiteAdmin parent = communePlus.getParents().iterator().next();
           displayCommune.setMotifModification(parent.getTypeGenealogie().getLibelleLong());
           displayCommune.setCommentaireModification(parent.getCommentaire());
         }
 
-        CommuneSandre communeSandre = communePlus.getCommuneSandre();
-        if(communeSandre != null){
-          displayCommune.setNomBassin(communeSandre.getCirconscriptionBassin().getLibelleLong());
-          displayCommune.setDateCreation(communeSandre.getDateCreationCommune());
-          displayCommune.setDateModification(communeSandre.getDateMajCommune());
-          displayCommune.setCodeBassin(communeSandre.getCirconscriptionBassin().getCode());
+        if(communePlus.getCirconscriptionBassin() != null){
+          displayCommune.setNomBassin(communePlus.getCirconscriptionBassin().getLibelleLong());
+          displayCommune.setDateCreation(communePlus.getDateCreationCommune());
+          displayCommune.setDateModification(communePlus.getDateMajCommune());
+          displayCommune.setCodeBassin(communePlus.getCirconscriptionBassin().getCode());
         }
 
-        Departement departement = departementService.getDepartementByCode(communeInsee.getDepartement(), communeInsee.getDebutValidite());
+        Departement departement = departementService.getDepartementByCode(communePlus.getDepartement(), communePlus.getDebutValidite());
         displayCommune.setNomDepartement(departement.getNomEnrichi());
         displayCommune.setCodeDepartement(departement.getCodeInsee());
-        displayCommune.setNomRegion(regionService.getRegionByCode(departement.getRegion(), communeInsee.getDebutValidite()).getNomEnrichi());
+        displayCommune.setNomRegion(regionService.getRegionByCode(departement.getRegion(), communePlus.getDebutValidite()).getNomEnrichi());
 
         view = initDetailCommuneView(displayCommune,  model);
-      }else{
-        model.addAttribute("errorRecherche", "La recherche n'a rien retourné");
-        view = initRechercheCommuneView(new SearchCommune(), model);
-      }
     }else{
       model.addAttribute("errorRecherche", "La recherche n'a rien retourné");
       view = initRechercheCommuneView(new SearchCommune(), model);
@@ -367,8 +364,8 @@ public class CommuneController {
     int lastCommuneIndex = allCommune ? searchCommune.getCommunes().size() : searchCommune.getLastCommuneIndex();
 
     for(int i = firstCommuneIndex ; i < lastCommuneIndex ; i++){
-      Commune commune = searchCommune.getCommunes().get(i);
-      Commune communed = communeService.getCommuneById(commune.getId());
+      CommunePlus commune = searchCommune.getCommunes().get(i);
+      Commune communed = communeService.getCommuneByCode(commune.getCodeInsee(), commune.getDebutValidite());
 
       DisplayCommune displayCommune = new DisplayCommune();
       displayCommune.setNomEnrichi(communed.getNomEnrichi());
