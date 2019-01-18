@@ -90,8 +90,8 @@ public interface CommuneJpaDao
                                                  Date date);
 
   /**
-   * Returns a List of all Commune from the given departement, commune name 
-   * and/or date.
+   * Returns a List of all Commune from the given departement, resembling the
+   * given name and valid at the given date.
    * @param dept the departement of the Communes.
    * @param nameLike a pattern to search for Communes with a name resembling.
    * @param date the date at which the Communes were valid.
@@ -105,8 +105,6 @@ public interface CommuneJpaDao
   public List<Commune> findByDepartementAndNameLikeValidOnDate(String dept,
                                                                String nameLike,
                                                                Date date);
-  
-
   /**
    * Returns a List of all Commune using the given Code INSEE, department and 
    * commune name 

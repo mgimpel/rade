@@ -59,7 +59,6 @@ public class TestCommuneJpaDao extends AbstractTestJpaDao {
         .addScript("db/sql/insert-CirconscriptionBassin.sql")
         .addScript("db/sql/insert-Region.sql")
         .addScript("db/sql/insert-Departement.sql")
-        .addScript("db/sql/insert-CommuneSandre-Test.sql")
         .addScript("db/sql/insert-Commune-Test.sql")
         .build();
   }

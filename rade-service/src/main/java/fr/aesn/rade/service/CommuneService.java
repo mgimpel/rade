@@ -291,5 +291,4 @@ public interface CommuneService {
   public Commune modX30Suppression(Date dateEffective, Audit audit,
                                    String codeInsee, String commentaire)
     throws InvalidArgumentException;
-  
 }

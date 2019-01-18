@@ -111,8 +111,8 @@ public class CommuneServiceImpl
       return communeJpaDao.findByDepartementAndNameLikeValidOnDate(dept, nameLike, date);
     return null;
   }
-  
-   /**
+
+  /**
    * Returns a Map of all Commune indexed by ID.
    * @return a Map of all Commune indexed by ID.
    */

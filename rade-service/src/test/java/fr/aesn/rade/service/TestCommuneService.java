@@ -97,7 +97,6 @@ public class TestCommuneService
         .addScript("db/sql/insert-CirconscriptionBassin.sql")
         .addScript("db/sql/insert-Region.sql")
         .addScript("db/sql/insert-Departement.sql")
-        .addScript("db/sql/insert-CommuneSandre-Test.sql")
         .addScript("db/sql/insert-Commune-Test.sql")
         .build();
   }
@@ -384,7 +383,7 @@ public class TestCommuneService
     assertNotNull(commune);
     assertEquals(newCommune, commune);
   }
-  
+
   /**
    * Tests MOD=210 : Retablissement, MOD=230 : Commune se separant.
    * @throws ParseException failed to parse date.
