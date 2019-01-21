@@ -167,8 +167,8 @@ public class CommunePlusServiceImpl
                                             Date dateEffet){
         List<Commune> communes = null;
 
-        codeInsee = codeInsee.isEmpty() ? "%" : codeInsee;
-        nomCommune = nomCommune.isEmpty() ? "%" : "%" + nomCommune + "%";
+        codeInsee = codeInsee == null || codeInsee.isEmpty() ? "%" : codeInsee;
+        nomCommune = nomCommune == null || nomCommune.isEmpty() ? "%" : "%" + nomCommune + "%";
         if(codeRegion == null || codeRegion.isEmpty()){
             codeDept = codeDept == null || codeDept.isEmpty() ? "%" : codeDept;   
         }
@@ -196,16 +196,16 @@ public class CommunePlusServiceImpl
               cp.setCommuneInsee(commune);
               CommuneSandre cs = null;
 
-              if(codeBassin != null && !codeBassin.isEmpty()){ 
-                  cs = communeSandreJpaDao.findByCirconscriptionBassin_CodeAndCodeCommune(codeBassin, commune.getCodeInsee());
+              if(codeBassin != null && !codeBassin.isEmpty()){
+                    cs = communeSandreJpaDao.findByCirconscriptionBassin_CodeAndCodeCommune(codeBassin, commune.getCodeInsee());
 
-                  if(cs != null && dateEffet != null && cs.getDateCreationCommune().getTime() > dateEffet.getTime()){
-                      cs = null;
-                  }
-                  if(cs == null){
-                    continue;
-                  }
-                  cp.setCommuneSandre(cs);  
+                    if(cs != null && dateEffet != null && cs.getDateCreationCommune().getTime() > dateEffet.getTime()){
+                        cs = null;
+                    }
+                    if(cs == null){
+                      continue;
+                    }
+                    cp.setCommuneSandre(cs); 
               }
               communesPlus.add(cp);
               
