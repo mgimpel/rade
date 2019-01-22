@@ -21,10 +21,15 @@ import java.io.FileOutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.StepContribution;
+import org.springframework.batch.core.StepExecution;
+import org.springframework.batch.core.StepExecutionListener;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
+import org.springframework.core.io.DefaultResourceLoader;
+import org.springframework.core.io.Resource;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -35,7 +40,23 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class ZipTasklet
-  implements Tasklet {
+  implements Tasklet, StepExecutionListener {
+  /** */
+  private String sourcefiles;
+  /** */
+  private String destfile;
+  /**
+   * Initialize the Tasklet by getting the various JobParameters.
+   * @param stepExecution Spring Batch stepExecution Object.
+   */
+  @Override
+  public void beforeStep(StepExecution stepExecution) {
+    sourcefiles = stepExecution.getJobParameters().getString("inputFile");
+    destfile = stepExecution.getJobParameters().getString("inputFile");
+    log.info("Zip Tasket for source files: {}, and destination file: {}",
+             sourcefiles, destfile);
+  }
+
   /**
    * Given the current context in the form of a step contribution, do whatever
    * is necessary to process this unit inside a transaction.
@@ -49,18 +70,34 @@ public class ZipTasklet
    * restarts.
    */
   @Override
-  public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext)
-    throws Exception {
-    log.info("Zipping Tasklet");
-    String zipFilePath = "file.zip";
+  public RepeatStatus execute(StepContribution contribution,
+                              ChunkContext chunkContext) {
+    Resource resource = new DefaultResourceLoader().getResource(destfile);
     try {
-      ZipOutputStream zop = new ZipOutputStream(new FileOutputStream(zipFilePath));
+      ZipOutputStream zop = new ZipOutputStream(new FileOutputStream(resource.getFile()));
       ZipEntry entry = new ZipEntry("file.csv"); //TODO
       zop.putNextEntry(entry);
       zop.close();
     } catch (Exception e) {
-      e.printStackTrace();
+      log.info("Error zipping file", e);
     }
     return RepeatStatus.FINISHED;
+  }
+
+  /**
+   * Give a listener a chance to modify the exit status from a step.
+   * The value returned will be combined with the normal exit status using
+   * ExitStatus.and(ExitStatus).
+   *
+   * Called after execution of step's processing logic (both successful or
+   * failed).
+   *
+   * @param stepExecution Spring Batch stepExecution Object.
+   * @return an ExitStatus to combine with the normal value.
+   * Return null to leave the old value unchanged.
+   */
+  @Override
+  public ExitStatus afterStep(StepExecution stepExecution) {
+    return null;
   }
 }

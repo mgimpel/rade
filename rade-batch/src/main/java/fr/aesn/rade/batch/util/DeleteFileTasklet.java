@@ -33,6 +33,10 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * Delete File Tasklet that deletes the given file.
+ *
+ * This task requires one JobParameter, "inputFile" which refers to the file to
+ * be deleted. it is referenced as a resource, i.e. "file:/path/to/file.ext".
+ *
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
 @Slf4j
@@ -59,12 +63,16 @@ public class DeleteFileTasklet
    * restarts.
    */
   @Override
-  public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) {
+  public RepeatStatus execute(StepContribution contribution,
+                              ChunkContext chunkContext) {
     Resource resource = new DefaultResourceLoader().getResource(filename);
     if (resource.exists() && resource.isFile()) {
       try {
-        resource.getFile().delete();
-        log.info("Deleted file: {}", resource);
+        if (resource.getFile().delete()) {
+          log.info("Deleted file: {}", resource);
+        } else {
+          log.info("Could not deleted file: {}", resource);
+        }
       } catch (IOException e) {
         log.info("Error trying to delete file: {}", resource);
       }
