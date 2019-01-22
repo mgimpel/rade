@@ -18,6 +18,9 @@
 package fr.aesn.rade.common.util;
 
 import java.text.Normalizer;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * String Utilities.
@@ -267,5 +270,20 @@ public class StringConversionUtils {
       buf.append(String.format("%04x", (int) ch));
     }
     return buf.toString();
+  }
+  
+  public static String formatDateUrl(Date date){
+      SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+      return sdf.format(date);
+  }
+  
+  public static Date formatDateUrl(String date) throws ParseException{
+      SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+      return sdf.parse(date);
+  }
+  
+  public static String formatDateIHM(Date date){
+      SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+      return sdf.format(date);
   }
 }

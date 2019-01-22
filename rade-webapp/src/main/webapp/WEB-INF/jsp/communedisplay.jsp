@@ -78,7 +78,7 @@
         <div class="demi pave" style="clear: none;">
             <fieldset>
                 <legend>Rattachement commune</legend>
-                <table>
+                <table style="height: 105px;">
                     <tr>
                         <td  width="38%"><label>Département : </label></td>
                         <td>${displayCommune.nomDepartement} (${displayCommune.codeDepartement})</td>  

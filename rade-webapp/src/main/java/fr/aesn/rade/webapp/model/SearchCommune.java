@@ -17,10 +17,10 @@
 package fr.aesn.rade.webapp.model;
 
 import fr.aesn.rade.common.modelplus.CommunePlus;
+import fr.aesn.rade.common.util.StringConversionUtils;
 import fr.aesn.rade.persist.model.CirconscriptionBassin;
 import fr.aesn.rade.persist.model.Departement;
 import fr.aesn.rade.persist.model.Region;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -34,7 +34,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
- *
+ * Formulaire de recherche d'une commune
  * @author sophie.belin
  */
 
@@ -63,12 +63,11 @@ public class SearchCommune {
    * @return Date
    */
   public String formatDate(Date date){
-    String formatDate = null;
+    String formatedDate = null;
     if(date != null){
-      SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-      formatDate = sdf.format(date);
+      formatedDate = StringConversionUtils.formatDateIHM(date);
     }
-    return formatDate;
+    return formatedDate;
   }
 
 

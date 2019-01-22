@@ -16,17 +16,13 @@
  */
 package fr.aesn.rade.webapp.export;
 
-import fr.aesn.rade.webapp.controller.ReferentielController;
 import fr.aesn.rade.webapp.model.DisplayCommune;
-import fr.aesn.rade.webapp.model.SearchCommune;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -43,98 +39,98 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
 
 /**
- *
+ * Export du résultat de la recherche de communes au format excel
  * @author sophie.belin
  */
+@Slf4j
 public class ExportExcel implements Export {
+  public final String EXPORT_NAME = "export-communes";
+    
   @Override
-  public void exportCommune(HttpServletResponse response, SearchCommune searchCommune){
-    try {
-      List<DisplayCommune> listeResultats = searchCommune.getListeResultats();
-      response.setContentType("application/vnd.ms-excel");
-      response.setHeader("Content-Disposition", "attachment; filename=\"export-communes.xls\"");
+  public void exportCommune(OutputStream output, List<DisplayCommune> listeCommunes){
+    Workbook wb = buildWorkbook(listeCommunes);
+    
+      try {
+          wb.write(output);
+      } catch (IOException ex) {
+          log.info("Erreur lors de la génération de l'export excel", ex.getMessage());
+      }
+  }
+  
+  private Workbook buildWorkbook(List<DisplayCommune> listeCommunes){
+    HSSFWorkbook wb = new HSSFWorkbook();
+    HSSFSheet sheet = wb.createSheet("Liste des communes");
 
-      OutputStream out = response.getOutputStream();
+    HSSFCellStyle cs = wb.createCellStyle();
+    CreationHelper createHelper = wb.getCreationHelper();
+    cs.setDataFormat(createHelper.createDataFormat().getFormat("mm/DD/yyyy"));
 
-      HSSFWorkbook wb = new HSSFWorkbook();
-      HSSFSheet sheet = wb.createSheet("Liste des communes");
+    CellStyle celleStyleHeader = getStyleHeader(wb);
 
-      HSSFCellStyle cs = wb.createCellStyle();
-      CreationHelper createHelper = wb.getCreationHelper();
-      cs.setDataFormat(createHelper.createDataFormat().getFormat("m/d/yy"));
+    HSSFRow header1 = sheet.createRow(0);
+    header1.createCell(0).setCellValue("Commune");
+    header1.getCell(0).setCellStyle(celleStyleHeader);
+    header1.createCell(4).setCellValue("Entité mère");
+    header1.getCell(4).setCellStyle(celleStyleHeader);
 
-      CellStyle celleStyleHeader = getStyleHeader(wb);
+    sheet.addMergedRegion(new CellRangeAddress(0,0,0,3));
+    sheet.addMergedRegion(new CellRangeAddress(0,0,4,5));
 
-      HSSFRow header1 = sheet.createRow(0);
-      header1.createCell(0).setCellValue("Commune");
-      header1.getCell(0).setCellStyle(celleStyleHeader);
-      header1.createCell(4).setCellValue("Entité mère");
-      header1.getCell(4).setCellStyle(celleStyleHeader);
+    HSSFRow header2 = sheet.createRow(1);
+    header2.createCell(0).setCellValue("Code");
+    header2.getCell(0).setCellStyle(celleStyleHeader);
+    header2.createCell(1).setCellValue("Nom");
+    header2.getCell(1).setCellStyle(celleStyleHeader);
+    header2.createCell(2).setCellValue("Début validité");
+    header2.getCell(2).setCellStyle(celleStyleHeader);
+    header2.createCell(3).setCellValue("Fin validité");
+    header2.getCell(3).setCellStyle(celleStyleHeader);
+    header2.createCell(4).setCellValue("Motif de modification");
+    header2.getCell(4).setCellStyle(celleStyleHeader);
+    header2.createCell(5).setCellValue("Code Insee");
+    header2.getCell(5).setCellStyle(celleStyleHeader);
 
-      sheet.addMergedRegion(new CellRangeAddress(0,0,0,3));
-      sheet.addMergedRegion(new CellRangeAddress(0,0,4,5));
+    for(int i = 0 ; i < listeCommunes.size() ; i++){
+      HSSFRow row = sheet.createRow(i+2);
+      DisplayCommune commune = listeCommunes.get(i);
+      row.createCell(0).setCellValue(commune.getCodeInsee());
+      row.getCell(0).setCellType(CellType.STRING);
+      row.createCell(1).setCellValue(commune.getNomEnrichi());
 
-      HSSFRow header2 = sheet.createRow(1);
-      header2.createCell(0).setCellValue("Code");
-      header2.getCell(0).setCellStyle(celleStyleHeader);
-      header2.createCell(1).setCellValue("Nom");
-      header2.getCell(1).setCellStyle(celleStyleHeader);
-      header2.createCell(2).setCellValue("Début validité");
-      header2.getCell(2).setCellStyle(celleStyleHeader);
-      header2.createCell(3).setCellValue("Fin validité");
-      header2.getCell(3).setCellStyle(celleStyleHeader);
-      header2.createCell(4).setCellValue("Motif de modification");
-      header2.getCell(4).setCellStyle(celleStyleHeader);
-      header2.createCell(5).setCellValue("Code Insee");
-      header2.getCell(5).setCellStyle(celleStyleHeader);
-
-      for(int i = 0 ; i < listeResultats.size() ; i++){
-        HSSFRow row = sheet.createRow(i+2);
-        DisplayCommune commune = listeResultats.get(i);
-        row.createCell(0).setCellValue(commune.getCodeInsee());
-        row.getCell(0).setCellType(CellType.STRING);
-        row.createCell(1).setCellValue(commune.getNomEnrichi());
-
-        if(commune.getDebutValidite() != null){
-          row.createCell(2).setCellValue(commune.getDebutValidite());
-          row.getCell(2).setCellStyle(cs);
-        }
-        if(commune.getFinValidite() != null){
-          row.createCell(3).setCellValue(commune.getFinValidite());
-          row.getCell(3).setCellStyle(cs);
-        }
-
-        row.createCell(4).setCellValue(commune.getMotifModification());
-
-        Iterator it = commune.getGenealogieParentCodeInsee().entrySet().iterator();
-
-        StringBuilder sb = new StringBuilder();
-        while(it.hasNext()){
-          Map.Entry pair = (Map.Entry)it.next();
-          sb.append(pair.getValue());
-          sb.append(" ");
-        }
-
-        row.createCell(5).setCellValue(sb.toString().trim());
+      if(commune.getDebutValidite() != null){
+        row.createCell(2).setCellValue(commune.getDebutValidite());
+        row.getCell(2).setCellStyle(cs);
+      }
+      if(commune.getFinValidite() != null){
+        row.createCell(3).setCellValue(commune.getFinValidite());
+        row.getCell(3).setCellStyle(cs);
       }
 
-      sheet.autoSizeColumn(0);
-      sheet.autoSizeColumn(1);
-      sheet.autoSizeColumn(2);
-      sheet.autoSizeColumn(3);
-      sheet.autoSizeColumn(4);
-      sheet.autoSizeColumn(5);
+      row.createCell(4).setCellValue(commune.getMotifModification());
 
-      wb.write(out);
-      out.flush();
-      out.close();
+      Iterator it = commune.getGenealogieParentCodeInsee().entrySet().iterator();
 
-    } catch (IOException ex) {
-      Logger.getLogger(ReferentielController.class.getName()).log(Level.SEVERE, null, ex);
+      StringBuilder sb = new StringBuilder();
+      while(it.hasNext()){
+        Map.Entry pair = (Map.Entry)it.next();
+        sb.append(pair.getValue());
+        sb.append(" ");
+      }
+
+      row.createCell(5).setCellValue(sb.toString().trim());
     }
+
+    sheet.autoSizeColumn(0);
+    sheet.autoSizeColumn(1);
+    sheet.autoSizeColumn(2);
+    sheet.autoSizeColumn(3);
+    sheet.autoSizeColumn(4);
+    sheet.autoSizeColumn(5);
+    
+    return wb;
   }
 
-  public CellStyle getStyleHeader(Workbook wb){
+  private CellStyle getStyleHeader(Workbook wb){
     CellStyle styleHeader = wb.createCellStyle();
     Font fontHeader = wb.createFont();
     fontHeader.setBold(true);

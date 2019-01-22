@@ -17,6 +17,7 @@
 package fr.aesn.rade.webapp.controller;
 
 import fr.aesn.rade.common.modelplus.CommunePlus;
+import fr.aesn.rade.common.util.StringConversionUtils;
 import fr.aesn.rade.persist.model.Departement;
 import fr.aesn.rade.service.BassinService;
 import fr.aesn.rade.service.CommunePlusService;
@@ -28,7 +29,9 @@ import fr.aesn.rade.webapp.export.ExportExcel;
 import fr.aesn.rade.webapp.model.DisplayCommune;
 import fr.aesn.rade.webapp.model.SearchCommune;
 import fr.aesn.rade.webapp.model.SearchEntite;
-import java.text.SimpleDateFormat;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -47,7 +50,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 /**
- *
+ * Spring MVC controller for searching and siplaying communes
  * @author sophie.belin
  */
 @Slf4j
@@ -66,6 +69,7 @@ public class CommuneController {
   private BassinService bassinService;
   @Autowired
   private CommunePlusService communePlusService;
+  private final String EXPORT_NAME = "export-communes";
 
   /**
    * Export de la liste des communes au format Excel
@@ -77,7 +81,17 @@ public class CommuneController {
       @ModelAttribute("searchCommune") SearchCommune searchCommune) {
     Export export = new ExportExcel();
     searchCommune.setListeResultats(paginateResultatsCommune(searchCommune, true));
-    export.exportCommune(response, searchCommune);
+    response.setContentType("application/vnd.ms-excel");
+    response.setHeader("Content-Disposition", "attachment; filename=\"" + EXPORT_NAME + "\"");
+    
+    try {
+      OutputStream out = response.getOutputStream();
+      export.exportCommune(out, searchCommune.getListeResultats());
+      out.flush();
+      out.close();
+    } catch (IOException ex) {
+      log.info("Echec lors de l'export au format excel", ex.getMessage());
+    }
   }
 
   /**
@@ -115,36 +129,36 @@ public class CommuneController {
 
   /**
    * Recherche d'une commune via la méthode POST en fonction d'une liste de critères
-   * @param criteria 
+   * @param searchCommune 
    * @param model
    * @return Vue de la page de recherche ou des résultats
    */
   @RequestMapping(value = "/resultats", method = RequestMethod.POST)
-  public String communedisplay(@ModelAttribute("searchCommune") SearchCommune criteria,
+  public String communedisplay(@ModelAttribute("searchCommune") SearchCommune searchCommune,
                                Model model) {
-    log.debug("Search for commune with criteria: {}", criteria);
+    log.debug("Search for commune with criteria: {}", searchCommune);
 
     String view = "communesearch";
 
     List<CommunePlus> communes = null;
 
-    if(!(criteria.getCodeInsee() == null
-        && criteria.getCodeDepartement().equals("-1")
-        && criteria.getCodeCirconscription().equals("-1")
-        && criteria.getCodeRegion().equals("-1")
-        && (criteria.getNomEnrichi() == null || criteria.getNomEnrichi().equals(""))
-        && criteria.getDateEffet() == null)){
+    if(!(searchCommune.getCodeInsee() == null
+        && searchCommune.getCodeDepartement().equals("-1")
+        && searchCommune.getCodeCirconscription().equals("-1")
+        && searchCommune.getCodeRegion().equals("-1")
+        && (searchCommune.getNomEnrichi() == null || searchCommune.getNomEnrichi().equals(""))
+        && searchCommune.getDateEffet() == null)){
         
-      String codeDepartement = criteria.getCodeDepartement().equals("-1") ? null : criteria.getCodeDepartement();
-      String codeRegion = criteria.getCodeRegion().equals("-1") ? null : criteria.getCodeRegion();
-      String codeBassin =  criteria.getCodeCirconscription().equals("-1") ? null : criteria.getCodeCirconscription();
+      String codeDepartement = searchCommune.getCodeDepartement().equals("-1") ? null : searchCommune.getCodeDepartement();
+      String codeRegion = searchCommune.getCodeRegion().equals("-1") ? null : searchCommune.getCodeRegion();
+      String codeBassin =  searchCommune.getCodeCirconscription().equals("-1") ? null : searchCommune.getCodeCirconscription();
         
-      communes = communePlusService.getCommuneByCriteria(criteria.getCodeInsee(),
+      communes = communePlusService.getCommuneByCriteria(searchCommune.getCodeInsee(),
           codeDepartement,
           codeBassin,
           codeRegion,
-          criteria.getNomEnrichi(),
-          criteria.getDateEffet());
+          searchCommune.getNomEnrichi(),
+          searchCommune.getDateEffet());
       
       if(communes == null || communes.isEmpty()){
         model.addAttribute("errorRecherche", "La recherche n'a donné aucun résultat.");
@@ -154,7 +168,7 @@ public class CommuneController {
     }
 
     if(communes == null || communes.isEmpty()){
-      view = initRechercheCommuneView(criteria, model);
+      view = initRechercheCommuneView(searchCommune, model);
     }else{
       if(communes.size() == 1){
         CommunePlus commune = communes.iterator().next();
@@ -162,12 +176,11 @@ public class CommuneController {
         if(commune.getFinValiditeCommuneInsee() != null){
           date.setTime(commune.getFinValiditeCommuneInsee().getTime() - 86400000);
         }
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        view = communedisplay(commune.getCodeInsee(), sdf.format(date), model);
+        return "redirect:/referentiel/commune/" + commune.getCodeInsee() + "?date=" + StringConversionUtils.formatDateUrl(date);
       }else{
-        criteria.setPage("1");
-        criteria.setCommunes(communes);
-        view = initResultatsRechercheCommuneView(criteria, model);
+        searchCommune.setPage("1");
+        searchCommune.setCommunes(communes);
+        view = initResultatsRechercheCommuneView(searchCommune, model);
       }
     }
 
@@ -183,17 +196,29 @@ public class CommuneController {
    * de résultats
    */
   @RequestMapping(value = "/{code}")
-  public String communedisplay(@PathVariable("code") String code, 
+  public String communedisplay(HttpServletRequest request, @PathVariable("code") String code, 
                                Model model) {
     String view = "communesearch";
+    
+    Date dateValidite = null;
+
+    if(request.getParameter("date") != null){
+        String dateString = (String)request.getParameter("date");
+        try {
+             dateValidite = StringConversionUtils.formatDateUrl(dateString);
+        } catch (ParseException ex) {
+            log.info("Erreur : le format de la date n'est pas valide et doit être yyyy-MM-dd : " + dateString, ex.toString());
+        }
+    }
     log.debug("Display commune: {}", code);
     if (code != null) {
-      List<CommunePlus> communes = communePlusService.getCommuneByCriteria(code, null,null,null,null,null);
+      List<CommunePlus> communes = communePlusService.getCommuneByCriteria(code, null,null,null,null,dateValidite);
 
       if(communes != null && communes.size() > 0){
         if(communes.size() == 1){
-          view = communedisplay(communes.get(0).getCodeInsee(),
-              communes.get(0).getDebutValiditeCommuneInsee().toString(), model);
+          DisplayCommune displayCommune = new DisplayCommune(communes.get(0), communeService, departementService, regionService);
+          view = initDetailCommuneView(displayCommune, model);
+          
         }else{
           SearchCommune searchCommune = new SearchCommune();
           searchCommune.setCodeInsee(code);
@@ -207,33 +232,6 @@ public class CommuneController {
     }else{
       view = initRechercheCommuneView(new SearchCommune(), model);
       model.addAttribute("errorRecherche", "La recherche n'a rien retourné");
-    }
-
-    return view;
-  }
-
-  /**
-   * Recherche d'une commune via son code Insee et sa date de validité
-   * @param code 
-   * @param date Date de validité de la commune
-   * @param model
-   * @return Vue de la page de recherche de communes avec message d'erreur ou du détail 
-   * de la commune si elle existe
-   */
-  @RequestMapping(value = "/{code}/{date}")
-  public String communedisplay(@PathVariable("code") String code, 
-                               @PathVariable("date") String date,
-                               Model model) {
-    String view = "communesearch";
-
-    CommunePlus communePlus = communePlusService.getCommuneByCode(code, date);
-
-    if(communePlus != null){
-        DisplayCommune displayCommune = new DisplayCommune(communePlus,communeService, departementService, regionService);
-        view = initDetailCommuneView(displayCommune,  model);
-    }else{
-      model.addAttribute("errorRecherche", "La recherche n'a rien retourné");
-      view = initRechercheCommuneView(new SearchCommune(), model);
     }
 
     return view;

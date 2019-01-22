@@ -16,14 +16,15 @@
  */
 package fr.aesn.rade.webapp.export;
 
-import fr.aesn.rade.webapp.model.SearchCommune;
-import javax.servlet.http.HttpServletResponse;
+import fr.aesn.rade.webapp.model.DisplayCommune;
+import java.io.OutputStream;
+import java.util.List;
 
 /**
- *
+ * Classe d'export du résultat de la recherche de communes
  * @author sophie.belin
  */
 public interface Export {
-  public void exportCommune(HttpServletResponse response,
-      SearchCommune searchCommune);
+  public void exportCommune(OutputStream output,
+      List<DisplayCommune> listeCommunes);
 }

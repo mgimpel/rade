@@ -21,7 +21,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- *
+ * Formulaire de recherche d'une entité adminstrative, présent sur toutes les 
+ * pages
  * @author fadhel.helali
  */
 @Getter @Setter

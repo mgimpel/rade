@@ -17,6 +17,7 @@
 /* $Id$ */
 package fr.aesn.rade.webapp.controller;
 
+import fr.aesn.rade.common.util.StringConversionUtils;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,6 @@ import fr.aesn.rade.persist.model.Region;
 import fr.aesn.rade.service.RegionService;
 import fr.aesn.rade.webapp.model.SearchEntite;
 import io.micrometer.core.instrument.util.StringUtils;
-import java.text.SimpleDateFormat;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
@@ -70,8 +70,7 @@ public class ReferentielController {
       // une fois la combo des types dégrisée, décommenter la ligne suivante
       String type = "commune"; // entite.getType();
       if(COMMUNE.equalsIgnoreCase(type)) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        view = "redirect:/referentiel/commune/" + entite.getCode() + "/" + sdf.format(new Date());
+        view = "redirect:/referentiel/commune/" + entite.getCode() + "?date=" + StringConversionUtils.formatDateUrl(new Date());
       }
       model.addAttribute("entite", new SearchEntite());
     }

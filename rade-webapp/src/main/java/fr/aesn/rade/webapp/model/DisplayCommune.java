@@ -17,13 +17,13 @@
 package fr.aesn.rade.webapp.model;
 
 import fr.aesn.rade.common.modelplus.CommunePlus;
+import fr.aesn.rade.common.util.StringConversionUtils;
 import fr.aesn.rade.persist.model.Departement;
 import fr.aesn.rade.persist.model.EntiteAdministrative;
 import fr.aesn.rade.persist.model.GenealogieEntiteAdmin;
 import fr.aesn.rade.service.CommuneService;
 import fr.aesn.rade.service.DepartementService;
 import fr.aesn.rade.service.RegionService;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import lombok.Getter;
@@ -32,7 +32,7 @@ import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
- *
+ * Affichage d'une commune
  * @author sophie.belin
  */
 @Getter @Setter @NoArgsConstructor
@@ -105,12 +105,11 @@ public class DisplayCommune {
    */
   public String getDateEffet(Date finValidite){
     Date date = new Date();
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
     if(finValidite != null){
       date.setTime(finValidite.getTime() - 86400000);
     }
-    return sdf.format(date);
+    return StringConversionUtils.formatDateUrl(date);
   }
 
   /**
@@ -120,8 +119,7 @@ public class DisplayCommune {
    */
   public String formatDate(Date date){
     if(date != null){
-      SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-      return sdf.format(date);
+      return StringConversionUtils.formatDateIHM(date);
     }
     return null;
   }
@@ -133,7 +131,7 @@ public class DisplayCommune {
    */
   public String entiteUrl(EntiteAdministrative entite, String codeInsee){
     if(entite != null){
-      return "/referentiel/commune/" + codeInsee + "/" + getDateEffet(entite.getFinValidite());
+      return "/referentiel/commune/" + codeInsee + "?date=" + getDateEffet(entite.getFinValidite());
     }
     return null;
   }
