@@ -315,34 +315,34 @@ public class TestCommuneJpaDao extends AbstractTestJpaDao {
   public void testFindByCodeInseeLikeAndDepartementLikeAndNomEnrichiLikeValidOnDate() throws ParseException {
       List<Commune> result;
       SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-      result = jpaDao.findByCodeInseeLikeAndDepartementLikeAndNomEnrichiIgnoreCaseLikeValidOnDate("91001","91","%", sdf.parse("2018-01-01"));
+      result = jpaDao.findByCodeInseeLikeAndDepartementLikeAndNomEnrichiLikeIgnoreCaseValidOnDate("91001","91","%", sdf.parse("2018-01-01"));
       assertEquals("Hibernate returned the wrong number of results",
                  1, result.size());   
-      result = jpaDao.findByCodeInseeLikeAndDepartementLikeAndNomEnrichiIgnoreCaseLikeValidOnDate("%","91","%", sdf.parse("2018-01-01"));
+      result = jpaDao.findByCodeInseeLikeAndDepartementLikeAndNomEnrichiLikeIgnoreCaseValidOnDate("%","91","%", sdf.parse("2018-01-01"));
       assertEquals("Hibernate returned the wrong number of results",
                  196, result.size());  
-      result = jpaDao.findByCodeInseeLikeAndDepartementLikeAndNomEnrichiIgnoreCaseLikeValidOnDate("91001","%","%",sdf.parse("2018-01-01"));
+      result = jpaDao.findByCodeInseeLikeAndDepartementLikeAndNomEnrichiLikeIgnoreCaseValidOnDate("91001","%","%",sdf.parse("2018-01-01"));
       assertEquals("Hibernate returned the wrong number of results",
                  1, result.size()); 
-      result = jpaDao.findByCodeInseeLikeAndDepartementLikeAndNomEnrichiIgnoreCaseLikeValidOnDate("%","%","%",sdf.parse("2018-01-01"));
+      result = jpaDao.findByCodeInseeLikeAndDepartementLikeAndNomEnrichiLikeIgnoreCaseValidOnDate("%","%","%",sdf.parse("2018-01-01"));
       assertEquals("Hibernate returned the wrong number of results",
                  632, result.size()); 
-      result = jpaDao.findByCodeInseeLikeAndDepartementLikeAndNomEnrichiIgnoreCaseLikeValidOnDate("91001","%","%évi%",sdf.parse("2018-01-01"));
+      result = jpaDao.findByCodeInseeLikeAndDepartementLikeAndNomEnrichiLikeIgnoreCaseValidOnDate("91001","%","%évi%",sdf.parse("2018-01-01"));
       assertEquals("Hibernate returned the wrong number of results",
                  1, result.size());   
-      result = jpaDao.findByCodeInseeLikeAndDepartementLikeAndNomEnrichiIgnoreCaseLikeValidOnDate("%","%","%évi%",sdf.parse("2018-01-01"));
+      result = jpaDao.findByCodeInseeLikeAndDepartementLikeAndNomEnrichiLikeIgnoreCaseValidOnDate("%","%","%évi%",sdf.parse("2018-01-01"));
       assertEquals("Hibernate returned the wrong number of results",
                  3, result.size());  
-      result = jpaDao.findByCodeInseeLikeAndDepartementLikeAndNomEnrichiIgnoreCaseLikeValidOnDate("91001","91","%évi%",sdf.parse("2018-01-01"));
+      result = jpaDao.findByCodeInseeLikeAndDepartementLikeAndNomEnrichiLikeIgnoreCaseValidOnDate("91001","91","%évi%",sdf.parse("2018-01-01"));
       assertEquals("Hibernate returned the wrong number of results",
                  1, result.size()); 
-      result = jpaDao.findByCodeInseeLikeAndDepartementLikeAndNomEnrichiIgnoreCaseLikeValidOnDate("%","91","%évi%",sdf.parse("2018-01-01"));
+      result = jpaDao.findByCodeInseeLikeAndDepartementLikeAndNomEnrichiLikeIgnoreCaseValidOnDate("%","91","%évi%",sdf.parse("2018-01-01"));
       assertEquals("Hibernate returned the wrong number of results",
                  2, result.size()); 
-      result = jpaDao.findByCodeInseeLikeAndDepartementLikeAndNomEnrichiIgnoreCaseLikeValidOnDate("91001","91","%aaa%",sdf.parse("2018-01-01"));
+      result = jpaDao.findByCodeInseeLikeAndDepartementLikeAndNomEnrichiLikeIgnoreCaseValidOnDate("91001","91","%aaa%",sdf.parse("2018-01-01"));
       assertEquals("Hibernate returned the wrong number of results",
                  0, result.size()); 
-      result = jpaDao.findByCodeInseeLikeAndDepartementLikeAndNomEnrichiIgnoreCaseLikeValidOnDate("%","91","%aaa%",sdf.parse("2018-01-01"));
+      result = jpaDao.findByCodeInseeLikeAndDepartementLikeAndNomEnrichiLikeIgnoreCaseValidOnDate("%","91","%aaa%",sdf.parse("2018-01-01"));
       assertEquals("Hibernate returned the wrong number of results",
                  0, result.size()); 
   }

@@ -187,27 +187,27 @@ public class CommunePlus {
     return insee.getTypeNomClair();
   }
   
-  public Date getDebutValidite(){
+  public Date getDebutValiditeCommuneInsee(){
       return insee.getDebutValidite();
   }
   
-  public Date getFinValidite(){
+  public Date getFinValiditeCommuneInsee(){
       return insee.getFinValidite();
   }
   
-  public Date getDateCreationCommune(){
+  public Date getDateCreationCommuneSandre(){
       return sandre.getDateCreationCommune();
   }
   
-  public Date getDateMajCommune(){
+  public Date getDateMajCommuneSandre(){
       return sandre.getDateMajCommune();
   }
   
-  public Set<GenealogieEntiteAdmin> getParents(){
+  public Set<GenealogieEntiteAdmin> getParentsCommuneInsee(){
       return insee.getParents();
   }
   
-  public Set<GenealogieEntiteAdmin> getEnfants(){
+  public Set<GenealogieEntiteAdmin> getEnfantsCommuneInsee(){
       return insee.getEnfants();
   }
 }

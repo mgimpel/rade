@@ -132,7 +132,7 @@ public interface CommuneJpaDao
                + " AND (c.debutValidite <= ?4)"
                + " AND (c.finValidite IS NULL OR c.finValidite > ?4)"
                + " ORDER BY c.nomEnrichi")
-  public List<Commune> findByCodeInseeLikeAndDepartementLikeAndNomEnrichiIgnoreCaseLikeValidOnDate(String codeInsee,
+  public List<Commune> findByCodeInseeLikeAndDepartementLikeAndNomEnrichiLikeIgnoreCaseValidOnDate(String codeInsee,
                                                                                          String departement, 
                                                                                          String nameLike, 
                                                                                          Date date);

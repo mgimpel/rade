@@ -16,8 +16,13 @@
  */
 package fr.aesn.rade.webapp.model;
 
+import fr.aesn.rade.common.modelplus.CommunePlus;
+import fr.aesn.rade.persist.model.Departement;
 import fr.aesn.rade.persist.model.EntiteAdministrative;
 import fr.aesn.rade.persist.model.GenealogieEntiteAdmin;
+import fr.aesn.rade.service.CommuneService;
+import fr.aesn.rade.service.DepartementService;
+import fr.aesn.rade.service.RegionService;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -49,6 +54,51 @@ public class DisplayCommune {
   HashMap<GenealogieEntiteAdmin, String> genealogieParentCodeInsee;
   HashMap<GenealogieEntiteAdmin, String> genealogieEnfantCodeInsee;
 
+  public DisplayCommune(CommunePlus communePlus, CommuneService communeService, DepartementService departementService, RegionService regionService){
+      
+    this.codeInsee = communePlus.getCodeInsee();     
+    this.nomMajuscule = communePlus.getNomMajuscule();
+    this.nomEnrichi = communePlus.getNomEnrichi();
+    this.debutValidite = communePlus.getDebutValiditeCommuneInsee();
+    this.finValidite = communePlus.getFinValiditeCommuneInsee();
+    this.article = communePlus.getTypeNomClair().getArticle();
+    this.articleEnrichi = communePlus.getArticleEnrichi();
+    this.genealogieParentCodeInsee = new HashMap<>();
+    this.genealogieEnfantCodeInsee = new HashMap<>();
+
+    for(GenealogieEntiteAdmin genealogieParent : communePlus.getParentsCommuneInsee()){
+      this.setMotifModification(genealogieParent.getTypeGenealogie().getLibelleLong());
+      EntiteAdministrative entiteAdmin = genealogieParent.getParentEnfant().getParent();
+      assert genealogieParent.getParentEnfant().getParent().getTypeEntiteAdmin().getCode().equals("COM");
+      
+      this.getGenealogieParentCodeInsee().put(genealogieParent, communeService.getCommuneById(entiteAdmin.getId()).getCodeInsee());
+    }
+    
+    for(GenealogieEntiteAdmin genealogieEnfant : communePlus.getEnfantsCommuneInsee()){
+      EntiteAdministrative entiteAdmin = genealogieEnfant.getParentEnfant().getParent();
+      assert genealogieEnfant.getParentEnfant().getEnfant().getTypeEntiteAdmin().getCode().equals("COM");
+      this.getGenealogieEnfantCodeInsee().put(genealogieEnfant, communeService.getCommuneById(entiteAdmin.getId()).getCodeInsee());
+    }
+
+    if(communePlus.getParentsCommuneInsee().size() > 0){
+      GenealogieEntiteAdmin parent = communePlus.getParentsCommuneInsee().iterator().next();
+      this.setMotifModification(parent.getTypeGenealogie().getLibelleLong());
+      this.setCommentaireModification(parent.getCommentaire());
+    }
+
+    if(communePlus.getCirconscriptionBassin() != null){
+      this.setNomBassin(communePlus.getCirconscriptionBassin().getLibelleLong());
+      this.setDateCreation(communePlus.getDateCreationCommuneSandre());
+      this.setDateModification(communePlus.getDateMajCommuneSandre());
+      this.setCodeBassin(communePlus.getCirconscriptionBassin().getCode());
+    }
+
+    Departement departement = departementService.getDepartementByCode(communePlus.getDepartement(), communePlus.getDebutValiditeCommuneInsee());
+    this.setNomDepartement(departement.getNomEnrichi());
+    this.setCodeDepartement(departement.getCodeInsee());
+    this.setNomRegion(regionService.getRegionByCode(departement.getRegion(), communePlus.getDebutValiditeCommuneInsee()).getNomEnrichi());
+  }
+  
   /**
    * @param finValidite 
    * @return date
@@ -83,26 +133,7 @@ public class DisplayCommune {
    */
   public String entiteUrl(EntiteAdministrative entite, String codeInsee){
     if(entite != null){
-      String typeCommune = null;
-      switch(entite.getTypeEntiteAdmin().getCode()){
-      case "COM":
-        typeCommune = "commune";
-        break;
-      case "REG":
-        typeCommune = "departement";
-        break;
-      case "DEP":
-        typeCommune = "region";
-      }
-
-      StringBuilder sb = new StringBuilder();
-      sb.append("/referentiel/");
-      sb.append(typeCommune);
-      sb.append("/");
-      sb.append(codeInsee);
-      sb.append("/");
-      sb.append(getDateEffet(entite.getFinValidite()));
-      return sb.toString();
+      return "/referentiel/commune/" + codeInsee + "/" + getDateEffet(entite.getFinValidite());
     }
     return null;
   }

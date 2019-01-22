@@ -181,7 +181,7 @@ public class CommunePlusServiceImpl
             }
         }else{
             if(codeRegion == null || codeRegion.isEmpty()){
-                communes = communeJpaDao.findByCodeInseeLikeAndDepartementLikeAndNomEnrichiIgnoreCaseLikeValidOnDate(codeInsee, codeDept, nomCommune, dateEffet);
+                communes = communeJpaDao.findByCodeInseeLikeAndDepartementLikeAndNomEnrichiLikeIgnoreCaseValidOnDate(codeInsee, codeDept, nomCommune, dateEffet);
             }else{
                 communes = communeJpaDao.findByCodeInseeLikeAndRegionLikeAndNomEnrichiLikeIgnoreCaseValidOnDate(codeInsee, codeRegion, nomCommune, dateEffet);
             }
@@ -197,8 +197,8 @@ public class CommunePlusServiceImpl
               CommuneSandre cs = null;
 
               if(codeBassin != null && !codeBassin.isEmpty()){
-                    cs = communeSandreJpaDao.findByCirconscriptionBassin_CodeAndCodeCommune(codeBassin, commune.getCodeInsee());
-
+                    cs = communeSandreJpaDao.findByCodeInseeValidOnDate(commune.getCodeInsee(), commune.getFinValidite());
+                 
                     if(cs != null && dateEffet != null && cs.getDateCreationCommune().getTime() > dateEffet.getTime()){
                         cs = null;
                     }

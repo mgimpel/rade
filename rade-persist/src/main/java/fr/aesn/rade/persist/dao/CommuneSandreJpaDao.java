@@ -52,12 +52,4 @@ public interface CommuneSandreJpaDao
                + " AND (c.dateCreationCommune IS NULL"
                  + " OR c.dateCreationCommune <= ?2)")
   public CommuneSandre findByCodeInseeValidOnDate(String codeInsee, Date date);
-  
-  /**
-   * Returns the Commune with the given circonscription code and commune code
-   * @param circonscriptionBassin the Code of the circonscription
-   * @param codeCommune the code INSEE of the commune
-   * @return the valid Commune.
-   */
-  public CommuneSandre findByCirconscriptionBassin_CodeAndCodeCommune(String circonscriptionBassin, String codeCommune);
 }

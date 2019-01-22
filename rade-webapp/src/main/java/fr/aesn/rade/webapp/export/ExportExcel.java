@@ -28,15 +28,17 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
-import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.CreationHelper;
+import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
 
@@ -90,7 +92,7 @@ public class ExportExcel implements Export {
         HSSFRow row = sheet.createRow(i+2);
         DisplayCommune commune = listeResultats.get(i);
         row.createCell(0).setCellValue(commune.getCodeInsee());
-        row.getCell(0).setCellType(Cell.CELL_TYPE_STRING);
+        row.getCell(0).setCellType(CellType.STRING);
         row.createCell(1).setCellValue(commune.getNomEnrichi());
 
         if(commune.getDebutValidite() != null){
@@ -135,17 +137,17 @@ public class ExportExcel implements Export {
   public CellStyle getStyleHeader(Workbook wb){
     CellStyle styleHeader = wb.createCellStyle();
     Font fontHeader = wb.createFont();
-    fontHeader.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+    fontHeader.setBold(true);
     fontHeader.setFontName("Arial");
     styleHeader.setFont(fontHeader);
-    styleHeader.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+    styleHeader.setFillPattern(FillPatternType.SOLID_FOREGROUND);
     styleHeader.setWrapText(true);
-    styleHeader.setFillForegroundColor(new HSSFColor.GREY_25_PERCENT().getIndex());
-    styleHeader.setAlignment(HSSFCellStyle.ALIGN_CENTER);
-    styleHeader.setBorderBottom(HSSFCellStyle.BORDER_THIN);
-    styleHeader.setBorderLeft(HSSFCellStyle.BORDER_THIN);
-    styleHeader.setBorderRight(HSSFCellStyle.BORDER_THIN);
-    styleHeader.setBorderTop(HSSFCellStyle.BORDER_THIN);
+    styleHeader.setFillForegroundColor(HSSFColor.HSSFColorPredefined.GREY_25_PERCENT.getIndex());
+    styleHeader.setAlignment(HorizontalAlignment.CENTER);
+    styleHeader.setBorderBottom(BorderStyle.THIN);
+    styleHeader.setBorderLeft(BorderStyle.THIN);
+    styleHeader.setBorderRight(BorderStyle.THIN);
+    styleHeader.setBorderTop(BorderStyle.THIN);
     return styleHeader;
   }
 }

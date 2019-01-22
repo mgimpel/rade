@@ -17,10 +17,7 @@
 package fr.aesn.rade.webapp.controller;
 
 import fr.aesn.rade.common.modelplus.CommunePlus;
-import fr.aesn.rade.persist.model.Commune;
 import fr.aesn.rade.persist.model.Departement;
-import fr.aesn.rade.persist.model.EntiteAdministrative;
-import fr.aesn.rade.persist.model.GenealogieEntiteAdmin;
 import fr.aesn.rade.service.BassinService;
 import fr.aesn.rade.service.CommunePlusService;
 import fr.aesn.rade.service.CommuneService;
@@ -162,8 +159,8 @@ public class CommuneController {
       if(communes.size() == 1){
         CommunePlus commune = communes.iterator().next();
         Date date = new Date();
-        if(commune.getFinValidite() != null){
-          date.setTime(commune.getFinValidite().getTime() - 86400000);
+        if(commune.getFinValiditeCommuneInsee() != null){
+          date.setTime(commune.getFinValiditeCommuneInsee().getTime() - 86400000);
         }
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         view = communedisplay(commune.getCodeInsee(), sdf.format(date), model);
@@ -196,7 +193,7 @@ public class CommuneController {
       if(communes != null && communes.size() > 0){
         if(communes.size() == 1){
           view = communedisplay(communes.get(0).getCodeInsee(),
-              communes.get(0).getDebutValidite().toString(), model);
+              communes.get(0).getDebutValiditeCommuneInsee().toString(), model);
         }else{
           SearchCommune searchCommune = new SearchCommune();
           searchCommune.setCodeInsee(code);
@@ -232,67 +229,7 @@ public class CommuneController {
     CommunePlus communePlus = communePlusService.getCommuneByCode(code, date);
 
     if(communePlus != null){
-        DisplayCommune displayCommune = new DisplayCommune();
-        displayCommune.setCodeInsee(communePlus.getCodeInsee());
-        displayCommune.setNomEnrichi(communePlus.getNomEnrichi());
-        displayCommune.setNomMajuscule(communePlus.getNomMajuscule());
-        displayCommune.setDebutValidite(communePlus.getDebutValidite());
-        displayCommune.setFinValidite(communePlus.getFinValidite());
-        displayCommune.setArticle(communePlus.getTypeNomClair().getArticle());
-        displayCommune.setArticleEnrichi(communePlus.getArticleEnrichi());
-        displayCommune.setGenealogieParentCodeInsee(new HashMap<>());
-
-        for(GenealogieEntiteAdmin genealogieParent : communePlus.getParents()){
-          displayCommune.setMotifModification(genealogieParent.getTypeGenealogie().getLibelleLong());
-          displayCommune.setCommentaireModification(genealogieParent.getCommentaire());
-          String codeInsee = null;
-          switch(genealogieParent.getParentEnfant().getParent().getTypeEntiteAdmin().getCode()){
-          case "COM":
-            codeInsee = communeService.getCommuneById(genealogieParent.getParentEnfant().getParent().getId()).getCodeInsee();
-            break;
-          case "REG":
-            codeInsee = regionService.getRegionById(genealogieParent.getParentEnfant().getParent().getId()).getCodeInsee();
-            break;
-          case "DEP":
-            codeInsee = departementService.getDepartementById(genealogieParent.getParentEnfant().getParent().getId()).getCodeInsee();
-          }
-          displayCommune.getGenealogieParentCodeInsee().put(genealogieParent, codeInsee);
-        }
-
-        displayCommune.setGenealogieEnfantCodeInsee(new HashMap<>());
-        for(GenealogieEntiteAdmin genealogieEnfant : communePlus.getEnfants()){
-          String codeInsee = null;
-          switch(genealogieEnfant.getParentEnfant().getEnfant().getTypeEntiteAdmin().getCode()){
-          case "COM":
-            codeInsee = communeService.getCommuneById(genealogieEnfant.getParentEnfant().getEnfant().getId()).getCodeInsee();
-            break;
-          case "REG":
-            codeInsee = regionService.getRegionById(genealogieEnfant.getParentEnfant().getEnfant().getId()).getCodeInsee();
-            break;
-          case "DEP":
-            codeInsee = departementService.getDepartementById(genealogieEnfant.getParentEnfant().getEnfant().getId()).getCodeInsee();
-          }
-          displayCommune.getGenealogieEnfantCodeInsee().put(genealogieEnfant, codeInsee);
-        }
-
-        if(communePlus.getParents().size() > 0){
-          GenealogieEntiteAdmin parent = communePlus.getParents().iterator().next();
-          displayCommune.setMotifModification(parent.getTypeGenealogie().getLibelleLong());
-          displayCommune.setCommentaireModification(parent.getCommentaire());
-        }
-
-        if(communePlus.getCirconscriptionBassin() != null){
-          displayCommune.setNomBassin(communePlus.getCirconscriptionBassin().getLibelleLong());
-          displayCommune.setDateCreation(communePlus.getDateCreationCommune());
-          displayCommune.setDateModification(communePlus.getDateMajCommune());
-          displayCommune.setCodeBassin(communePlus.getCirconscriptionBassin().getCode());
-        }
-
-        Departement departement = departementService.getDepartementByCode(communePlus.getDepartement(), communePlus.getDebutValidite());
-        displayCommune.setNomDepartement(departement.getNomEnrichi());
-        displayCommune.setCodeDepartement(departement.getCodeInsee());
-        displayCommune.setNomRegion(regionService.getRegionByCode(departement.getRegion(), communePlus.getDebutValidite()).getNomEnrichi());
-
+        DisplayCommune displayCommune = new DisplayCommune(communePlus,communeService, departementService, regionService);
         view = initDetailCommuneView(displayCommune,  model);
     }else{
       model.addAttribute("errorRecherche", "La recherche n'a rien retourné");
@@ -310,12 +247,10 @@ public class CommuneController {
    */
   public String initDetailCommuneView(DisplayCommune displayCommune, 
                                       Model model){
-    StringBuilder sb = new StringBuilder();
-    sb.append("Commune / Détail commune ");
-    sb.append(displayCommune.getCodeInsee());
-    sb.append(" ");
-    sb.append(displayCommune.getNomEnrichi());
-    model.addAttribute("titre", sb.toString());
+    model.addAttribute("titre", "Commune / Détail commune " 
+                                 + displayCommune.getCodeInsee() 
+                                 + " " 
+                                 + displayCommune.getNomEnrichi());
     model.addAttribute("displayCommune", displayCommune);
     return "communedisplay";
   }
@@ -364,35 +299,8 @@ public class CommuneController {
     int lastCommuneIndex = allCommune ? searchCommune.getCommunes().size() : searchCommune.getLastCommuneIndex();
 
     for(int i = firstCommuneIndex ; i < lastCommuneIndex ; i++){
-      CommunePlus commune = searchCommune.getCommunes().get(i);
-      Commune communed = communeService.getCommuneByCode(commune.getCodeInsee(), commune.getDebutValidite());
-
-      DisplayCommune displayCommune = new DisplayCommune();
-      displayCommune.setNomEnrichi(communed.getNomEnrichi());
-      displayCommune.setCodeInsee(communed.getCodeInsee());
-      displayCommune.setDebutValidite(communed.getDebutValidite());
-      displayCommune.setFinValidite(communed.getFinValidite());
-
-      displayCommune.setGenealogieParentCodeInsee(new HashMap<>());
-
-      for(GenealogieEntiteAdmin genealogieParent : communed.getParents()){
-        displayCommune.setMotifModification(genealogieParent.getTypeGenealogie().getLibelleLong());
-        String codeInsee = null;
-        EntiteAdministrative entiteAdmin = genealogieParent.getParentEnfant().getParent();
-        switch(genealogieParent.getParentEnfant().getParent().getTypeEntiteAdmin().getCode()){
-        case "COM":
-          codeInsee = communeService.getCommuneById(entiteAdmin.getId()).getCodeInsee();
-          break;
-        case "REG":
-          codeInsee = regionService.getRegionById(entiteAdmin.getId()).getCodeInsee();
-          break;
-        case "DEP":
-          codeInsee = departementService.getDepartementById(entiteAdmin.getId()).getCodeInsee();
-        }
-        displayCommune.getGenealogieParentCodeInsee().put(genealogieParent, codeInsee);
-      }
-
-      listeResultats.add(displayCommune);
+      CommunePlus communePlus = searchCommune.getCommunes().get(i);
+      listeResultats.add(new DisplayCommune(communePlus, communeService, departementService, regionService));
     }
     return listeResultats;
   }

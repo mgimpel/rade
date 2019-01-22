@@ -55,6 +55,7 @@ public interface CommunePlusService {
    * region, circonscription, commune name and/or date.
    * @param codeInsee the code of the Communes.
    * @param codeDept the departement of the Communes.
+   * @param codeBassin the circonscription of the Communes
    * @param codeRegion the region of the Communes.
    * @param nomCommune a pattern to search for Communes with a name resembling.
    * @param dateEffet the date at which the Communes were valid.
