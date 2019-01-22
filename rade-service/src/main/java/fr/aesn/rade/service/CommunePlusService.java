@@ -21,6 +21,7 @@ import java.util.Date;
 import java.util.List;
 
 import fr.aesn.rade.common.modelplus.CommunePlus;
+import fr.aesn.rade.common.modelplus.CommunePlusWithGenealogie;
 
 /**
  * Service Interface for CommunePlus.
@@ -49,4 +50,15 @@ public interface CommunePlusService {
    * @return the Commune with the given code at the given date.
    */
   public CommunePlus getCommuneByCode(String code, String date);
+
+  /**
+   * Get the Commune with the given code at the given date, and all it's
+   * genealogie.
+   * @param code the Commune code.
+   * @param date the date at which the code was valid
+   * @return the Commune with the given code at the given date, and all it's
+   * genealogie.
+   */
+  public CommunePlusWithGenealogie getCommuneWithGenealogie(final String code,
+                                                            final Date date);
 }
