@@ -15,7 +15,7 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 /* $Id$ */
-package fr.aesn.rade.batch;
+package fr.aesn.rade.batch.runner;
 
 import java.io.PrintWriter;
 import java.text.ParseException;

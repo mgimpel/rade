@@ -16,7 +16,7 @@
  */
 /* $Id$ */
 /**
- * This is the base package for Batch Scripts (based on Spring Batch) for the
- * Rade Project.
+ * This package contains the tasklet and chunk orientated components for
+ * importing and exporting CSV datafiles.
  */
-package fr.aesn.rade.batch;
+package fr.aesn.rade.batch.tasks.csv;

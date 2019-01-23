@@ -18,6 +18,7 @@
 package fr.aesn.rade.common.modelplus;
 
 import java.util.Date;
+import java.util.Set;
 
 import fr.aesn.rade.common.InvalidArgumentException;
 import fr.aesn.rade.common.util.SharedBusinessRules;
@@ -34,18 +35,18 @@ import lombok.ToString;
  * Enhanced Commune which regroups the details about the Commune from different
  * sources, in particular INSEE (code, libelle, filiation, ...), Sandre
  * (bassin, ...), ...
- * 
+ *
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
 @ToString @EqualsAndHashCode
 public class CommunePlus {
   /** Code INSEE of the Commune. */
   private String code;
-  /** */
+  /** The effective date. */
   private Date dateEffective;
-  /** */
+  /** The INSEE Commune Entity. */
   private Commune insee;
-  /** */
+  /** The Sandre Commune Entity. */
   private CommuneSandre sandre;
 
   /**
@@ -209,5 +210,19 @@ public class CommunePlus {
   
   public Set<GenealogieEntiteAdmin> getEnfantsCommuneInsee(){
       return insee.getEnfants();
+  }
+
+  public Set<GenealogieEntiteAdmin> getParentsInsee(){
+    if (insee == null) {
+      return null;
+    }
+    return insee.getParents();
+  }
+
+  public Set<GenealogieEntiteAdmin> getEnfantsInsee(){
+    if (insee == null) {
+      return null;
+    }
+    return insee.getEnfants();
   }
 }

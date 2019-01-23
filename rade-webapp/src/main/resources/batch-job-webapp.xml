@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--/*
+ *  This file is part of the Rade project (https://github.com/mgimpel/rade).
+ *  Copyright (C) 2018 Marc Gimpel
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */-->
+<!-- $Id$ -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:batch="http://www.springframework.org/schema/batch"
+       xsi:schemaLocation="
+         http://www.springframework.org/schema/beans
+         http://www.springframework.org/schema/beans/spring-beans.xsd
+         http://www.springframework.org/schema/batch
+         http://www.springframework.org/schema/batch/spring-batch.xsd">
+
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+  <!-- Readers -->
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+  <!-- ItemReader which reads data from Sandre commune file -->
+  <bean id="communeSandreItemReader" scope="step"
+        class="org.springframework.batch.item.file.FlatFileItemReader">
+    <property name="resource" value="#{jobParameters['inputFile']}"/>
+    <property name="encoding" value="UTF-8"/>
+    <property name="linesToSkip" value="2"/>
+    <property name="lineMapper">
+      <bean class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
+        <property name="fieldSetMapper">
+          <bean class="fr.aesn.rade.batch.tasks.sandre.CommuneSandreMapper"/>
+        </property>
+        <property name="lineTokenizer">
+          <bean class="org.springframework.batch.item.file.transform.DelimitedLineTokenizer"
+                p:delimiter=";"/>
+        </property>
+      </bean>
+    </property>
+  </bean>
+
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+  <!-- Writers -->
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+  <!-- ItemWriter which writes the data to the database -->
+  <bean id="communeSandreItemWriter" scope="step"
+        class="org.springframework.batch.item.database.JpaItemWriter"
+        p:entityManagerFactory-ref="entityManagerFactory"/>
+
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+  <!-- Processors -->
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+  <!-- ItemProcessor which processes the data (adds Audit details) -->
+  <bean id="communeSandreItemProcessor" scope="step"
+        class="fr.aesn.rade.batch.tasks.sandre.CommuneSandreProcessor"/>
+
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+  <!-- Tasklets -->
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+  <!-- Info Tasklet -->
+  <bean id="infoTasklet" scope="step"
+        class="fr.aesn.rade.batch.tasks.info.InfoTasklet"/>
+
+  <!-- Delete File Tasklet -->
+  <bean id="deleteFileTasklet" scope="step"
+        class="fr.aesn.rade.batch.util.DeleteFileTasklet"/>
+
+  <!-- Delete File Tasklet -->
+  <bean id="deleteAllCommuneSandreTasklet" scope="step"
+        class="fr.aesn.rade.batch.tasks.csv.DeleteAllCommuneSandreTasklet"/>
+
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+  <!-- Jobs -->
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+  <!-- Info Job -->
+  <batch:job id="infoJob">
+    <batch:step id="infoStep1" next="infoStep2">
+      <batch:tasklet ref="infoTasklet"/>
+    </batch:step>
+    <batch:step id="infoStep2">
+      <batch:tasklet ref="deleteFileTasklet"/>
+    </batch:step>
+  </batch:job>
+
+  <!-- The Commune Sandre Full Import Job -->
+  <batch:job id="importCommuneSandreJob">
+    <batch:step id="importCommuneSandreStep1" next="importCommuneSandreStep2">
+      <batch:tasklet ref="deleteAllCommuneSandreTasklet"/>
+    </batch:step>
+    <batch:step id="importCommuneSandreStep2" next="importCommuneSandreStep3">
+      <batch:tasklet transaction-manager="transactionManager">
+        <batch:chunk reader="communeSandreItemReader"
+                     processor="communeSandreItemProcessor"
+                     writer="communeSandreItemWriter"
+                     commit-interval="100"/>
+      </batch:tasklet>
+    </batch:step>
+    <batch:step id="importCommuneSandreStep3">
+      <batch:tasklet ref="deleteFileTasklet"/>
+    </batch:step>
+  </batch:job>
+
+</beans>

@@ -17,6 +17,8 @@
 /* $Id$ */
 package fr.aesn.rade.batch.tasks.info;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -29,6 +31,9 @@ import org.springframework.batch.core.StepExecutionListener;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
+import org.springframework.core.io.DefaultResourceLoader;
+import org.springframework.core.io.Resource;
+import org.springframework.util.ResourceUtils;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -51,6 +56,22 @@ public class InfoTasklet
     Map<String, JobParameter> params = stepExecution.getJobParameters().getParameters();
     for (Entry<String, JobParameter> entry : params.entrySet()) {
       log.info("Job Parameter {}: {}", entry.getKey(), entry.getValue());
+    }
+    if (params.containsKey("inputFile")) {
+      String param = params.get("inputFile").toString();
+      log.info("Resource details: param: {}", param);
+      try {
+        log.info("Resource details: URI: {}", ResourceUtils.toURI(param));
+        Resource resource = new DefaultResourceLoader().getResource(param);
+        log.info("Resource details: Resource exists: {}", resource.exists());
+        if (resource.exists()) {
+          log.info("Resource details: Resource size: {}", resource.contentLength());
+        }
+      } catch (IOException e) {
+        log.info("File details: IOException: {}", e.getMessage());
+      } catch (URISyntaxException e) {
+        log.info("File details: URISyntaxException: {}", e.getMessage());
+      }
     }
     Set<Entry<String, Object>> entries = stepExecution.getExecutionContext().entrySet();
     for (Entry<String, Object> entry : entries) {

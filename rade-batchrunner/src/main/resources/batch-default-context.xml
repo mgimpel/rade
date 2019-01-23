@@ -84,6 +84,7 @@
         p:jobRepository-ref="jobRepository"/>
 
   <import resource="classpath*:batch-job-info.xml"/>
+  <import resource="classpath*:batch-job-csv.xml"/>
   <import resource="classpath*:batch-job-insee.xml"/>
   <import resource="classpath*:batch-job-sandre.xml"/>
   <import resource="classpath*:batch-job-hexaposte.xml"/>

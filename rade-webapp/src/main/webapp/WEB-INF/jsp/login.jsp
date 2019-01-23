@@ -21,7 +21,7 @@
 <jsp:include page="aesn_header.jsp" />
 <c:if test="${param.error != null}"><p align="center">Invalid username and password.</p></c:if>
 <c:if test="${param.logout != null}"><p align="center">You have been logged out successfully.</p></c:if>
-<form name='loginForm' action="<c:url value="/login" />" method="post">
+<form name="loginForm" action="<c:url value="/login"/>" method="post">
 <table style="margin-left:auto;margin-right:auto;">
 	<tr>
 		<td><label for="username">Username:</label></td>
@@ -32,7 +32,7 @@
 		<td><input type="password" name="password" placeholder="Enter Password" required></td>
 	</tr>
 	<tr>
-		<td><input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" /></td>
+		<td><input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/></td>
 		<td><input type="submit" name="submit" value="Log in"></td>
 	</tr>
 </table>

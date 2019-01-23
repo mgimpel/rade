@@ -17,6 +17,8 @@
 /* $Id$ */
 package fr.aesn.rade.rs;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -51,84 +53,93 @@ public interface RestService {
   /**
    * Get all Region.
    * @param req HTTP Request (for determining base path of Rest Service).
-   * @param rawdate the date at which the returned data is valid.
+   * @param rawCodes list of INSEE code of the Region.
+   * @param rawDate the date at which the returned data is valid.
    * @return list of all Region.
    */
   @GET
   @Path(REST_PATH_REGION)
   @Produces(MediaType.APPLICATION_JSON)
   public Response getAllRegion(@Context final HttpServletRequest req,
-                               @QueryParam("date") final String rawdate);
+                               @QueryParam("code") final List<String> rawCodes,
+                               @QueryParam("date") final String rawDate);
 
   /**
    * Get the Region with the given INSEE code.
    * @param req HTTP Request (for determining base path of Rest Service).
-   * @param rawcode the INSEE code of the Region.
-   * @param rawdate the date at which the returned data is valid.
+   * @param rawCode the INSEE code of the Region.
+   * @param rawDate the date at which the returned data is valid.
    * @return the Region with the given INSEE code.
    */
   @GET
   @Path(REST_PATH_REGION + "{code}")
   @Produces(MediaType.APPLICATION_JSON)
   public Response getRegion(@Context final HttpServletRequest req,
-                            @PathParam("code") final String rawcode,
-                            @QueryParam("date") final String rawdate);
+                            @PathParam("code") final String rawCode,
+                            @QueryParam("date") final String rawDate);
 
   /**
    * Get all Departement.
    * @param req HTTP Request (for determining base path of Rest Service).
-   * @param rawdate the date at which the returned data is valid.
+   * @param rawCodes list of INSEE code of the Departement.
+   * @param rawDate the date at which the returned data is valid.
    * @return list of all Departement.
    */
   @GET
   @Path(REST_PATH_DEPARTEMENT)
   @Produces(MediaType.APPLICATION_JSON)
   public Response getAllDepartement(@Context final HttpServletRequest req,
-                                    @QueryParam("date") final String rawdate);
+                                    @QueryParam("code") final List<String> rawCodes,
+                                    @QueryParam("date") final String rawDate);
 
   /**
    * Get the Departement with the given INSEE code.
    * @param req HTTP Request (for determining base path of Rest Service).
-   * @param rawcode the INSEE code of the Departement.
-   * @param rawdate the date at which the returned data is valid.
+   * @param rawCode the INSEE code of the Departement.
+   * @param rawDate the date at which the returned data is valid.
    * @return the Departement with the given INSEE code.
    */
   @GET
   @Path(REST_PATH_DEPARTEMENT + "{code}")
   @Produces(MediaType.APPLICATION_JSON)
   public Response getDepartement(@Context final HttpServletRequest req,
-                                 @PathParam("code") final String rawcode,
-                                 @QueryParam("date") final String rawdate);
+                                 @PathParam("code") final String rawCode,
+                                 @QueryParam("date") final String rawDate);
 
   /**
    * Get all Commune matching the request parameters.
    * @param req HTTP Request (for determining base path of Rest Service).
-   * @param rawdate the date at which the returned data is valid.
-   * @param rawcodedepartement the Departement INSEE code of the Commune.
-   * @param rawnom a part of the Commune enrich name.
+   * @param rawCodes list of INSEE code of the Commune
+   * (if no codes are given dept and namelike are used). 
+   * @param rawDept the Departement INSEE code of the Commune
+   * (not used if codes are given).
+   * @param rawNameLike a part of the Commune enrich name
+   * (not used if codes are given).
+   * @param rawDate the date at which the returned data is valid.
    * @return list of all Commune matching the request parameters.
    */
   @GET
   @Path(REST_PATH_COMMUNE)
   @Produces(MediaType.APPLICATION_JSON)
   public Response getAllCommune(@Context final HttpServletRequest req,
-                                @QueryParam("date") final String rawdate,
-                                @QueryParam("codedepartement") final String rawcodedepartement,
-                                @QueryParam("nom") final String rawnom);
+                                @QueryParam("code") final List<String> rawCodes,
+                                @QueryParam("dept") final String rawDept,
+                                @QueryParam("namelike") final String rawNameLike,
+                                @QueryParam("date") final String rawDate);
 
   /**
    * Get the Commune with the given INSEE code.
    * @param req HTTP Request (for determining base path of Rest Service).
-   * @param rawcode the INSEE code of the Commune.
-   * @param rawdate the date at which the returned data is valid.
+   * @param rawCode the INSEE code of the Commune.
+   * @param rawDate the date at which the returned data is valid.
    * @return the Commune with the given INSEE code.
    */
   @GET
   @Path(REST_PATH_COMMUNE + "{code}")
   @Produces(MediaType.APPLICATION_JSON)
   public Response getCommune(@Context final HttpServletRequest req,
-                             @PathParam("code") final String rawcode,
-                             @QueryParam("date") final String rawdate);
+                             @PathParam("code") final String rawCode,
+                             @QueryParam("date") final String rawDate);
 
   /**
    * Get all Delegation.
@@ -143,14 +154,14 @@ public interface RestService {
   /**
    * Get the Delegation with the given code.
    * @param req HTTP Request (for determining base path of Rest Service).
-   * @param rawcode the code of the Delegation.
+   * @param rawCode the code of the Delegation.
    * @return the Delegation with the given code.
    */
   @GET
   @Path(REST_PATH_DELEGATION + "{code}")
   @Produces(MediaType.APPLICATION_JSON)
   public Response getDelegation(@Context final HttpServletRequest req,
-                                @PathParam("code") final String rawcode);
+                                @PathParam("code") final String rawCode);
 
   /**
    * Get all CirconscriptionBassin.
@@ -165,12 +176,12 @@ public interface RestService {
   /**
    * Get the CirconscriptionBassin with the given code.
    * @param req HTTP Request (for determining base path of Rest Service).
-   * @param rawcode the code of the CirconscriptionBassin.
+   * @param rawCode the code of the CirconscriptionBassin.
    * @return the CirconscriptionBassin with the given code.
    */
   @GET
   @Path(REST_PATH_CIRCONSCRIPTION_BASSIN + "{code}")
   @Produces(MediaType.APPLICATION_JSON)
   public Response getBassin(@Context final HttpServletRequest req,
-                            @PathParam("code") final String rawcode);
+                            @PathParam("code") final String rawCode);
 }

@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,10 +31,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import fr.aesn.rade.common.InvalidArgumentException;
 import fr.aesn.rade.common.modelplus.CommunePlus;
+import fr.aesn.rade.common.modelplus.CommunePlusWithGenealogie;
 import fr.aesn.rade.persist.dao.CommuneJpaDao;
 import fr.aesn.rade.persist.dao.CommuneSandreJpaDao;
 import fr.aesn.rade.persist.model.Commune;
 import fr.aesn.rade.persist.model.CommuneSandre;
+import fr.aesn.rade.persist.model.EntiteAdministrative;
+import fr.aesn.rade.persist.model.GenealogieEntiteAdmin;
 import fr.aesn.rade.service.CommunePlusService;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -214,5 +218,53 @@ public class CommunePlusServiceImpl
             }
         }
         return communesPlus;
+  }
+  
+  /**
+   * Get the Commune with the given code at the given date, and all it's
+   * genealogie.
+   * @param code the Commune code.
+   * @param date the date at which the code was valid
+   * @return the Commune with the given code at the given date, and all it's
+   * genealogie.
+   */
+  @Override
+  @Transactional(readOnly = true)
+  public CommunePlusWithGenealogie getCommuneWithGenealogie(final String code,
+                                                            final Date date) {
+    CommunePlus commune = getCommuneByCode(code, date);
+    if (commune == null) {
+      return null;
+    }
+    CommunePlusWithGenealogie result = new CommunePlusWithGenealogie(commune);
+    EntiteAdministrative tempEntity;
+    Set<GenealogieEntiteAdmin> parents = commune.getParentsInsee();
+    if (parents != null) {
+      for (GenealogieEntiteAdmin parent : parents) {
+        tempEntity = parent.getParentEnfant().getParent();
+        assert "COM".equals(tempEntity.getTypeEntiteAdmin().getCode());
+        try {
+          result.addParent(parent.getTypeGenealogie(),
+                           communeJpaDao.findById(tempEntity.getId()).get());
+        } catch (InvalidArgumentException e) {
+          log.warn("This should never happen! parent must exist: {}", parent);
+        }
+      }
+    }
+    Set<GenealogieEntiteAdmin> enfants = commune.getEnfantsInsee();
+    if (enfants != null) {
+      for (GenealogieEntiteAdmin enfant : enfants) {
+        tempEntity = enfant.getParentEnfant().getParent();
+        assert "COM".equals(tempEntity.getTypeEntiteAdmin().getCode());
+        try {
+          result.addParent(enfant.getTypeGenealogie(),
+                           communeJpaDao.findById(tempEntity.getId()).get());
+        } catch (InvalidArgumentException e) {
+          log.warn("This should never happen! enfant must exist: {}", enfant);
+        }
+      }
+    }
+
+    return result;
   }
 }

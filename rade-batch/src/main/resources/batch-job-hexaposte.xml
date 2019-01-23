@@ -27,6 +27,10 @@
          http://www.springframework.org/schema/batch
          http://www.springframework.org/schema/batch/spring-batch.xsd">
 
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+  <!-- Readers -->
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
   <!-- ItemReader which reads data from Hexaposte file -->
   <bean id="hexaposteItemReader" scope="step"
         class="org.springframework.batch.item.file.FlatFileItemReader">
@@ -45,14 +49,26 @@
     </property>
   </bean>
 
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+  <!-- Writers -->
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
   <!-- ItemWriter which writes the data to the database -->
   <bean id="hexaposteItemWriter" scope="step"
         class="org.springframework.batch.item.database.JpaItemWriter"
         p:entityManagerFactory-ref="entityManagerFactory"/>
 
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+  <!-- Processors -->
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
   <!-- ItemProcessor which processes the data (adds Audit details) -->
   <bean id="hexaposteItemProcessor" scope="step"
         class="fr.aesn.rade.batch.tasks.hexaposte.HexaposteProcessor"/>
+
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+  <!-- Jobs -->
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
   <!-- The Hexaposte Full Import Job -->
   <batch:job id="importHexaposteJob">
