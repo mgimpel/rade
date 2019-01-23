@@ -17,6 +17,7 @@
 package fr.aesn.rade.webapp.model;
 
 import fr.aesn.rade.common.modelplus.CommunePlus;
+import fr.aesn.rade.common.util.DateConversionUtils;
 import fr.aesn.rade.common.util.StringConversionUtils;
 import fr.aesn.rade.persist.model.CirconscriptionBassin;
 import fr.aesn.rade.persist.model.Departement;
@@ -65,7 +66,7 @@ public class SearchCommune {
   public String formatDate(Date date){
     String formatedDate = null;
     if(date != null){
-      formatedDate = StringConversionUtils.formatDateIHM(date);
+      formatedDate = DateConversionUtils.formatDateToStringIHM(date);
     }
     return formatedDate;
   }

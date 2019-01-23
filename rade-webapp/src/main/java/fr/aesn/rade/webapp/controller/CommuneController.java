@@ -17,6 +17,7 @@
 package fr.aesn.rade.webapp.controller;
 
 import fr.aesn.rade.common.modelplus.CommunePlus;
+import fr.aesn.rade.common.util.DateConversionUtils;
 import fr.aesn.rade.common.util.StringConversionUtils;
 import fr.aesn.rade.persist.model.Departement;
 import fr.aesn.rade.service.BassinService;
@@ -46,11 +47,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 /**
- * Spring MVC controller for searching and siplaying communes
+ * Spring MVC controller for searching and displaying communes
  * @author sophie.belin
  */
 @Slf4j
@@ -69,7 +71,7 @@ public class CommuneController {
   private BassinService bassinService;
   @Autowired
   private CommunePlusService communePlusService;
-  private final String EXPORT_NAME = "export-communes";
+  private final String DEFAULT_EXPORT_FILENAME = "export-communes";
 
   /**
    * Export de la liste des communes au format Excel
@@ -82,7 +84,7 @@ public class CommuneController {
     Export export = new ExportExcel();
     searchCommune.setListeResultats(paginateResultatsCommune(searchCommune, true));
     response.setContentType("application/vnd.ms-excel");
-    response.setHeader("Content-Disposition", "attachment; filename=\"" + EXPORT_NAME + "\"");
+    response.setHeader("Content-Disposition", "attachment; filename=\"" + DEFAULT_EXPORT_FILENAME + "\"");
     
     try {
       OutputStream out = response.getOutputStream();
@@ -176,7 +178,7 @@ public class CommuneController {
         if(commune.getFinValiditeCommuneInsee() != null){
           date.setTime(commune.getFinValiditeCommuneInsee().getTime() - 86400000);
         }
-        return "redirect:/referentiel/commune/" + commune.getCodeInsee() + "?date=" + StringConversionUtils.formatDateUrl(date);
+        return "redirect:/referentiel/commune/" + commune.getCodeInsee() + "?date=" + DateConversionUtils.formatDateToStringUrl(date);
       }else{
         searchCommune.setPage("1");
         searchCommune.setCommunes(communes);
@@ -189,25 +191,25 @@ public class CommuneController {
 
 
   /**
-   * Recherche d'une commune via son code Insee
-   * @param code 
+   * Recherche d'une commune via son code Insee 
+   * @param code Code INSEE de la commune affichée
+   * @param dateParam Date de validité de la commune passée en tant que paramètre optionnel 
    * @param model
    * @return Vue de la page de recherche ou des résultats en fonction du nombre 
    * de résultats
    */
   @RequestMapping(value = "/{code}")
-  public String communedisplay(HttpServletRequest request, @PathVariable("code") String code, 
+  public String communedisplay(@PathVariable("code") String code, @RequestParam(value = "date", required = false) String dateParam, 
                                Model model) {
     String view = "communesearch";
     
     Date dateValidite = null;
 
-    if(request.getParameter("date") != null){
-        String dateString = (String)request.getParameter("date");
+    if(dateParam != null){
         try {
-             dateValidite = StringConversionUtils.formatDateUrl(dateString);
+             dateValidite = DateConversionUtils.formatStringToDateUrl(dateParam);
         } catch (ParseException ex) {
-            log.info("Erreur : le format de la date n'est pas valide et doit être yyyy-MM-dd : " + dateString, ex.toString());
+            log.info("Erreur : le format de la date n'est pas valide et doit être yyyy-MM-dd : " + dateParam, ex.toString());
         }
     }
     log.debug("Display commune: {}", code);

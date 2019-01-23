@@ -17,6 +17,7 @@
 package fr.aesn.rade.webapp.model;
 
 import fr.aesn.rade.common.modelplus.CommunePlus;
+import fr.aesn.rade.common.util.DateConversionUtils;
 import fr.aesn.rade.common.util.StringConversionUtils;
 import fr.aesn.rade.persist.model.Departement;
 import fr.aesn.rade.persist.model.EntiteAdministrative;
@@ -109,7 +110,7 @@ public class DisplayCommune {
     if(finValidite != null){
       date.setTime(finValidite.getTime() - 86400000);
     }
-    return StringConversionUtils.formatDateUrl(date);
+    return DateConversionUtils.formatDateToStringUrl(date);
   }
 
   /**
@@ -119,7 +120,7 @@ public class DisplayCommune {
    */
   public String formatDate(Date date){
     if(date != null){
-      return StringConversionUtils.formatDateIHM(date);
+      return DateConversionUtils.formatDateToStringIHM(date);
     }
     return null;
   }

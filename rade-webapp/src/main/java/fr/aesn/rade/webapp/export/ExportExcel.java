@@ -44,7 +44,6 @@ import org.apache.poi.ss.util.CellRangeAddress;
  */
 @Slf4j
 public class ExportExcel implements Export {
-  public final String EXPORT_NAME = "export-communes";
     
   @Override
   public void exportCommune(OutputStream output, List<DisplayCommune> listeCommunes){

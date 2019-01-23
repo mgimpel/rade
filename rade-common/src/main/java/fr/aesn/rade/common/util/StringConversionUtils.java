@@ -271,19 +271,4 @@ public class StringConversionUtils {
     }
     return buf.toString();
   }
-  
-  public static String formatDateUrl(Date date){
-      SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-      return sdf.format(date);
-  }
-  
-  public static Date formatDateUrl(String date) throws ParseException{
-      SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-      return sdf.parse(date);
-  }
-  
-  public static String formatDateIHM(Date date){
-      SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-      return sdf.format(date);
-  }
 }
