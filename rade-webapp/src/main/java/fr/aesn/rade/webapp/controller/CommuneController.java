@@ -265,7 +265,7 @@ public class CommuneController {
             assert genealogieEnfant.getParentEnfant().getParent().getTypeEntiteAdmin().getCode().equals("COM");
             Commune communeEnfant = communeService.getCommuneById(genealogieEnfant.getParentEnfant().getEnfant().getId());
             try {
-              communePlusWithGenealogie.addParent(genealogieEnfant.getTypeGenealogie(), communeEnfant);
+              communePlusWithGenealogie.addEnfant(genealogieEnfant.getTypeGenealogie(), communeEnfant);
             } catch (InvalidArgumentException ex) {
               log.info("La commune ajoutée n'est pas valide", ex.getMessage());
             }
@@ -368,7 +368,7 @@ public class CommuneController {
       assert genealogieEnfant.getParentEnfant().getParent().getTypeEntiteAdmin().getCode().equals("COM");
         Commune communeEnfant = communeService.getCommuneById(genealogieEnfant.getParentEnfant().getEnfant().getId());
         try {
-          communePlusWithGenealogie.addParent(genealogieEnfant.getTypeGenealogie(), communeEnfant);
+          communePlusWithGenealogie.addEnfant(genealogieEnfant.getTypeGenealogie(), communeEnfant);
         } catch (InvalidArgumentException ex) {
           log.info("La commune ajoutée n'est pas valide", ex.getMessage());
         }

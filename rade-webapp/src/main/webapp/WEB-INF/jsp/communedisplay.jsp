@@ -110,55 +110,51 @@
                             <td width="18%"><label>Fin validité : </label><td>
                             <td>${displayCommune.getDateIHM(displayCommune.finValidite)}</td>  
                         </c:if>
+                        
                     </tr>
+                    <c:if test="${displayCommune.motifModification != null}">
+                        <tr>
+                            <td width="18%"><label>Motif de modification : </label></td>
+                            <td>${displayCommune.motifModification}</td>  
+                        </tr>
+                    </c:if>
                 </table>
             </fieldset>
         </div>
-        
-        <c:if test="${displayCommune.communePlusWithGenealogie.parents.size() > 0}">
-            <div class="<c:if test="${displayCommune.communePlusWithGenealogie.enfants != null && displayCommune.communePlusWithGenealogie.enfants.size() > 0}">demi</c:if> pave" style="font-size: 12px; width: auto">
-                <fieldset>
-                    <legend>Entités mères</legend>
-                    <table>
+                        
+        <div class="demi pave" style="font-size: 12px; width: 49%">
+            <fieldset>
+                <legend>Entités mères</legend>
+                <table>
+                    <c:if test="${displayCommune.communePlusWithGenealogie.parents.size() == 0}">   
+                        <td>Aucune entités mères</td>
+                    </c:if>
+                    <c:forEach items="${displayCommune.communePlusWithGenealogie.parents}" var="genealogieParent">
                         <tr>
-                            <td>
-                                <c:forEach items="${displayCommune.communePlusWithGenealogie.parents}" var="genealogieParent">
-                                    <div>
-                                        <a href="${displayCommune.getUrlEntite(genealogieParent.key, genealogieParent.value.entity.finValidite)}">
-                                            ${genealogieParent.key} - ${genealogieParent.value.entity.nomEnrichi} 
-                                            (${displayCommune.getDateIHM(genealogieParent.value.entity.debutValidite)}) 
-                                            ${genealogieParent.value.type.libelleLong}
-                                        </a>
-                                    </div>
-                                </c:forEach>
-                            </td>
+                            <td style="width: 60px; text-align: center"><a href="${displayCommune.getUrlEntite(genealogieParent.key, genealogieParent.value.entity.finValidite)}">${genealogieParent.key}</a></td>
+                            <td>${genealogieParent.value.entity.nomEnrichi}</td>
+                            <td>${displayCommune.getDateIHM(genealogieParent.value.entity.debutValidite)}</td>
                         </tr>
-                    </table>
-                </fieldset>
-            </div> 
-        </c:if>
-        <c:if test="${displayCommune.communePlusWithGenealogie.enfants.size() > 0}">   
-            <div class="<c:if test="${displayCommune.communePlusWithGenealogie.parents.size() > 0}">demi</c:if> pave" style="clear: none;font-size: 12px; width: auto;">
-                <fieldset>
-                    <legend>Entités filles</legend>
-
-                    <table>
+                    </c:forEach>
+                </table>
+            </fieldset>
+        </div> 
+        <div class="demi pave" style="clear: none;font-size: 12px; width: 49%;">
+            <fieldset>
+                <legend>Entités filles</legend>
+                <table>
+                    <c:if test="${displayCommune.communePlusWithGenealogie.enfants.size() == 0}">   
+                        <td>Aucune entités filles</td>
+                    </c:if>
+                    <c:forEach items="${displayCommune.communePlusWithGenealogie.enfants}" var="genealogieEnfant">
                         <tr>
-                            <td> 
-                                <c:forEach items="${displayCommune.communePlusWithGenealogie.enfants}" var="genealogieEnfant">
-                                    <div>
-                                        <a href="${displayCommune.getUrlEntite(genealogieEnfant.key, genealogieEnfant.value.entity.finValidite)}">
-                                            ${genealogieEnfant.key} - ${genealogieEnfant.value.entity.nomEnrichi} 
-                                            (${displayCommune.getDateIHM(genealogieEnfant.value.entity.debutValidite)}) 
-                                            ${genealogieEnfant.value.type.libelleLong}
-                                        </a>
-                                    </div>
-                                </c:forEach>
-                            </td>
+                            <td style="width: 60px; text-align: center"><a href="${displayCommune.getUrlEntite(genealogieEnfant.key, genealogieEnfant.value.entity.finValidite)}">${genealogieEnfant.key}</a></td>
+                            <td>${genealogieEnfant.value.entity.nomEnrichi}</td>
+                            <td>${displayCommune.getDateIHM(genealogieEnfant.value.entity.debutValidite)}</td>
                         </tr>
-                    </table>
-                </fieldset>
-            </div>
-        </c:if>
+                    </c:forEach>
+                </table>
+            </fieldset>
+        </div>
     </div>
 <jsp:include page="aesn_footer.jsp" />
