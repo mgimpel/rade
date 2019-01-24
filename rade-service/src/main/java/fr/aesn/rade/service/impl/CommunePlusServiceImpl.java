@@ -201,7 +201,13 @@ public class CommunePlusServiceImpl
 
     for(Commune commune : communes){   
       try {
-          Date dateValidite = commune.getFinValidite() != null ? new Date(commune.getFinValidite().getTime() - 1) : new Date();
+        
+          Date dateValidite;
+          if(commune.getDebutValidite() == commune.getFinValidite()){
+            dateValidite = commune.getDebutValidite();
+          }else{
+            dateValidite = commune.getFinValidite() != null ? new Date(commune.getFinValidite().getTime() - 1) : new Date();
+          }
           CommunePlus cp = new CommunePlus(commune.getCodeInsee(), dateValidite);
           cp.setCommuneInsee(commune);
           CommuneSandre communeSandre = null;

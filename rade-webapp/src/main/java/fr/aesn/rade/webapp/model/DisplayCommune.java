@@ -98,9 +98,15 @@ public class DisplayCommune {
    * @return L'url permettant d'afficher l'entité
    */
   public String getUrlEntite(String codeInsee, Date dateFinValidite){
-    if(codeInsee != null){
-      String urlParams = dateFinValidite != null ? getDateUrl(new Date(dateFinValidite.getTime() - 1)) : getDateUrl(new Date());
-      return "/referentiel/commune/" + codeInsee + "?date=" + urlParams;
+     if(codeInsee != null){
+       Date date;
+    
+      if(dateFinValidite == null){
+        date = new Date();
+      }else{
+        date = new Date(dateFinValidite.getTime() - 1);
+      }
+      return "/referentiel/commune/" + codeInsee + "?date=" + DateConversionUtils.formatDateToStringUrl(date);
     }
     return null;
   }

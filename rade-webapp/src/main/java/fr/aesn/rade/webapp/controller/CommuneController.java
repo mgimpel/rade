@@ -167,13 +167,16 @@ public class CommuneController {
     }else{
       if(communes.size() == 1){
         CommunePlusWithGenealogie commune = communes.iterator().next();
-        String dateUrl;
-        if(commune.getCommunePlus().getFinValiditeCommuneInsee() != null){
-          dateUrl = DateConversionUtils.formatDateToStringUrl(new Date(commune.getCommunePlus().getFinValiditeCommuneInsee().getTime() - 1));
+        
+        Date dateValidite;
+    
+        if(commune.getCommunePlus().getFinValiditeCommuneInsee() == null){
+          dateValidite = new Date();
         }else{
-          dateUrl = DateConversionUtils.formatDateToStringUrl(new Date());
+          dateValidite = new Date(commune.getCommunePlus().getFinValiditeCommuneInsee().getTime() - 1);
         }
-        String urlParam = commune.getCommunePlus().getCodeInsee() + "?date=" + dateUrl;
+
+        String urlParam = commune.getCommunePlus().getCodeInsee() + "?date=" + DateConversionUtils.formatDateToStringUrl(dateValidite);
         return "redirect:/referentiel/commune/" + urlParam;
       }else{
         searchCommune.setPage("1");
@@ -325,7 +328,13 @@ public class CommuneController {
 
     for(int i = firstCommuneIndex ; i < lastCommuneIndex ; i++){
       CommunePlusWithGenealogie commune = searchCommune.getCommunes().get(i);
-      Date dateValidite = commune.getCommunePlus().getFinValiditeCommuneInsee() != null ? new Date(commune.getCommunePlus().getFinValiditeCommuneInsee().getTime() - 1) : new Date();
+      Date dateValidite;
+    
+      if(commune.getCommunePlus().getFinValiditeCommuneInsee() == null){
+        dateValidite = new Date();
+      }else{
+        dateValidite = new Date(commune.getCommunePlus().getFinValiditeCommuneInsee().getTime() - 1);
+      }
       commune = communePlusService.getCommuneWithGenealogie(commune.getCommunePlus().getCodeInsee(), dateValidite);
       Departement departement = departementService.getDepartementByCode(commune.getCommunePlus().getDepartement(), commune.getCommunePlus().getDebutValiditeCommuneInsee());
       Region region = regionService.getRegionByCode(departement.getRegion(), commune.getCommunePlus().getDebutValiditeCommuneInsee());

@@ -129,7 +129,7 @@
                 <c:forEach items="${searchCommune.listeResultats}" var="communeDisplay">
                    <tr>
                        <td style="text-align: center">
-                           <a href="/referentiel/commune/${communeDisplay.codeInsee}?date=${communeDisplay.getDateUrl(communeDisplay.finValidite)}">
+                           <a href="${communeDisplay.getUrlEntite(communeDisplay.codeInsee, communeDisplay.finValidite)}">
                                ${communeDisplay.codeInsee}
                            </a>
                        </td>
