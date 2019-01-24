@@ -21,10 +21,6 @@
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <jsp:include page="aesn_header.jsp" />
     <script>  
-        
-        
-        
-        
         function validerForm(){
             var nomEnrichi = document.getElementById("nomEnrichi").value;
             var codeRegion = document.getElementById("codeRegion").value;
@@ -147,7 +143,8 @@
                         <td><form:input type="date" style="width:110px"  path="dateEffet"/></td>
                     </tr>
                 </table>
-                <div class="action"><input type="submit" name="submit" value="Rechercher" onclick="return validerForm();"></div>
+                    <input type="hidden" value="testvaleur" name="test" />
+                <div class="action"><input name="annuler" type="submit" value="Annuler"> <input type="submit" name="valider" value="Rechercher" onclick="return validerForm();"></div>
             </form:form>
         </td>
     </tr> 

@@ -63,13 +63,8 @@ public class SearchCommune {
    * @return Date
    */
   public String getDateIHM(Date date){
-    String formatedDate = null;
-    if(date != null){
-      formatedDate = DateConversionUtils.formatDateToStringIHM(date);
-    }
-    return formatedDate;
+    return DateConversionUtils.formatDateToStringIHM(date);
   }
-
 
   public void setPage(String page){
     try{

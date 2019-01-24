@@ -99,8 +99,7 @@ public class CommuneController {
   }
 
   /**
-   * Appel de la page de recherche de commune.
-   * @param request 
+   * Appel de la page de recherche de commune. 
    * @param model
    * @param searchCommune 
    * @return Vue correspondant à liste des résultats
@@ -136,7 +135,7 @@ public class CommuneController {
    * @param model
    * @return Vue de la page de recherche ou des résultats
    */
-  @RequestMapping(value = "/resultats", method = RequestMethod.POST)
+  @RequestMapping(params = "valider", value = "/resultats", method = RequestMethod.POST)
   public String communedisplay(@ModelAttribute("searchCommune") SearchCommune searchCommune,
                                Model model) {
     log.debug("Search for commune with criteria: {}", searchCommune);
@@ -149,8 +148,7 @@ public class CommuneController {
         && searchCommune.getCodeDepartement().equals("-1")
         && searchCommune.getCodeCirconscription().equals("-1")
         && searchCommune.getCodeRegion().equals("-1")
-        && (searchCommune.getNomEnrichi() == null || searchCommune.getNomEnrichi().equals(""))
-        && searchCommune.getDateEffet() == null)){
+        && (searchCommune.getNomEnrichi() == null || searchCommune.getNomEnrichi().equals("")))){
         
       String codeDepartement = searchCommune.getCodeDepartement().equals("-1") ? null : searchCommune.getCodeDepartement();
       String codeRegion = searchCommune.getCodeRegion().equals("-1") ? null : searchCommune.getCodeRegion();
@@ -191,6 +189,30 @@ public class CommuneController {
     }
 
     return view;
+  }
+  
+  /**
+   * Remise à zéro du formulaire de recherche
+   * @param model
+   * @param searchCommune 
+   * @return Vue correspondant à liste des résultats
+   */
+  @RequestMapping(params = "annuler", value = "/resultats", method = RequestMethod.POST)
+  public String annulerForm(Model model,
+                           @ModelAttribute("searchCommune") SearchCommune searchCommune) {
+    searchCommune.setCodeInsee(null);
+    searchCommune.setCodeDepartement("-1");
+    searchCommune.setCodeRegion("-1");
+    searchCommune.setCodeCirconscription("-1");
+    searchCommune.setNomEnrichi(null);
+    searchCommune.setDateEffet(new Date());
+    
+    if(searchCommune.getListeResultats() != null){
+      searchCommune.getListeResultats().clear();
+    }else{
+      searchCommune.setListeResultats(new ArrayList<>());
+    }
+    return initRechercheCommuneView(searchCommune, model);
   }
 
 
