@@ -16,16 +16,12 @@
  */
 package fr.aesn.rade.webapp.controller;
 
-import fr.aesn.rade.common.InvalidArgumentException;
 import fr.aesn.rade.common.modelplus.CommunePlusWithGenealogie;
 import fr.aesn.rade.common.util.DateConversionUtils;
-import fr.aesn.rade.persist.model.Commune;
 import fr.aesn.rade.persist.model.Departement;
-import fr.aesn.rade.persist.model.GenealogieEntiteAdmin;
 import fr.aesn.rade.persist.model.Region;
 import fr.aesn.rade.service.BassinService;
 import fr.aesn.rade.service.CommunePlusService;
-import fr.aesn.rade.service.CommuneService;
 import fr.aesn.rade.service.DepartementService;
 import fr.aesn.rade.service.RegionService;
 import fr.aesn.rade.webapp.export.Export;
@@ -65,8 +61,6 @@ public class CommuneController {
   /** Service. */
   @Autowired
   private RegionService regionService;
-  @Autowired
-  private CommuneService communeService;
   @Autowired
   private DepartementService departementService;
   @Autowired
@@ -173,7 +167,7 @@ public class CommuneController {
     }else{
       if(communes.size() == 1){
         CommunePlusWithGenealogie commune = communes.iterator().next();
-        String dateUrl = null;
+        String dateUrl;
         if(commune.getCommunePlus().getFinValiditeCommuneInsee() != null){
           dateUrl = DateConversionUtils.formatDateToStringUrl(new Date(commune.getCommunePlus().getFinValiditeCommuneInsee().getTime() - 1));
         }else{
@@ -245,31 +239,9 @@ public class CommuneController {
       if(communes != null && communes.size() > 0){
         if(communes.size() == 1){
           CommunePlusWithGenealogie communePlusWithGenealogie = communePlusService.getCommuneWithGenealogie(code,
-                                                            dateValidite);
-          Commune commune = communeService.getCommuneByCode(communePlusWithGenealogie.getCommunePlus().getCodeInsee(), communePlusWithGenealogie.getCommunePlus().getDebutValiditeCommuneInsee());
-          
+                                                            dateValidite);    
           Departement departement = departementService.getDepartementByCode(communePlusWithGenealogie.getCommunePlus().getDepartement(), communePlusWithGenealogie.getCommunePlus().getDebutValiditeCommuneInsee());
           Region region = regionService.getRegionByCode(departement.getRegion(), communePlusWithGenealogie.getCommunePlus().getDebutValiditeCommuneInsee());
-          
-          for(GenealogieEntiteAdmin genealogieParent : commune.getParents()){
-            assert genealogieParent.getParentEnfant().getParent().getTypeEntiteAdmin().getCode().equals("COM");
-            Commune communeParent = communeService.getCommuneById(genealogieParent.getParentEnfant().getParent().getId());
-            try {
-              communePlusWithGenealogie.addParent(genealogieParent.getTypeGenealogie(), communeParent);
-            } catch (InvalidArgumentException ex) {
-                log.info("La commune ajoutée n'est pas valide", ex.getMessage());
-            }
-          }
-
-          for(GenealogieEntiteAdmin genealogieEnfant : commune.getEnfants()){
-            assert genealogieEnfant.getParentEnfant().getParent().getTypeEntiteAdmin().getCode().equals("COM");
-            Commune communeEnfant = communeService.getCommuneById(genealogieEnfant.getParentEnfant().getEnfant().getId());
-            try {
-              communePlusWithGenealogie.addEnfant(genealogieEnfant.getTypeGenealogie(), communeEnfant);
-            } catch (InvalidArgumentException ex) {
-              log.info("La commune ajoutée n'est pas valide", ex.getMessage());
-            }
-          }  
           
           DisplayCommune displayCommune = new DisplayCommune(communePlusWithGenealogie, departement, region);
           view = initDetailCommuneView(displayCommune, model);
@@ -352,37 +324,14 @@ public class CommuneController {
     int lastCommuneIndex = allCommune ? searchCommune.getCommunes().size() : searchCommune.getLastCommuneIndex();
 
     for(int i = firstCommuneIndex ; i < lastCommuneIndex ; i++){
-      CommunePlusWithGenealogie communePlusWithGenealogie = searchCommune.getCommunes().get(i);
-      // Rechargement de la commune (problème de chargement -LAZY- des parents et enfants)
-      Commune commune = communeService.getCommuneByCode(communePlusWithGenealogie.getCommunePlus().getCodeInsee(), communePlusWithGenealogie.getCommunePlus().getDebutValiditeCommuneInsee());
-      for(GenealogieEntiteAdmin genealogieParent : commune.getParents()){
-        Commune communeParent = communeService.getCommuneById(genealogieParent.getParentEnfant().getParent().getId());
-        try {
-          communePlusWithGenealogie.addParent(genealogieParent.getTypeGenealogie(), communeParent);
-        } catch (InvalidArgumentException ex) {
-          log.info("La commune ajoutée n'est pas valide", ex.getMessage());
-        }
-      }
-      
-    for(GenealogieEntiteAdmin genealogieEnfant : commune.getEnfants()){
-      assert genealogieEnfant.getParentEnfant().getParent().getTypeEntiteAdmin().getCode().equals("COM");
-        Commune communeEnfant = communeService.getCommuneById(genealogieEnfant.getParentEnfant().getEnfant().getId());
-        try {
-          communePlusWithGenealogie.addEnfant(genealogieEnfant.getTypeGenealogie(), communeEnfant);
-        } catch (InvalidArgumentException ex) {
-          log.info("La commune ajoutée n'est pas valide", ex.getMessage());
-        }
-    }  
-    
-    Departement departement = departementService.getDepartementByCode(communePlusWithGenealogie.getCommunePlus().getDepartement(), communePlusWithGenealogie.getCommunePlus().getDebutValiditeCommuneInsee());
-    Region region = regionService.getRegionByCode(departement.getRegion(), communePlusWithGenealogie.getCommunePlus().getDebutValiditeCommuneInsee());
+      CommunePlusWithGenealogie commune = searchCommune.getCommunes().get(i);
+      Date dateValidite = commune.getCommunePlus().getFinValiditeCommuneInsee() != null ? new Date(commune.getCommunePlus().getFinValiditeCommuneInsee().getTime() - 1) : new Date();
+      commune = communePlusService.getCommuneWithGenealogie(commune.getCommunePlus().getCodeInsee(), dateValidite);
+      Departement departement = departementService.getDepartementByCode(commune.getCommunePlus().getDepartement(), commune.getCommunePlus().getDebutValiditeCommuneInsee());
+      Region region = regionService.getRegionByCode(departement.getRegion(), commune.getCommunePlus().getDebutValiditeCommuneInsee());
 
-    listeResultats.add(new DisplayCommune(communePlusWithGenealogie, departement, region));
-  }
-
-
-
-    
+      listeResultats.add(new DisplayCommune(commune, departement, region));
+    }
     return listeResultats;
   }
 

@@ -215,20 +215,6 @@ public class CommunePlus {
     }
     return sandre.getDateMajCommune();
   }
-  
-  public Set<GenealogieEntiteAdmin> getParentsCommuneInsee(){
-    if (insee == null) {
-      return null;
-    }
-    return insee.getParents();
-  }
-  
-  public Set<GenealogieEntiteAdmin> getEnfantsCommuneInsee(){
-    if (insee == null) {
-      return null;
-    }
-    return insee.getEnfants();
-  }
 
   public Set<GenealogieEntiteAdmin> getParentsInsee(){
     if (insee == null) {

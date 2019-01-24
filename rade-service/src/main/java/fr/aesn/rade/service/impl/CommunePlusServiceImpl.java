@@ -170,6 +170,7 @@ public class CommunePlusServiceImpl
                                             String nomCommune,
                                             Date dateEffet){
     List<Commune> communes = null;
+
     codeInsee = codeInsee == null || codeInsee.isEmpty() ? "%" : codeInsee;
     nomCommune = nomCommune == null || nomCommune.isEmpty() ? "%" : "%" + nomCommune + "%";
     
@@ -200,7 +201,8 @@ public class CommunePlusServiceImpl
 
     for(Commune commune : communes){   
       try {
-          CommunePlus cp = new CommunePlus(commune.getCodeInsee(), commune.getDebutValidite());
+          Date dateValidite = commune.getFinValidite() != null ? new Date(commune.getFinValidite().getTime() - 1) : new Date();
+          CommunePlus cp = new CommunePlus(commune.getCodeInsee(), dateValidite);
           cp.setCommuneInsee(commune);
           CommuneSandre communeSandre = null;
           
@@ -260,10 +262,10 @@ public class CommunePlusServiceImpl
     Set<GenealogieEntiteAdmin> enfants = commune.getEnfantsInsee();
     if (enfants != null) {
       for (GenealogieEntiteAdmin enfant : enfants) {
-        tempEntity = enfant.getParentEnfant().getParent();
+        tempEntity = enfant.getParentEnfant().getEnfant();
         assert "COM".equals(tempEntity.getTypeEntiteAdmin().getCode());
         try {
-          result.addParent(enfant.getTypeGenealogie(),
+          result.addEnfant(enfant.getTypeGenealogie(),
                            communeJpaDao.findById(tempEntity.getId()).get());
         } catch (InvalidArgumentException e) {
           log.warn("This should never happen! enfant must exist: {}", enfant);
