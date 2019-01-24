@@ -41,8 +41,11 @@ public class DateConversionUtils {
    * @return a the formatted date
    */
   public static String formatDateToStringUrl(Date date){
-      SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-      return sdf.format(date);
+    if(date == null){
+      return null;
+    }
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    return sdf.format(date);
   }
 
   /**
@@ -52,9 +55,12 @@ public class DateConversionUtils {
    * @throws java.text.ParseException
    */
   public static Date formatStringToDateUrl(String date) throws ParseException{
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        return sdf.parse(date);
+    if(date == null){
+      return null;
     }
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    return sdf.parse(date);
+  }
 
   /**
    * Convert the given date to a String that can be use into the IHM
@@ -62,7 +68,10 @@ public class DateConversionUtils {
    * @return a the formatted date
    */
   public static String formatDateToStringIHM(Date date){
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        return sdf.format(date);
+    if(date == null){
+      return null;
     }
+    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+    return sdf.format(date);
+  }
 }

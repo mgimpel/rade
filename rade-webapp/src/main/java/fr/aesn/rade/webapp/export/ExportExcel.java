@@ -16,6 +16,7 @@
  */
 package fr.aesn.rade.webapp.export;
 
+import fr.aesn.rade.common.modelplus.CommunePlusWithGenealogie;
 import fr.aesn.rade.webapp.model.DisplayCommune;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -105,17 +106,18 @@ public class ExportExcel implements Export {
         row.getCell(3).setCellStyle(cs);
       }
 
-      row.createCell(4).setCellValue(commune.getMotifModification());
-
-      Iterator it = commune.getGenealogieParentCodeInsee().entrySet().iterator();
-
+      Iterator it = commune.getCommunePlusWithGenealogie().getParents().entrySet().iterator();
+      String motifModification = "";
       StringBuilder sb = new StringBuilder();
+      
       while(it.hasNext()){
         Map.Entry pair = (Map.Entry)it.next();
-        sb.append(pair.getValue());
+        sb.append(pair.getKey());
         sb.append(" ");
+        motifModification = ((CommunePlusWithGenealogie.GenealogieTypeAndEntity)pair.getValue()).getType().getLibelleLong();
       }
 
+      row.createCell(4).setCellValue(motifModification);
       row.createCell(5).setCellValue(sb.toString().trim());
     }
 

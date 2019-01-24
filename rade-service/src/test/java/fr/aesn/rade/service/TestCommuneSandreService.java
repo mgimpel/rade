@@ -77,7 +77,7 @@ public class TestCommuneSandreService
     List<CommuneSandre> list;
     list = jpaDao.findAll();
     assertNotNull("Service returned a null list", list);
-    assertEquals("Wrong number of Commune Sandre returned", 101, list.size());
+    assertEquals("Wrong number of Commune Sandre returned", 102, list.size());
     service.deleteAll();
     list = jpaDao.findAll();
     assertNotNull("Service returned a null list", list);

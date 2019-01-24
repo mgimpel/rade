@@ -16,9 +16,8 @@
  */
 package fr.aesn.rade.webapp.model;
 
-import fr.aesn.rade.common.modelplus.CommunePlus;
+import fr.aesn.rade.common.modelplus.CommunePlusWithGenealogie;
 import fr.aesn.rade.common.util.DateConversionUtils;
-import fr.aesn.rade.common.util.StringConversionUtils;
 import fr.aesn.rade.persist.model.CirconscriptionBassin;
 import fr.aesn.rade.persist.model.Departement;
 import fr.aesn.rade.persist.model.Region;
@@ -55,7 +54,7 @@ public class SearchCommune {
   Map<String,String> regionsByCodeInsee;
   Map<String, String> circonscriptionByCode;
   List<DisplayCommune> listeResultats;
-  List<CommunePlus> communes;
+  List<CommunePlusWithGenealogie> communes;
 
   /**
    * Renvoie la date au format dd/MM/yyyy 
@@ -63,7 +62,7 @@ public class SearchCommune {
    * @param date 
    * @return Date
    */
-  public String formatDate(Date date){
+  public String getDateIHM(Date date){
     String formatedDate = null;
     if(date != null){
       formatedDate = DateConversionUtils.formatDateToStringIHM(date);

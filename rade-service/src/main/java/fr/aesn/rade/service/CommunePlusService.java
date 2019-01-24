@@ -62,7 +62,7 @@ public interface CommunePlusService {
    * @param dateEffet the date at which the Communes were valid.
    * @return a List of all Commune matching the given parameters.
    */
-  public List<CommunePlus> getCommuneByCriteria(String codeInsee,
+  public List<CommunePlusWithGenealogie> getCommuneByCriteria(String codeInsee,
                                             String codeDept,
                                             String codeBassin,
                                             String codeRegion,
@@ -78,5 +78,6 @@ public interface CommunePlusService {
    * genealogie.
    */
   public CommunePlusWithGenealogie getCommuneWithGenealogie(final String code,
+                                                            final Date date);
   
 }

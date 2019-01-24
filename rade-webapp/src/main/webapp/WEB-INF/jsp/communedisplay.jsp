@@ -105,57 +105,29 @@
                 <table style="height: 105px;">
                     <tr>
                         <td  width="18%"><label>Début validité : </label></td>
-                        <td>${displayCommune.formatDate(displayCommune.debutValidite)}</td>  
+                        <td>${displayCommune.getDateIHM(displayCommune.debutValidite)}</td>  
                         <c:if test="${displayCommune.finValidite != null}">
                             <td width="18%"><label>Fin validité : </label><td>
-                            <td>${displayCommune.formatDate(displayCommune.finValidite)}</td>  
+                            <td>${displayCommune.getDateIHM(displayCommune.finValidite)}</td>  
                         </c:if>
                     </tr>
-
-                    <c:if test="${displayCommune.motifModification != '' && displayCommune.motifModification != null}">
-                        <tr>
-                            <td><label>Motif modification : </label></td>
-                            <td>${displayCommune.motifModification}</td>  
-                        </tr>
-                    </c:if>
-                    
-                    <c:if test="${displayCommune.dateModification != '' && displayCommune.dateModification != null}">
-                        <tr>
-                            <td><label>Date modification : </label></td>
-                            <td>${displayCommune.formatDate(displayCommune.dateModification)}</td>  
-                        </tr>
-                    </c:if>
-                    
-                    <c:if test="${displayCommune.dateCreation != '' && displayCommune.dateCreation != null}">
-                        <tr>
-                            <td><label>Date de création : </label></td>
-                            <td>${displayCommune.formatDate(displayCommune.dateCreation)}</td>  
-                        </tr>
-                    </c:if>
-                        
-                    <c:if test="${displayCommune.commentaireModification != '' && displayCommune.commentaireModification != null}">
-                        <tr>
-                            <td><label>Commentaire : </label></td>
-                            <td>${displayCommune.commentaireModification}</td>  
-                        </tr>
-                    </c:if>
                 </table>
             </fieldset>
         </div>
-                
-        <c:if test="${displayCommune.genealogieParentCodeInsee != null && displayCommune.genealogieParentCodeInsee.size() > 0}">
-            <div class="<c:if test="${displayCommune.genealogieEnfantCodeInsee != null && displayCommune.genealogieEnfantCodeInsee.size() > 0}">demi</c:if> pave" style="font-size: 12px; width: auto">
+        
+        <c:if test="${displayCommune.communePlusWithGenealogie.parents.size() > 0}">
+            <div class="<c:if test="${displayCommune.communePlusWithGenealogie.enfants != null && displayCommune.communePlusWithGenealogie.enfants.size() > 0}">demi</c:if> pave" style="font-size: 12px; width: auto">
                 <fieldset>
                     <legend>Entités mères</legend>
                     <table>
                         <tr>
                             <td>
-                                <c:forEach items="${displayCommune.genealogieParentCodeInsee}" var="genealogieParent">
+                                <c:forEach items="${displayCommune.communePlusWithGenealogie.parents}" var="genealogieParent">
                                     <div>
-                                        <a href="${displayCommune.entiteUrl(genealogieParent.key.parentEnfant.parent, genealogieParent.value)}">
-                                            ${genealogieParent.value} - ${genealogieParent.key.parentEnfant.parent.nomEnrichi} 
-                                            (${displayCommune.formatDate(genealogieParent.key.parentEnfant.parent.debutValidite)}) 
-                                            ${genealogieParent.key.typeGenealogie.libelleLong}
+                                        <a href="${displayCommune.getUrlEntite(genealogieParent.key, genealogieParent.value.entity.finValidite)}">
+                                            ${genealogieParent.key} - ${genealogieParent.value.entity.nomEnrichi} 
+                                            (${displayCommune.getDateIHM(genealogieParent.value.entity.debutValidite)}) 
+                                            ${genealogieParent.value.type.libelleLong}
                                         </a>
                                     </div>
                                 </c:forEach>
@@ -165,20 +137,20 @@
                 </fieldset>
             </div> 
         </c:if>
-        <c:if test="${displayCommune.genealogieEnfantCodeInsee != null && displayCommune.genealogieEnfantCodeInsee.size() > 0}">   
-            <div class="<c:if test="${displayCommune.genealogieParentCodeInsee != null && displayCommune.genealogieParentCodeInsee.size() > 0}">demi</c:if> pave" style="clear: none;font-size: 12px; width: auto;">
+        <c:if test="${displayCommune.communePlusWithGenealogie.enfants.size() > 0}">   
+            <div class="<c:if test="${displayCommune.communePlusWithGenealogie.parents.size() > 0}">demi</c:if> pave" style="clear: none;font-size: 12px; width: auto;">
                 <fieldset>
                     <legend>Entités filles</legend>
 
                     <table>
                         <tr>
                             <td> 
-                                <c:forEach items="${displayCommune.genealogieEnfantCodeInsee}" var="genealogieEnfant">
+                                <c:forEach items="${displayCommune.communePlusWithGenealogie.enfants}" var="genealogieEnfant">
                                     <div>
-                                        <a href="${displayCommune.entiteUrl(genealogieEnfant.key.parentEnfant.enfant, genealogieEnfant.value)}">
-                                            ${genealogieEnfant.value} - ${genealogieEnfant.key.parentEnfant.enfant.nomEnrichi} 
-                                            (${displayCommune.formatDate(genealogieEnfant.key.parentEnfant.enfant.debutValidite)}) 
-                                            ${genealogieEnfant.key.typeGenealogie.libelleLong}
+                                        <a href="${displayCommune.getUrlEntite(genealogieEnfant.key, genealogieEnfant.value.entity.finValidite)}">
+                                            ${genealogieEnfant.key} - ${genealogieEnfant.value.entity.nomEnrichi} 
+                                            (${displayCommune.getDateIHM(genealogieEnfant.value.entity.debutValidite)}) 
+                                            ${genealogieEnfant.value.type.libelleLong}
                                         </a>
                                     </div>
                                 </c:forEach>

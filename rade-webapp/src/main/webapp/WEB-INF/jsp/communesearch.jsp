@@ -33,7 +33,7 @@
             var codeInsee = document.getElementById("codeInsee").value;
             if(codeInsee != "" && codeInsee != null){
                 if(!/^[0-9a-zA-Z]{2}[0-9]{3}$/.test(codeInsee)){
-                    alert("Le code INSEE doit être composé de cinq chiffres ou lettres");
+                    alert("Le code INSEE doit être composé de cinq chiffres ou de deux lettres et trois chiffres");
                     return false;
                 }
             }
@@ -60,9 +60,6 @@
             <script>
                 window.onload = function(){
                     loadDepartement();
-                    <c:if test="${errorRecherche != null && !errorRecherche.equals('')}">
-                        alert("${errorRecherche}");
-                    </c:if>
 
                     document.getElementById("codeRegion").onchange = function(){
                         loadDepartement();
@@ -100,7 +97,9 @@
                   }
             </script>
             
-            
+            <c:if test="${errorRecherche != null && !errorRecherche.equals('')}">
+                <div style="border: 1px solid #ffeeba; padding: 5px; background-color: #fff3cd; margin-bottom: 5px;">${errorRecherche}</div>
+            </c:if>
             <form:form id="formCommune" method="POST" action="/referentiel/commune/resultats" modelAttribute="searchCommune">
                 <table  class="prez" style="margin-left:auto;margin-right:auto;">
                     <tr>

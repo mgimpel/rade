@@ -18,7 +18,6 @@
 package fr.aesn.rade.common.modelplus;
 
 import java.util.Date;
-import java.util.Set;
 
 import fr.aesn.rade.common.InvalidArgumentException;
 import fr.aesn.rade.common.util.SharedBusinessRules;
@@ -189,27 +188,46 @@ public class CommunePlus {
   }
   
   public Date getDebutValiditeCommuneInsee(){
-      return insee.getDebutValidite();
+    if(insee == null){
+      return null;
+    }
+    return insee.getDebutValidite();
+    
   }
   
   public Date getFinValiditeCommuneInsee(){
-      return insee.getFinValidite();
+    if(insee == null){
+      return null;
+    }
+    return insee.getFinValidite();
   }
   
   public Date getDateCreationCommuneSandre(){
-      return sandre.getDateCreationCommune();
+    if(sandre == null){
+      return null; 
+    }
+    return sandre.getDateCreationCommune();
   }
   
   public Date getDateMajCommuneSandre(){
-      return sandre.getDateMajCommune();
+    if (insee == null) {
+      return null;
+    }
+    return sandre.getDateMajCommune();
   }
   
   public Set<GenealogieEntiteAdmin> getParentsCommuneInsee(){
-      return insee.getParents();
+    if (insee == null) {
+      return null;
+    }
+    return insee.getParents();
   }
   
   public Set<GenealogieEntiteAdmin> getEnfantsCommuneInsee(){
-      return insee.getEnfants();
+    if (insee == null) {
+      return null;
+    }
+    return insee.getEnfants();
   }
 
   public Set<GenealogieEntiteAdmin> getParentsInsee(){

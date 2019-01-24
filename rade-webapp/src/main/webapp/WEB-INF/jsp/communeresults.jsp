@@ -58,7 +58,7 @@
                     </c:if>
                     <c:if test="${!searchCommune.dateEffet.equals('') && searchCommune.dateEffet != null}">
                         <td style="text-align: right;width: 100px"><strong>Date d'effet : </strong></td>
-                        <td>${searchCommune.formatDate(searchCommune.dateEffet)}</td>
+                        <td>${searchCommune.getDateIHM(searchCommune.dateEffet)}</td>
                     </c:if>
                 </tr>
             </table>
@@ -129,18 +129,18 @@
                 <c:forEach items="${searchCommune.listeResultats}" var="communeDisplay">
                    <tr>
                        <td style="text-align: center">
-                           <a href="/referentiel/commune/${communeDisplay.codeInsee}/${communeDisplay.getDateEffet(communeDisplay.finValidite)}">
+                           <a href="/referentiel/commune/${communeDisplay.codeInsee}?date=${communeDisplay.getDateUrl(communeDisplay.finValidite)}">
                                ${communeDisplay.codeInsee}
                            </a>
                        </td>
-                       <td><a href="/referentiel/commune/${communeDisplay.codeInsee}/${communeDisplay.getDateEffet(communeDisplay.finValidite)}">${communeDisplay.nomEnrichi}</a></td>
-                       <td style="text-align: center">${communeDisplay.formatDate(communeDisplay.debutValidite)}</td>
-                       <td style="text-align: center">${communeDisplay.formatDate(communeDisplay.finValidite)}</td>
+                       <td><a href="${communeDisplay.getUrlEntite(communeDisplay.codeInsee,communeDisplay.finValidite)}">${communeDisplay.nomEnrichi}</a></td>
+                       <td style="text-align: center">${communeDisplay.getDateIHM(communeDisplay.debutValidite)}</td>
+                       <td style="text-align: center">${communeDisplay.getDateIHM(communeDisplay.finValidite)}</td>
                        <td style="text-align: center">${communeDisplay.motifModification}</td>
                        <td>
-                            <c:forEach items="${communeDisplay.genealogieParentCodeInsee}" var="genealogieParent">
-                                <a href="${communeDisplay.entiteUrl(genealogieParent.key.parentEnfant.parent, genealogieParent.value)}">${genealogieParent.value}</a>
-                             </c:forEach>
+                           <c:forEach items="${communeDisplay.communePlusWithGenealogie.parents}" var="genealogieParent">
+                                <a href="${communeDisplay.getUrlEntite(genealogieParent.key, genealogieParent.value.entity.finValidite)}">${genealogieParent.key}</a>
+                            </c:forEach>
                        </td>
                    </tr>
                </c:forEach>
