@@ -50,7 +50,7 @@ public class DisplayCommune {
   Date dateCreation, dateModification, debutValidite, finValidite;
   CommunePlusWithGenealogie communePlusWithGenealogie;
 
-  public DisplayCommune(CommunePlusWithGenealogie communePlusWithGenealogie, Departement departement, Region region){
+  public DisplayCommune(CommunePlusWithGenealogie communePlusWithGenealogie){
     
     this.codeInsee = communePlusWithGenealogie.getCommunePlus().getCodeInsee();     
     this.nomMajuscule = communePlusWithGenealogie.getCommunePlus().getNomMajuscule();
@@ -61,13 +61,19 @@ public class DisplayCommune {
     this.articleEnrichi = communePlusWithGenealogie.getCommunePlus().getArticleEnrichi();
     this.communePlusWithGenealogie = communePlusWithGenealogie;
 
-    this.setNomDepartement(departement.getNomEnrichi());
-    this.setCodeDepartement(departement.getCodeInsee());
-    this.setNomRegion(region.getNomEnrichi());
+    Map<String, CommunePlusWithGenealogie.GenealogieTypeAndEntity> genealogie = null;
+            
+    if(communePlusWithGenealogie.getParents().size() > 0){
+      genealogie = communePlusWithGenealogie.getParents();
+    }else if(communePlusWithGenealogie.getEnfants().size() > 0){
+      genealogie = communePlusWithGenealogie.getEnfants();
+    }
     
-    Iterator<Map.Entry<String, CommunePlusWithGenealogie.GenealogieTypeAndEntity>> it = communePlusWithGenealogie.getParents().entrySet().iterator();
-    if(it.hasNext()){
-      this.motifModification = ((CommunePlusWithGenealogie.GenealogieTypeAndEntity)it.next().getValue()).getType().getLibelleLong();
+    if(genealogie != null){
+      Iterator<Map.Entry<String, CommunePlusWithGenealogie.GenealogieTypeAndEntity>> it = genealogie.entrySet().iterator();
+      if(it.hasNext()){
+        this.motifModification = ((CommunePlusWithGenealogie.GenealogieTypeAndEntity)it.next().getValue()).getType().getLibelleLong();
+      }
     }
     
     if(communePlusWithGenealogie.getCommunePlus().getCirconscriptionBassin() != null){
@@ -76,6 +82,13 @@ public class DisplayCommune {
       this.setDateModification(communePlusWithGenealogie.getCommunePlus().getDateMajCommuneSandre());
       this.setCodeBassin(communePlusWithGenealogie.getCommunePlus().getCirconscriptionBassin().getCode());
     }
+  }
+  
+  public DisplayCommune(CommunePlusWithGenealogie communePlusWithGenealogie, Departement departement, Region region){
+    this(communePlusWithGenealogie);
+    this.setNomDepartement(departement.getNomEnrichi());
+    this.setCodeDepartement(departement.getCodeInsee());
+    this.setNomRegion(region.getNomEnrichi());
   }
 
   /**

@@ -169,6 +169,18 @@ public class CommunePlusServiceImpl
                                             String codeRegion,
                                             String nomCommune,
                                             Date dateEffet){
+    
+    List<CommunePlusWithGenealogie> communesPlus = new ArrayList();
+    // Recherche par code INSEE et par date
+    if(codeInsee != null && dateEffet != null && codeDept == null && codeBassin == null && nomCommune == null){
+      System.out.println("code : " + codeInsee + " date : " + dateEffet);
+      CommunePlusWithGenealogie communeGenealogie = getCommuneWithGenealogie(codeInsee, dateEffet);
+      if(communeGenealogie != null){
+        communesPlus.add(communeGenealogie);
+      }
+      return communesPlus;
+    }
+    
     List<Commune> communes = null;
 
     codeInsee = codeInsee == null || codeInsee.isEmpty() ? "%" : codeInsee;
@@ -179,7 +191,7 @@ public class CommunePlusServiceImpl
     }
         
     if(dateEffet == null){
-      // Si la région est renseignée et que le département n'est pas renseigné : priorité du département sur la région
+      // Si la région est renseignée et que le département ne l'est pas, la priorité est donnée au département sur la région
       // pendant une recherche
       if((codeDept == null || codeDept.isEmpty()) && (codeRegion != null && !codeRegion.isEmpty())){
         communes = communeJpaDao.findByCodeInseeLikeAndRegionLikeAndNomEnrichiLikeIgnoreCase(codeInsee, codeRegion, nomCommune);
@@ -189,42 +201,54 @@ public class CommunePlusServiceImpl
     }else{
       if((codeDept == null || codeDept.isEmpty()) && (codeRegion != null && !codeRegion.isEmpty())){
         communes = communeJpaDao.findByCodeInseeLikeAndRegionLikeAndNomEnrichiLikeIgnoreCaseValidOnDate(codeInsee, codeRegion, nomCommune, dateEffet);
-        
       }else{
         communes = communeJpaDao.findByCodeInseeLikeAndDepartementLikeAndNomEnrichiLikeIgnoreCaseValidOnDate(codeInsee, codeDept, nomCommune, dateEffet);
       }
     }
 
     // Recherche des communes sandre correspondant à chaque commune afin de créer une liste de
-    // communePlus
-    List<CommunePlusWithGenealogie> communesPlus = new ArrayList<>();
-
+    // communePlusWithGenealogie
     for(Commune commune : communes){   
       try {
-        
+          CommunePlusWithGenealogie communeWithGenealogie = null;
+          
           Date dateValidite;
           if(commune.getDebutValidite() == commune.getFinValidite()){
             dateValidite = commune.getDebutValidite();
           }else{
             dateValidite = commune.getFinValidite() != null ? new Date(commune.getFinValidite().getTime() - 1) : new Date();
           }
+          
           CommunePlus cp = new CommunePlus(commune.getCodeInsee(), dateValidite);
           cp.setCommuneInsee(commune);
           CommuneSandre communeSandre = null;
           
           // Recherche sur la commune sandre en fonction du code bassin passé en paramètre
           if(codeBassin != null && !codeBassin.isEmpty()){
-            communeSandre = communeSandreJpaDao.findByCodeInseeValidOnDate(commune.getCodeInsee(), commune.getDebutValidite());
+            communeSandre = communeSandreJpaDao.findByCodeInseeValidOnDate(commune.getCodeInsee(), dateValidite);
             
-            try {
+            if(communeSandre != null && codeBassin.equals(communeSandre.getCirconscriptionBassin().getCode())){
+              try {
               cp.setCommuneSandre(communeSandre);
-            } catch (InvalidArgumentException ex) {
-              log.info("La commune sandre n'est pas valide : " + cp.getCodeInsee()+ "/" + cp.getFinValiditeCommuneInsee(), ex);
+              } catch (InvalidArgumentException ex) {
+                log.info("La commune sandre n'est pas valide : " + cp.getCodeInsee()+ "/" + cp.getFinValiditeCommuneInsee(), ex);
+              }
+            }else{
+              communeSandre = null;
             }
           }
+
+          if((codeBassin == null || communeSandre != null)){
+            // Chargement de la généalogie
+            if((commune.getEnfants() != null && commune.getEnfants().size() > 0) || (commune.getParents()!= null && commune.getParents().size() > 0)){
+              communeWithGenealogie = getCommuneWithGenealogie(commune.getCodeInsee(), dateValidite);
+            }else{
+              communeWithGenealogie = new CommunePlusWithGenealogie(cp);
+            }
             
-          if(codeBassin == null || communeSandre != null){
-            communesPlus.add(new CommunePlusWithGenealogie(cp));
+            if(communeWithGenealogie != null){
+              communesPlus.add(communeWithGenealogie);
+            }
            }
         } catch (InvalidArgumentException ex) {
             log.info("La commune insee n'est pas valide : " + commune.getCodeInsee(), ex);

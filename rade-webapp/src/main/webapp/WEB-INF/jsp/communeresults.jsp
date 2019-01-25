@@ -119,7 +119,7 @@
                 </tr>
                 <tr style="background-color: #0365ab; color: white;padding: 5px 0; margin: -1px; text-align: center; vertical-align: middle;">
                     <th style="width: 6%">Code</th>
-                    <th>Nom</th>
+                    <th style="width: 120px">Nom</th>
                     <th style="width: 75px">Début validité</th>
                     <th style="width: 75px">Fin validité</th>
                     <th>Motif de modification</th>

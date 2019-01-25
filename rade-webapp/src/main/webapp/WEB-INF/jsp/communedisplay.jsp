@@ -157,4 +157,7 @@
             </fieldset>
         </div>
     </div>
+    <div>
+    <a href="/referentiel/commune/resultats">&lt;&lt; Retour</a>
+    </div>
 <jsp:include page="aesn_footer.jsp" />

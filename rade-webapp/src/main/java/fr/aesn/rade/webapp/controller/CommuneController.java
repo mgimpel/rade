@@ -241,8 +241,7 @@ public class CommuneController {
       
       if(communes != null && communes.size() > 0){
         if(communes.size() == 1){
-          CommunePlusWithGenealogie communePlusWithGenealogie = communePlusService.getCommuneWithGenealogie(code,
-                                                            dateValidite);    
+          CommunePlusWithGenealogie communePlusWithGenealogie = communes.get(0);
           Departement departement = departementService.getDepartementByCode(communePlusWithGenealogie.getCommunePlus().getDepartement(), communePlusWithGenealogie.getCommunePlus().getDebutValiditeCommuneInsee());
           Region region = regionService.getRegionByCode(departement.getRegion(), communePlusWithGenealogie.getCommunePlus().getDebutValiditeCommuneInsee());
           
@@ -328,18 +327,7 @@ public class CommuneController {
 
     for(int i = firstCommuneIndex ; i < lastCommuneIndex ; i++){
       CommunePlusWithGenealogie commune = searchCommune.getCommunes().get(i);
-      Date dateValidite;
-    
-      if(commune.getCommunePlus().getFinValiditeCommuneInsee() == null){
-        dateValidite = new Date();
-      }else{
-        dateValidite = new Date(commune.getCommunePlus().getFinValiditeCommuneInsee().getTime() - 1);
-      }
-      commune = communePlusService.getCommuneWithGenealogie(commune.getCommunePlus().getCodeInsee(), dateValidite);
-      Departement departement = departementService.getDepartementByCode(commune.getCommunePlus().getDepartement(), commune.getCommunePlus().getDebutValiditeCommuneInsee());
-      Region region = regionService.getRegionByCode(departement.getRegion(), commune.getCommunePlus().getDebutValiditeCommuneInsee());
-
-      listeResultats.add(new DisplayCommune(commune, departement, region));
+      listeResultats.add(new DisplayCommune(commune));
     }
     return listeResultats;
   }
