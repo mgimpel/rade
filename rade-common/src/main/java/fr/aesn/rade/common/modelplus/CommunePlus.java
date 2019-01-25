@@ -192,7 +192,6 @@ public class CommunePlus {
       return null;
     }
     return insee.getDebutValidite();
-    
   }
 
   public Date getFinValiditeCommuneInsee(){

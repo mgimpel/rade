@@ -67,6 +67,10 @@ public class SearchCommune {
     return DateConversionUtils.formatDateToStringUi(date);
   }
 
+  /**
+   * Set the page number.
+   * @param page page number.
+   */
   public void setPage(String page) {
     try {
       int numPage = Integer.parseInt(page);
@@ -133,7 +137,6 @@ public class SearchCommune {
           regionsByCodeInsee.put(r.getCodeInsee(), r.getNomEnrichi() );
         }
       }
-
       regionsByCodeInsee = sortByValue(regionsByCodeInsee);
     }
   }
@@ -172,7 +175,12 @@ public class SearchCommune {
     dateEffet = new Date();
   }
 
-  public static <K, V extends Comparable<? super V>> Map<K, V> sortByValue(Map<K, V> map) {
+  /**
+   * Static method for sorting the given map.
+   * @param map
+   * @return
+   */
+  private static <K, V extends Comparable<? super V>> Map<K, V> sortByValue(Map<K, V> map) {
     List<Map.Entry<K, V>> list = new ArrayList<>(map.entrySet());
     list.sort(Map.Entry.comparingByValue());
     Map<K, V> result = new LinkedHashMap<>();

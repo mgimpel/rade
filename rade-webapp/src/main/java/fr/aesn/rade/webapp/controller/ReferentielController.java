@@ -143,7 +143,7 @@ public class ReferentielController {
     model.addAttribute("titre", "Region");
     model.addAttribute("region", region);
     return "regiondisplay";
-  }  
+  }
 
   /**
    * Attribut de session du contrôleur
