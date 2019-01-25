@@ -319,7 +319,7 @@ public class CommuneController {
    * @return Liste des communes affichés sur la page des résultats
    */
   public List<DisplayCommune> paginateResultatsCommune(SearchCommune searchCommune, boolean allCommune){
-    List<DisplayCommune> listeResultats = new ArrayList();
+    List<DisplayCommune> listeResultats = new ArrayList<>();
     int firstCommuneIndex = allCommune ? 0 : searchCommune.getFirstCommuneIndex();
     int lastCommuneIndex = allCommune ? searchCommune.getCommunes().size() : searchCommune.getLastCommuneIndex();
 

@@ -20,13 +20,9 @@ import fr.aesn.rade.common.modelplus.CommunePlusWithGenealogie;
 import fr.aesn.rade.webapp.model.DisplayCommune;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.BorderStyle;
@@ -36,6 +32,8 @@ import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
 
@@ -45,58 +43,52 @@ import org.apache.poi.ss.util.CellRangeAddress;
  */
 @Slf4j
 public class ExportExcel implements Export {
-    
+
   @Override
-  public void exportCommune(OutputStream output, List<DisplayCommune> listeCommunes){
+  public void exportCommune(OutputStream output, List<DisplayCommune> listeCommunes) {
     Workbook wb = buildWorkbook(listeCommunes);
-    
-      try {
-          wb.write(output);
-      } catch (IOException ex) {
-          log.info("Erreur lors de la génération de l'export excel", ex.getMessage());
-      }
+    try {
+      wb.write(output);
+    } catch (IOException e) {
+      log.info("Erreur lors de la génération de l'export excel", e);
+    }
   }
-  
-  private Workbook buildWorkbook(List<DisplayCommune> listeCommunes){
-    HSSFWorkbook wb = new HSSFWorkbook();
-    HSSFSheet sheet = wb.createSheet("Liste des communes");
 
-    HSSFCellStyle cs = wb.createCellStyle();
-    CreationHelper createHelper = wb.getCreationHelper();
-    cs.setDataFormat(createHelper.createDataFormat().getFormat("mm/DD/yyyy"));
+  private Workbook buildWorkbook(List<DisplayCommune> listeCommunes) {
+    Workbook wb = new HSSFWorkbook();
+    Sheet sheet = wb.createSheet("Liste des communes");
+    CreationHelper creationHelper = wb.getCreationHelper();
+    CellStyle cs = wb.createCellStyle();
+    cs.setDataFormat(creationHelper.createDataFormat().getFormat("DD/mm/yyyy"));
+    CellStyle headercs = getHeaderCellStyle(wb);
 
-    CellStyle celleStyleHeader = getStyleHeader(wb);
-
-    HSSFRow header1 = sheet.createRow(0);
+    Row header1 = sheet.createRow(0);
     header1.createCell(0).setCellValue("Commune");
-    header1.getCell(0).setCellStyle(celleStyleHeader);
+    header1.getCell(0).setCellStyle(headercs);
     header1.createCell(4).setCellValue("Entité mère");
-    header1.getCell(4).setCellStyle(celleStyleHeader);
-
+    header1.getCell(4).setCellStyle(headercs);
     sheet.addMergedRegion(new CellRangeAddress(0,0,0,3));
     sheet.addMergedRegion(new CellRangeAddress(0,0,4,5));
-
-    HSSFRow header2 = sheet.createRow(1);
+    Row header2 = sheet.createRow(1);
     header2.createCell(0).setCellValue("Code");
-    header2.getCell(0).setCellStyle(celleStyleHeader);
+    header2.getCell(0).setCellStyle(headercs);
     header2.createCell(1).setCellValue("Nom");
-    header2.getCell(1).setCellStyle(celleStyleHeader);
+    header2.getCell(1).setCellStyle(headercs);
     header2.createCell(2).setCellValue("Début validité");
-    header2.getCell(2).setCellStyle(celleStyleHeader);
+    header2.getCell(2).setCellStyle(headercs);
     header2.createCell(3).setCellValue("Fin validité");
-    header2.getCell(3).setCellStyle(celleStyleHeader);
+    header2.getCell(3).setCellStyle(headercs);
     header2.createCell(4).setCellValue("Motif de modification");
-    header2.getCell(4).setCellStyle(celleStyleHeader);
+    header2.getCell(4).setCellStyle(headercs);
     header2.createCell(5).setCellValue("Code Insee");
-    header2.getCell(5).setCellStyle(celleStyleHeader);
+    header2.getCell(5).setCellStyle(headercs);
 
-    for(int i = 0 ; i < listeCommunes.size() ; i++){
-      HSSFRow row = sheet.createRow(i+2);
+    for(int i = 0; i < listeCommunes.size(); i++) {
+      Row row = sheet.createRow(i+2);
       DisplayCommune commune = listeCommunes.get(i);
       row.createCell(0).setCellValue(commune.getCodeInsee());
       row.getCell(0).setCellType(CellType.STRING);
       row.createCell(1).setCellValue(commune.getNomEnrichi());
-
       if(commune.getDebutValidite() != null){
         row.createCell(2).setCellValue(commune.getDebutValidite());
         row.getCell(2).setCellStyle(cs);
@@ -105,37 +97,35 @@ public class ExportExcel implements Export {
         row.createCell(3).setCellValue(commune.getFinValidite());
         row.getCell(3).setCellStyle(cs);
       }
-
-      Iterator it = commune.getCommunePlusWithGenealogie().getParents().entrySet().iterator();
-      String motifModification = "";
-      StringBuilder sb = new StringBuilder();
-      
-      while(it.hasNext()){
-        Map.Entry pair = (Map.Entry)it.next();
-        sb.append(pair.getKey());
-        sb.append(" ");
-        motifModification = ((CommunePlusWithGenealogie.GenealogieTypeAndEntity)pair.getValue()).getType().getLibelleLong();
+      if(commune.getMotifModification() != null){
+        row.createCell(4).setCellValue(commune.getMotifModification());
+        row.getCell(4).setCellStyle(cs);
       }
-
-      row.createCell(4).setCellValue(motifModification);
+      StringBuilder sb = new StringBuilder();
+      for (Map.Entry<String, CommunePlusWithGenealogie.GenealogieTypeAndEntity> entry : commune.getParents().entrySet()) {
+        sb.append(entry.getKey());
+        sb.append(" ");
+      }
       row.createCell(5).setCellValue(sb.toString().trim());
     }
-
     sheet.autoSizeColumn(0);
     sheet.autoSizeColumn(1);
     sheet.autoSizeColumn(2);
     sheet.autoSizeColumn(3);
     sheet.autoSizeColumn(4);
     sheet.autoSizeColumn(5);
-    
     return wb;
   }
 
-  private CellStyle getStyleHeader(Workbook wb){
+  /**
+   * Cell Style for header.
+   * @param wb
+   * @return
+   */
+  private CellStyle getHeaderCellStyle(Workbook wb) {
     CellStyle styleHeader = wb.createCellStyle();
     Font fontHeader = wb.createFont();
     fontHeader.setBold(true);
-    fontHeader.setFontName("Arial");
     styleHeader.setFont(fontHeader);
     styleHeader.setFillPattern(FillPatternType.SOLID_FOREGROUND);
     styleHeader.setWrapText(true);

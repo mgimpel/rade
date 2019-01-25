@@ -18,7 +18,6 @@
 package fr.aesn.rade.webapp.controller;
 
 import fr.aesn.rade.common.util.DateConversionUtils;
-import fr.aesn.rade.common.util.StringConversionUtils;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;

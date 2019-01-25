@@ -186,7 +186,7 @@ public class CommunePlus {
     }
     return insee.getTypeNomClair();
   }
-  
+
   public Date getDebutValiditeCommuneInsee(){
     if(insee == null){
       return null;
@@ -194,26 +194,12 @@ public class CommunePlus {
     return insee.getDebutValidite();
     
   }
-  
+
   public Date getFinValiditeCommuneInsee(){
     if(insee == null){
       return null;
     }
     return insee.getFinValidite();
-  }
-  
-  public Date getDateCreationCommuneSandre(){
-    if(sandre == null){
-      return null; 
-    }
-    return sandre.getDateCreationCommune();
-  }
-  
-  public Date getDateMajCommuneSandre(){
-    if (insee == null) {
-      return null;
-    }
-    return sandre.getDateMajCommune();
   }
 
   public Set<GenealogieEntiteAdmin> getParentsInsee(){

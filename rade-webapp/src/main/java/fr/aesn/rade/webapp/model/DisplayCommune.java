@@ -21,12 +21,10 @@ import fr.aesn.rade.common.util.DateConversionUtils;
 import fr.aesn.rade.persist.model.Departement;
 import fr.aesn.rade.persist.model.Region;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.Map;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * Affichage d'une commune
@@ -46,9 +44,9 @@ public class DisplayCommune {
   String nomDepartement;
   String nomMajuscule;
   String nomRegion;
-  @DateTimeFormat(pattern="dd/MM/yyyy")
-  Date dateCreation, dateModification, debutValidite, finValidite;
-  CommunePlusWithGenealogie communePlusWithGenealogie;
+  Date debutValidite, finValidite;
+  Map<String, CommunePlusWithGenealogie.GenealogieTypeAndEntity> parents;
+  Map<String, CommunePlusWithGenealogie.GenealogieTypeAndEntity> enfants;
 
   public DisplayCommune(CommunePlusWithGenealogie communePlusWithGenealogie, Departement departement, Region region){
     
@@ -59,21 +57,19 @@ public class DisplayCommune {
     this.finValidite = communePlusWithGenealogie.getCommunePlus().getFinValiditeCommuneInsee();
     this.article = communePlusWithGenealogie.getCommunePlus().getTypeNomClair().getArticle();
     this.articleEnrichi = communePlusWithGenealogie.getCommunePlus().getArticleEnrichi();
-    this.communePlusWithGenealogie = communePlusWithGenealogie;
+    this.parents = communePlusWithGenealogie.getParents();
+    this.enfants = communePlusWithGenealogie.getEnfants();
 
     this.setNomDepartement(departement.getNomEnrichi());
     this.setCodeDepartement(departement.getCodeInsee());
     this.setNomRegion(region.getNomEnrichi());
     
-    Iterator<Map.Entry<String, CommunePlusWithGenealogie.GenealogieTypeAndEntity>> it = communePlusWithGenealogie.getParents().entrySet().iterator();
-    if(it.hasNext()){
-      this.motifModification = ((CommunePlusWithGenealogie.GenealogieTypeAndEntity)it.next().getValue()).getType().getLibelleLong();
+    if (!parents.isEmpty()) {
+      this.motifModification = parents.values().iterator().next().getType().getLibelleLong();
     }
     
     if(communePlusWithGenealogie.getCommunePlus().getCirconscriptionBassin() != null){
       this.setNomBassin(communePlusWithGenealogie.getCommunePlus().getCirconscriptionBassin().getLibelleLong());
-      this.setDateCreation(communePlusWithGenealogie.getCommunePlus().getDateCreationCommuneSandre());
-      this.setDateModification(communePlusWithGenealogie.getCommunePlus().getDateMajCommuneSandre());
       this.setCodeBassin(communePlusWithGenealogie.getCommunePlus().getCirconscriptionBassin().getCode());
     }
   }
