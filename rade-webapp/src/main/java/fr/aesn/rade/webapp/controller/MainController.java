@@ -56,7 +56,7 @@ public class MainController {
   @RequestMapping("/login")
   public String login(Model model) {
     log.debug("Requesting /login");
-    model.addAttribute("titre", "Login");    
+    model.addAttribute("titre", "Login");
     model.addAttribute("entite", new SearchEntite());
     return "login";
   }

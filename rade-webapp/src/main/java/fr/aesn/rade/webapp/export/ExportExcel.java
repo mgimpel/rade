@@ -1,19 +1,20 @@
-/*
- * Copyright (C) 2018 sophie.belin
+/*  This file is part of the Rade project (https://github.com/mgimpel/rade).
+ *  Copyright (C) 2018 Sophie Belin
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+/* $Id$ */
 package fr.aesn.rade.webapp.export;
 
 import fr.aesn.rade.common.modelplus.CommunePlusWithGenealogie;
@@ -38,23 +39,33 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
 
 /**
- * Export du résultat de la recherche de communes au format excel
+ * Export du résultat de la recherche de communes au format Excel.
  * @author sophie.belin
  */
 @Slf4j
-public class ExportExcel implements Export {
-
+public class ExportExcel
+  implements Export {
+  /**
+   * Export the given CommuneList to the given OutputStream.
+   * @param os the OutputStream to which the export is written.
+   * @param list the list of Communes to export.
+   */
   @Override
-  public void exportCommune(OutputStream output, List<DisplayCommune> listeCommunes) {
-    Workbook wb = buildWorkbook(listeCommunes);
+  public void exportCommune(OutputStream os, List<DisplayCommune> list) {
+    Workbook wb = buildCommuneWorkbook(list);
     try {
-      wb.write(output);
+      wb.write(os);
     } catch (IOException e) {
       log.info("Erreur lors de la génération de l'export excel", e);
     }
   }
 
-  private Workbook buildWorkbook(List<DisplayCommune> listeCommunes) {
+  /**
+   * Build the Excel Workbook containing the given Communes list.
+   * @param list the list of Communes to export.
+   * @return the Excel Workbook containing the given Communes list.
+   */
+  private Workbook buildCommuneWorkbook(List<DisplayCommune> list) {
     Workbook wb = new HSSFWorkbook();
     Sheet sheet = wb.createSheet("Liste des communes");
     CreationHelper creationHelper = wb.getCreationHelper();
@@ -83,9 +94,9 @@ public class ExportExcel implements Export {
     header2.createCell(5).setCellValue("Code Insee");
     header2.getCell(5).setCellStyle(headercs);
 
-    for(int i = 0; i < listeCommunes.size(); i++) {
+    for(int i = 0; i < list.size(); i++) {
       Row row = sheet.createRow(i+2);
-      DisplayCommune commune = listeCommunes.get(i);
+      DisplayCommune commune = list.get(i);
       row.createCell(0).setCellValue(commune.getCodeInsee());
       row.getCell(0).setCellType(CellType.STRING);
       row.createCell(1).setCellValue(commune.getNomEnrichi());

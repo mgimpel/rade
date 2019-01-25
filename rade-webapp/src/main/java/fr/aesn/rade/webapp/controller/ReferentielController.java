@@ -33,7 +33,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import fr.aesn.rade.persist.model.Region;
 import fr.aesn.rade.service.RegionService;
 import fr.aesn.rade.webapp.model.SearchEntite;
-import io.micrometer.core.instrument.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
@@ -66,7 +65,7 @@ public class ReferentielController {
   public String entiteSearch(@ModelAttribute("entite") SearchEntite entite, Model model) {
     log.info("Recherche d'entités, type : " + entite.getType() + ", code :" + entite.getCode());
     String view = "home";
-    if(!StringUtils.isEmpty(entite.getCode())){
+    if(entite.getCode() != null && !entite.getCode().isEmpty()){
       // une fois la combo des types dégrisée, décommenter la ligne suivante
       String type = "commune"; // entite.getType();
       if(COMMUNE.equalsIgnoreCase(type)) {

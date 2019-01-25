@@ -18,6 +18,7 @@
 package fr.aesn.rade.common.modelplus;
 
 import java.util.Date;
+import java.util.Set;
 
 import fr.aesn.rade.common.InvalidArgumentException;
 import fr.aesn.rade.common.util.SharedBusinessRules;
@@ -26,7 +27,6 @@ import fr.aesn.rade.persist.model.Commune;
 import fr.aesn.rade.persist.model.CommuneSandre;
 import fr.aesn.rade.persist.model.GenealogieEntiteAdmin;
 import fr.aesn.rade.persist.model.TypeNomClair;
-import java.util.Set;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
