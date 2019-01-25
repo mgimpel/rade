@@ -293,8 +293,8 @@ public class CommuneController {
     if(searchCommune.getDateEffet() == null){
       searchCommune.setDateEffet(new Date());
     }
-    searchCommune.setDepartementsByCodeInsee(departementService.getAllDepartement());
-    searchCommune.setRegionsByCodeInsee(regionService.getAllRegion());
+    searchCommune.setDepartementsByCodeInsee(departementService.getAllDepartement(searchCommune.getDateEffet()));
+    searchCommune.setRegionsByCodeInsee(regionService.getAllRegion(searchCommune.getDateEffet()));
     searchCommune.setCirconscriptionByCode(bassinService.getAllBassin());
     model.addAttribute("searchCommune", searchCommune);
     model.addAttribute("titre", "Rechercher une Commune");
@@ -340,9 +340,9 @@ public class CommuneController {
    * @param searchCommune
    * @return Tableau associatif comprenant le code insee et le nom de chaque département
    */
-  @RequestMapping(value = "/dep/{regionId}", method = RequestMethod.GET)
+  @RequestMapping(value = "/json/deptlist", method = RequestMethod.GET)
   public @ResponseBody  HashMap<String,String> getDepartementByRegion(
-      @PathVariable("regionId") String regionId,
+      @RequestParam("regionId") String regionId,
       @ModelAttribute("searchCommune") SearchCommune searchCommune) {
     List<Departement> listeDepartement = searchCommune.getDepartements();
     if(listeDepartement == null){

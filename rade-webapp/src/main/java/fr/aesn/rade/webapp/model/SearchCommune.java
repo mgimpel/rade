@@ -41,20 +41,20 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Slf4j
 @Getter @Setter @NoArgsConstructor
 public class SearchCommune {
-  String codeRegion;
-  String codeDepartement;
-  String codeCirconscription;
+  private String codeRegion;
+  private String codeDepartement;
+  private String codeCirconscription;
   @DateTimeFormat(pattern="yyyy-MM-dd")
-  Date dateEffet;
-  String codeInsee;
-  String nomEnrichi;
-  String page = "1";
-  List<Departement> departements;
-  Map<String,String> departementsByCodeInsee;
-  Map<String,String> regionsByCodeInsee;
-  Map<String, String> circonscriptionByCode;
-  List<DisplayCommune> listeResultats;
-  List<CommunePlusWithGenealogie> communes;
+  private Date dateEffet;
+  private String codeInsee;
+  private String nomEnrichi;
+  private String page = "1";
+  private List<Departement> departements;
+  private Map<String,String> departementsByCodeInsee;
+  private Map<String,String> regionsByCodeInsee;
+  private Map<String, String> circonscriptionByCode;
+  private List<DisplayCommune> listeResultats;
+  private List<CommunePlusWithGenealogie> communes;
 
   /**
    * Renvoie la date au format dd/MM/yyyy 
@@ -174,4 +174,3 @@ public class SearchCommune {
     return result;
   }
 }
-

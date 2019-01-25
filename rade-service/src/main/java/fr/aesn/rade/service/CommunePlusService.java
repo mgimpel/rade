@@ -50,7 +50,7 @@ public interface CommunePlusService {
    * @return the Commune with the given code at the given date.
    */
   public CommunePlus getCommuneByCode(String code, String date);
-  
+
   /**
    * Returns a List of all Commune from the given codeInsee, departement, 
    * region, circonscription, commune name and/or date.
@@ -68,7 +68,7 @@ public interface CommunePlusService {
                                             String codeRegion,
                                             String nomCommune,
                                             Date dateEffet);
-                                            
+
   /**
    * Get the Commune with the given code at the given date, and all it's
    * genealogie.
@@ -79,5 +79,4 @@ public interface CommunePlusService {
    */
   public CommunePlusWithGenealogie getCommuneWithGenealogie(final String code,
                                                             final Date date);
-  
 }

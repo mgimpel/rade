@@ -20,136 +20,131 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <jsp:include page="aesn_header.jsp" />
-    <script>  
-        function validerForm(){
-            var nomEnrichi = document.getElementById("nomEnrichi").value;
-            var codeRegion = document.getElementById("codeRegion").value;
-            var codeDepartement = document.getElementById("codeDepartement").value;
-            var circonscription = document.getElementById("codeCirconscription").value;
-            var codeInsee = document.getElementById("codeInsee").value;
-            if(codeInsee != "" && codeInsee != null){
-                if(!/^[0-9a-zA-Z]{2}[0-9]{3}$/.test(codeInsee)){
-                    alert("Le code INSEE doit être composé de cinq chiffres ou de deux lettres et trois chiffres");
-                    return false;
-                }
-            }
+	<script>
+		window.onload = function(){
+			loadDepartement();
 
-            var dateEffet = document.getElementById("dateEffet").value;
-            if(dateEffet != "" && dateEffet != null){
-                if(!/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(dateEffet)){
-                    alert("La date n'est pas valide");
-                    return false;
-                }
-            }
-            
-            if(codeInsee == "" && nomEnrichi == "" && codeRegion == "-1" && codeDepartement == "-1" && circonscription == "-1"){
-                alert("Au moins un des champs doit être renseigné");
-                return false;
-            }
+			document.getElementById("codeRegion").onchange = function(){
+				loadDepartement();
+			}
+		}
 
-            return true;
-        }
-    </script>
-    <tr>
-        <td colspan="2">
-            
-            <script>
-                window.onload = function(){
-                    loadDepartement();
+		function loadDepartement() {
+			var regionId = document.getElementById("codeRegion").value;
+			var xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function() {
+				if (this.readyState == 4 && this.status == 200) {
+					listeDeptJson = JSON.parse(this.responseText);
 
-                    document.getElementById("codeRegion").onchange = function(){
-                        loadDepartement();
-                    }
-                }
-                
-                function loadDepartement() {
-                    var regionId = document.getElementById("codeRegion").value;
-                    
-                    var xhttp = new XMLHttpRequest();
-                    
-                    xhttp.onreadystatechange = function() {
-                      if (this.readyState == 4 && this.status == 200) {
-                        listeDeptJson = JSON.parse(this.responseText);
-                        
-                        var departementSelected = document.getElementById("codeDepartement").value;
-                        var listeDepartement= document.getElementById("codeDepartement");
-                        var option = "<option value='-1'>Sélectionner un département...</option>";
-                        listeDepartement.innerHTML = "";
-                        
-                        for(var codeInseeDept in listeDeptJson) {
-                            var nomDept = listeDeptJson[codeInseeDept];
-                            if(departementSelected !== codeInseeDept){
-                                option = option + "<option value='" + codeInseeDept + "'>" + nomDept + "</option>";
-                            }else{
-                                option = option + "<option value='" + codeInseeDept + "' selected='selected'>" + nomDept + "</option>";
-                            }
-                        }
-                        
-                        listeDepartement.innerHTML = option;
-                      }
-                    };
-                    xhttp.open("GET", "/referentiel/commune/dep/" + regionId, true);
-                    xhttp.send();
-                  }
-            </script>
-            
-            <c:if test="${errorRecherche != null && !errorRecherche.equals('')}">
-                <div style="border: 1px solid #ffeeba; padding: 5px; background-color: #fff3cd; margin-bottom: 5px;">${errorRecherche}</div>
-            </c:if>
-            <form:form id="formCommune" method="POST" action="/referentiel/commune/resultats" modelAttribute="searchCommune">
-                <table  class="prez" style="margin-left:auto;margin-right:auto;">
-                    <tr>
-                        <td style="text-align: right"><form:label path="codeInsee">Code INSEE :</form:label></td>
-                        <td><form:input style="width:95px"  path="codeInsee"/></td>
-                    </tr>
+					var departementSelected = document.getElementById("codeDepartement").value;
+					var listeDepartement= document.getElementById("codeDepartement");
+					var option = "<option value='-1'>Sélectionner un département...</option>";
+					listeDepartement.innerHTML = "";
 
-                    <tr>
-                        <td style="text-align: right"><form:label path="nomEnrichi">Nom :</form:label></td>
-                        <td><form:input  style="width:300px"  path="nomEnrichi"/></td>
-                    </tr>
+					for(var codeInseeDept in listeDeptJson) {
+						var nomDept = listeDeptJson[codeInseeDept];
+						if(departementSelected !== codeInseeDept) {
+							option = option + "<option value='" + codeInseeDept + "'>" + nomDept + "</option>";
+						} else {
+							option = option + "<option value='" + codeInseeDept + "' selected='selected'>" + nomDept + "</option>";
+						}
+					}
 
-                    <tr>
-                        <td style="text-align: right"><form:label path="codeRegion">Region :</form:label></td>
-                        <td>
-                            <form:select style="width:300px"  path="codeRegion">
-                                <form:option value="-1" label="Sélectionner une région..." />
-                                <form:options  items="${searchCommune.regionsByCodeInsee}"  />
-                            </form:select>
-                        </td>
-                    </tr>
+					listeDepartement.innerHTML = option;
+				}
+			};
+			xhttp.open("GET", "/referentiel/commune/json/deptlist?regionId=" + regionId, true);
+			xhttp.send();
+		}
 
-                     <tr>
-                        <td style="text-align: right"><form:label path="codeDepartement">Département :</form:label></td>
-                        <td>
-                            <form:select style="width:300px" path="codeDepartement">
-                                <form:option value="-1" label="Sélectionner un département..." />
-                                <form:options  items="${searchCommune.departementsByCodeInsee}"  />
-                            </form:select>
-                        </td>
-                    </tr>
+		function validerForm(){
+			var nomEnrichi = document.getElementById("nomEnrichi").value;
+			var codeRegion = document.getElementById("codeRegion").value;
+			var codeDepartement = document.getElementById("codeDepartement").value;
+			var circonscription = document.getElementById("codeCirconscription").value;
+			var codeInsee = document.getElementById("codeInsee").value;
+			if(codeInsee != "" && codeInsee != null){
+				if(!/^[0-9a-zA-Z]{2}[0-9]{3}$/.test(codeInsee)){
+					alert("Le code INSEE doit être composé de cinq chiffres ou de deux lettres et trois chiffres");
+					return false;
+				}
+			}
 
-                    <tr>
-                        <td style="text-align: right"><form:label path="codeCirconscription">Circonscription bassin :</form:label></td>
-                        <td>
-                            <form:select  style="width:300px"  path="codeCirconscription">
-                                <form:option value="-1" label="Sélectionner une circonscription..." />
-                                <form:options  items="${searchCommune.circonscriptionByCode}"  />
-                            </form:select>
-                        </td>
-                    </tr>
+			var dateEffet = document.getElementById("dateEffet").value;
+			if(dateEffet != "" && dateEffet != null){
+				if(!/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(dateEffet)){
+					alert("La date n'est pas valide");
+					return false;
+				}
+			}
 
-                    <tr>
-                        <td style="text-align: right"><label for="dateEffet">Date d'effet : </label></td>
-                        <td><form:input type="date" style="width:110px"  path="dateEffet"/></td>
-                    </tr>
-                </table>
-                    <input type="hidden" value="testvaleur" name="test" />
-                <div class="action">
-                    <input name="annuler" type="submit" value="Annuler"> 
-                    <input type="submit" name="valider" value="Rechercher" onclick="return validerForm();">
-                </div>
-            </form:form>
-        </td>
-    </tr> 
+			if(codeInsee == "" && nomEnrichi == "" && codeRegion == "-1" && codeDepartement == "-1" && circonscription == "-1"){
+				alert("Au moins un des champs doit être renseigné");
+				return false;
+			}
+
+			return true;
+		}
+	</script>
+	<tr>
+		<td colspan="2">
+			<c:if test="${errorRecherche != null && !errorRecherche.equals('')}">
+				<div style="border: 1px solid #ffeeba; padding: 5px; background-color: #fff3cd; margin-bottom: 5px;">${errorRecherche}</div>
+			</c:if>
+			<form:form id="formCommune" method="POST" action="/referentiel/commune/resultats" modelAttribute="searchCommune">
+				<table  class="prez" style="margin-left:auto;margin-right:auto;">
+					<tr>
+						<td style="text-align: right"><form:label path="codeInsee">Code INSEE :</form:label></td>
+						<td><form:input style="width:95px"  path="codeInsee"/></td>
+					</tr>
+
+					<tr>
+						<td style="text-align: right"><form:label path="nomEnrichi">Nom :</form:label></td>
+						<td><form:input  style="width:300px"  path="nomEnrichi"/></td>
+					</tr>
+
+					<tr>
+						<td style="text-align: right"><form:label path="codeRegion">Region :</form:label></td>
+						<td>
+							<form:select style="width:300px"  path="codeRegion">
+								<form:option value="-1" label="Sélectionner une région..." />
+								<form:options  items="${searchCommune.regionsByCodeInsee}"  />
+							</form:select>
+						</td>
+					</tr>
+
+					<tr>
+						<td style="text-align: right"><form:label path="codeDepartement">Département :</form:label></td>
+						<td>
+							<form:select style="width:300px" path="codeDepartement">
+								<form:option value="-1" label="Sélectionner un département..." />
+								<form:options  items="${searchCommune.departementsByCodeInsee}"  />
+							</form:select>
+						</td>
+					</tr>
+
+					<tr>
+						<td style="text-align: right"><form:label path="codeCirconscription">Circonscription bassin :</form:label></td>
+						<td>
+							<form:select  style="width:300px"  path="codeCirconscription">
+								<form:option value="-1" label="Sélectionner une circonscription..." />
+								<form:options  items="${searchCommune.circonscriptionByCode}"  />
+							</form:select>
+						</td>
+					</tr>
+
+					<tr>
+						<td style="text-align: right"><label for="dateEffet">Date d'effet : </label></td>
+						<td><form:input type="date" style="width:110px"  path="dateEffet"/></td>
+					</tr>
+				</table>
+
+				<div class="action">
+					<input name="annuler" type="submit" value="Annuler"> 
+					<input type="submit" name="valider" value="Rechercher" onclick="return validerForm();">
+				</div>
+			</form:form>
+		</td>
+	</tr> 
 
 <jsp:include page="aesn_footer.jsp" />
