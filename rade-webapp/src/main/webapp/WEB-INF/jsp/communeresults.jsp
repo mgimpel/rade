@@ -128,7 +128,7 @@
                 
                 <c:forEach items="${searchCommune.listeResultats}" var="communeDisplay">
                    <tr>
-                       <td style="text-align: center">
+                       <td>
                            <a href="${communeDisplay.getUrlEntite(communeDisplay.codeInsee, communeDisplay.finValidite)}">
                                ${communeDisplay.codeInsee}
                            </a>
@@ -138,7 +138,7 @@
                        <td style="text-align: center">${communeDisplay.getDateIHM(communeDisplay.finValidite)}</td>
                        <td style="text-align: center">${communeDisplay.motifModification}</td>
                        <td>
-                           <c:forEach items="${communeDisplay.communePlusWithGenealogie.parents}" var="genealogieParent">
+                           <c:forEach items="${communeDisplay.parents}" var="genealogieParent">
                                 <a href="${communeDisplay.getUrlEntite(genealogieParent.key, genealogieParent.value.entity.finValidite)}">${genealogieParent.key}</a>
                             </c:forEach>
                        </td>

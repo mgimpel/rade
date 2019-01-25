@@ -101,7 +101,7 @@
 
         <div class="pave">
             <fieldset>
-                <legend>Données historisation</legend>
+                <legend>Données historisation INSEE</legend>
                 <table style="height: 105px;">
                     <tr>
                         <td  width="18%"><label>Début validité : </label></td>
@@ -126,10 +126,10 @@
             <fieldset>
                 <legend>Entités mères</legend>
                 <table>
-                    <c:if test="${displayCommune.communePlusWithGenealogie.parents.size() == 0}">   
+                    <c:if test="${displayCommune.parents.isEmpty()}">   
                         <td>Aucune entités mères</td>
                     </c:if>
-                    <c:forEach items="${displayCommune.communePlusWithGenealogie.parents}" var="genealogieParent">
+                    <c:forEach items="${displayCommune.parents}" var="genealogieParent">
                         <tr>
                             <td style="width: 60px; text-align: center"><a href="${displayCommune.getUrlEntite(genealogieParent.key, genealogieParent.value.entity.finValidite)}">${genealogieParent.key}</a></td>
                             <td>${genealogieParent.value.entity.nomEnrichi}</td>
@@ -143,10 +143,10 @@
             <fieldset>
                 <legend>Entités filles</legend>
                 <table>
-                    <c:if test="${displayCommune.communePlusWithGenealogie.enfants.size() == 0}">   
+                    <c:if test="${displayCommune.enfants.isEmpty()}">   
                         <td>Aucune entités filles</td>
                     </c:if>
-                    <c:forEach items="${displayCommune.communePlusWithGenealogie.enfants}" var="genealogieEnfant">
+                    <c:forEach items="${displayCommune.enfants}" var="genealogieEnfant">
                         <tr>
                             <td style="width: 60px; text-align: center"><a href="${displayCommune.getUrlEntite(genealogieEnfant.key, genealogieEnfant.value.entity.finValidite)}">${genealogieEnfant.key}</a></td>
                             <td>${genealogieEnfant.value.entity.nomEnrichi}</td>

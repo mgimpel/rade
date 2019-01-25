@@ -18,6 +18,7 @@
 package fr.aesn.rade.common.modelplus;
 
 import java.util.Date;
+import java.util.Set;
 
 import fr.aesn.rade.common.InvalidArgumentException;
 import fr.aesn.rade.common.util.SharedBusinessRules;
@@ -26,7 +27,6 @@ import fr.aesn.rade.persist.model.Commune;
 import fr.aesn.rade.persist.model.CommuneSandre;
 import fr.aesn.rade.persist.model.GenealogieEntiteAdmin;
 import fr.aesn.rade.persist.model.TypeNomClair;
-import java.util.Set;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -186,7 +186,7 @@ public class CommunePlus {
     }
     return insee.getTypeNomClair();
   }
-  
+
   public Date getDebutValiditeCommuneInsee(){
     if(insee == null){
       return null;
@@ -194,26 +194,12 @@ public class CommunePlus {
     return insee.getDebutValidite();
     
   }
-  
+
   public Date getFinValiditeCommuneInsee(){
     if(insee == null){
       return null;
     }
     return insee.getFinValidite();
-  }
-  
-  public Date getDateCreationCommuneSandre(){
-    if(sandre == null){
-      return null; 
-    }
-    return sandre.getDateCreationCommune();
-  }
-  
-  public Date getDateMajCommuneSandre(){
-    if (insee == null) {
-      return null;
-    }
-    return sandre.getDateMajCommune();
   }
 
   public Set<GenealogieEntiteAdmin> getParentsInsee(){

@@ -1,19 +1,20 @@
-/*
- * Copyright (C) 2018 sophie.belin
+/*  This file is part of the Rade project (https://github.com/mgimpel/rade).
+ *  Copyright (C) 2018 Sophie Belin
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+/* $Id$ */
 package fr.aesn.rade.webapp.model;
 
 import fr.aesn.rade.common.modelplus.CommunePlusWithGenealogie;
@@ -25,30 +26,28 @@ import java.util.Iterator;
 import java.util.Map;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * Affichage d'une commune
  * @author sophie.belin
  */
-@Getter @Setter @NoArgsConstructor
+@Getter @NoArgsConstructor
 public class DisplayCommune {
-  String codeInsee;
-  String motifModification;
-  String nomEnrichi;
-  String commentaireModification;
-  String article;
-  String articleEnrichi;
-  String codeBassin;
-  String nomBassin;
-  String codeDepartement;
-  String nomDepartement;
-  String nomMajuscule;
-  String nomRegion;
-  @DateTimeFormat(pattern="dd/MM/yyyy")
-  Date dateCreation, dateModification, debutValidite, finValidite;
-  CommunePlusWithGenealogie communePlusWithGenealogie;
+  private String codeInsee;
+  private String motifModification;
+  private String nomEnrichi;
+  private String commentaireModification;
+  private String article;
+  private String articleEnrichi;
+  private String codeBassin;
+  private String nomBassin;
+  private String codeDepartement;
+  private String nomDepartement;
+  private String nomMajuscule;
+  private String nomRegion;
+  private Date debutValidite, finValidite;
+  private Map<String, CommunePlusWithGenealogie.GenealogieTypeAndEntity> parents;
+  private Map<String, CommunePlusWithGenealogie.GenealogieTypeAndEntity> enfants;
 
   public DisplayCommune(CommunePlusWithGenealogie communePlusWithGenealogie){
     
@@ -59,17 +58,18 @@ public class DisplayCommune {
     this.finValidite = communePlusWithGenealogie.getCommunePlus().getFinValiditeCommuneInsee();
     this.article = communePlusWithGenealogie.getCommunePlus().getTypeNomClair().getArticle();
     this.articleEnrichi = communePlusWithGenealogie.getCommunePlus().getArticleEnrichi();
-    this.communePlusWithGenealogie = communePlusWithGenealogie;
+    this.parents = communePlusWithGenealogie.getParents();
+    this.enfants = communePlusWithGenealogie.getEnfants();
 
     Map<String, CommunePlusWithGenealogie.GenealogieTypeAndEntity> genealogie = null;
             
-    if(communePlusWithGenealogie.getParents().size() > 0){
+    if(!parents.isEmpty()){
       genealogie = communePlusWithGenealogie.getParents();
-    }else if(communePlusWithGenealogie.getEnfants().size() > 0){
+    }else if(!enfants.isEmpty()){
       genealogie = communePlusWithGenealogie.getEnfants();
     }
     
-    if(genealogie != null){
+    if (genealogie != null) {
       Iterator<Map.Entry<String, CommunePlusWithGenealogie.GenealogieTypeAndEntity>> it = genealogie.entrySet().iterator();
       if(it.hasNext()){
         this.motifModification = ((CommunePlusWithGenealogie.GenealogieTypeAndEntity)it.next().getValue()).getType().getLibelleLong();
@@ -77,50 +77,52 @@ public class DisplayCommune {
     }
     
     if(communePlusWithGenealogie.getCommunePlus().getCirconscriptionBassin() != null){
-      this.setNomBassin(communePlusWithGenealogie.getCommunePlus().getCirconscriptionBassin().getLibelleLong());
-      this.setDateCreation(communePlusWithGenealogie.getCommunePlus().getDateCreationCommuneSandre());
-      this.setDateModification(communePlusWithGenealogie.getCommunePlus().getDateMajCommuneSandre());
-      this.setCodeBassin(communePlusWithGenealogie.getCommunePlus().getCirconscriptionBassin().getCode());
+      this.nomBassin = communePlusWithGenealogie.getCommunePlus().getCirconscriptionBassin().getLibelleLong();
+      this.codeBassin = communePlusWithGenealogie.getCommunePlus().getCirconscriptionBassin().getCode();
     }
   }
   
   public DisplayCommune(CommunePlusWithGenealogie communePlusWithGenealogie, Departement departement, Region region){
     this(communePlusWithGenealogie);
-    this.setNomDepartement(departement.getNomEnrichi());
-    this.setCodeDepartement(departement.getCodeInsee());
-    this.setNomRegion(region.getNomEnrichi());
+    this.nomDepartement = departement.getNomEnrichi();
+    this.codeDepartement = departement.getCodeInsee();
+    this.nomRegion = region.getNomEnrichi();
   }
 
   /**
-   * Renvoie la date formatée au format dd/MM/yyyy
-   * @param date 
-   * @return date formatée
+   * Renvoie la date comme String au format IHM: dd/MM/yyyy
+   * @param date la date à formatter.
+   * @return date formatée.
    */
   public String getDateIHM(Date date){
-    return DateConversionUtils.formatDateToStringIHM(date);
+    return DateConversionUtils.formatDateToStringUi(date);
   }
-  
+
+  /**
+   * Renvoie la date comme String au format URL: yyyy-MM-dd
+   * @param date la date à formatter.
+   * @return date formatée.
+   */
   public String getDateUrl(Date date){
     return DateConversionUtils.formatDateToStringUrl(date);
   }
 
   /**
-   * Renvoie l'url correspondant à l'entité
+   * Renvoie l'url correspondant à l'entité.
    * @param codeInsee 
    * @param dateFinValidite 
    * @return L'url permettant d'afficher l'entité
    */
   public String getUrlEntite(String codeInsee, Date dateFinValidite){
-     if(codeInsee != null){
-       Date date;
-    
-      if(dateFinValidite == null){
-        date = new Date();
-      }else{
-        date = new Date(dateFinValidite.getTime() - 1);
-      }
-      return "/referentiel/commune/" + codeInsee + "?date=" + DateConversionUtils.formatDateToStringUrl(date);
+    if(codeInsee == null) {
+      return null;
     }
-    return null;
+    Date date;
+    if(dateFinValidite == null){
+      date = new Date();
+    }else{
+      date = new Date(dateFinValidite.getTime() - 1);
+    }
+    return "/referentiel/commune/" + codeInsee + "?date=" + DateConversionUtils.formatDateToStringUrl(date);
   }
 }

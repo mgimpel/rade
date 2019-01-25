@@ -24,7 +24,6 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 
 import org.junit.*;
-import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
@@ -35,11 +34,10 @@ import fr.aesn.rade.persist.dao.CommuneSandreJpaDao;
 import fr.aesn.rade.service.impl.CommunePlusServiceImpl;
 
 /**
- * JUnit Test for DelegationService.
+ * JUnit Test for CommunePlusService.
  * 
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TestCommunePlusService
   extends AbstractTestService {
   /** DAO for the Service to be tested. */
