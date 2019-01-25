@@ -59,16 +59,20 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 @RequestMapping("/referentiel/commune")
 @SessionAttributes({"searchCommune", "entite"})
 public class CommuneController {
-  /** Service. */
+  /** Default name for the export file. */
+  public final String DEFAULT_EXPORT_FILENAME = "export-communes";
+  /** Region Service. */
   @Autowired
   private RegionService regionService;
+  /** Departement Service. */
   @Autowired
   private DepartementService departementService;
+  /** Bassin Service. */
   @Autowired
   private BassinService bassinService;
+  /** Commune Service. */
   @Autowired
   private CommunePlusService communePlusService;
-  private final String DEFAULT_EXPORT_FILENAME = "export-communes";
 
   /**
    * Export de la liste des communes au format Excel
@@ -82,7 +86,6 @@ public class CommuneController {
     searchCommune.setListeResultats(paginateResultatsCommune(searchCommune, true));
     response.setContentType("application/vnd.ms-excel");
     response.setHeader("Content-Disposition", "attachment; filename=\"" + DEFAULT_EXPORT_FILENAME + "\"");
-    
     try {
       OutputStream out = response.getOutputStream();
       export.exportCommune(out, searchCommune.getCommunes());
@@ -198,16 +201,10 @@ public class CommuneController {
   @RequestMapping(params = "annuler", value = "/resultats", method = RequestMethod.POST)
   public String annulerForm(Model model,
                            @ModelAttribute("searchCommune") SearchCommune searchCommune) {
-    searchCommune.setCodeInsee(null);
-    searchCommune.setCodeDepartement("-1");
-    searchCommune.setCodeRegion("-1");
-    searchCommune.setCodeCirconscription("-1");
-    searchCommune.setNomEnrichi(null);
-    searchCommune.setDateEffet(new Date());
-    
-    if(searchCommune.getListeResultats() != null){
+    searchCommune.reset();
+    if(searchCommune.getListeResultats() != null) {
       searchCommune.getListeResultats().clear();
-    }else{
+    } else {
       searchCommune.setListeResultats(new ArrayList<>());
     }
     return initRechercheCommuneView(searchCommune, model);
@@ -229,7 +226,7 @@ public class CommuneController {
     
     Date dateValidite = null;
 
-    if(dateParam != null){
+    if(dateParam != null) {
         try {
              dateValidite = DateConversionUtils.formatStringToDateUrl(dateParam);
         } catch (ParseException ex) {
@@ -240,7 +237,7 @@ public class CommuneController {
     if (code != null) {
       List<CommunePlusWithGenealogie> communes = communePlusService.getCommuneByCriteria(code,null,null,null,null,dateValidite);
       
-      if(communes != null && communes.size() > 0){
+      if(communes != null && communes.size() > 0) {
         if(communes.size() == 1){
           CommunePlusWithGenealogie communePlusWithGenealogie = communes.get(0);
           Departement departement = departementService.getDepartementByCode(communePlusWithGenealogie.getCommunePlus().getDepartement(), communePlusWithGenealogie.getCommunePlus().getDebutValiditeCommuneInsee());
@@ -249,17 +246,17 @@ public class CommuneController {
           DisplayCommune displayCommune = new DisplayCommune(communePlusWithGenealogie, departement, region);
           view = initDetailCommuneView(displayCommune, model);
           
-        }else{
+        } else {
           SearchCommune searchCommune = new SearchCommune();
           searchCommune.setCodeInsee(code);
           searchCommune.setCommunes(communes);
           searchCommune.setPage("1");
           view = initResultatsRechercheCommuneView(searchCommune, model);
         }
-      }else{
+      } else {
         model.addAttribute("errorRecherche", "La commune recherchée n'existe pas");
       }
-    }else{
+    } else {
       view = initRechercheCommuneView(new SearchCommune(), model);
       model.addAttribute("errorRecherche", "La recherche n'a rien retourné");
     }
@@ -326,7 +323,7 @@ public class CommuneController {
     int firstCommuneIndex = allCommune ? 0 : searchCommune.getFirstCommuneIndex();
     int lastCommuneIndex = allCommune ? searchCommune.getCommunes().size() : searchCommune.getLastCommuneIndex();
 
-    for(int i = firstCommuneIndex ; i < lastCommuneIndex ; i++){
+    for(int i = firstCommuneIndex ; i < lastCommuneIndex ; i++) {
       CommunePlusWithGenealogie commune = searchCommune.getCommunes().get(i);
       listeResultats.add(new DisplayCommune(commune));
     }
@@ -350,8 +347,8 @@ public class CommuneController {
     }
     HashMap<String,String> departementByRegion = new HashMap<>();
 
-    for(Departement d : listeDepartement){
-      if(d.getRegion().equals(regionId) || regionId.equals("-1")){
+    for(Departement d : listeDepartement) {
+      if(d.getRegion().equals(regionId) || regionId.equals("-1")) {
         departementByRegion.put(d.getCodeInsee(), d.getNomEnrichi());
       }
     }

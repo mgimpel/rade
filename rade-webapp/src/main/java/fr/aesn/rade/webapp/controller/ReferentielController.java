@@ -49,10 +49,10 @@ public class ReferentielController {
   @Autowired
   private RegionService regionService;
 
-  private final static String REGION  = "region";
-  private final static String DEPT  = "dept";
-  private final static String COMMUNE  = "commune";
-  private final static String BASSIN  = "bassin"; 
+  public final static String REGION  = "region";
+  public final static String DEPT    = "dept";
+  public final static String COMMUNE = "commune";
+  public final static String BASSIN  = "bassin"; 
 
   /**
    * Entite search mapping

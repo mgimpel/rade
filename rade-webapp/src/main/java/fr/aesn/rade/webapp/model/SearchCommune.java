@@ -1,19 +1,20 @@
-/*
- * Copyright (C) 2018 sophie.belin
+/*  This file is part of the Rade project (https://github.com/mgimpel/rade).
+ *  Copyright (C) 2018 Sophie Belin
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+/* $Id$ */
 package fr.aesn.rade.webapp.model;
 
 import fr.aesn.rade.common.modelplus.CommunePlusWithGenealogie;
@@ -62,18 +63,18 @@ public class SearchCommune {
    * @param date 
    * @return Date
    */
-  public String getDateIHM(Date date){
+  public String getDateIHM(Date date) {
     return DateConversionUtils.formatDateToStringUi(date);
   }
 
-  public void setPage(String page){
-    try{
+  public void setPage(String page) {
+    try {
       int numPage = Integer.parseInt(page);
-      if(numPage <= getPageMax()){
+      if(numPage <= getPageMax()) {
         this.page = page;
       }
-    }catch(NumberFormatException e){
-      log.error("Paramètre non valide");
+    } catch(NumberFormatException e) {
+      log.info("Invalid parameter: page={}", page);
     }
   }
 
@@ -81,15 +82,15 @@ public class SearchCommune {
    * Renvoie l'index de la première commune
    * @return Index 
    */
-  public int getFirstCommuneIndex(){
+  public int getFirstCommuneIndex() {
     int index = 1;
-    if(communes != null && communes.size() > 0){
-      try{
+    if(communes != null && communes.size() > 0) {
+      try {
         index = Integer.parseInt(page) * 10 - 10;
-      }catch(NumberFormatException ne){
+      } catch(NumberFormatException e) {
         page = "1";
       }
-      if(index > communes.size()){
+      if(index > communes.size()) {
         index = this.communes.size();
       }
     }
@@ -100,11 +101,11 @@ public class SearchCommune {
    * Renvoie l'index de la dernière commune
    * @return Index
    */
-  public int getLastCommuneIndex(){
+  public int getLastCommuneIndex() {
     int index = 1;
-    if(communes != null && communes.size() > 0){
+    if(communes != null && communes.size() > 0) {
       index = getFirstCommuneIndex() + 10;
-      if(index > this.communes.size()){
+      if(index > this.communes.size()) {
         index = this.communes.size();
       }
     }
@@ -116,18 +117,18 @@ public class SearchCommune {
    * ou un département
    * @return Nombre de page
    */
-  public int getPageMax(){
-    if(this.communes != null && this.communes.size() > 0){
+  public int getPageMax() {
+    if(this.communes != null && this.communes.size() > 0) {
       return (int) Math.ceil((double)this.communes.size() / (double)10);
-    }else{
+    } else {
       return 1;
     }
   }
 
-  public void setRegionsByCodeInsee(List<Region> regions){
+  public void setRegionsByCodeInsee(List<Region> regions) {
     regionsByCodeInsee = new HashMap<>();
-    if(regions != null){
-      for(Region r : regions){
+    if(regions != null) {
+      for(Region r : regions) {
         if(!regionsByCodeInsee.containsKey(r.getCodeInsee())){
           regionsByCodeInsee.put(r.getCodeInsee(), r.getNomEnrichi() );
         }
@@ -137,11 +138,11 @@ public class SearchCommune {
     }
   }
 
-  public void setDepartementsByCodeInsee(List<Departement> departements){
+  public void setDepartementsByCodeInsee(List<Departement> departements) {
     departementsByCodeInsee = new HashMap<>();
-    if(departements != null){
-      for(Departement r : departements){
-        if(!departementsByCodeInsee.containsKey(r.getCodeInsee())){
+    if(departements != null) {
+      for(Departement r : departements) {
+        if(!departementsByCodeInsee.containsKey(r.getCodeInsee())) {
           departementsByCodeInsee.put(r.getCodeInsee(), r.getNomEnrichi() );
         }
       }
@@ -150,11 +151,11 @@ public class SearchCommune {
     }
   }
 
-  public void setCirconscriptionByCode(List<CirconscriptionBassin> circonscriptions){
+  public void setCirconscriptionByCode(List<CirconscriptionBassin> circonscriptions) {
     circonscriptionByCode = new HashMap<>();
     if(circonscriptions != null){
-      for(CirconscriptionBassin c : circonscriptions){
-        if(!circonscriptionByCode.containsKey(c.getCode())){
+      for(CirconscriptionBassin c : circonscriptions) {
+        if(!circonscriptionByCode.containsKey(c.getCode())) {
           circonscriptionByCode.put(c.getCode(), c.getLibelleLong());
         }
       }
@@ -162,15 +163,22 @@ public class SearchCommune {
     }
   }
 
+  public void reset() {
+    codeInsee = null;
+    codeDepartement = "-1";
+    codeRegion = "-1";
+    codeCirconscription = "-1";
+    nomEnrichi = null;
+    dateEffet = new Date();
+  }
+
   public static <K, V extends Comparable<? super V>> Map<K, V> sortByValue(Map<K, V> map) {
     List<Map.Entry<K, V>> list = new ArrayList<>(map.entrySet());
     list.sort(Map.Entry.comparingByValue());
-
     Map<K, V> result = new LinkedHashMap<>();
     for (Map.Entry<K, V> entry : list) {
       result.put(entry.getKey(), entry.getValue());
     }
-
     return result;
   }
 }

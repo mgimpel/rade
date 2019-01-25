@@ -170,10 +170,10 @@ public class CommunePlusServiceImpl
                                             String nomCommune,
                                             Date dateEffet){
     
-    List<CommunePlusWithGenealogie> communesPlus = new ArrayList();
+    List<CommunePlusWithGenealogie> communesPlus = new ArrayList<>();
     // Recherche par code INSEE et par date
     if(codeInsee != null && dateEffet != null && codeDept == null && codeBassin == null && nomCommune == null){
-      System.out.println("code : " + codeInsee + " date : " + dateEffet);
+      log.info("code : " + codeInsee + " date : " + dateEffet);
       CommunePlusWithGenealogie communeGenealogie = getCommuneWithGenealogie(codeInsee, dateEffet);
       if(communeGenealogie != null){
         communesPlus.add(communeGenealogie);
