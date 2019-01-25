@@ -17,7 +17,7 @@
 /* $Id$ */
 package fr.aesn.rade.webapp.export;
 
-import fr.aesn.rade.webapp.model.DisplayCommune;
+import fr.aesn.rade.common.modelplus.CommunePlusWithGenealogie;
 import java.io.OutputStream;
 import java.util.List;
 
@@ -32,5 +32,5 @@ public interface Export {
    * @param list the list of Communes to export.
    */
   public void exportCommune(OutputStream os,
-                            List<DisplayCommune> list);
+                            List<CommunePlusWithGenealogie> list);
 }

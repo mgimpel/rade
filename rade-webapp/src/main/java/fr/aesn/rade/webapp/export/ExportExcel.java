@@ -18,7 +18,6 @@
 package fr.aesn.rade.webapp.export;
 
 import fr.aesn.rade.common.modelplus.CommunePlusWithGenealogie;
-import fr.aesn.rade.webapp.model.DisplayCommune;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
@@ -51,7 +50,7 @@ public class ExportExcel
    * @param list the list of Communes to export.
    */
   @Override
-  public void exportCommune(OutputStream os, List<DisplayCommune> list) {
+  public void exportCommune(OutputStream os, List<CommunePlusWithGenealogie> list) {
     Workbook wb = buildCommuneWorkbook(list);
     try {
       wb.write(os);
@@ -65,7 +64,7 @@ public class ExportExcel
    * @param list the list of Communes to export.
    * @return the Excel Workbook containing the given Communes list.
    */
-  private Workbook buildCommuneWorkbook(List<DisplayCommune> list) {
+  private Workbook buildCommuneWorkbook(List<CommunePlusWithGenealogie> list) {
     Workbook wb = new HSSFWorkbook();
     Sheet sheet = wb.createSheet("Liste des communes");
     CreationHelper creationHelper = wb.getCreationHelper();
@@ -96,26 +95,29 @@ public class ExportExcel
 
     for(int i = 0; i < list.size(); i++) {
       Row row = sheet.createRow(i+2);
-      DisplayCommune commune = list.get(i);
-      row.createCell(0).setCellValue(commune.getCodeInsee());
+      CommunePlusWithGenealogie commune = list.get(i);
+      row.createCell(0).setCellValue(commune.getCommunePlus().getCodeInsee());
       row.getCell(0).setCellType(CellType.STRING);
-      row.createCell(1).setCellValue(commune.getNomEnrichi());
-      if(commune.getDebutValidite() != null){
-        row.createCell(2).setCellValue(commune.getDebutValidite());
+      row.createCell(1).setCellValue(commune.getCommunePlus().getNomEnrichi());
+      if(commune.getCommunePlus().getDebutValiditeCommuneInsee()!= null){
+        row.createCell(2).setCellValue(commune.getCommunePlus().getDebutValiditeCommuneInsee());
         row.getCell(2).setCellStyle(cs);
       }
-      if(commune.getFinValidite() != null){
-        row.createCell(3).setCellValue(commune.getFinValidite());
+      if(commune.getCommunePlus().getFinValiditeCommuneInsee()!= null){
+        row.createCell(3).setCellValue(commune.getCommunePlus().getFinValiditeCommuneInsee());
         row.getCell(3).setCellStyle(cs);
       }
-      if(commune.getMotifModification() != null){
-        row.createCell(4).setCellValue(commune.getMotifModification());
-        row.getCell(4).setCellStyle(cs);
-      }
+      
       StringBuilder sb = new StringBuilder();
+      String motif = null;
       for (Map.Entry<String, CommunePlusWithGenealogie.GenealogieTypeAndEntity> entry : commune.getParents().entrySet()) {
         sb.append(entry.getKey());
         sb.append(" ");
+        motif = entry.getValue().getType().getLibelleLong();
+      }
+      if(motif != null){
+        row.createCell(4).setCellValue(motif);
+        row.getCell(4).setCellStyle(cs);
       }
       row.createCell(5).setCellValue(sb.toString().trim());
     }

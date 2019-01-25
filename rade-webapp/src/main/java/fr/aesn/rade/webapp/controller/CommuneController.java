@@ -85,7 +85,7 @@ public class CommuneController {
     
     try {
       OutputStream out = response.getOutputStream();
-      export.exportCommune(out, searchCommune.getListeResultats());
+      export.exportCommune(out, searchCommune.getCommunes());
       out.flush();
       out.close();
     } catch (IOException ex) {

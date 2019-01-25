@@ -146,7 +146,7 @@
                     <input type="hidden" value="testvaleur" name="test" />
                 <div class="action">
                     <input name="annuler" type="submit" value="Annuler"> 
-                    <input type="submit" autofocus name="valider" value="Rechercher" onclick="return validerForm();">
+                    <input type="submit" name="valider" value="Rechercher" onclick="return validerForm();">
                 </div>
             </form:form>
         </td>
