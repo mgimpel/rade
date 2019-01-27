@@ -70,7 +70,7 @@ public class TestCommuneJpaDao extends AbstractTestJpaDao {
   public void testGettingEntityList() {
     List<Commune> list = jpaDao.findAll();
     assertNotNull("JpaDao returned a null list", list);
-    assertEquals(632, list.size());
+    assertEquals(639, list.size());
     for (Commune obj : list) {
       assertNotNull("Hibernate returned a List but an Entity is null",
                     obj);
@@ -82,27 +82,27 @@ public class TestCommuneJpaDao extends AbstractTestJpaDao {
    */
   @Test
   public void testExistsEntity() {
-    assertTrue(jpaDao.existsById(134726));
-    assertTrue(jpaDao.existsById(135357));
+    assertTrue(jpaDao.existsById(37062));
+    assertTrue(jpaDao.existsById(37570));
     assertFalse(jpaDao.existsById(200000));
     assertFalse(jpaDao.existsById(0));
     assertFalse(jpaDao.existsById(-1));
   }
 
   /**
-   * Test getting a Entity.
+   * Test getting an Entity.
    * @throws ParseException failed to parse date.
    */
   @Test
   public void testGettingEntity() throws ParseException {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-    Optional<Commune> result = jpaDao.findById(135233);
+    Optional<Commune> result = jpaDao.findById(37570);
     assertTrue("Hibernate didn't return an Entity", result.isPresent());
     Commune com = result.get();
     assertEquals("Hibernate returned a Commune, but the Id doesn't match",
-                 135233, com.getId().intValue());
+                 37570, com.getId().intValue());
     assertEquals("Hibernate returned a Commune, but a field doesn't match",
-                 sdf.parse("2018-01-01"), com.getDebutValidite());
+                 sdf.parse("1999-01-01"), com.getDebutValidite());
     assertNull("Hibernate returned a Commune, but a field doesn't match",
                com.getFinValidite());
     assertNull("Hibernate returned a Commune, but a field doesn't match",
@@ -126,11 +126,12 @@ public class TestCommuneJpaDao extends AbstractTestJpaDao {
   }
 
   /**
+   * Test getting an Entity using search criteria.
    */
   @Test
   public void testGettingEntitySearch() {
-      Commune criteria = new Commune();
-    criteria.setId(135233);
+    Commune criteria = new Commune();
+    criteria.setId(37570);
     List<Commune> list = jpaDao.findAll(Example.of(criteria));
     assertEquals("", 1, list.size());
     Commune resultat = list.get(0);
@@ -149,9 +150,9 @@ public class TestCommuneJpaDao extends AbstractTestJpaDao {
                  1, result.size());
     Commune com = result.get(0);
     assertEquals("Hibernate returned a Commune, but the Id doesn't match",
-                 135233, com.getId().intValue());
+                 37570, com.getId().intValue());
     assertEquals("Hibernate returned a Commune, but a field doesn't match",
-                 sdf.parse("2018-01-01"), com.getDebutValidite());
+                 sdf.parse("1999-01-01"), com.getDebutValidite());
     assertNull("Hibernate returned a Commune, but a field doesn't match",
                com.getFinValidite());
     assertNull("Hibernate returned a Commune, but a field doesn't match",
@@ -187,6 +188,9 @@ public class TestCommuneJpaDao extends AbstractTestJpaDao {
                  632, result.size());
     result = jpaDao.findAllValidOnDate(sdf.parse("2010-01-01"));
     assertEquals("Hibernate returned the wrong number of results",
+                 616, result.size());
+    result = jpaDao.findAllValidOnDate(sdf.parse("1998-01-01"));
+    assertEquals("Hibernate returned the wrong number of results",
                  0, result.size());
   }
 
@@ -201,9 +205,9 @@ public class TestCommuneJpaDao extends AbstractTestJpaDao {
     com = jpaDao.findByCodeInseeValidOnDate("97105", sdf.parse("2018-01-01"));
     assertNotNull("Hibernate returned null", com);
     assertEquals("Hibernate returned a Commune, but the Id doesn't match",
-                 135233, com.getId().intValue());
+                 37570, com.getId().intValue());
     assertEquals("Hibernate returned a Commune, but a field doesn't match",
-                 sdf.parse("2018-01-01"), com.getDebutValidite());
+                 sdf.parse("1999-01-01"), com.getDebutValidite());
     assertNull("Hibernate returned a Commune, but a field doesn't match",
                com.getFinValidite());
     assertNull("Hibernate returned a Commune, but a field doesn't match",
@@ -224,7 +228,7 @@ public class TestCommuneJpaDao extends AbstractTestJpaDao {
                  "97105", com.getCodeInsee());
     assertEquals("Hibernate returned a Commune, but a field doesn't match",
                  "971", com.getDepartement());
-    com = jpaDao.findByCodeInseeValidOnDate("97105", sdf.parse("2010-01-01"));
+    com = jpaDao.findByCodeInseeValidOnDate("97105", sdf.parse("1998-01-01"));
     assertNull("Hibernate return a Commune it shouldn't have", com);
   }
 
