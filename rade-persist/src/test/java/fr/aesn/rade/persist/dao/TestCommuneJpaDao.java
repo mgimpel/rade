@@ -288,7 +288,7 @@ public class TestCommuneJpaDao extends AbstractTestJpaDao {
                  1, result.size());   
       result = jpaDao.findByCodeInseeLikeAndDepartementLikeAndAndNomEnrichiLikeIgnoreCase("%","%","%");
       assertEquals("Hibernate returned the wrong number of results",
-                 632, result.size()); 
+                 639, result.size()); 
       result = jpaDao.findByCodeInseeLikeAndDepartementLikeAndAndNomEnrichiLikeIgnoreCase("91001","91","%");
       assertEquals("Hibernate returned the wrong number of results",
                  1, result.size());   
@@ -359,13 +359,13 @@ public class TestCommuneJpaDao extends AbstractTestJpaDao {
                  1, result.size()); 
       result = jpaDao.findByCodeInseeLikeAndRegionLikeAndNomEnrichiLikeIgnoreCase("%","%","%");
       assertEquals("Hibernate returned the wrong number of results",
-                 632, result.size());   
+                 639, result.size());   
       result = jpaDao.findByCodeInseeLikeAndRegionLikeAndNomEnrichiLikeIgnoreCase("91001","11","%");
       assertEquals("Hibernate returned the wrong number of results",
                  1, result.size());   
       result = jpaDao.findByCodeInseeLikeAndRegionLikeAndNomEnrichiLikeIgnoreCase("%","11","%");
       assertEquals("Hibernate returned the wrong number of results",
-                 503, result.size());   
+                 507, result.size());   
       result = jpaDao.findByCodeInseeLikeAndRegionLikeAndNomEnrichiLikeIgnoreCase("91001","11","%éVi%");
       assertEquals("Hibernate returned the wrong number of results",
                  1, result.size());    
