@@ -61,6 +61,9 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 public class CommuneController {
   /** Default name for the export file. */
   public final String DEFAULT_EXPORT_FILENAME = "export-communes";
+  /** Commune Service. */
+  @Autowired
+  private CommunePlusService communePlusService;
   /** Region Service. */
   @Autowired
   private RegionService regionService;
@@ -70,9 +73,6 @@ public class CommuneController {
   /** Bassin Service. */
   @Autowired
   private BassinService bassinService;
-  /** Commune Service. */
-  @Autowired
-  private CommunePlusService communePlusService;
 
   /**
    * Export de la liste des communes au format Excel
@@ -145,17 +145,15 @@ public class CommuneController {
         && searchCommune.getCodeCirconscription().equals("-1")
         && searchCommune.getCodeRegion().equals("-1")
         && (searchCommune.getNomEnrichi() == null || searchCommune.getNomEnrichi().equals("")))) {
-
       String codeDepartement = searchCommune.getCodeDepartement().equals("-1") ? null : searchCommune.getCodeDepartement();
       String codeRegion = searchCommune.getCodeRegion().equals("-1") ? null : searchCommune.getCodeRegion();
       String codeBassin =  searchCommune.getCodeCirconscription().equals("-1") ? null : searchCommune.getCodeCirconscription();
       communes = communePlusService.getCommuneByCriteria(searchCommune.getCodeInsee(),
-          codeDepartement,
-          codeRegion,
-          codeBassin,
-          searchCommune.getNomEnrichi(),
-          searchCommune.getDateEffet());
-
+                                          codeDepartement,
+                                          codeRegion,
+                                          codeBassin,
+                                          searchCommune.getNomEnrichi(),
+                                          searchCommune.getDateEffet());
       if(communes == null || communes.isEmpty()){
         model.addAttribute("errorRecherche", "La recherche n'a donné aucun résultat.");
       }
@@ -169,15 +167,14 @@ public class CommuneController {
       if(communes.size() == 1) {
         CommunePlusWithGenealogie commune = communes.iterator().next();
         Date dateValidite;
-
         if(commune.getCommunePlus().getFinValiditeCommuneInsee() == null) {
           dateValidite = new Date();
         } else {
           dateValidite = new Date(commune.getCommunePlus().getFinValiditeCommuneInsee().getTime() - 1);
         }
-
-        String urlParam = commune.getCommunePlus().getCodeInsee() + "?date=" + DateConversionUtils.formatDateToStringUrl(dateValidite);
-        return "redirect:/referentiel/commune/" + urlParam;
+        return "redirect:/referentiel/commune/"
+               + commune.getCommunePlus().getCodeInsee() + "?date="
+               + DateConversionUtils.formatDateToStringUrl(dateValidite);
       } else {
         searchCommune.setPage("1");
         searchCommune.setCommunes(communes);
@@ -319,18 +316,17 @@ public class CommuneController {
    * @return Tableau associatif comprenant le code insee et le nom de chaque département
    */
   @RequestMapping(value = "/json/deptlist", method = RequestMethod.GET)
-  public @ResponseBody  HashMap<String,String> getDepartementByRegion(
+  public @ResponseBody HashMap<String,String> getDepartementByRegion(
       @RequestParam("regionId") String regionId,
       @ModelAttribute("searchCommune") SearchCommune searchCommune) {
-    List<Departement> listeDepartement = searchCommune.getDepartements();
-    if(listeDepartement == null) {
-      listeDepartement = new ArrayList<>();
+    List<Departement> depts = searchCommune.getDepartements();
+    if(depts == null) {
+      depts = new ArrayList<>();
     }
     HashMap<String,String> departementByRegion = new HashMap<>();
-
-    for(Departement d : listeDepartement) {
-      if(d.getRegion().equals(regionId) || regionId.equals("-1")) {
-        departementByRegion.put(d.getCodeInsee(), d.getNomEnrichi());
+    for(Departement dept : depts) {
+      if(dept.getRegion().equals(regionId) || regionId.equals("-1")) {
+        departementByRegion.put(dept.getCodeInsee(), dept.getNomEnrichi());
       }
     }
     return departementByRegion;

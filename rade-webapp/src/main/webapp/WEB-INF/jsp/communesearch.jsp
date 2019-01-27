@@ -20,72 +20,65 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <jsp:include page="aesn_header.jsp" />
-	<script>
-		window.onload = function(){
+<script>
+	window.onload = function(){
+		loadDepartement();
+		document.getElementById("codeRegion").onchange = function() {
 			loadDepartement();
-
-			document.getElementById("codeRegion").onchange = function(){
-				loadDepartement();
-			}
 		}
+	}
 
-		function loadDepartement() {
-			var regionId = document.getElementById("codeRegion").value;
-			var xhttp = new XMLHttpRequest();
-			xhttp.onreadystatechange = function() {
-				if (this.readyState == 4 && this.status == 200) {
-					listeDeptJson = JSON.parse(this.responseText);
-
-					var departementSelected = document.getElementById("codeDepartement").value;
-					var listeDepartement= document.getElementById("codeDepartement");
-					var option = "<option value='-1'>Sélectionner un département...</option>";
-					listeDepartement.innerHTML = "";
-
-					for(var codeInseeDept in listeDeptJson) {
-						var nomDept = listeDeptJson[codeInseeDept];
-						if(departementSelected !== codeInseeDept) {
-							option = option + "<option value='" + codeInseeDept + "'>" + nomDept + "</option>";
-						} else {
-							option = option + "<option value='" + codeInseeDept + "' selected='selected'>" + nomDept + "</option>";
-						}
+	function loadDepartement() {
+		var regionId = document.getElementById("codeRegion").value;
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				listeDeptJson = JSON.parse(this.responseText);
+				var departementSelected = document.getElementById("codeDepartement").value;
+				var listeDepartement= document.getElementById("codeDepartement");
+				var option = "<option value='-1'>Sélectionner un département...</option>";
+				listeDepartement.innerHTML = "";
+				for(var codeInseeDept in listeDeptJson) {
+					var nomDept = listeDeptJson[codeInseeDept];
+					if(departementSelected !== codeInseeDept) {
+						option = option + "<option value='" + codeInseeDept + "'>" + nomDept + "</option>";
+					} else {
+						option = option + "<option value='" + codeInseeDept + "' selected='selected'>" + nomDept + "</option>";
 					}
-
-					listeDepartement.innerHTML = option;
 				}
-			};
-			xhttp.open("GET", "/referentiel/commune/json/deptlist?regionId=" + regionId, true);
-			xhttp.send();
-		}
-
-		function validerForm(){
-			var nomEnrichi = document.getElementById("nomEnrichi").value;
-			var codeRegion = document.getElementById("codeRegion").value;
-			var codeDepartement = document.getElementById("codeDepartement").value;
-			var circonscription = document.getElementById("codeCirconscription").value;
-			var codeInsee = document.getElementById("codeInsee").value;
-			if(codeInsee != "" && codeInsee != null){
-				if(!/^[0-9a-zA-Z]{2}[0-9]{3}$/.test(codeInsee)){
-					alert("Le code INSEE doit être composé de cinq chiffres ou de deux lettres et trois chiffres");
-					return false;
-				}
+				listeDepartement.innerHTML = option;
 			}
+		};
+		xhttp.open("GET", "/referentiel/commune/json/deptlist?regionId=" + regionId, true);
+		xhttp.send();
+	}
 
-			var dateEffet = document.getElementById("dateEffet").value;
-			if(dateEffet != "" && dateEffet != null){
-				if(!/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(dateEffet)){
-					alert("La date n'est pas valide");
-					return false;
-				}
-			}
-
-			if(codeInsee == "" && nomEnrichi == "" && codeRegion == "-1" && codeDepartement == "-1" && circonscription == "-1"){
-				alert("Au moins un des champs doit être renseigné");
+	function validerForm(){
+		var nomEnrichi = document.getElementById("nomEnrichi").value;
+		var codeRegion = document.getElementById("codeRegion").value;
+		var codeDepartement = document.getElementById("codeDepartement").value;
+		var circonscription = document.getElementById("codeCirconscription").value;
+		var codeInsee = document.getElementById("codeInsee").value;
+		if(codeInsee != "" && codeInsee != null) {
+			if(!/^[0-9a-zA-Z]{2}[0-9]{3}$/.test(codeInsee)) {
+				alert("Le code INSEE doit être composé de cinq chiffres ou de deux lettres et trois chiffres");
 				return false;
 			}
-
-			return true;
 		}
-	</script>
+		var dateEffet = document.getElementById("dateEffet").value;
+		if(dateEffet != "" && dateEffet != null){
+			if(!/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(dateEffet)) {
+				alert("La date n'est pas valide");
+				return false;
+			}
+		}
+		if(codeInsee == "" && nomEnrichi == "" && codeRegion == "-1" && codeDepartement == "-1" && circonscription == "-1") {
+			alert("Au moins un des champs doit être renseigné");
+			return false;
+		}
+		return true;
+	}
+</script>
 	<tr>
 		<td colspan="2">
 			<c:if test="${errorRecherche != null && !errorRecherche.equals('')}">
@@ -146,5 +139,4 @@
 			</form:form>
 		</td>
 	</tr> 
-
 <jsp:include page="aesn_footer.jsp" />

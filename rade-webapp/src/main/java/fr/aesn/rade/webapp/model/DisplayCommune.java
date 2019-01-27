@@ -89,7 +89,9 @@ public class DisplayCommune {
    * @param departement Departement details.
    * @param region Region details.
    */
-  public DisplayCommune(CommunePlusWithGenealogie communePlusWithGenealogie, Departement departement, Region region){
+  public DisplayCommune(CommunePlusWithGenealogie communePlusWithGenealogie,
+                        Departement departement,
+                        Region region) {
     this(communePlusWithGenealogie);
     this.nomDepartement = departement.getNomEnrichi();
     this.codeDepartement = departement.getCodeInsee();
@@ -101,7 +103,7 @@ public class DisplayCommune {
    * @param date la date à formatter.
    * @return date formatée.
    */
-  public String getDateIHM(Date date){
+  public String getDateIHM(Date date) {
     return DateConversionUtils.formatDateToStringUi(date);
   }
 
@@ -110,7 +112,7 @@ public class DisplayCommune {
    * @param date la date à formatter.
    * @return date formatée.
    */
-  public String getDateUrl(Date date){
+  public String getDateUrl(Date date) {
     return DateConversionUtils.formatDateToStringUrl(date);
   }
 
@@ -120,16 +122,17 @@ public class DisplayCommune {
    * @param dateFinValidite 
    * @return L'url permettant d'afficher l'entité
    */
-  public String getUrlEntite(String codeInsee, Date dateFinValidite){
+  public String getUrlEntite(String codeInsee, Date dateFinValidite) {
     if(codeInsee == null) {
       return null;
     }
     Date date;
-    if(dateFinValidite == null){
+    if(dateFinValidite == null) {
       date = new Date();
-    }else{
+    } else {
       date = new Date(dateFinValidite.getTime() - 1);
     }
-    return "/referentiel/commune/" + codeInsee + "?date=" + DateConversionUtils.formatDateToStringUrl(date);
+    return "/referentiel/commune/" + codeInsee + "?date="
+           + DateConversionUtils.formatDateToStringUrl(date);
   }
 }

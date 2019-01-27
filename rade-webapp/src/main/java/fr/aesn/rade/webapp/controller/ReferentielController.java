@@ -56,20 +56,24 @@ public class ReferentielController {
 
   /**
    * Entite search mapping
-   * Recherche d'entité (commune, région, département, bassin, délégation) par code
+   * Recherche d'entité (commune, région, département, bassin, délégation) par
+   * code.
    * @param entite
    * @param model
    * @return redirect to the suitable entity search
    */
   @RequestMapping("/entiteSearch")
-  public String entiteSearch(@ModelAttribute("entite") SearchEntite entite, Model model) {
-    log.info("Recherche d'entités, type : " + entite.getType() + ", code :" + entite.getCode());
+  public String entiteSearch(@ModelAttribute("entite") SearchEntite entite,
+                             Model model) {
+    log.info("Recherche d'entités, type : {}, code :{}",
+             entite.getType(), entite.getCode());
     String view = "home";
-    if(entite.getCode() != null && !entite.getCode().isEmpty()){
+    if(entite.getCode() != null && !entite.getCode().isEmpty()) {
       // une fois la combo des types dégrisée, décommenter la ligne suivante
       String type = "commune"; // entite.getType();
       if(COMMUNE.equalsIgnoreCase(type)) {
-        view = "redirect:/referentiel/commune/" + entite.getCode() + "?date=" + DateConversionUtils.formatDateToStringUrl(new Date());
+        view = "redirect:/referentiel/commune/" + entite.getCode() + "?date="
+             + DateConversionUtils.formatDateToStringUrl(new Date());
       }
       model.addAttribute("entite", new SearchEntite());
     }

@@ -179,5 +179,4 @@ public class TestCommuneSandreJpaDao extends AbstractTestJpaDao {
     commune = jpaDao.findByCodeInseeValidOnDate("01001", sdf.parse("2000-01-01"));
     assertNull("Hibernate return a Commune it shouldn't have", commune);
   }
-  
 }

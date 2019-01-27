@@ -15,10 +15,10 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 /* $Id$ */
-
 package fr.aesn.rade.webapp.model;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
@@ -26,7 +26,7 @@ import lombok.Setter;
  * présent sur toutes les pages.
  * @author fadhel.helali
  */
-@Getter @Setter
+@Getter @Setter @NoArgsConstructor
 public class SearchEntite {
   /** Code INSEE. */
   private String code;

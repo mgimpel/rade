@@ -62,7 +62,7 @@ public class DateConversionUtils {
    */
   public static Date formatStringToDateUrl(String date)
     throws ParseException {
-    if(date == null){
+    if(date == null) {
       return null;
     }
     SimpleDateFormat sdf = new SimpleDateFormat(URL_DATE_FORMAT);
@@ -75,7 +75,7 @@ public class DateConversionUtils {
    * @return a the formatted date.
    */
   public static String formatDateToStringUi(Date date) {
-    if(date == null){
+    if(date == null) {
       return null;
     }
     SimpleDateFormat sdf = new SimpleDateFormat(UI_DATE_FORMAT);
