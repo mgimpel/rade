@@ -38,7 +38,6 @@ import org.springframework.format.annotation.DateTimeFormat;
  * Formulaire de recherche d'une commune
  * @author sophie.belin
  */
-
 @Slf4j
 @Getter @Setter @NoArgsConstructor
 public class SearchCommune {
@@ -129,6 +128,10 @@ public class SearchCommune {
     }
   }
 
+  /**
+   * Sets the Regions map from the given Regions list.
+   * @param regions Regions list.
+   */
   public void setRegionsByCodeInsee(List<Region> regions) {
     regionsByCodeInsee = new HashMap<>();
     if(regions != null) {
@@ -141,6 +144,10 @@ public class SearchCommune {
     }
   }
 
+  /**
+   * Sets the Departements map from the given Departements list.
+   * @param departements Departements list.
+   */
   public void setDepartementsByCodeInsee(List<Departement> departements) {
     departementsByCodeInsee = new HashMap<>();
     if(departements != null) {
@@ -154,10 +161,14 @@ public class SearchCommune {
     }
   }
 
-  public void setCirconscriptionByCode(List<CirconscriptionBassin> circonscriptions) {
+  /**
+   * Sets the Bassins map from the given Bassins list.
+   * @param bassins Bassins list.
+   */
+  public void setCirconscriptionByCode(List<CirconscriptionBassin> bassins) {
     circonscriptionByCode = new HashMap<>();
-    if(circonscriptions != null){
-      for(CirconscriptionBassin c : circonscriptions) {
+    if(bassins != null){
+      for(CirconscriptionBassin c : bassins) {
         if(!circonscriptionByCode.containsKey(c.getCode())) {
           circonscriptionByCode.put(c.getCode(), c.getLibelleLong());
         }
@@ -166,6 +177,9 @@ public class SearchCommune {
     }
   }
 
+  /**
+   * Resets the search criteria.
+   */
   public void reset() {
     codeInsee = null;
     codeDepartement = "-1";
