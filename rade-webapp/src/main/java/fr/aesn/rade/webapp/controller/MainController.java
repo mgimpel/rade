@@ -17,6 +17,7 @@
 /* $Id$ */
 package fr.aesn.rade.webapp.controller;
 
+import fr.aesn.rade.webapp.model.SearchEntite;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -42,7 +43,8 @@ public class MainController {
    * @return View for the Homepage.
    */
   @RequestMapping("/")
-  public String home() {
+  public String home(Model model) {
+    model.addAttribute("entite", new SearchEntite());
     return "home";
   }
 
@@ -55,6 +57,7 @@ public class MainController {
   public String login(Model model) {
     log.debug("Requesting /login");
     model.addAttribute("titre", "Login");
+    model.addAttribute("entite", new SearchEntite());
     return "login";
   }
 

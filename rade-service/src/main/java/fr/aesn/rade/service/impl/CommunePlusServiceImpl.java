@@ -149,6 +149,72 @@ public class CommunePlusServiceImpl
       return null;
     }
   }
+  
+  /**
+   * Returns a List of all Commune from the given codeInsee, departement,
+   * region, circonscription, commune name and/or date.
+   * @param code the code of the Communes.
+   * @param dept the departement of the Communes.
+   * @param region the region of the Communes.
+   * @param bassin the circonscription of the Communes.
+   * @param nameLike a pattern to search for Communes with a name resembling.
+   * @param date the date at which the Communes were valid.
+   * @return a List of all Commune matching the given parameters.
+   */
+  @Override
+  @Transactional(readOnly = true)
+  public List<CommunePlusWithGenealogie> getCommuneByCriteria(final String code,
+                                                              final String dept,
+                                                              final String region,
+                                                              final String bassin,
+                                                              final String nameLike,
+                                                              final Date date) {
+    log.debug("Commune with Genealogie requested with criteria: " +
+              "code={}, dept={}, region={}, bassin={}, name={}, date={}",
+              code, dept, region, bassin, nameLike, date);
+    List<CommunePlusWithGenealogie> communesPlus = new ArrayList<>();
+    if(code != null) { // Rechercher par code INSEE (ignorer dept, region, ...)
+      CommunePlusWithGenealogie communeGenealogie = getCommuneWithGenealogie(code, date);
+      if(communeGenealogie != null) {
+        communesPlus.add(communeGenealogie);
+      }
+      return communesPlus;
+    }
+    // Rechercher les communes en fonction du nom, dept, region
+    List<Commune> communes = null;
+    Date testdate = (date == null ? new Date() : date);
+    String testname = (nameLike == null || nameLike.isEmpty() ? "%" : "%" + nameLike + "%");
+    if ((dept == null || dept.isEmpty()) && (region == null || region.isEmpty())) {
+      // neither region or departement are given
+      communes = communeJpaDao.findByCodeInseeLikeAndDepartementLikeAndNomEnrichiLikeIgnoreCaseValidOnDate("%", "%", testname, testdate);
+    } else if ((dept == null || dept.isEmpty()) && (region != null && !region.isEmpty())) {
+      // only region is given
+      communes = communeJpaDao.findByCodeInseeLikeAndRegionLikeAndNomEnrichiLikeIgnoreCaseValidOnDate("%", region, testname, testdate);
+    } else {
+      // department is given
+      communes = communeJpaDao.findByCodeInseeLikeAndDepartementLikeAndNomEnrichiLikeIgnoreCaseValidOnDate("%", dept, testname, testdate);
+    }
+    // Filter les communes en fonction du bassin et récupérer le genealogie
+    CommuneSandre sandre;
+    CommunePlus communePlus;
+    for(Commune commune : communes) {
+      sandre = communeSandreJpaDao.findByCodeInseeValidOnDate(commune.getCodeInsee(), testdate);
+      communePlus = new CommunePlus(commune.getCodeInsee(), testdate);
+      try {
+        communePlus.setCommuneInsee(commune);
+        if (sandre != null) {
+          communePlus.setCommuneSandre(sandre);
+        }
+      }
+      catch (InvalidArgumentException e) {
+        log.warn("Error assembling CommunePlus for Commune {} on {}", code, testdate, e);
+      }
+      if (bassin == null || bassin.isEmpty() || (sandre != null && bassin.equals(sandre.getCirconscriptionBassin().getCode()))) {
+        communesPlus.add(buildCommuneWithGenealogie(communePlus));
+      }
+    }
+    return communesPlus;
+  }
 
   /**
    * Get the Commune with the given code at the given date, and all it's
@@ -166,6 +232,15 @@ public class CommunePlusServiceImpl
     if (commune == null) {
       return null;
     }
+    return buildCommuneWithGenealogie(commune);
+  }
+
+  /**
+   * Build a CommunePlusWithGenealogie from the given CommunePlus.
+   * @param commune the CommunePlus
+   * @return a CommunePlusWithGenealogie built from the given CommunePlus.
+   */
+  private CommunePlusWithGenealogie buildCommuneWithGenealogie(final CommunePlus commune) {
     CommunePlusWithGenealogie result = new CommunePlusWithGenealogie(commune);
     EntiteAdministrative tempEntity;
     Set<GenealogieEntiteAdmin> parents = commune.getParentsInsee();
@@ -184,17 +259,16 @@ public class CommunePlusServiceImpl
     Set<GenealogieEntiteAdmin> enfants = commune.getEnfantsInsee();
     if (enfants != null) {
       for (GenealogieEntiteAdmin enfant : enfants) {
-        tempEntity = enfant.getParentEnfant().getParent();
+        tempEntity = enfant.getParentEnfant().getEnfant();
         assert "COM".equals(tempEntity.getTypeEntiteAdmin().getCode());
         try {
-          result.addParent(enfant.getTypeGenealogie(),
+          result.addEnfant(enfant.getTypeGenealogie(),
                            communeJpaDao.findById(tempEntity.getId()).get());
         } catch (InvalidArgumentException e) {
           log.warn("This should never happen! enfant must exist: {}", enfant);
         }
       }
     }
-
     return result;
   }
 }

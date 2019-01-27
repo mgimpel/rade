@@ -17,6 +17,7 @@
 /* $Id$ */
 package fr.aesn.rade.webapp.controller;
 
+import fr.aesn.rade.common.util.DateConversionUtils;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import fr.aesn.rade.persist.model.Region;
 import fr.aesn.rade.service.RegionService;
+import fr.aesn.rade.webapp.model.SearchEntite;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 /**
  * Spring MVC Controller for Rade.
@@ -40,10 +43,42 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Controller
 @RequestMapping("/referentiel")
+@SessionAttributes({"searchCommune", "entite"})
 public class ReferentielController {
   /** Service. */
   @Autowired
   private RegionService regionService;
+
+  public final static String REGION  = "region";
+  public final static String DEPT    = "dept";
+  public final static String COMMUNE = "commune";
+  public final static String BASSIN  = "bassin"; 
+
+  /**
+   * Entite search mapping
+   * Recherche d'entité (commune, région, département, bassin, délégation) par
+   * code.
+   * @param entite
+   * @param model
+   * @return redirect to the suitable entity search
+   */
+  @RequestMapping("/entiteSearch")
+  public String entiteSearch(@ModelAttribute("entite") SearchEntite entite,
+                             Model model) {
+    log.info("Recherche d'entités, type : {}, code :{}",
+             entite.getType(), entite.getCode());
+    String view = "home";
+    if(entite.getCode() != null && !entite.getCode().isEmpty()) {
+      // une fois la combo des types dégrisée, décommenter la ligne suivante
+      String type = "commune"; // entite.getType();
+      if(COMMUNE.equalsIgnoreCase(type)) {
+        view = "redirect:/referentiel/commune/" + entite.getCode() + "?date="
+             + DateConversionUtils.formatDateToStringUrl(new Date());
+      }
+      model.addAttribute("entite", new SearchEntite());
+    }
+    return view;
+  }
 
   /**
    * Region Search mapping.
@@ -112,5 +147,14 @@ public class ReferentielController {
     model.addAttribute("titre", "Region");
     model.addAttribute("region", region);
     return "regiondisplay";
+  }
+
+  /**
+   * Attribut de session du contrôleur
+   * @return Objet de recherche de commune
+   */
+  @ModelAttribute("entite")
+  public SearchEntite searchEntite() {
+    return new SearchEntite();
   }
 }

@@ -21,6 +21,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <spring:eval var="appname" expression="@applicationName"/>
 <head>
@@ -67,6 +68,29 @@
 				<h1>${appname}</h1>
 			</div>
 			<div id="chemin_nav">Vous êtes ici : &nbsp;${titre}&nbsp;</div>
+			<div style="clear:both;"></div>
+			<div style="float:right; clear:both;">
+				<form:form method="POST" action="/referentiel/entiteSearch" modelAttribute="entite">
+					<table>
+						<tr>
+							<td><b>Code :</b></td>
+							<td><form:input  style="width:40px" path="code" maxlength="5"/></td>
+							<td><b>Type :</b></td>
+							<td>
+								<form:select path="type" disabled="true">
+									<form:option value="region">Région</form:option>
+									<form:option value="dept">Département</form:option>
+									<form:option selected="selected" value="commune">Commune</form:option>
+									<form:option value="bassin">Bassin</form:option>
+									<form:option value="delegation">Délégation</form:option>
+								</form:select>
+							</td>
+							<td><input type="submit" name="submit" value="Rechercher"></td>
+						</tr>
+					</table>
+				</form:form>
+			</div>
+			<div style="clear:both;"></div>
 			<ul id="nav">
 				<li><a href='<%=request.getContextPath()%>/'>Référentiel</a>
 					<ul>

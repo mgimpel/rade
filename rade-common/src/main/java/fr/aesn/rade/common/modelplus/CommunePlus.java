@@ -187,14 +187,28 @@ public class CommunePlus {
     return insee.getTypeNomClair();
   }
 
-  public Set<GenealogieEntiteAdmin> getParentsInsee(){
+  public Date getDebutValiditeCommuneInsee() {
+    if(insee == null) {
+      return null;
+    }
+    return insee.getDebutValidite();
+  }
+
+  public Date getFinValiditeCommuneInsee() {
+    if(insee == null) {
+      return null;
+    }
+    return insee.getFinValidite();
+  }
+
+  public Set<GenealogieEntiteAdmin> getParentsInsee() {
     if (insee == null) {
       return null;
     }
     return insee.getParents();
   }
 
-  public Set<GenealogieEntiteAdmin> getEnfantsInsee(){
+  public Set<GenealogieEntiteAdmin> getEnfantsInsee() {
     if (insee == null) {
       return null;
     }

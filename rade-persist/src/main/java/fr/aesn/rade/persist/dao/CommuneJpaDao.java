@@ -105,4 +105,77 @@ public interface CommuneJpaDao
   public List<Commune> findByDepartementAndNameLikeValidOnDate(String dept,
                                                                String nameLike,
                                                                Date date);
+
+  /**
+   * Returns a List of all Commune using the given Code INSEE, department and 
+   * commune name 
+   * @param codeInsee the code INSEE of the Communes.
+   * @param dept the department of the Communes.
+   * @param nameLike a pattern to search for Communes with a name resembling.
+   * @return a List of all Commune matching the given parameters.
+   */
+  public List<Commune> findByCodeInseeLikeAndDepartementLikeAndNomEnrichiLikeIgnoreCase(String codeInsee,
+                                                                                        String dept, 
+                                                                                        String nameLike);
+
+  /**
+   * Returns a List of all Commune using the given Code INSEE, department, commune 
+   * name and a date
+   * @param codeInsee the code INSEE of the Communes.
+   * @param dept the department of the Communes.
+   * @param nameLike a pattern to search for Communes with a name resembling.
+   * @param date the date at which the Communes were valid.
+   * @return a List of all Commune matching the given parameters.
+   */
+  @Query("SELECT DISTINCT(c) FROM Commune c"
+               + " WHERE (c.codeInsee LIKE ?1)"
+               + " AND (c.departement LIKE ?2)"
+               + " AND (UPPER(c.nomMajuscule) LIKE UPPER(?3) OR UPPER(c.nomEnrichi) LIKE UPPER(?3))" 
+               + " AND (c.debutValidite <= ?4)"
+               + " AND (c.finValidite IS NULL OR c.finValidite > ?4)"
+               + " ORDER BY c.nomEnrichi")
+  public List<Commune> findByCodeInseeLikeAndDepartementLikeAndNomEnrichiLikeIgnoreCaseValidOnDate(String codeInsee,
+                                                                                                   String dept, 
+                                                                                                   String nameLike, 
+                                                                                                   Date date);
+
+  /**
+   * Returns a List of all Commune using the given Code INSEE, department and commune
+   * name 
+   * @param codeInsee the code INSEE of the Communes.
+   * @param region the region of the Communes.
+   * @param nameLike a pattern to search for Communes with a name resembling.
+   * @return a List of all Commune matching the given parameters.
+   */
+  @Query("SELECT DISTINCT(c) FROM Commune c, Departement d"
+               + " WHERE c.departement = d.codeInsee"
+               + " AND (c.codeInsee LIKE ?1)"
+               + " AND (d.region LIKE ?2)"
+               + " AND (UPPER(c.nomMajuscule) LIKE UPPER(?3) OR UPPER(c.nomEnrichi) LIKE UPPER(?3))" 
+               + " ORDER BY c.nomEnrichi")
+  public List<Commune> findByCodeInseeLikeAndRegionLikeAndNomEnrichiLikeIgnoreCase(String codeInsee,
+                                                                                   String region, 
+                                                                                   String nameLike);
+
+  /**
+   * Returns a List of all Commune using the given Code INSEE, region, commune name
+   * and a date
+   * @param codeInsee the code INSEE of the Communes.
+   * @param region the region of the Communes.
+   * @param nameLike a pattern to search for Communes with a name resembling.
+   * @param date the date at which the Communes were valid.
+   * @return a List of all Commune matching the given parameters.
+   */
+  @Query("SELECT DISTINCT(c) FROM Commune c, Departement d"
+               + " WHERE c.departement = d.codeInsee"
+               + " AND (c.codeInsee LIKE ?1)"
+               + " AND (d.region LIKE ?2)"
+               + " AND (UPPER(c.nomMajuscule) LIKE UPPER(?3) OR UPPER(c.nomEnrichi) LIKE UPPER(?3))" 
+               + " AND (c.debutValidite <= ?4)"
+               + " AND (c.finValidite IS NULL OR c.finValidite > ?4)"
+               + " ORDER BY c.nomEnrichi")
+  public List<Commune> findByCodeInseeLikeAndRegionLikeAndNomEnrichiLikeIgnoreCaseValidOnDate(String codeInsee,
+                                                                                              String region, 
+                                                                                              String nameLike, 
+                                                                                              Date date);
 }

@@ -52,6 +52,24 @@ public interface CommunePlusService {
   public CommunePlus getCommuneByCode(String code, String date);
 
   /**
+   * Returns a List of all Commune from the given codeInsee, departement, 
+   * region, circonscription, commune name and/or date.
+   * @param code the code of the Communes.
+   * @param dept the departement of the Communes.
+   * @param region the region of the Communes.
+   * @param bassin the circonscription of the Communes
+   * @param nameLike a pattern to search for Communes with a name resembling.
+   * @param date the date at which the Communes were valid.
+   * @return a List of all Commune matching the given parameters.
+   */
+  public List<CommunePlusWithGenealogie> getCommuneByCriteria(String code,
+                                                              String dept,
+                                                              String region,
+                                                              String bassin,
+                                                              String nameLike,
+                                                              Date date);
+
+  /**
    * Get the Commune with the given code at the given date, and all it's
    * genealogie.
    * @param code the Commune code.
@@ -59,6 +77,6 @@ public interface CommunePlusService {
    * @return the Commune with the given code at the given date, and all it's
    * genealogie.
    */
-  public CommunePlusWithGenealogie getCommuneWithGenealogie(final String code,
-                                                            final Date date);
+  public CommunePlusWithGenealogie getCommuneWithGenealogie(String code,
+                                                            Date date);
 }
