@@ -114,9 +114,9 @@ public interface CommuneJpaDao
    * @param nameLike a pattern to search for Communes with a name resembling.
    * @return a List of all Commune matching the given parameters.
    */
-  public List<Commune> findByCodeInseeLikeAndDepartementLikeAndAndNomEnrichiLikeIgnoreCase(String codeInsee,
-                                                                                           String dept, 
-                                                                                           String nameLike);
+  public List<Commune> findByCodeInseeLikeAndDepartementLikeAndNomEnrichiLikeIgnoreCase(String codeInsee,
+                                                                                        String dept, 
+                                                                                        String nameLike);
 
   /**
    * Returns a List of all Commune using the given Code INSEE, department, commune 

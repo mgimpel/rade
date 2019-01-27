@@ -151,8 +151,8 @@ public class CommuneController {
       String codeBassin =  searchCommune.getCodeCirconscription().equals("-1") ? null : searchCommune.getCodeCirconscription();
       communes = communePlusService.getCommuneByCriteria(searchCommune.getCodeInsee(),
           codeDepartement,
-          codeBassin,
           codeRegion,
+          codeBassin,
           searchCommune.getNomEnrichi(),
           searchCommune.getDateEffet());
 
@@ -229,22 +229,12 @@ public class CommuneController {
     }
     log.debug("Display commune: {}", code);
     if (code != null) {
-      List<CommunePlusWithGenealogie> communes = communePlusService.getCommuneByCriteria(code,null,null,null,null,dateValidite);
-
-      if(communes != null && communes.size() > 0) {
-        if(communes.size() == 1){
-          CommunePlusWithGenealogie communePlusWithGenealogie = communes.get(0);
-          Departement departement = departementService.getDepartementByCode(communePlusWithGenealogie.getCommunePlus().getDepartement(), communePlusWithGenealogie.getCommunePlus().getDebutValiditeCommuneInsee());
-          Region region = regionService.getRegionByCode(departement.getRegion(), communePlusWithGenealogie.getCommunePlus().getDebutValiditeCommuneInsee());
-          DisplayCommune displayCommune = new DisplayCommune(communePlusWithGenealogie, departement, region);
-          view = initDetailCommuneView(displayCommune, model);
-        } else {
-          SearchCommune searchCommune = new SearchCommune();
-          searchCommune.setCodeInsee(code);
-          searchCommune.setCommunes(communes);
-          searchCommune.setPage("1");
-          view = initResultatsRechercheCommuneView(searchCommune, model);
-        }
+      CommunePlusWithGenealogie commune = communePlusService.getCommuneWithGenealogie(code, dateValidite);
+      if(commune != null) {
+        Departement departement = departementService.getDepartementByCode(commune.getCommunePlus().getDepartement(), dateValidite);
+        Region region = regionService.getRegionByCode(departement.getRegion(), dateValidite);
+        DisplayCommune displayCommune = new DisplayCommune(commune, departement, region);
+        view = initDetailCommuneView(displayCommune, model);
       } else {
         model.addAttribute("errorRecherche", "La commune recherchée n'existe pas");
       }

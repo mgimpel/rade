@@ -36,7 +36,7 @@ public class DateConversionUtils {
    * Utility classes, which are a collection of static members,
    * are not meant to be instantiated.
    */
-  private DateConversionUtils(){
+  private DateConversionUtils() {
     throw new UnsupportedOperationException(
         "This is a utility class and cannot be instantiated");
   }
@@ -46,8 +46,8 @@ public class DateConversionUtils {
    * @param date Date to format.
    * @return a the formatted date.
    */
-  public static String formatDateToStringUrl(Date date){
-    if(date == null){
+  public static String formatDateToStringUrl(Date date) {
+    if(date == null) {
       return null;
     }
     SimpleDateFormat sdf = new SimpleDateFormat(URL_DATE_FORMAT);
@@ -60,7 +60,8 @@ public class DateConversionUtils {
    * @return the parsed Date.
    * @throws ParseException if problem parsing the given String.
    */
-  public static Date formatStringToDateUrl(String date) throws ParseException{
+  public static Date formatStringToDateUrl(String date)
+    throws ParseException {
     if(date == null){
       return null;
     }
@@ -73,7 +74,7 @@ public class DateConversionUtils {
    * @param date Date to format.
    * @return a the formatted date.
    */
-  public static String formatDateToStringUi(Date date){
+  public static String formatDateToStringUi(Date date) {
     if(date == null){
       return null;
     }

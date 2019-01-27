@@ -56,16 +56,16 @@ public interface CommunePlusService {
    * region, circonscription, commune name and/or date.
    * @param code the code of the Communes.
    * @param dept the departement of the Communes.
-   * @param bassin the circonscription of the Communes
    * @param region the region of the Communes.
+   * @param bassin the circonscription of the Communes
    * @param nameLike a pattern to search for Communes with a name resembling.
    * @param date the date at which the Communes were valid.
    * @return a List of all Commune matching the given parameters.
    */
   public List<CommunePlusWithGenealogie> getCommuneByCriteria(String code,
                                                               String dept,
-                                                              String bassin,
                                                               String region,
+                                                              String bassin,
                                                               String nameLike,
                                                               Date date);
 
