@@ -3,6 +3,9 @@ Thumbs.db
 [Dd]esktop.ini
 $RECYCLE.BIN/
 
+# MacOS #
+.DS_Store
+
 # Java #
 *.class
 *.jar
@@ -12,10 +15,25 @@ $RECYCLE.BIN/
 # Maven #
 target/
 
+# NetBeans #
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+nbactions.xml
+nb-configuration.xml
+
 # Eclispe #
 .settings/
 .classpath
 .project
+
+# IntelliJ #
+*.iml
+*.iws
+*.ipr
+.idea/
 
 # Test logs #
 logs/
