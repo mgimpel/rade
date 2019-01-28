@@ -37,6 +37,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +62,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 @SessionAttributes({"searchCommune", "entite"})
 public class CommuneController {
   /** Default name for the export file. */
-  public final String DEFAULT_EXPORT_FILENAME = "export-communes";
+  public static final String DEFAULT_EXPORT_FILENAME = "export-communes";
   /** Commune Service. */
   @Autowired
   private CommunePlusService communePlusService;
@@ -118,7 +120,7 @@ public class CommuneController {
   public String communeresults(Model model,
                                @ModelAttribute("searchCommune") SearchCommune searchCommune) {
     String view;
-    if(searchCommune.getCommunes() != null && searchCommune.getCommunes().size() > 0) {
+    if(searchCommune.getCommunes() != null && !searchCommune.getCommunes().isEmpty()) {
       searchCommune.setListeResultats(paginateResultatsCommune(searchCommune, false));
       view = initResultatsRechercheCommuneView(searchCommune, model);
     } else {
@@ -137,21 +139,20 @@ public class CommuneController {
   public String communedisplay(@ModelAttribute("searchCommune") SearchCommune searchCommune,
                                Model model) {
     log.debug("Search for commune with criteria: {}", searchCommune);
-    String view = "communesearch";
     List<CommunePlusWithGenealogie> communes = null;
 
     if(!(searchCommune.getCodeInsee() == null
-        && searchCommune.getCodeDepartement().equals("-1")
-        && searchCommune.getCodeCirconscription().equals("-1")
-        && searchCommune.getCodeRegion().equals("-1")
-        && (searchCommune.getNomEnrichi() == null || searchCommune.getNomEnrichi().equals("")))) {
-      String codeDepartement = searchCommune.getCodeDepartement().equals("-1") ? null : searchCommune.getCodeDepartement();
-      String codeRegion = searchCommune.getCodeRegion().equals("-1") ? null : searchCommune.getCodeRegion();
-      String codeBassin =  searchCommune.getCodeCirconscription().equals("-1") ? null : searchCommune.getCodeCirconscription();
+        && "-1".equals(searchCommune.getCodeDepartement())
+        && "-1".equals(searchCommune.getCodeCirconscription())
+        && "-1".equals(searchCommune.getCodeRegion())
+        && (searchCommune.getNomEnrichi() == null || searchCommune.getNomEnrichi().isEmpty()))) {
+      String dept   = "-1".equals(searchCommune.getCodeDepartement()) ? null : searchCommune.getCodeDepartement();
+      String region = "-1".equals(searchCommune.getCodeRegion()) ? null : searchCommune.getCodeRegion();
+      String bassin = "-1".equals(searchCommune.getCodeCirconscription()) ? null : searchCommune.getCodeCirconscription();
       communes = communePlusService.getCommuneByCriteria(searchCommune.getCodeInsee(),
-                                          codeDepartement,
-                                          codeRegion,
-                                          codeBassin,
+                                          dept,
+                                          region,
+                                          bassin,
                                           searchCommune.getNomEnrichi(),
                                           searchCommune.getDateEffet());
       if(communes == null || communes.isEmpty()){
@@ -162,7 +163,7 @@ public class CommuneController {
     }
 
     if(communes == null || communes.isEmpty()) {
-      view = initRechercheCommuneView(searchCommune, model);
+      return initRechercheCommuneView(searchCommune, model);
     } else {
       if(communes.size() == 1) {
         CommunePlusWithGenealogie commune = communes.iterator().next();
@@ -178,10 +179,9 @@ public class CommuneController {
       } else {
         searchCommune.setPage("1");
         searchCommune.setCommunes(communes);
-        view = initResultatsRechercheCommuneView(searchCommune, model);
+        return initResultatsRechercheCommuneView(searchCommune, model);
       }
     }
-    return view;
   }
 
   /**
@@ -316,18 +316,22 @@ public class CommuneController {
    * @return Tableau associatif comprenant le code insee et le nom de chaque département
    */
   @RequestMapping(value = "/json/deptlist", method = RequestMethod.GET)
-  public @ResponseBody HashMap<String,String> getDepartementByRegion(
+  public @ResponseBody Map<String,String> getDepartementByRegion(
       @RequestParam("regionId") String regionId,
-      @ModelAttribute("searchCommune") SearchCommune searchCommune) {
-    List<Departement> depts = searchCommune.getDepartements();
-    if(depts == null) {
-      depts = new ArrayList<>();
+      @RequestParam(value = "date", required = false) String dateParam) {
+    Date date = null;
+    if (dateParam == null || dateParam.isEmpty()) {
+      try {
+        date = DateConversionUtils.formatStringToDateUrl(dateParam);
+      } catch (ParseException e) {
+        log.info("Invalid date format, expected yyyy-MM-dd but was {}", dateParam);
+      }
     }
+    String region = (regionId == null || regionId.isEmpty() || "-1".equals(regionId) ? null : regionId);
+    List<Departement> depts = departementService.getDepartementForRegion(region, date);
     HashMap<String,String> departementByRegion = new HashMap<>();
     for(Departement dept : depts) {
-      if(dept.getRegion().equals(regionId) || regionId.equals("-1")) {
-        departementByRegion.put(dept.getCodeInsee(), dept.getNomEnrichi());
-      }
+      departementByRegion.put(dept.getCodeInsee(), dept.getNomEnrichi());
     }
     return departementByRegion;
   }

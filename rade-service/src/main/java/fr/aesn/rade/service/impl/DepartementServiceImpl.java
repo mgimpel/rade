@@ -66,10 +66,13 @@ public class DepartementServiceImpl
    * @param date the date at which the code was valid
    * @return a List of all the Departement.
    */
+  @Override
+  @Transactional(readOnly = true)
   public List<Departement> getAllDepartement(final Date date) {
     log.debug("Departement list requested for Date: date={}", date);
     List<Departement> list = departementJpaDao.findAll();
-    list.removeIf(e -> !SharedBusinessRules.isEntiteAdministrativeValid(e, date));
+    Date testDate = (date == null ? new Date() : date);
+    list.removeIf(e -> !SharedBusinessRules.isEntiteAdministrativeValid(e, testDate));
     return list;
   }
 
@@ -126,6 +129,8 @@ public class DepartementServiceImpl
    * @param code the Departement code.
    * @return list of Departements that have historically had the given code.
    */
+  @Override
+  @Transactional(readOnly = true)
   public List<Departement> getDepartementByCode(final String code) {
     log.debug("Departement requested by code: code={}", code);
     return departementJpaDao.findByCodeInsee(code);
@@ -144,6 +149,7 @@ public class DepartementServiceImpl
    * @param date the date at which the code was valid
    * @return the Departement with the given code at the given date.
    */
+  @Override
   public Departement getDepartementByCode(final String code, final Date date) {
     log.debug("Departement requested by code and date: code={}, date={}", code, date);
     List<Departement> list = getDepartementByCode(code);
@@ -166,6 +172,7 @@ public class DepartementServiceImpl
    * @param date the date at which the code was valid
    * @return the Departement with the given code at the given date.
    */
+  @Override
   public Departement getDepartementByCode(final String code,
                                           final String date) {
     log.debug("Departement requested by code and date: code={}, date={}", code, date);
@@ -175,6 +182,25 @@ public class DepartementServiceImpl
     } catch (ParseException e) {
       log.warn("Departement requested by code and date: Exception parsing date {}", date, e);
       return null;
+    }
+  }
+
+  /**
+   * Get all the Departements within a given region, at the given date.
+   * @param region the regions code.
+   * @param date the date at which the Departments are valid.
+   * @return list of Departements within the given region, at the given date.
+   */
+  @Override
+  public List<Departement> getDepartementForRegion(String region, Date date) {
+    log.debug("Departement list requested for region: region={}, date={}",
+              region, date);
+    List<Departement> list = getAllDepartement(date);
+    if (region == null || region.isEmpty()) {
+      return list;
+    } else {
+      list.removeIf(e -> !region.equals(e.getRegion()));
+      return list;
     }
   }
 

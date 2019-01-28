@@ -98,7 +98,6 @@ public class BatchController {
     Path tmpFile = storeTempFile(file);
     JobParametersBuilder jobBuilder = new JobParametersBuilder();
     jobBuilder.addString("inputFile", tmpFile.toUri().toString());
-    //jobBuilder.addDate("debutValidite", debutValidite);
     jobBuilder.addString("auditAuteur", "WebBatch");
     jobBuilder.addDate("auditDate", new Date());
     jobBuilder.addString("auditNote", "Import " + file.getOriginalFilename());
@@ -127,7 +126,6 @@ public class BatchController {
     Path tmpFile = storeTempFile(file);
     JobParametersBuilder jobBuilder = new JobParametersBuilder();
     jobBuilder.addString("inputFile", tmpFile.toUri().toString());
-    //jobBuilder.addDate("debutValidite", debutValidite);
     jobBuilder.addString("auditAuteur", "WebBatch");
     jobBuilder.addDate("auditDate", new Date());
     jobBuilder.addString("auditNote", "Import " + file.getOriginalFilename());

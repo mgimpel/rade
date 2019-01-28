@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -173,7 +174,7 @@ public class CommunePlusServiceImpl
               "code={}, dept={}, region={}, bassin={}, name={}, date={}",
               code, dept, region, bassin, nameLike, date);
     List<CommunePlusWithGenealogie> communesPlus = new ArrayList<>();
-    if(code != null) { // Rechercher par code INSEE (ignorer dept, region, ...)
+    if(code != null && !code.isEmpty()) { // Rechercher par code INSEE (ignorer dept, region, ...)
       CommunePlusWithGenealogie communeGenealogie = getCommuneWithGenealogie(code, date);
       if(communeGenealogie != null) {
         communesPlus.add(communeGenealogie);
@@ -241,17 +242,23 @@ public class CommunePlusServiceImpl
    * @return a CommunePlusWithGenealogie built from the given CommunePlus.
    */
   private CommunePlusWithGenealogie buildCommuneWithGenealogie(final CommunePlus commune) {
+    log.debug("Building Genealogie for {}", commune);
     CommunePlusWithGenealogie result = new CommunePlusWithGenealogie(commune);
     EntiteAdministrative tempEntity;
+    Optional<Commune> opt;
     Set<GenealogieEntiteAdmin> parents = commune.getParentsInsee();
     if (parents != null) {
       for (GenealogieEntiteAdmin parent : parents) {
         tempEntity = parent.getParentEnfant().getParent();
         assert "COM".equals(tempEntity.getTypeEntiteAdmin().getCode());
-        try {
-          result.addParent(parent.getTypeGenealogie(),
-                           communeJpaDao.findById(tempEntity.getId()).get());
-        } catch (InvalidArgumentException e) {
+        opt = communeJpaDao.findById(tempEntity.getId());
+        if (opt.isPresent()) {
+          try {
+            result.addParent(parent.getTypeGenealogie(), opt.get());
+          } catch (InvalidArgumentException e) {
+            log.warn("This should never happen! parent must exist: {}", parent);
+          }
+        } else {
           log.warn("This should never happen! parent must exist: {}", parent);
         }
       }
@@ -261,11 +268,15 @@ public class CommunePlusServiceImpl
       for (GenealogieEntiteAdmin enfant : enfants) {
         tempEntity = enfant.getParentEnfant().getEnfant();
         assert "COM".equals(tempEntity.getTypeEntiteAdmin().getCode());
-        try {
-          result.addEnfant(enfant.getTypeGenealogie(),
-                           communeJpaDao.findById(tempEntity.getId()).get());
-        } catch (InvalidArgumentException e) {
-          log.warn("This should never happen! enfant must exist: {}", enfant);
+        opt = communeJpaDao.findById(tempEntity.getId());
+        if (opt.isPresent()) {
+          try {
+            result.addEnfant(enfant.getTypeGenealogie(), opt.get());
+          } catch (InvalidArgumentException e) {
+            log.warn("This should never happen! enfant must exist: {}", enfant);
+          }
+        } else {
+          log.warn("This should never happen! parent must exist: {}", enfant);
         }
       }
     }

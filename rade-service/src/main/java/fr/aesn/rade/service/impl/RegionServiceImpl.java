@@ -66,6 +66,8 @@ public class RegionServiceImpl
    * @param date the date at which the code was valid
    * @return a List of all the Region.
    */
+  @Override
+  @Transactional(readOnly = true)
   public List<Region> getAllRegion(final Date date) {
     log.debug("Region list requested for Date: date={}", date);
     List<Region> list = regionJpaDao.findAll();
@@ -78,7 +80,6 @@ public class RegionServiceImpl
    * @return a Map of all Region indexed by ID.
    */
   @Override
-  @Transactional(readOnly = true)
   public Map<Integer, Region> getRegionMap() {
     log.debug("Region map requested");
     List<Region> list = getAllRegion();
@@ -148,7 +149,6 @@ public class RegionServiceImpl
    * @return the Region with the given code at the given date.
    */
   @Override
-  @Transactional(readOnly = true)
   public Region getRegionByCode(final String code, final Date date) {
     log.debug("Region requested by code and date: code={}, date={}", code, date);
     List<Region> list = getRegionByCode(code);
@@ -172,7 +172,6 @@ public class RegionServiceImpl
    * @return the Region with the given code at the given date.
    */
   @Override
-  @Transactional(readOnly = true)
   public Region getRegionByCode(final String code, final String date) {
     log.debug("Region requested by code and date: code={}, date={}", code, date);
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");

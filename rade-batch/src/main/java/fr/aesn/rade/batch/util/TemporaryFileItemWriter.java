@@ -30,22 +30,31 @@ import org.springframework.batch.item.file.FlatFileItemWriter;
 import org.springframework.core.io.Resource;
 
 /**
- * TODO
+ * Spring Batch ItemWriter for writing to a temporary file.
+ * The class id designed using the delegation pattern.
  * 
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
 public class TemporaryFileItemWriter<T>
   implements ItemWriter<T>, ItemStreamWriter<T>, StepExecutionListener {
-  /** */
+  /** Delegate object that handles execution. */
   private FlatFileItemWriter<T> delegate;
-  /** */
+  /** The temporary file to write to. */
   private Resource tmpResource;
 
+  /**
+   * Delegate setter.
+   * @param delegate the Delegate.
+   */
   public void setDelegate(final FlatFileItemWriter<T> delegate) {
     this.delegate = delegate;
     delegate.setResource(tmpResource);
   }
 
+  /**
+   * Temporary Resource setter.
+   * @param tmpResource the Temporary Resource. 
+   */
   public void setTmpResource(final Resource tmpResource) {
     this.tmpResource = tmpResource;
     if (delegate != null) {
@@ -67,10 +76,9 @@ public class TemporaryFileItemWriter<T>
 
   /**
    * No-op.
-   * @throws ItemStreamException if exception while closing the reader.
    */
   @Override
-  public void close() throws ItemStreamException {
+  public void close() {
     delegate.close();
   }
 
@@ -79,22 +87,18 @@ public class TemporaryFileItemWriter<T>
    * close is called.
    * @param context current step's ExecutionContext. Will be the
    * executionContext from the last run of the step on a restart.
-   * @throws ItemStreamException if exception while initializing the reader.
    */
   @Override
-  public void open(ExecutionContext context)
-    throws ItemStreamException {
+  public void open(ExecutionContext context) {
     delegate.open(context);
   }
 
   /**
    * Return empty ExecutionContext.
    * @param context to be updated
-   * @throws ItemStreamException if exception while updating the reader.
    */
   @Override
-  public void update(ExecutionContext context)
-    throws ItemStreamException {
+  public void update(ExecutionContext context) {
     delegate.update(context);
   }
 
