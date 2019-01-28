@@ -44,6 +44,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.async.DeferredResult;
 import org.springframework.web.multipart.MultipartFile;
 
+import fr.aesn.rade.webapp.model.SearchEntite;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -71,7 +72,10 @@ public class BatchController {
    * @return View for the Info Batch Upload page
    */
   @RequestMapping(value = "/info", method = RequestMethod.GET)
-  public String infoGet() {
+  public String infoGet(Model model) {
+    log.debug("Requesting /batch/info");
+    model.addAttribute("titre", "Batch Info");
+    model.addAttribute("entite", new SearchEntite());
     return "batchinfo";
   }
 
@@ -80,7 +84,10 @@ public class BatchController {
    * @return View for the Sandre Batch Upload page
    */
   @RequestMapping(value = "/sandre", method = RequestMethod.GET)
-  public String sandreGet() {
+  public String sandreGet(Model model) {
+    log.debug("Requesting /batch/sandre");
+    model.addAttribute("titre", "Batch Sandre");
+    model.addAttribute("entite", new SearchEntite());
     return "batchsandre";
   }
 
@@ -95,6 +102,9 @@ public class BatchController {
   public String infoPost(@RequestParam("file") MultipartFile file,
                          Model model)
     throws IOException {
+    log.debug("Posting to /batch/info");
+    model.addAttribute("titre", "Batch Info");
+    model.addAttribute("entite", new SearchEntite());
     Path tmpFile = storeTempFile(file);
     JobParametersBuilder jobBuilder = new JobParametersBuilder();
     jobBuilder.addString("inputFile", tmpFile.toUri().toString());
@@ -123,6 +133,9 @@ public class BatchController {
   public DeferredResult<String> sandrePost(@RequestParam("file") MultipartFile file,
                                            Model model)
     throws IOException {
+    log.debug("Posting to /batch/sandre");
+    model.addAttribute("titre", "Batch Sandre");
+    model.addAttribute("entite", new SearchEntite());
     Path tmpFile = storeTempFile(file);
     JobParametersBuilder jobBuilder = new JobParametersBuilder();
     jobBuilder.addString("inputFile", tmpFile.toUri().toString());

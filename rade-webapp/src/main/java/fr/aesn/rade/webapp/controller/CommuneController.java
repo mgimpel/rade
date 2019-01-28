@@ -312,13 +312,13 @@ public class CommuneController {
    * Renvoie la liste des départements en fonction de la région pour l'affichage de la liste 
    * déroulante "départements" de la page de recherche.
    * @param regionId 
-   * @param searchCommune
+   * @param dateParam
    * @return Tableau associatif comprenant le code insee et le nom de chaque département
    */
   @RequestMapping(value = "/json/deptlist", method = RequestMethod.GET)
   public @ResponseBody Map<String,String> getDepartementByRegion(
-      @RequestParam("regionId") String regionId,
-      @RequestParam(value = "date", required = false) String dateParam) {
+          @RequestParam(value = "regionId", required = false) String regionId,
+          @RequestParam(value = "date", required = false) String dateParam) {
     Date date = null;
     if (dateParam == null || dateParam.isEmpty()) {
       try {
