@@ -27,7 +27,7 @@ Environment=RADE_OPTS=""
 Environment=LOGGING="-Dlogging.config=/etc/rade/logback.xml"
 User=rade
 Group=rade
-ExecStart=/usr/bin/env $JAVA_EXEC $JAVA_OPTS $RADE_OPTS $LOGGING -jar $BINARY
+ExecStart=/usr/bin/env $JAVA_EXEC $JAVA_OPTS $LOGGING -jar $BINARY $RADE_OPTS
 StandardOutput=journal
 StandardError=journal
 SyslogIdentifier=rade
