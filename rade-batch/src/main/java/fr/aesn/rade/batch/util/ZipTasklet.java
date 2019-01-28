@@ -31,7 +31,6 @@ import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 
-import lombok.Cleanup;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -74,8 +73,7 @@ public class ZipTasklet
   public RepeatStatus execute(StepContribution contribution,
                               ChunkContext chunkContext) {
     Resource resource = new DefaultResourceLoader().getResource(destfile);
-    try {
-      @Cleanup ZipOutputStream zop = new ZipOutputStream(new FileOutputStream(resource.getFile()));
+    try (ZipOutputStream zop = new ZipOutputStream(new FileOutputStream(resource.getFile()))) {
       ZipEntry entry = new ZipEntry("file.csv"); //TODO
       zop.putNextEntry(entry);
       zop.close();

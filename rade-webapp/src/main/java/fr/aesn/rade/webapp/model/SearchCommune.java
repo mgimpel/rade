@@ -87,7 +87,7 @@ public class SearchCommune {
    */
   public int getFirstCommuneIndex() {
     int index = 1;
-    if(communes != null && communes.size() > 0) {
+    if(communes != null && !communes.isEmpty()) {
       try {
         index = Integer.parseInt(page) * 10 - 10;
       } catch(NumberFormatException e) {
@@ -106,7 +106,7 @@ public class SearchCommune {
    */
   public int getLastCommuneIndex() {
     int index = 1;
-    if(communes != null && communes.size() > 0) {
+    if(communes != null && !communes.isEmpty()) {
       index = getFirstCommuneIndex() + 10;
       if(index > this.communes.size()) {
         index = this.communes.size();
@@ -121,7 +121,7 @@ public class SearchCommune {
    * @return Nombre de page
    */
   public int getPageMax() {
-    if(this.communes != null && this.communes.size() > 0) {
+    if(communes != null && !communes.isEmpty()) {
       return (int) Math.ceil((double)this.communes.size() / (double)10);
     } else {
       return 1;

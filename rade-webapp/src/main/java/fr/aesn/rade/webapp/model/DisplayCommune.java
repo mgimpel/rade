@@ -46,7 +46,8 @@ public class DisplayCommune {
   private String nomDepartement;
   private String nomMajuscule;
   private String nomRegion;
-  private Date debutValidite, finValidite;
+  private Date debutValidite;
+  private Date finValidite;
   private Map<String, CommunePlusWithGenealogie.GenealogieTypeAndEntity> parents;
   private Map<String, CommunePlusWithGenealogie.GenealogieTypeAndEntity> enfants;
 
@@ -74,7 +75,7 @@ public class DisplayCommune {
     if (genealogie != null) {
       Iterator<Map.Entry<String, CommunePlusWithGenealogie.GenealogieTypeAndEntity>> it = genealogie.entrySet().iterator();
       if(it.hasNext()){
-        this.motifModification = ((CommunePlusWithGenealogie.GenealogieTypeAndEntity)it.next().getValue()).getType().getLibelleLong();
+        this.motifModification = (it.next().getValue()).getType().getLibelleLong();
       }
     }
     if(communePlusWithGenealogie.getCommunePlus().getCirconscriptionBassin() != null){
