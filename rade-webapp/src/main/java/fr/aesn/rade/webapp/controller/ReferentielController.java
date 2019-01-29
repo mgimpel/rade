@@ -17,7 +17,6 @@
 /* $Id$ */
 package fr.aesn.rade.webapp.controller;
 
-import fr.aesn.rade.common.util.DateConversionUtils;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,10 +69,9 @@ public class ReferentielController {
     String view = "home";
     if(entite.getCode() != null && !entite.getCode().isEmpty()) {
       // une fois la combo des types dégrisée, décommenter la ligne suivante
-      String type = "commune"; // entite.getType();
+      String type = COMMUNE; // entite.getType();
       if(COMMUNE.equalsIgnoreCase(type)) {
-        view = "redirect:/referentiel/commune/" + entite.getCode() + "?date="
-             + DateConversionUtils.formatDateToStringUrl(new Date());
+        view = "redirect:/referentiel/commune/" + entite.getCode();
       }
       model.addAttribute("entite", new SearchEntite());
     }

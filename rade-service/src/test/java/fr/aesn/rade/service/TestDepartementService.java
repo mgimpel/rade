@@ -171,4 +171,49 @@ public class TestDepartementService
     assertEquals("vdept returned a Departement, but a field doesn't match",
                  "01", dept.getRegion());
   }
+
+  /**
+   * Test getting a the list of all Departements for a given Region.
+   * @throws ParseException failed to parse date.
+   */
+  @Test
+  public void testGettingDepartementForRegion() throws ParseException {
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    List<Departement> list;
+    // Toute la France
+    list = service.getDepartementForRegion(null, null);
+    assertEquals(101, list.size());
+    list = service.getDepartementForRegion(null, sdf.parse("2018-01-01"));
+    assertEquals(101, list.size());
+    list = service.getDepartementForRegion(null, sdf.parse("2008-01-01"));
+    assertEquals(100, list.size());
+    list = service.getDepartementForRegion(null, sdf.parse("1998-01-01"));
+    assertEquals(0, list.size());
+    // Grand Est - Alsace-Champagne-Ardenne-Lorraine
+    list = service.getDepartementForRegion("44", null);
+    assertEquals(10, list.size());
+    list = service.getDepartementForRegion("44", sdf.parse("2018-01-01"));
+    assertEquals(10, list.size());
+    list = service.getDepartementForRegion("44", sdf.parse("2016-01-01"));
+    assertEquals(10, list.size());
+    list = service.getDepartementForRegion("44", sdf.parse("2015-01-01"));
+    assertEquals(0, list.size());
+    // Alsace et Lorraine
+    list = service.getDepartementForRegion("41", null);
+    assertEquals(0, list.size());
+    list = service.getDepartementForRegion("42", null);
+    assertEquals(0, list.size());
+    list = service.getDepartementForRegion("41", sdf.parse("2015-01-01"));
+    assertEquals(4, list.size());
+    list = service.getDepartementForRegion("42", sdf.parse("2015-01-01"));
+    assertEquals(2, list.size());
+    list = service.getDepartementForRegion("41", sdf.parse("1999-01-01"));
+    assertEquals(4, list.size());
+    list = service.getDepartementForRegion("42", sdf.parse("1999-01-01"));
+    assertEquals(2, list.size());
+    list = service.getDepartementForRegion("41", sdf.parse("1998-01-01"));
+    assertEquals(0, list.size());
+    list = service.getDepartementForRegion("42", sdf.parse("1998-01-01"));
+    assertEquals(0, list.size());
+  }
 }

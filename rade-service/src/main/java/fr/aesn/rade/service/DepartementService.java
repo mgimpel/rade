@@ -72,7 +72,7 @@ public interface DepartementService {
   /**
    * Get the Departement with the given code at the given date.
    * @param code the Departement code.
-   * @param date the date at which the code was valid
+   * @param date the date at which the code was valid.
    * @return the Departement with the given code at the given date.
    */
   public Departement getDepartementByCode(String code, Date date);
@@ -80,10 +80,18 @@ public interface DepartementService {
   /**
    * Get the Departement with the given code at the given date.
    * @param code the Departement code.
-   * @param date the date at which the code was valid
+   * @param date the date at which the code was valid.
    * @return the Departement with the given code at the given date.
    */
   public Departement getDepartementByCode(String code, String date);
+
+  /**
+   * Get all the Departements within a given region, at the given date.
+   * @param region the regions code.
+   * @param date the date at which the Departments are valid.
+   * @return list of Departements within the given region, at the given date.
+   */
+  public List<Departement> getDepartementForRegion(String region, Date date);
 
   /**
    * Invalidates the given departement by setting the departements finValidite

@@ -60,6 +60,8 @@ public class SpringSecurityConfig
           .antMatchers("/actuator/health", "/actuator/info").permitAll()
           // Static resources (CSS, images, ...) : no restrictions
           .antMatchers("/css/**", "/img/**", "/resources/**", "/favicon.ico").permitAll()
+          // Search queries open to all
+          .antMatchers("/referentiel/**").permitAll()
           // Admin files : require administrator role
           .antMatchers("/admin/**").hasAnyAuthority("RAD_ADMIN")
           .antMatchers("/batch/**").hasAnyAuthority("RAD_ADMIN")
