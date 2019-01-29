@@ -183,15 +183,33 @@ public class TestCommuneJpaDao extends AbstractTestJpaDao {
   public void testFindAllValidOnDate() throws ParseException {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     List<Commune> result;
-    result = jpaDao.findAllValidOnDate(sdf.parse("2018-01-01"));
-    assertEquals("Hibernate returned the wrong number of results",
-                 632, result.size());
-    result = jpaDao.findAllValidOnDate(sdf.parse("2010-01-01"));
-    assertEquals("Hibernate returned the wrong number of results",
-                 616, result.size());
+    // Aucune Commune n'est valable avant 01/01/1999
     result = jpaDao.findAllValidOnDate(sdf.parse("1998-01-01"));
     assertEquals("Hibernate returned the wrong number of results",
                  0, result.size());
+    // Import complet au 01/01/1999
+    result = jpaDao.findAllValidOnDate(sdf.parse("1999-01-01"));
+    assertEquals("Hibernate returned the wrong number of results",
+                 618, result.size());
+    // St-Barthelemy et St-Martin deviennent Collectivité d'outre-mer 15/7/2007
+    result = jpaDao.findAllValidOnDate(sdf.parse("2007-07-15"));
+    assertEquals("Hibernate returned the wrong number of results",
+                 616, result.size());
+    // Changement de nom de Arnouville 11/07/20010
+    result = jpaDao.findAllValidOnDate(sdf.parse("2010-07-11"));
+    assertEquals("Hibernate returned the wrong number of results",
+                 616, result.size());
+    // Mayotte devient un DOM
+    result = jpaDao.findAllValidOnDate(sdf.parse("2012-01-01"));
+    assertEquals("Hibernate returned the wrong number of results",
+                 633, result.size()); 
+    // Fusion de Avernes et Gadancourt au 01/01/2018
+    result = jpaDao.findAllValidOnDate(sdf.parse("2017-12-31"));
+    assertEquals("Hibernate returned the wrong number of results",
+                 633, result.size());
+    result = jpaDao.findAllValidOnDate(sdf.parse("2018-01-01"));
+    assertEquals("Hibernate returned the wrong number of results",
+                 632, result.size());
   }
 
   /**
@@ -243,7 +261,13 @@ public class TestCommuneJpaDao extends AbstractTestJpaDao {
     result = jpaDao.findByDepartementValidOnDate("91", sdf.parse("2018-01-01"));
     assertEquals("Hibernate returned the wrong number of results",
                  196, result.size());
-    result = jpaDao.findByDepartementValidOnDate("90", sdf.parse("2018-01-01"));
+    result = jpaDao.findByDepartementValidOnDate("95", sdf.parse("2018-01-01"));
+    assertEquals("Hibernate returned the wrong number of results",
+                 184, result.size());
+    result = jpaDao.findByDepartementValidOnDate("95", sdf.parse("2017-12-31"));
+    assertEquals("Hibernate returned the wrong number of results",
+                 185, result.size());
+    result = jpaDao.findByDepartementValidOnDate("100", sdf.parse("2018-01-01"));
     assertEquals("Hibernate returned the wrong number of results",
                  0, result.size());
   }

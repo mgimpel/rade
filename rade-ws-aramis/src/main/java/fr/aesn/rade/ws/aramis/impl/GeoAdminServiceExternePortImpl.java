@@ -17,6 +17,7 @@
 /* $Id$ */
 package fr.aesn.rade.ws.aramis.impl;
 
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -102,7 +103,7 @@ public class GeoAdminServiceExternePortImpl implements GeoAdminServiceExterneImp
         } else {
             // Si l'annee est fourni, on recherche toutes les Communes valide au
             // 1er Janvier de l'annee fourni.
-            date = new GregorianCalendar(annee, 1, 1, 12, 0, 0).getTime(); // January 1st, 12:00
+            date = new GregorianCalendar(annee, Calendar.JANUARY, 1, 12, 0, 0).getTime(); // January 1st, 12:00
         }
         try {
             if (communePlusService == null) {
