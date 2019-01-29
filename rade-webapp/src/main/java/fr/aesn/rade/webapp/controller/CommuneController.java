@@ -179,7 +179,9 @@ public class CommuneController {
                + commune.getCommunePlus().getCodeInsee() + "?date="
                + DateConversionUtils.formatDateToStringUrl(dateValidite);
       } else {
-        return initResultatsRechercheCommuneView(searchCommune, model);
+        model.addAttribute("searchCommune", searchCommune);
+        model.addAttribute("titre", "Liste des résultats");
+        return "redirect:/referentiel/commune/resultats";
       }
     }
   }
