@@ -18,22 +18,23 @@
 <%/* $Id$ */%>
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <jsp:include page="aesn_header.jsp" />
 <c:if test="${param.error != null}"><p align="center">Invalid username and password.</p></c:if>
 <c:if test="${param.logout != null}"><p align="center">You have been logged out successfully.</p></c:if>
 <form name="loginForm" action="<c:url value="/login"/>" method="post">
 <table style="margin-left:auto;margin-right:auto;">
 	<tr>
-		<td><label for="username">Username:</label></td>
-		<td><input type="text" name="username" placeholder="Enter Username" required autofocus></td>
+		<td><label for="username"><spring:message code="login.username"/>:</label></td>
+		<td><input type="text" name="username" placeholder="<spring:message code="login.username.placeholder"/>" required autofocus></td>
 	</tr>
 	<tr>
-		<td><label for="password">Password:</label></td>
-		<td><input type="password" name="password" placeholder="Enter Password" required></td>
+		<td><label for="password"><spring:message code="login.password"/>:</label></td>
+		<td><input type="password" name="password" placeholder="<spring:message code="login.password.placeholder"/>" required></td>
 	</tr>
 	<tr>
 		<td><input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/></td>
-		<td><input type="submit" name="submit" value="Log in"></td>
+		<td><input type="submit" name="submit" value="<spring:message code="login.submit"/>"></td>
 	</tr>
 </table>
 </form>
