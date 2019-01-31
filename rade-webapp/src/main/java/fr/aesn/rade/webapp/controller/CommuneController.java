@@ -181,7 +181,7 @@ public class CommuneController {
       } else {
         model.addAttribute("searchCommune", searchCommune);
         model.addAttribute("titre", "Liste des résultats");
-        return "redirect:/referentiel/commune/resultats";
+        return "redirect:/referentiel/commune/resultats?page=1";
       }
     }
   }

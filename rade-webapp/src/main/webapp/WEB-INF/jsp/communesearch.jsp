@@ -26,6 +26,30 @@
 		document.getElementById("codeRegion").onchange = function() {
 			loadDepartement();
 		}
+		document.getElementById("formCommune").addEventListener("keydown", controlerTouche, false);
+	}
+
+	function controlerTouche(e){
+		// IE
+		if(!e){
+			e=window.event;
+		}
+
+		if(e.keyCode === 13){
+			validerForm();
+		}
+	}
+
+	function annuler(){
+		document.getElementById("typeAction").name = "annuler";
+		document.getElementById("formCommune").submit();
+	}
+
+	function validerForm(){
+		if(verifierForm()){
+			document.getElementById("typeAction").name = "valider";
+			document.getElementById("formCommune").submit();
+		}
 	}
 
 	function loadDepartement() {
@@ -53,7 +77,7 @@
 		xhttp.send();
 	}
 
-	function validerForm(){
+	function verifierForm(){
 		var nomEnrichi = document.getElementById("nomEnrichi").value;
 		var codeRegion = document.getElementById("codeRegion").value;
 		var codeDepartement = document.getElementById("codeDepartement").value;
@@ -128,13 +152,14 @@
 
 					<tr>
 						<td style="text-align: right"><label for="dateEffet">Date d'effet : </label></td>
-						<td><form:input type="date" style="width:110px"  path="dateEffet"/></td>
+						<td><form:input type="date" style="width:110px"  path="dateEffet" /></td>
 					</tr>
 				</table>
 
 				<div class="action">
-					<input name="annuler" type="submit" value="Annuler"> 
-					<input type="submit" name="valider" value="Rechercher" onclick="return validerForm();">
+					<input type="hidden" name="valider" id="typeAction"> 
+					<input type="button" value="Annuler" onclick="annuler();"> 
+					<input type="button" value="Rechercher" onclick="validerForm();">
 				</div>
 			</form:form>
 		</td>

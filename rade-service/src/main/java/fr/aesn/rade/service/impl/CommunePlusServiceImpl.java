@@ -242,7 +242,7 @@ public class CommunePlusServiceImpl
    * @return a CommunePlusWithGenealogie built from the given CommunePlus.
    */
   private CommunePlusWithGenealogie buildCommuneWithGenealogie(final CommunePlus commune) {
-	log.debug("Building Genealogie for {}", commune);
+    log.debug("Building Genealogie for {}", commune);
     CommunePlusWithGenealogie result = new CommunePlusWithGenealogie(commune);
     EntiteAdministrative tempEntity;
     Optional<Commune> opt;
