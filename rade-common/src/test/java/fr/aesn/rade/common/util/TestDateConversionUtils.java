@@ -18,7 +18,9 @@
 package fr.aesn.rade.common.util;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.GregorianCalendar;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
@@ -26,10 +28,7 @@ import org.junit.Test;
 /**
  * JUnit Test for DateConversionUtils.
  */
-public class TestDateConversionUtils {
-  private static final String FORMAT_URL = "yyyy-MM-dd";
-  private static final String FORMAT_UI = "dd/MM/yyyy";
-  
+public class TestDateConversionUtils { 
   /**
    * test formatDateToStringUrl
    * @throws java.text.ParseException
@@ -37,9 +36,8 @@ public class TestDateConversionUtils {
   @Test
   public void testFormatDateToStringUrl() throws ParseException {
     String dateString = "2019-01-28";
-    SimpleDateFormat sdf = new SimpleDateFormat(FORMAT_URL);
-    String date = DateConversionUtils.formatDateToStringUrl(sdf.parse(dateString));
-    assertEquals("Erreur lors de la conversion de la chaine de caractère en date", dateString, date);
+    GregorianCalendar gregorianCalendar = GregorianCalendar.from(ZonedDateTime.of(2019, 1, 28, 0, 0, 0, 0, ZoneId.systemDefault()));
+    assertEquals("Erreur lors de la conversion de la chaine de caractère en date", DateConversionUtils.formatDateToStringUrl(gregorianCalendar.getTime()), dateString);
   }
   
   /**
@@ -48,11 +46,13 @@ public class TestDateConversionUtils {
    */
   @Test
   public void testFormatStringToDateUrl() throws ParseException{
-    SimpleDateFormat sdf = new SimpleDateFormat(FORMAT_URL);
-    String dateString = "2019-01-01";
-    assertEquals("Erreur lors de la conversion de la date en chaine de caractère", sdf.parse(dateString), DateConversionUtils.formatStringToDateUrl(dateString));
+    String dateString = "2019-01-28";
+    GregorianCalendar gregorianCalendar = GregorianCalendar.from(ZonedDateTime.of(2019, 1, 28, 0, 0, 0, 0, ZoneId.systemDefault()));
+    assertEquals("Erreur lors de la conversion de la date en chaine de caractère", DateConversionUtils.formatStringToDateUrl(dateString), gregorianCalendar.getTime());
     dateString = "2019-12-31";
-    assertEquals("Erreur lors de la conversion de la date en chaine de caractère", sdf.parse(dateString), DateConversionUtils.formatStringToDateUrl(dateString));
+    gregorianCalendar = GregorianCalendar.from(ZonedDateTime.of(2019, 12, 31, 0, 0, 0, 0, ZoneId.systemDefault()));
+    assertEquals("Erreur lors de la conversion de la date en chaine de caractère", DateConversionUtils.formatStringToDateUrl(dateString), gregorianCalendar.getTime());
+    
   }
   
   /**
@@ -61,9 +61,8 @@ public class TestDateConversionUtils {
    */
   @Test
   public void testFormatDateToStringUi() throws ParseException {
+    GregorianCalendar gregorianCalendar = GregorianCalendar.from(ZonedDateTime.of(2019, 1, 28, 0, 0, 0, 0, ZoneId.systemDefault()));
     String dateString = "28/01/2019";
-    SimpleDateFormat sdf = new SimpleDateFormat(FORMAT_UI);
-    String date = DateConversionUtils.formatDateToStringUi(sdf.parse(dateString));
-    assertEquals("Erreur lors de la conversion de la chaine de caractère en date", dateString, date);
+    assertEquals("Erreur lors de la conversion de la chaine de caractère en date", DateConversionUtils.formatDateToStringUi(gregorianCalendar.getTime()), dateString);
   }
 }
