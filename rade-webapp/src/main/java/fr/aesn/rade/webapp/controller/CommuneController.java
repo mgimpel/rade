@@ -165,21 +165,23 @@ public class CommuneController {
     if(communes == null || communes.isEmpty()) {
       return initRechercheCommuneView(searchCommune, model);
     } else {
+      searchCommune.setCommunes(communes);
+      searchCommune.setPage("1");
       if(communes.size() == 1) {
         CommunePlusWithGenealogie commune = communes.iterator().next();
         Date dateValidite;
-        if(commune.getCommunePlus().getFinValiditeCommuneInsee() == null) {
+        if(searchCommune.getDateEffet() == null) {
           dateValidite = new Date();
         } else {
-          dateValidite = new Date(commune.getCommunePlus().getFinValiditeCommuneInsee().getTime() - 1);
+          dateValidite = searchCommune.getDateEffet();
         }
         return "redirect:/referentiel/commune/"
                + commune.getCommunePlus().getCodeInsee() + "?date="
                + DateConversionUtils.formatDateToStringUrl(dateValidite);
       } else {
-        searchCommune.setPage("1");
-        searchCommune.setCommunes(communes);
-        return initResultatsRechercheCommuneView(searchCommune, model);
+        model.addAttribute("searchCommune", searchCommune);
+        model.addAttribute("titre", "Liste des résultats");
+        return "redirect:/referentiel/commune/resultats?page=1";
       }
     }
   }
