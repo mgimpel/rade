@@ -121,7 +121,7 @@ public class SearchCommune {
    * @return Nombre de page
    */
   public int getPageMax() {
-    if(this.communes != null && !communes.isEmpty()) {
+    if(communes != null && !communes.isEmpty()) {
       return (int) Math.ceil((double)this.communes.size() / (double)10);
     } else {
       return 1;

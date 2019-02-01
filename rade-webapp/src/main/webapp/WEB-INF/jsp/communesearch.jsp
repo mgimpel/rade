@@ -21,7 +21,7 @@
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <jsp:include page="aesn_header.jsp" />
 <script>
-	window.onload = function(){
+	window.onload = function() {
 		loadDepartement();
 		document.getElementById("codeRegion").onchange = function() {
 			loadDepartement();
@@ -29,24 +29,22 @@
 		document.getElementById("formCommune").addEventListener("keydown", controlerTouche, false);
 	}
 
-	function controlerTouche(e){
-		// IE
-		if(!e){
-			e=window.event;
+	function controlerTouche(e) {
+		if(!e) { // IE
+			e = window.event;
 		}
-
-		if(e.keyCode === 13){
+		if(e.keyCode === 13) {
 			validerForm();
 		}
 	}
 
-	function annuler(){
+	function annuler() {
 		document.getElementById("typeAction").name = "annuler";
 		document.getElementById("formCommune").submit();
 	}
 
-	function validerForm(){
-		if(verifierForm()){
+	function validerForm() {
+		if(verifierForm()) {
 			document.getElementById("typeAction").name = "valider";
 			document.getElementById("formCommune").submit();
 		}
@@ -77,7 +75,7 @@
 		xhttp.send();
 	}
 
-	function verifierForm(){
+	function verifierForm() {
 		var nomEnrichi = document.getElementById("nomEnrichi").value;
 		var codeRegion = document.getElementById("codeRegion").value;
 		var codeDepartement = document.getElementById("codeDepartement").value;
