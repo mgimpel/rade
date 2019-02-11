@@ -20,22 +20,34 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <jsp:include page="aesn_header.jsp" />
-<c:if test="${param.error != null}"><p align="center">Invalid username and password.</p></c:if>
-<c:if test="${param.logout != null}"><p align="center">You have been logged out successfully.</p></c:if>
-<form name="loginForm" action="<c:url value="/login"/>" method="post">
-<table style="margin-left:auto;margin-right:auto;">
-	<tr>
-		<td><label for="username"><spring:message code="login.username"/>:</label></td>
-		<td><input type="text" name="username" placeholder="<spring:message code="login.username.placeholder"/>" required autofocus></td>
-	</tr>
-	<tr>
-		<td><label for="password"><spring:message code="login.password"/>:</label></td>
-		<td><input type="password" name="password" placeholder="<spring:message code="login.password.placeholder"/>" required></td>
-	</tr>
-	<tr>
-		<td><input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/></td>
-		<td><input type="submit" name="submit" value="<spring:message code="login.submit"/>"></td>
-	</tr>
-</table>
-</form>
+<style type="text/css">@import url("${pageContext.request.contextPath}/webjars/font-awesome/css/all.min.css");</style>
+<div class="row justify-content-center">
+	<div class="col-4">
+		<c:if test="${param.error != null}">
+			<div class="alert alert-danger">Invalid username and password.</div>
+		</c:if>
+		<c:if test="${param.logout != null}">
+			<div class="alert alert-success">You have been logged out successfully.</div>
+		</c:if>
+		<div class="card card-aesn">
+			<div class="card-body">
+				<form name="loginForm" action="/login" method="post">
+					<div class="form-group">
+						<div class="input-group">
+							<div class="input-group-prepend input-group-text btn-aesn"><i class="fas fa-user"></i></div>
+							<input type="text" class="form-control form-aesn" name="username" placeholder="<spring:message code="login.username.placeholder"/>" required="" autofocus="">
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="input-group input-group-md">
+							<div class="input-group-prepend input-group-text btn-aesn"><i class="fas fa-lock"></i></div>
+							<input type="password" class="form-control form-aesn" name="password" placeholder="<spring:message code="login.password.placeholder"/>" required="">
+						</div>
+					</div>
+					<button type="submit" class="form-control btn-aesn" name="submit"><i class="fas fa-sign-in-alt"></i> <spring:message code="login.submit"/></button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
 <jsp:include page="aesn_footer.jsp" />

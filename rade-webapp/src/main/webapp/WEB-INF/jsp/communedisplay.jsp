@@ -19,132 +19,146 @@
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <jsp:include page="aesn_header.jsp" />
-<style>
-.demi{
-	float: left;
-	width: 49%;
-	margin-right: 1%;
-	clear: none;
-}
-.pave{
-	clear: left;
-}
-.cadre{
-	border: 1px solid #0365AB;
-	background-color: #E0EDF6;
-	overflow: auto;
-	height: 1%;
-	padding: 13px;
-}
-</style>
-	<div class="cadre" style="padding: 15px;">
-		<div class="demi pave">
-			<fieldset>
-				<legend>Attributs commune</legend>
-				<table style="height: 105px;">
-					<tr>
-						<td width="38%"><label>Code INSEE : </label></td>
-						<td>${displayCommune.codeInsee}</td>  
-					</tr>
-					<c:if test="${displayCommune.article != '' && displayCommune.article != null}">
-						<tr>
-							<td><label>Article : </label></td>
-							<td>${displayCommune.article}</td>  
-						</tr>
-					</c:if>
-					<c:if test="${displayCommune.articleEnrichi != '' && displayCommune.articleEnrichi != null}">  
-						<tr>
-							<td><label>Article enrichi : </label></td>
-							<td>${displayCommune.articleEnrichi}</td>  
-						</tr>
-					</c:if>
-					<tr>
-						<td><label>Nom commune : </label></td>
-						<td>${displayCommune.nomMajuscule}</td>  
-					</tr>
-					<tr>
-						<td><label>Nom commune enrichi : </label></td>
-						<td>${displayCommune.nomEnrichi}</td>  
-					</tr>
-				</table>
-			</fieldset>
+<div class="row justify-content-center">
+	<div class="col-12">
+		<div class="card card-aesn">
+			<div class="card-body card-body-aesn">
+				<div class="row">
+					<div class="col-6">
+						<h5>Attributs commune</h5>
+						<div class="card card-aesn">
+							<div class="card-body card-body-aesn">
+								<table class="w-100 h-100">
+									<tr>
+										<td class="w-33">Code INSEE :</td>
+										<td>${displayCommune.codeInsee}</td>
+									</tr>
+									<c:if test="${displayCommune.article != '' && displayCommune.article != null}">
+										<tr>
+											<td>Article :</td>
+											<td>${displayCommune.article}</td>  
+										</tr>
+									</c:if>
+									<c:if test="${displayCommune.articleEnrichi != '' && displayCommune.articleEnrichi != null}">
+										<tr>
+											<td>Article enrichi :</td>
+											<td>${displayCommune.articleEnrichi}</td>
+										</tr>
+									</c:if>
+									<tr>
+										<td>Nom commune :</td>
+										<td>${displayCommune.nomMajuscule}</td>
+									</tr>
+									<tr>
+										<td>Nom commune enrichi :</td>
+										<td>${displayCommune.nomEnrichi}</td>
+									</tr>
+								</table>
+							</div>
+						</div>
+					</div>
+					<div class="col-6">
+						<h5>Rattachement commune</h5>
+						<div class="card card-aesn">
+							<div class="card-body card-body-aesn">
+								<table class="w-100 h-100">
+									<tr>
+										<td class="w-33">Département :</td>
+										<td>${displayCommune.nomDepartement} (${displayCommune.codeDepartement})</td>
+									</tr>
+									<tr>
+										<td>Région :</td>
+										<td>${displayCommune.nomRegion}</td>
+									</tr>
+									<c:if test="${displayCommune.nomBassin != null}">
+										<tr>
+											<td>Bassin :</td>
+											<td>${displayCommune.nomBassin} (${displayCommune.codeBassin})</td>
+										</tr>
+									</c:if>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row mt-2">
+					<div class="col-12">
+						<h5>Données historisation INSEE</h5>
+						<div class="card card-aesn">
+							<div class="card-body card-body-aesn">
+								<table class="w-100 h-100">
+									<tr>
+										<td class="w-16">Début validité :</td>
+										<td>${displayCommune.getDateIHM(displayCommune.debutValidite)}</td>
+									</tr>
+									<c:if test="${displayCommune.finValidite != null}">
+										<tr>
+											<td>Fin validité :</td>
+											<td>${displayCommune.getDateIHM(displayCommune.finValidite)}</td>
+										</tr>
+									</c:if>
+									<c:if test="${displayCommune.motifModification != null}">
+										<tr>
+											<td>Motif de modification :</td>
+											<td>${displayCommune.motifModification}</td>
+										</tr>
+									</c:if>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row mt-2">
+					<div class="col-6">
+						<h5>Entités mères</h5>
+						<div class="card card-aesn">
+							<div class="card-body card-body-aesn">
+								<table class="w-100 h-100">
+									<c:if test="${displayCommune.parents.isEmpty()}">
+										<tr>
+											<td>Aucune entités mères</td>
+										</tr>
+									</c:if>
+									<c:forEach items="${displayCommune.parents}" var="genealogieParent">
+										<tr>
+											<td class="w-16 text-center"><a href="${displayCommune.getUrlEntite(genealogieParent.key, genealogieParent.value.entity.finValidite)}">${genealogieParent.key}</a></td>
+											<td>${genealogieParent.value.entity.nomEnrichi}</td>
+											<td class="w-25">${displayCommune.getDateIHM(genealogieParent.value.entity.debutValidite)}</td>
+										</tr>
+									</c:forEach>
+								</table>
+							</div>
+						</div>
+					</div>
+					<div class="col-6">
+						<h5>Entités filles</h5>
+						<div class="card card-aesn">
+							<div class="card-body card-body-aesn">
+								<table class="w-100 h-100">
+									<c:if test="${displayCommune.enfants.isEmpty()}">
+										<tr>
+											<td>Aucune entités filles</td>
+										</tr>
+									</c:if>
+									<c:forEach items="${displayCommune.enfants}" var="genealogieEnfant">
+										<tr>
+											<td class="w-16 text-center"><a href="${displayCommune.getUrlEntite(genealogieEnfant.key, genealogieEnfant.value.entity.finValidite)}">${genealogieEnfant.key}</a></td>
+											<td>${genealogieEnfant.value.entity.nomEnrichi}</td>
+											<td class="w-25">${displayCommune.getDateIHM(genealogieEnfant.value.entity.debutValidite)}</td>
+										</tr>
+									</c:forEach>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
-		<div class="demi pave" style="clear: none;">
-			<fieldset>
-				<legend>Rattachement commune</legend>
-				<table style="height: 105px;">
-					<tr>
-						<td width="38%"><label>Département : </label></td>
-						<td>${displayCommune.nomDepartement} (${displayCommune.codeDepartement})</td>  
-					</tr>
-					<tr>
-						<td><label>Région : </label></td>
-						<td>${displayCommune.nomRegion}</td>  
-					</tr>
-					<c:if test="${displayCommune.nomBassin != null}">
-						<tr>
-							<td><label>Bassin : </label></td>
-							<td>${displayCommune.nomBassin} <span style="font-size: 12px">(${displayCommune.codeBassin})</span></td>  
-						</tr>
-					</c:if>
-				</table>
-			</fieldset>
-		</div>
-		<div class="pave">
-			<fieldset>
-				<legend>Données historisation INSEE</legend>
-				<table style="height: 105px;">
-					<tr>
-						<td  width="18%"><label>Début validité : </label></td>
-						<td>${displayCommune.getDateIHM(displayCommune.debutValidite)}</td>  
-						<c:if test="${displayCommune.finValidite != null}">
-							<td width="18%"><label>Fin validité : </label><td>
-							<td>${displayCommune.getDateIHM(displayCommune.finValidite)}</td>  
-						</c:if>
-					</tr>
-					<c:if test="${displayCommune.motifModification != null}">
-						<tr>
-							<td width="18%"><label>Motif de modification : </label></td>
-							<td>${displayCommune.motifModification}</td>  
-						</tr>
-					</c:if>
-				</table>
-			</fieldset>
-		</div>
-		<div class="demi pave" style="font-size: 12px; width: 49%">
-			<fieldset>
-				<legend>Entités mères</legend>
-				<table>
-					<c:if test="${displayCommune.parents.isEmpty()}">   
-						<td>Aucune entités mères</td>
-					</c:if>
-					<c:forEach items="${displayCommune.parents}" var="genealogieParent">
-						<tr>
-							<td style="width: 60px; text-align: center"><a href="${displayCommune.getUrlEntite(genealogieParent.key, genealogieParent.value.entity.finValidite)}">${genealogieParent.key}</a></td>
-							<td>${genealogieParent.value.entity.nomEnrichi}</td>
-							<td>${displayCommune.getDateIHM(genealogieParent.value.entity.debutValidite)}</td>
-						</tr>
-					</c:forEach>
-				</table>
-			</fieldset>
-		</div>
-		<div class="demi pave" style="clear: none;font-size: 12px; width: 49%;">
-			<fieldset>
-				<legend>Entités filles</legend>
-				<table>
-					<c:if test="${displayCommune.enfants.isEmpty()}">   
-						<td>Aucune entités filles</td>
-					</c:if>
-					<c:forEach items="${displayCommune.enfants}" var="genealogieEnfant">
-						<tr>
-							<td style="width: 60px; text-align: center"><a href="${displayCommune.getUrlEntite(genealogieEnfant.key, genealogieEnfant.value.entity.finValidite)}">${genealogieEnfant.key}</a></td>
-							<td>${genealogieEnfant.value.entity.nomEnrichi}</td>
-							<td>${displayCommune.getDateIHM(genealogieEnfant.value.entity.debutValidite)}</td>
-						</tr>
-					</c:forEach>
-				</table>
-			</fieldset>
+		<div class="row mt-2">
+			<div class="col-auto">
+				<a class="btn btn-sm btn-aesn" href="/referentiel/commune/resultats">&lt;&lt; Retour</a>
+			</div>
 		</div>
 	</div>
-	<div><a href="/referentiel/commune/resultats">&lt;&lt; Retour</a></div>
+</div>
 <jsp:include page="aesn_footer.jsp" />

@@ -20,24 +20,24 @@
 <%@ page import="fr.aesn.rade.common.util.Version" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-		</td>
-	</tr>
-	<tr id="footer">
-		<td><%
-			SimpleDateFormat ft = new SimpleDateFormat ("d MMMMM yyyy");
-			out.print(ft.format(new Date()));
-		%></td>
-		<td>
-			<div id="footer_r">
+<c:set var="path" value="${pageContext.request.contextPath}"/>
+		<!-- Footer -->
+		<div class="row mt-4">
+			<div class="col-lg-2 aesn-footer"><%
+				SimpleDateFormat ft = new SimpleDateFormat("d MMMMM yyyy");
+				out.print(ft.format(new Date()));
+			%></div>
+			<div class="col-lg-10 aesn-footer aesn-footer-border">
 <spring:eval var="footermenu" expression="@footerMenu"/>
 <c:forEach var="menuitem" items="${footermenu}">
 				<a href="#" onclick="window.open('<c:url value="${menuitem.value}" />')">${menuitem.key}</a>&nbsp;&nbsp;|&nbsp;
 </c:forEach>
 				<%out.print(Version.PROJECT_VERSION);%>
 			</div>
-		</td>
-	</tr>
-	</tbody>
-</table>
+		</div>
+	</div>
+	<script src="${path}/webjars/popper.js/popper.min.js"></script>
+	<script src="${path}/webjars/jquery/jquery.slim.min.js"></script>
+	<script src="${path}/webjars/bootstrap/js/bootstrap.min.js"></script>
 </body>
 </html>

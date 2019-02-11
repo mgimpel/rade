@@ -91,6 +91,7 @@ public class HabilitationsAuthenticationProvider
   @Override
   protected UserDetails retrieveUser(String username,
                                      UsernamePasswordAuthenticationToken authentication) {
+    log.debug("Retrieving details for user {}", username);
     if (authentication == null) {
       throw new BadCredentialsException("Authentication Token was null");
     }
@@ -167,6 +168,7 @@ public class HabilitationsAuthenticationProvider
       throw new BadCredentialsException("Authentication Token was null");
     }
     String name = authentication.getName();
+    log.debug("Authenticating user", name);
     Object credentials = authentication.getCredentials();
     if (credentials == null) {
       throw new BadCredentialsException("Credentials were null");

@@ -101,65 +101,67 @@
 		return true;
 	}
 </script>
-	<tr>
-		<td colspan="2">
-			<c:if test="${errorRecherche != null && !errorRecherche.equals('')}">
-				<div style="border: 1px solid #ffeeba; padding: 5px; background-color: #fff3cd; margin-bottom: 5px;">${errorRecherche}</div>
-			</c:if>
-			<form:form id="formCommune" method="POST" action="/referentiel/commune/resultats" modelAttribute="searchCommune">
-				<table  class="prez" style="margin-left:auto;margin-right:auto;">
-					<tr>
-						<td style="text-align: right"><form:label path="codeInsee">Code INSEE :</form:label></td>
-						<td><form:input style="width:95px"  path="codeInsee"/></td>
-					</tr>
-
-					<tr>
-						<td style="text-align: right"><form:label path="nomEnrichi">Nom :</form:label></td>
-						<td><form:input  style="width:300px"  path="nomEnrichi"/></td>
-					</tr>
-
-					<tr>
-						<td style="text-align: right"><form:label path="codeRegion">Region :</form:label></td>
-						<td>
-							<form:select style="width:300px"  path="codeRegion">
-								<form:option value="-1" label="Sélectionner une région..." />
-								<form:options  items="${searchCommune.regionsByCodeInsee}"  />
-							</form:select>
-						</td>
-					</tr>
-
-					<tr>
-						<td style="text-align: right"><form:label path="codeDepartement">Département :</form:label></td>
-						<td>
-							<form:select style="width:300px" path="codeDepartement">
-								<form:option value="-1" label="Sélectionner un département..." />
-								<form:options  items="${searchCommune.departementsByCodeInsee}"  />
-							</form:select>
-						</td>
-					</tr>
-
-					<tr>
-						<td style="text-align: right"><form:label path="codeCirconscription">Circonscription bassin :</form:label></td>
-						<td>
-							<form:select  style="width:300px"  path="codeCirconscription">
-								<form:option value="-1" label="Sélectionner une circonscription..." />
-								<form:options  items="${searchCommune.circonscriptionByCode}"  />
-							</form:select>
-						</td>
-					</tr>
-
-					<tr>
-						<td style="text-align: right"><label for="dateEffet">Date d'effet : </label></td>
-						<td><form:input type="date" style="width:110px"  path="dateEffet" /></td>
-					</tr>
-				</table>
-
-				<div class="action">
-					<input type="hidden" name="valider" id="typeAction"> 
-					<input type="button" value="Annuler" onclick="annuler();"> 
-					<input type="button" value="Rechercher" onclick="validerForm();">
-				</div>
-			</form:form>
-		</td>
-	</tr> 
+<div class="row justify-content-center">
+	<div class="col-12">
+		<c:if test="${errorRecherche != null && !errorRecherche.equals('')}">
+			<div class="alert alert-danger">${errorRecherche}</div>
+		</c:if>
+		<div class="card card-aesn">
+			<div class="card-body card-body-aesn">
+				<form:form id="formCommune" action="/referentiel/commune/resultats" method="POST" modelAttribute="searchCommune">
+					<table class="w-100">
+						<tbody style="vertical-align:baseline;">
+							<tr>
+								<td class="text-right"><form:label path="codeInsee">Code INSEE:</form:label></td>
+								<td><form:input class="pt-0 pb-0 pl-1" path="codeInsee"/></td>
+							</tr>
+							<tr>
+								<td class="text-right"><form:label path="nomEnrichi">Nom:</form:label></td>
+								<td><form:input class="input-aesn-20 pt-0 pb-0 pl-1" path="nomEnrichi"/></td>
+							</tr>
+							<tr>
+								<td class="text-right"><form:label path="codeRegion">Region:</form:label></td>
+								<td>
+									<form:select class="input-aesn-20" path="codeRegion">
+										<form:option value="-1" label="Sélectionner une région..." />
+										<form:options items="${searchCommune.regionsByCodeInsee}" />
+									</form:select>
+								</td>
+							</tr>
+							<tr>
+								<td class="text-right"><form:label path="codeDepartement">Département:</form:label></td>
+								<td>
+									<form:select class="input-aesn-20" path="codeDepartement">
+										<form:option value="-1" label="Sélectionner un département..." />
+										<form:options items="${searchCommune.departementsByCodeInsee}" />
+									</form:select>
+								</td>
+							</tr>
+							<tr>
+								<td class="text-right"><form:label path="codeCirconscription">Circonscription bassin:</form:label></td>
+								<td>
+									<form:select class="input-aesn-20" path="codeCirconscription">
+										<form:option value="-1" label="Sélectionner une circonscription..." />
+										<form:options items="${searchCommune.circonscriptionByCode}" />
+									</form:select>
+								</td>
+							</tr>
+							<tr>
+								<td class="text-right"><label for="dateEffet">Date d'effet:</label></td>
+								<td><form:input type="date" path="dateEffet" /></td>
+							</tr>
+							<tr>
+								<td class="text-right" colspan="2">
+									<input type="hidden" name="valider" id="typeAction">
+									<input type="button" class="btn btn-sm btn-aesn" value="Annuler" onclick="annuler();">
+									<input type="button" class="btn btn-sm btn-aesn" value="Rechercher" onclick="validerForm();">
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</form:form>
+			</div>
+		</div>
+	</div>
+</div>
 <jsp:include page="aesn_footer.jsp" />
