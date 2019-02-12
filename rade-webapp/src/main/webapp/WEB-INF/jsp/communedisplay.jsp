@@ -156,7 +156,7 @@
 		</div>
 		<div class="row mt-2">
 			<div class="col-auto">
-				<a class="btn btn-sm btn-aesn" href="/referentiel/commune/resultats">&lt;&lt; Retour</a>
+				<a class="btn btn-sm btn-aesn" href="${pageContext.request.contextPath}/referentiel/commune/resultats">&lt;&lt; Retour</a>
 			</div>
 		</div>
 	</div>

@@ -19,26 +19,34 @@
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <jsp:include page="aesn_header.jsp" />
-<table style="margin-left:auto;margin-right:auto;" class="prez">
-	<tr>
-		<td width="175"><b>Code INSEE:</b></td>
-		<td><input type="text" style="width:300px" value="${region.codeInsee}" readonly/></td>
-	</tr>
-	<tr>
-		<td width="175"><b>Nom Enrichi:</b></td>
-		<td><input type="text" style="width:300px" value="${region.nomEnrichi}" readonly/></td>
-	</tr>
-	<tr>
-		<td width="175"><b>Nom Majuscule:</b></td>
-		<td><input type="text" style="width:300px" value="${region.nomMajuscule}" readonly/></td>
-	</tr>
-	<tr>
-		<td width="175"><b>Début Validité:</b></td>
-		<td><input type="text" style="width:300px" value="${region.debutValidite}" readonly/></td>
-	</tr>
-	<tr>
-		<td width="175"><b>Fin Validité:</b></td>
-		<td><input type="text" style="width:300px" value="${region.finValidite != null ? region.finValidite : ''}" readonly/></td>
-	</tr>
-</table>
+<div class="row justify-content-center">
+	<div class="col-12">
+		<div class="card card-aesn">
+			<div class="card-body">
+				<table class="w-100">
+					<tr>
+						<td class="w-16"><b>Code INSEE:</b></td>
+						<td><input type="text" class="w-33" value="${region.codeInsee}" readonly/></td>
+					</tr>
+					<tr>
+						<td><b>Nom Enrichi:</b></td>
+						<td><input type="text" class="w-33" value="${region.nomEnrichi}" readonly/></td>
+					</tr>
+					<tr>
+						<td><b>Nom Majuscule:</b></td>
+						<td><input type="text" class="w-33" value="${region.nomMajuscule}" readonly/></td>
+					</tr>
+					<tr>
+						<td><b>Début Validité:</b></td>
+						<td><input type="text" class="w-33" value="${region.debutValidite}" readonly/></td>
+					</tr>
+					<tr>
+						<td><b>Fin Validité:</b></td>
+						<td><input type="text" class="w-33" value="${region.finValidite != null ? region.finValidite : ''}" readonly/></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
 <jsp:include page="aesn_footer.jsp" />

@@ -19,16 +19,26 @@
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <jsp:include page="aesn_header.jsp" />
-<form name="batchForm" action="<c:url value="/batch/sandre"/>" method="post" enctype="multipart/form-data">
-<table style="margin-left:auto;margin-right:auto;">
-	<tr>
-		<td><label for="file">Select a file to upload:</label></td>
-		<td><input type="file" name="file" /></td>
-	</tr>
-	<tr>
-		<td><input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/></td>
-		<td><input type="submit" name="submit" value="Submit"></td>
-	</tr>
-</table>
-</form>
+<div class="row justify-content-center">
+	<div class="col-12">
+		<div class="card card-aesn">
+			<div class="card-body">
+				<form name="batchForm" action="${pageContext.request.contextPath}/batch/sandre" method="post" enctype="multipart/form-data">
+					<table class="w-100">
+						<tr>
+							<td class="w-25"><label for="file">Select a file to upload:</label></td>
+							<td><label class="btn btn-aesn">Browse<input type="file" name="file" onchange="$('#filename').html(this.files[0].name)" hidden></label>
+								<span class="label label-info" id="filename"></span>
+							</td>
+						</tr>
+						<tr>
+							<td><input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/></td>
+							<td><input type="submit" class="btn btn-aesn" name="submit" value="Submit"></td>
+						</tr>
+					</table>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
 <jsp:include page="aesn_footer.jsp" />

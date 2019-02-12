@@ -18,26 +18,34 @@
 <%/* $Id$ */%>
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <jsp:include page="aesn_header.jsp" />
-<table style="margin-left:auto;margin-right:auto;">
-	<tr>
-		<td>OriginalFileName: </td>
-		<td>${file.originalFilename}</td>
-	</tr>
-	<tr>
-		<td>Type:</td>
-		<td>${file.contentType}</td>
-	</tr>
-	<tr>
-		<td>Name:</td>
-		<td>${file.name}</td>
-	</tr>
-	<tr>
-		<td>Size:</td>
-		<td>${file.size}</td>
-	</tr>
-	<tr>
-		<td>URI:</td>
-		<td>${uri}</td>
-	</tr>
-</table>
+<div class="row justify-content-center">
+	<div class="col-12">
+		<div class="card card-aesn">
+			<div class="card-body">
+				<table class="w-100">
+					<tr>
+						<td>OriginalFileName: </td>
+						<td>${file.originalFilename}</td>
+					</tr>
+					<tr>
+						<td>Type:</td>
+						<td>${file.contentType}</td>
+					</tr>
+					<tr>
+						<td>Name:</td>
+						<td>${file.name}</td>
+					</tr>
+					<tr>
+						<td>Size:</td>
+						<td>${file.size}</td>
+					</tr>
+					<tr>
+						<td>URI:</td>
+						<td>${uri}</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
 <jsp:include page="aesn_footer.jsp" />

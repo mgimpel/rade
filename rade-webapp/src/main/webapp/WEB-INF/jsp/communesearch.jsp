@@ -71,7 +71,7 @@
 				listeDepartement.innerHTML = option;
 			}
 		};
-		xhttp.open("GET", "/referentiel/commune/json/deptlist?regionId=" + regionId, true);
+		xhttp.open("GET", "${pageContext.request.contextPath}/referentiel/commune/json/deptlist?regionId=" + regionId, true);
 		xhttp.send();
 	}
 
@@ -108,7 +108,7 @@
 		</c:if>
 		<div class="card card-aesn">
 			<div class="card-body card-body-aesn">
-				<form:form id="formCommune" action="/referentiel/commune/resultats" method="POST" modelAttribute="searchCommune">
+				<form:form id="formCommune" action="${pageContext.request.contextPath}/referentiel/commune/resultats" method="POST" modelAttribute="searchCommune">
 					<table class="w-100">
 						<tbody style="vertical-align:baseline;">
 							<tr>

@@ -144,10 +144,10 @@
 		</c:if>
 		<div class="row justify-content-between">
 			<div class="col-auto">
-				<a class="btn btn-sm btn-aesn" href="/referentiel/commune">&lt;&lt; Retour</a>
+				<a class="btn btn-sm btn-aesn" href="${pageContext.request.contextPath}/referentiel/commune">&lt;&lt; Retour</a>
 			</div>
 			<div class="col-auto">
-				<form id="formExcel" action="/referentiel/commune/export" method="POST">
+				<form id="formExcel" action="${pageContext.request.contextPath}/referentiel/commune/export" method="POST">
 					<button class="btn btn-sm btn-aesn" type="submit">Exporter sous excel</button>
 				</form>
 			</div>

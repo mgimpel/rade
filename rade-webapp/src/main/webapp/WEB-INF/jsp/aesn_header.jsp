@@ -101,7 +101,7 @@
 						</nav>
 					</div>
 					<div class="col-auto ml-auto">
-						<form:form class="form-inline" action="/referentiel/entiteSearch" method="post" modelAttribute="entite">
+						<form:form class="form-inline" action="${path}/referentiel/entiteSearch" method="post" modelAttribute="entite">
 							<form:input class="form-control" path="code" placeholder="code" maxlength="5"/>
 							<form:select class="form-control" path="type" disabled="true">
 								<form:option value="region">Région</form:option>

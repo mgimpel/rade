@@ -20,16 +20,24 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <jsp:include page="aesn_header.jsp" />
-<form:form method="POST" action="/referentiel/region" modelAttribute="region">
-<table style="margin-left:auto;margin-right:auto;">
-	<tr>
-		<td><form:label path="codeInsee">Code INSEE:</form:label></td>
-		<td><form:input path="codeInsee"/></td>
-	</tr>
-	<tr>
-		<td></td>
-		<td><input type="submit" name="submit" value="Rechercher"></td>
-	</tr>
-</table>
-</form:form>
+<div class="row justify-content-center">
+	<div class="col-12">
+		<div class="card card-aesn">
+			<div class="card-body">
+				<form:form method="POST" action="/referentiel/region" modelAttribute="region">
+					<table class="w-100">
+						<tr>
+							<td><form:label path="codeInsee">Code INSEE:</form:label></td>
+							<td><form:input path="codeInsee"/></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td><input type="submit" name="submit" value="Rechercher"></td>
+						</tr>
+					</table>
+				</form:form>
+			</div>
+		</div>
+	</div>
+</div>
 <jsp:include page="aesn_footer.jsp" />
