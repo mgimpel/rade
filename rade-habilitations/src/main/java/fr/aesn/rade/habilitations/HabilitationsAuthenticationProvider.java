@@ -183,11 +183,11 @@ public class HabilitationsAuthenticationProvider
       }
       log.info("User authenticated: {}", name);
     } catch (HabilitationException e) {
-      log.debug("Unable to authenticate user {}", name, e);
+      log.warn("Unable to authenticate user {}", name, e);
       throw new BadCredentialsException("Unable to authenticate user " + name,
                                         e);
     } catch (RemoteException e) {
-      log.debug("Unable to authenticate user {}", name, e);
+      log.warn("Unable to authenticate user {}", name, e);
       throw new AuthenticationServiceException("Unable to authenticate user "
                                                + name, e);
     }
