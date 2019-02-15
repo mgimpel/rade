@@ -21,58 +21,36 @@
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <jsp:include page="aesn_header.jsp" />
 <script>
-	window.onload = function() {
+	$(document).ready(function(){
 		loadDepartement();
-		document.getElementById("codeRegion").onchange = function() {
-			loadDepartement();
-		}
-		document.getElementById("formCommune").addEventListener("keydown", controlerTouche, false);
-	}
+		$("#formCommune").keydown(function (e) {
+			if(e.which == 13) validerForm();
+		});
+	});
 
-	function controlerTouche(e) {
-		if(!e) { // IE
-			e = window.event;
-		}
-		if(e.keyCode === 13) {
-			validerForm();
-		}
+	function loadDepartement() {
+		$.getJSON("${pageContext.request.contextPath}/referentiel/commune/json/deptlist",
+				{"regionId": $("#codeRegion").val()},
+				function(data){
+			var current = $("#codeDepartement").val();
+			var option = "<option value='-1'>Sélectionner un département...</option>";
+			$.each(data, function(key, val) {
+				option +=  "<option value='" + key + "'" + (key != current ? ">" : " selected='selected'>") + val + "</option>";
+			});
+			$("#codeDepartement").html(option);
+		});
 	}
 
 	function annuler() {
-		document.getElementById("typeAction").name = "annuler";
-		document.getElementById("formCommune").submit();
+		$("#typeAction").attr("name", "annuler");
+		$("#formCommune")[0].submit();
 	}
 
 	function validerForm() {
 		if(verifierForm()) {
-			document.getElementById("typeAction").name = "valider";
-			document.getElementById("formCommune").submit();
+			$("#typeAction").attr("name", "valider");
+			$("#formCommune")[0].submit();
 		}
-	}
-
-	function loadDepartement() {
-		var regionId = document.getElementById("codeRegion").value;
-		var xhttp = new XMLHttpRequest();
-		xhttp.onreadystatechange = function() {
-			if (this.readyState == 4 && this.status == 200) {
-				listeDeptJson = JSON.parse(this.responseText);
-				var departementSelected = document.getElementById("codeDepartement").value;
-				var listeDepartement= document.getElementById("codeDepartement");
-				var option = "<option value='-1'>Sélectionner un département...</option>";
-				listeDepartement.innerHTML = "";
-				for(var codeInseeDept in listeDeptJson) {
-					var nomDept = listeDeptJson[codeInseeDept];
-					if(departementSelected !== codeInseeDept) {
-						option = option + "<option value='" + codeInseeDept + "'>" + nomDept + "</option>";
-					} else {
-						option = option + "<option value='" + codeInseeDept + "' selected='selected'>" + nomDept + "</option>";
-					}
-				}
-				listeDepartement.innerHTML = option;
-			}
-		};
-		xhttp.open("GET", "${pageContext.request.contextPath}/referentiel/commune/json/deptlist?regionId=" + regionId, true);
-		xhttp.send();
 	}
 
 	function verifierForm() {
@@ -122,7 +100,7 @@
 							<tr>
 								<td class="text-right"><form:label path="codeRegion">Region:</form:label></td>
 								<td>
-									<form:select class="input-aesn-20" path="codeRegion">
+									<form:select class="input-aesn-20" path="codeRegion" onchange="loadDepartement()">
 										<form:option value="-1" label="Sélectionner une région..." />
 										<form:options items="${searchCommune.regionsByCodeInsee}" />
 									</form:select>

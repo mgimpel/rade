@@ -250,7 +250,7 @@ public class CommuneController {
    * @param model
    * @return Vue due la page de recherche
    */
-  public String initDetailCommuneView(DisplayCommune displayCommune, 
+  private String initDetailCommuneView(DisplayCommune displayCommune, 
                                       Model model) {
     model.addAttribute("titre", "Commune / Détail commune "
                                  + displayCommune.getCodeInsee()
@@ -266,7 +266,7 @@ public class CommuneController {
    * @param model
    * @return Vue due la page de recherche
    */
-  public String initRechercheCommuneView(SearchCommune searchCommune, Model model){
+  private String initRechercheCommuneView(SearchCommune searchCommune, Model model){
     if(searchCommune.getDateEffet() == null){
       searchCommune.setDateEffet(new Date());
     }
@@ -284,7 +284,7 @@ public class CommuneController {
    * @param model
    * @return Vue due la page de résultats
    */
-  public String initResultatsRechercheCommuneView(SearchCommune searchCommune,
+  private String initResultatsRechercheCommuneView(SearchCommune searchCommune,
                                                   Model model){
     searchCommune.setListeResultats(paginateResultatsCommune(searchCommune, false));
     model.addAttribute("searchCommune", searchCommune);
@@ -298,7 +298,7 @@ public class CommuneController {
    * @param allCommune 
    * @return Liste des communes affichés sur la page des résultats
    */
-  public List<DisplayCommune> paginateResultatsCommune(SearchCommune searchCommune, boolean allCommune) {
+  private List<DisplayCommune> paginateResultatsCommune(SearchCommune searchCommune, boolean allCommune) {
     List<DisplayCommune> listeResultats = new ArrayList<>();
     int firstCommuneIndex = allCommune ? 0 : searchCommune.getFirstCommuneIndex();
     int lastCommuneIndex = allCommune ? searchCommune.getCommunes().size() : searchCommune.getLastCommuneIndex();

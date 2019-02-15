@@ -36,8 +36,7 @@
 			</div>
 		</div>
 	</div>
-	<script src="${path}/webjars/popper.js/popper.min.js"></script>
-	<script src="${path}/webjars/jquery/jquery.slim.min.js"></script>
-	<script src="${path}/webjars/bootstrap/js/bootstrap.min.js"></script>
+	<script src="${path}/webjars/popper.js/umd/popper.min.js" type="text/javascript"></script>
+	<script src="${path}/webjars/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
 </body>
 </html>

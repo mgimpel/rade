@@ -34,17 +34,12 @@
 	<link rel="shortcut icon" href="${path}/favicon.ico" type="image/x-icon">
 	<link rel="stylesheet" href="${path}/webjars/bootstrap/css/bootstrap.min.css" type="text/css">
 	<link rel="stylesheet" href="${path}/css/aesn.css" type="text/css">
+	<script src="${path}/webjars/jquery/jquery.min.js" type="text/javascript"></script>
 	<script type="text/javascript">
 	function accederRapidement() {
 		var select = document.getElementById('sel_acces_rapide');
-		var options = select.childNodes;
-		for (var i=0; i<options.length; i++) {
-			if(options[i].selected) { 
-				var url = options[i].value;
-				if (url != '')
-					window.open(url);
-			}
-		}
+		var url = select.options[select.selectedIndex].value;
+		if (url != '') window.open(url);
 	}
 	</script>
 </head>
@@ -163,7 +158,7 @@
 						<h2>${titre}</h2>
 					</div>
 					<div class="col-auto ml-auto">
-						<a href="${path}/aide.jsp" target="_blank" id="boutonAide"><img src="${path}/img/picto_aide.gif" alt="Aide" title="Afficher l'aide" style="margin-right: 0px" width="25" height="25"></a>
+						<a href="${path}/aide" target="_blank" id="boutonAide"><img src="${path}/img/picto_aide.gif" alt="Aide" title="Afficher l'aide" style="margin-right: 0px" width="25" height="25"></a>
 					</div>
 				</div>
 			</div>
