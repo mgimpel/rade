@@ -33,7 +33,6 @@ import fr.aesn.rade.persist.model.Region;
 import fr.aesn.rade.service.RegionService;
 import fr.aesn.rade.webapp.model.SearchEntite;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.SessionAttributes;
 
 /**
  * Spring MVC Controller for Rade.
@@ -42,7 +41,6 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 @Slf4j
 @Controller
 @RequestMapping("/referentiel")
-@SessionAttributes({"searchCommune", "entite"})
 public class ReferentielController {
   /** Service. */
   @Autowired
@@ -62,27 +60,25 @@ public class ReferentielController {
    * @return redirect to the suitable entity search
    */
   @RequestMapping("/entiteSearch")
-  public String entiteSearch(@ModelAttribute("entite") SearchEntite entite,
+  public String entiteSearch(@ModelAttribute SearchEntite entite,
                              Model model) {
     log.info("Recherche d'entités, type : {}, code :{}",
              entite.getType(), entite.getCode());
-    String view = "home";
     if(entite.getCode() != null && !entite.getCode().isEmpty()) {
       // une fois la combo des types dégrisée, décommenter la ligne suivante
       String type = COMMUNE; // entite.getType();
       if(COMMUNE.equalsIgnoreCase(type)) {
-        view = "redirect:/referentiel/commune/" + entite.getCode();
+        return "redirect:/referentiel/commune/" + entite.getCode();
       }
-      model.addAttribute("entite", new SearchEntite());
     }
-    return view;
+    return "home";
   }
 
   /**
    * Region Search mapping.
    * @param code INSEE code for Region.
    * @param model MVC model passed to JSP.
-   * @return View for the Login page.
+   * @return View for the page.
    */
   @RequestMapping(value = "/region", method = RequestMethod.GET)
   public String regionsearch(@RequestParam(value = "code", required = false) String code,
@@ -102,7 +98,7 @@ public class ReferentielController {
    * @param criteria Region search criteria entered in form.
    * @param result binding to Region object result.
    * @param model MVC model passed to JSP.
-   * @return View for the Login page.
+   * @return View for the page.
    */
   @RequestMapping(value = "/region", method = RequestMethod.POST)
   public String regiondisplay(@ModelAttribute("region") Region criteria, 
@@ -120,7 +116,7 @@ public class ReferentielController {
    * Region Search mapping.
    * @param code INSEE code for Region.
    * @param model MVC model passed to JSP.
-   * @return View for the Login page.
+   * @return View for the page.
    */
   @RequestMapping(value = "/region/{code}")
   public String regiondisplay(@PathVariable("code") String code, 
@@ -140,19 +136,52 @@ public class ReferentielController {
    * @param model the Spring MVC model.
    * @return View for the region display page.
    */
-  public String regiondisplay(Region region, 
-                              Model model) {
+  private String regiondisplay(Region region, 
+                               Model model) {
     model.addAttribute("titre", "Region");
     model.addAttribute("region", region);
     return "regiondisplay";
   }
 
   /**
-   * Attribut de session du contrôleur
-   * @return Objet de recherche de commune
+   * Departement Search mapping.
+   * @param code INSEE code for Departement.
+   * @param model MVC model passed to JSP.
+   * @return View for the page.
    */
-  @ModelAttribute("entite")
-  public SearchEntite searchEntite() {
-    return new SearchEntite();
+  @RequestMapping(value = "/departement", method = RequestMethod.GET)
+  public String departementsearch(@RequestParam(value = "code", required = false) String code,
+                                  Model model) {
+    log.debug("Search for departement: {}", code);
+    model.addAttribute("titre", "Recherche Département");
+    return "todo";
+  }
+
+  /**
+   * Bassin Search mapping.
+   * @param code Sandre code for Bassin.
+   * @param model MVC model passed to JSP.
+   * @return View for the page.
+   */
+  @RequestMapping(value = "/bassin", method = RequestMethod.GET)
+  public String bassinsearch(@RequestParam(value = "code", required = false) String code,
+                             Model model) {
+    log.debug("Search for bassin: {}", code);
+    model.addAttribute("titre", "Recherche Bassin");
+    return "todo";
+  }
+
+  /**
+   * Delegation Search mapping.
+   * @param code Delegation code.
+   * @param model MVC model passed to JSP.
+   * @return View for the page.
+   */
+  @RequestMapping(value = "/delegation", method = RequestMethod.GET)
+  public String delegationsearch(@RequestParam(value = "code", required = false) String code,
+                                 Model model) {
+    log.debug("Search for delegation: {}", code);
+    model.addAttribute("titre", "Recherche Délégation");
+    return "todo";
   }
 }

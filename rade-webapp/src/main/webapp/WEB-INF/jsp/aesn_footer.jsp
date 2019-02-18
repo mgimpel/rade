@@ -30,7 +30,7 @@
 			<div class="col-lg-10 aesn-footer aesn-footer-border">
 <spring:eval var="footermenu" expression="@footerMenu"/>
 <c:forEach var="menuitem" items="${footermenu}">
-				<a href="#" onclick="window.open('<c:url value="${menuitem.value}" />')">${menuitem.key}</a>&nbsp;&nbsp;|&nbsp;
+				<a href="<c:url value="${menuitem.value}"/>" target="_blank">${menuitem.key}</a>&nbsp;&nbsp;|&nbsp;
 </c:forEach>
 				<%out.print(Version.PROJECT_VERSION);%>
 			</div>

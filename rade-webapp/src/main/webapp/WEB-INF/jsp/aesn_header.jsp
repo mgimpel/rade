@@ -97,17 +97,17 @@
 						</nav>
 					</div>
 					<div class="col-auto ml-auto">
-						<form:form class="form-inline" action="${path}/referentiel/entiteSearch" method="post" modelAttribute="entite">
-							<form:input class="form-control" path="code" placeholder="code" maxlength="5"/>
-							<form:select class="form-control" path="type" disabled="true">
-								<form:option value="region">Région</form:option>
-								<form:option value="dept">Département</form:option>
-								<form:option value="commune" selected="selected">Commune</form:option>
-								<form:option value="bassin">Bassin</form:option>
-								<form:option value="delegation">Délégation</form:option>
-							</form:select>
+						<form id="entite" class="form-inline" action="${path}/referentiel/entiteSearch" method="post">
+							<input class="form-control" type="text" id="code" name="code" placeholder="code" value="" maxlength="5"/>
+							<select class="form-control" id="type" name="type" disabled="disabled">
+								<option value="region">Région</option>
+								<option value="dept">Département</option>
+								<option value="commune" selected="selected">Commune</option>
+								<option value="bassin">Bassin</option>
+								<option value="delegation">Délégation</option>
+							</select>
 							<button class="form-control form-control-sm mr-3" type="submit">Rechercher</button>
-						</form:form>
+						</form>
 					</div>
 				</div>
 				<!-- Navigation Bar Row -->

@@ -29,7 +29,6 @@ import fr.aesn.rade.webapp.export.Export;
 import fr.aesn.rade.webapp.export.ExportExcel;
 import fr.aesn.rade.webapp.model.DisplayCommune;
 import fr.aesn.rade.webapp.model.SearchCommune;
-import fr.aesn.rade.webapp.model.SearchEntite;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.text.ParseException;
@@ -59,7 +58,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 @Slf4j
 @Controller
 @RequestMapping("/referentiel/commune")
-@SessionAttributes({"searchCommune", "entite"})
+@SessionAttributes({"searchCommune"})
 public class CommuneController {
   /** Default name for the export file. */
   public static final String DEFAULT_EXPORT_FILENAME = "export-communes";
@@ -223,7 +222,7 @@ public class CommuneController {
       try {
         dateValidite = DateConversionUtils.formatStringToDateUrl(dateParam);
       } catch (ParseException e) {
-        log.info("Le format de la date n'est pas valide et doit être yyyy-MM-dd : {}", dateParam);
+        log.info("Le format de la date est invalide ({}) : {}", DateConversionUtils.URL_DATE_FORMAT, dateParam);
       }
     }
     log.debug("Display commune: {}", code);
@@ -266,7 +265,7 @@ public class CommuneController {
    * @param model
    * @return Vue due la page de recherche
    */
-  private String initRechercheCommuneView(SearchCommune searchCommune, Model model){
+  private String initRechercheCommuneView(SearchCommune searchCommune, Model model) {
     if(searchCommune.getDateEffet() == null){
       searchCommune.setDateEffet(new Date());
     }
@@ -285,7 +284,7 @@ public class CommuneController {
    * @return Vue due la page de résultats
    */
   private String initResultatsRechercheCommuneView(SearchCommune searchCommune,
-                                                  Model model){
+                                                   Model model) {
     searchCommune.setListeResultats(paginateResultatsCommune(searchCommune, false));
     model.addAttribute("searchCommune", searchCommune);
     model.addAttribute("titre", "Liste des résultats");
@@ -318,7 +317,7 @@ public class CommuneController {
    * @return Tableau associatif comprenant le code insee et le nom de chaque département
    */
   @RequestMapping(value = "/json/deptlist", method = RequestMethod.GET)
-  public @ResponseBody Map<String,String> getDepartementByRegion(
+  public @ResponseBody Map<String,String> getJsonDepartementList(
           @RequestParam(value = "regionId", required = false) String regionId,
           @RequestParam(value = "date", required = false) String dateParam) {
     Date date = null;
@@ -343,16 +342,7 @@ public class CommuneController {
    * @return Objet de recherche de commune
    */
   @ModelAttribute("searchCommune")
-  public SearchCommune searchCommune() {
+  private SearchCommune searchCommune() {
     return new SearchCommune();
-  }
-
-  /**
-   * Attribut de session du contrôleur
-   * @return Objet de recherche de commune
-   */
-  @ModelAttribute("entite")
-  public SearchEntite searchEntite() {
-    return new SearchEntite();
   }
 }

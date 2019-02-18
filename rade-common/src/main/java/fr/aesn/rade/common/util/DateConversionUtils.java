@@ -27,9 +27,9 @@ import java.util.Date;
  */
 public class DateConversionUtils {
   /** Date Format for User Interface. */
-  private static final String UI_DATE_FORMAT = "dd/MM/yyyy";
+  public static final String UI_DATE_FORMAT = "dd/MM/yyyy";
   /** Date Format for URLs. */
-  private static final String URL_DATE_FORMAT = "yyyy-MM-dd";
+  public static final String URL_DATE_FORMAT = "yyyy-MM-dd";
 
   /**
    * Hidden private Constructor makes the class non-instantiable.
