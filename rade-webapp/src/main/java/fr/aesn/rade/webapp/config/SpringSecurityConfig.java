@@ -58,17 +58,16 @@ public class SpringSecurityConfig
           // - health & info Actuators : no restrictions
           // - all other Actuators (logfile and metrics) : authenticated user
           .antMatchers("/actuator/health", "/actuator/info").permitAll()
-          // Static resources (CSS, images, ...) : no restrictions
-          .antMatchers("/css/**", "/img/**", "/resources/**", "/favicon.ico").permitAll()
+          // Static resources (CSS, Javascript, images, ...) : no restrictions
+          .antMatchers("/css/**", "/js/**", "/img/**", "/favicon.ico").permitAll()
           // WebJars : no restrictions
           .antMatchers("/webjars/**").permitAll()
           // Search queries open to all
           .antMatchers("/referentiel/**").permitAll()
           // Admin files : require administrator role
-          .antMatchers("/admin/**").hasAnyAuthority("RAD_ADMIN")
-          .antMatchers("/batch/**").hasAnyAuthority("RAD_ADMIN")
-          // User files : require user role
-          .antMatchers("/user/**").hasAnyAuthority("RAD_CONSULT")
+          .antMatchers("/admin/**", "/batch/**").hasAuthority("RAD_ADMIN")
+          // User files : require any role
+          .antMatchers("/user/**").hasAnyAuthority("RAD_CONSULT", "RAD_GESTION", "RAD_ADMIN")
           // All other files : authenticated user
           .anyRequest().authenticated()
           .and()
