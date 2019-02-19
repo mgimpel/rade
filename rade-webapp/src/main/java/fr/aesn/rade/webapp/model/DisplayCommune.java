@@ -22,6 +22,8 @@ import fr.aesn.rade.common.modelplus.CommunePlusWithGenealogie;
 import fr.aesn.rade.common.util.DateConversionUtils;
 import fr.aesn.rade.persist.model.Departement;
 import fr.aesn.rade.persist.model.Region;
+import fr.aesn.rade.webapp.controller.CommuneController;
+
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
@@ -123,7 +125,7 @@ public class DisplayCommune {
    * @param dateFinValidite 
    * @return L'url permettant d'afficher l'entité
    */
-  public String getUrlEntite(String codeInsee, Date dateFinValidite) {
+  public String getUrlEntite(String appContext, String codeInsee, Date dateFinValidite) {
     if(codeInsee == null) {
       return null;
     }
@@ -133,7 +135,7 @@ public class DisplayCommune {
     } else {
       date = new Date(dateFinValidite.getTime() - 1);
     }
-    return "/referentiel/commune/" + codeInsee + "?date="
-           + DateConversionUtils.formatDateToStringUrl(date);
+    return appContext + CommuneController.REQUEST_MAPPING + "/" + codeInsee
+           + "?date=" + DateConversionUtils.formatDateToStringUrl(date);
   }
 }

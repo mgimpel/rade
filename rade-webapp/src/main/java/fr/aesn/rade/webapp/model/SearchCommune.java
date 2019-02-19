@@ -29,7 +29,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -39,8 +38,9 @@ import org.springframework.format.annotation.DateTimeFormat;
  * @author sophie.belin
  */
 @Slf4j
-@Getter @Setter @NoArgsConstructor
+@Getter @Setter
 public class SearchCommune {
+  public static final int PAGE_SIZE = 10;
   private String codeRegion;
   private String codeDepartement;
   private String codeCirconscription;
@@ -48,13 +48,33 @@ public class SearchCommune {
   private Date dateEffet;
   private String codeInsee;
   private String nomEnrichi;
-  private String page = "1";
+  private int page;
   private List<Departement> departements;
   private Map<String,String> departementsByCodeInsee;
   private Map<String,String> regionsByCodeInsee;
   private Map<String, String> circonscriptionByCode;
   private List<DisplayCommune> listeResultats;
   private List<CommunePlusWithGenealogie> communes;
+
+  /**
+   * Constructor.
+   */
+  public SearchCommune() {
+    reset();
+  }
+
+  /**
+   * Resets the search criteria.
+   */
+  public void reset() {
+    codeInsee = null;
+    codeDepartement = "-1";
+    codeRegion = "-1";
+    codeCirconscription = "-1";
+    nomEnrichi = null;
+    dateEffet = new Date();
+    page = 1;
+  }
 
   /**
    * Renvoie la date au format dd/MM/yyyy 
@@ -68,16 +88,16 @@ public class SearchCommune {
 
   /**
    * Set the page number.
-   * @param page page number.
+   * @param stringPage page number.
    */
-  public void setPage(String page) {
+  public void setPage(String stringPage) {
     try {
-      int numPage = Integer.parseInt(page);
+      int numPage = Integer.parseInt(stringPage);
       if(numPage <= getPageMax()) {
-        this.page = page;
+        page = numPage;
       }
     } catch(NumberFormatException e) {
-      log.info("Invalid parameter: page={}", page);
+      log.info("Cannot set page: Invalid parameter {}", stringPage);
     }
   }
 
@@ -86,17 +106,11 @@ public class SearchCommune {
    * @return Index 
    */
   public int getFirstCommuneIndex() {
-    int index = 1;
-    if(communes != null && !communes.isEmpty()) {
-      try {
-        index = Integer.parseInt(page) * 10 - 10;
-      } catch(NumberFormatException e) {
-        page = "1";
-      }
-      if(index > communes.size()) {
-        index = this.communes.size();
-      }
+    if(communes == null || communes.isEmpty()) {
+      return 1;
     }
+    int index = (page - 1) * PAGE_SIZE;
+    assert index <= communes.size();
     return index;
   }
 
@@ -105,12 +119,12 @@ public class SearchCommune {
    * @return Index
    */
   public int getLastCommuneIndex() {
-    int index = 1;
-    if(communes != null && !communes.isEmpty()) {
-      index = getFirstCommuneIndex() + 10;
-      if(index > this.communes.size()) {
-        index = this.communes.size();
-      }
+    if(communes == null || communes.isEmpty()) {
+      return 1;
+    }
+    int index = page * PAGE_SIZE;
+    if(index > communes.size()) {
+      index = communes.size();
     }
     return index;
   }
@@ -122,10 +136,24 @@ public class SearchCommune {
    */
   public int getPageMax() {
     if(communes != null && !communes.isEmpty()) {
-      return (int) Math.ceil((double)this.communes.size() / (double)10);
+      return pagesNeeded(PAGE_SIZE, communes.size());
     } else {
       return 1;
     }
+  }
+
+  /**
+   * Return the number of pages needed to display the given number of items and
+   * the size of the page.
+   * @param pageSize maximum number of items per page.
+   * @param itemCount number of items.
+   * @return the number of pages needed.
+   */
+  private int pagesNeeded(int pageSize, int itemCount) {
+    if (itemCount <= 0 || pageSize <= 0) {
+      return 0;
+    }
+    return ((itemCount - 1) / pageSize) + 1;
   }
 
   /**
@@ -178,21 +206,9 @@ public class SearchCommune {
   }
 
   /**
-   * Resets the search criteria.
-   */
-  public void reset() {
-    codeInsee = null;
-    codeDepartement = "-1";
-    codeRegion = "-1";
-    codeCirconscription = "-1";
-    nomEnrichi = null;
-    dateEffet = new Date();
-  }
-
-  /**
    * Static method for sorting the given map.
    * @param map
-   * @return
+   * @return Sorted map.
    */
   private static <K, V extends Comparable<? super V>> Map<K, V> sortByValue(Map<K, V> map) {
     List<Map.Entry<K, V>> list = new ArrayList<>(map.entrySet());

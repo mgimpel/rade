@@ -57,9 +57,11 @@ import org.springframework.web.bind.annotation.SessionAttributes;
  */
 @Slf4j
 @Controller
-@RequestMapping("/referentiel/commune")
+@RequestMapping(CommuneController.REQUEST_MAPPING)
 @SessionAttributes({"searchCommune"})
 public class CommuneController {
+  /** RequestMapping for this Controller. */
+  public static final String REQUEST_MAPPING = "/referentiel/commune";
   /** Default name for the export file. */
   public static final String DEFAULT_EXPORT_FILENAME = "export-communes";
   /** Commune Service. */

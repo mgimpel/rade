@@ -53,19 +53,21 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @Controller
-@RequestMapping("/batch")
+@RequestMapping(BatchController.REQUEST_MAPPING)
 public class BatchController {
+  /** RequestMapping for this Controller. */
+  public static final String REQUEST_MAPPING = "/batch";
   /** Spring Batch Job Launcher. */
   @Autowired
-  JobLauncher jobLauncher;
+  private JobLauncher jobLauncher;
   /** Batch Info Job. */
   @Autowired
   @Qualifier("infoJob")
-  Job infoJob;
+  private Job infoJob;
   /** Batch Import Communes Sandre Job. */
   @Autowired
   @Qualifier("importCommuneSandreJob")
-  Job sandreJob;
+  private Job sandreJob;
 
   /**
    * Info Batch Upload mapping.

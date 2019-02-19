@@ -27,24 +27,21 @@
 			<li class="page-item<c:if test="${currentPage == 1}"> disabled</c:if>"><a class="page-link" href="${baseUrl}1" aria-label="First"><span aria-hidden="true">&lt;&lt;</span></a></li>
 			<li class="page-item<c:if test="${currentPage == 1}"> disabled</c:if>"><a class="page-link" href="${baseUrl}${currentPage - 1}" aria-label="Previous"><span aria-hidden="true">&lt;</span></a></li>
 			<c:forEach begin="1" end="${maxPage}" step="1" var="numPage">
-				<c:if test="${(numPage > 2 && numPage == currentPage - 2)
-							|| (numPage == currentPage + 2
-							&& numPage <= maxPage - 2)}">
-					<li class="page-item disabled"><a class="page-link" href="#">...</a></li>
-				</c:if>
-				<c:if test="${numPage <= 2 
-							|| numPage >= maxPage - 1 
-							|| (numPage >= currentPage - 1 
-							&& numPage <= currentPage)
-							|| (numPage >= currentPage 
-							&& numPage <= currentPage + 1)}">
-					<c:if test="${numPage == currentPage}">
+				<c:choose>
+					<c:when test="${numPage == currentPage}">
 						<li class="page-item active" aria-current="page"><a class="page-link" href="#">${numPage}<span class="sr-only">(current)</a></span></li>
-					</c:if>
-					<c:if test="${numPage != currentPage}">
+					</c:when>
+					<c:when test="${numPage <= 2
+								|| numPage >= maxPage - 1
+								|| numPage == currentPage - 1
+								|| numPage == currentPage + 1}">
 						<li class="page-item"><a class="page-link" href="${baseUrl}${numPage}">${numPage}</a></li>
-					</c:if>
-				</c:if>
+					</c:when>
+					<c:when test="${(numPage > 2 && numPage == currentPage - 2)
+								|| (numPage < maxPage - 2 && numPage == currentPage + 2)}">
+						<li class="page-item disabled"><a class="page-link" href="#">...</a></li>
+					</c:when>
+				</c:choose>
 			</c:forEach>
 			<li class="page-item<c:if test="${currentPage == maxPage}"> disabled</c:if>"><a class="page-link" href="${baseUrl}${currentPage + 1}" aria-label="Next"><span aria-hidden="true">&gt;</span></a></li>
 			<li class="page-item<c:if test="${currentPage == maxPage}"> disabled</c:if>"><a class="page-link" href="${baseUrl}${maxPage}" aria-label="Last"><span aria-hidden="true">&gt;&gt;</span></a></li>

@@ -71,14 +71,14 @@
 			</tr>
 			<c:forEach items="${searchCommune.listeResultats}" var="communeDisplay">
 				<tr>
-					<td><a href="${communeDisplay.getUrlEntite(communeDisplay.codeInsee,communeDisplay.finValidite)}">${communeDisplay.codeInsee}</a></td>
-					<td><a href="${communeDisplay.getUrlEntite(communeDisplay.codeInsee,communeDisplay.finValidite)}">${communeDisplay.nomEnrichi}</a></td>
+					<td><a href="${communeDisplay.getUrlEntite(pageContext.request.contextPath, communeDisplay.codeInsee, communeDisplay.finValidite)}">${communeDisplay.codeInsee}</a></td>
+					<td><a href="${communeDisplay.getUrlEntite(pageContext.request.contextPath, communeDisplay.codeInsee, communeDisplay.finValidite)}">${communeDisplay.nomEnrichi}</a></td>
 					<td class="text-center">${communeDisplay.getDateIHM(communeDisplay.debutValidite)}</td>
 					<td class="text-center">${communeDisplay.getDateIHM(communeDisplay.finValidite)}</td>
 					<td class="text-center">${communeDisplay.motifModification}</td>
 					<td>
 						<c:forEach items="${communeDisplay.parents}" var="genealogieParent">
-							<a href="${communeDisplay.getUrlEntite(genealogieParent.key,genealogieParent.value.entity.finValidite)}">${genealogieParent.key}</a>
+							<a href="${communeDisplay.getUrlEntite(pageContext.request.contextPath, genealogieParent.key, genealogieParent.value.entity.finValidite)}">${genealogieParent.key}</a>
 						</c:forEach>
 					</td>
 				</tr>

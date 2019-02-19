@@ -22,8 +22,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * SessionAttribute pour le formulaire de recherche d'une entité adminstrative,
- * présent sur toutes les pages.
+ * Model for the Breadcrumb bar Search Form present on every page.
  * @author fadhel.helali
  */
 @Getter @Setter @NoArgsConstructor

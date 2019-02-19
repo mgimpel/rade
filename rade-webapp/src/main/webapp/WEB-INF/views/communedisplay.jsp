@@ -121,7 +121,7 @@
 									</c:if>
 									<c:forEach items="${displayCommune.parents}" var="genealogieParent">
 										<tr>
-											<td class="w-16 text-center"><a href="${displayCommune.getUrlEntite(genealogieParent.key, genealogieParent.value.entity.finValidite)}">${genealogieParent.key}</a></td>
+											<td class="w-16 text-center"><a href="${displayCommune.getUrlEntite(pageContext.request.contextPath, genealogieParent.key, genealogieParent.value.entity.finValidite)}">${genealogieParent.key}</a></td>
 											<td>${genealogieParent.value.entity.nomEnrichi}</td>
 											<td class="w-25">${displayCommune.getDateIHM(genealogieParent.value.entity.debutValidite)}</td>
 										</tr>
@@ -142,7 +142,7 @@
 									</c:if>
 									<c:forEach items="${displayCommune.enfants}" var="genealogieEnfant">
 										<tr>
-											<td class="w-16 text-center"><a href="${displayCommune.getUrlEntite(genealogieEnfant.key, genealogieEnfant.value.entity.finValidite)}">${genealogieEnfant.key}</a></td>
+											<td class="w-16 text-center"><a href="${displayCommune.getUrlEntite(pageContext.request.contextPath, genealogieEnfant.key, genealogieEnfant.value.entity.finValidite)}">${genealogieEnfant.key}</a></td>
 											<td>${genealogieEnfant.value.entity.nomEnrichi}</td>
 											<td class="w-25">${displayCommune.getDateIHM(genealogieEnfant.value.entity.debutValidite)}</td>
 										</tr>

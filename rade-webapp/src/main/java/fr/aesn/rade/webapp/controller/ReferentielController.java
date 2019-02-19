@@ -40,11 +40,13 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @Controller
-@RequestMapping("/referentiel")
+@RequestMapping(ReferentielController.REQUEST_MAPPING)
 public class ReferentielController {
   /** Service. */
   @Autowired
   private RegionService regionService;
+  /** RequestMapping for this Controller. */
+  public static final String REQUEST_MAPPING = "/referentiel";
 
   public static final String REGION  = "region";
   public static final String DEPT    = "dept";
