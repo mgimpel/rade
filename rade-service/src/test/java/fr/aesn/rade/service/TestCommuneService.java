@@ -21,9 +21,9 @@ import static org.junit.Assert.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Set;
 
@@ -137,7 +137,7 @@ public class TestCommuneService
    */
   @Test
   public void testGettingCommuneList2018() {
-    Date year2018 = new GregorianCalendar(2018, 1, 1, 0, 0, 0).getTime();
+    Date year2018 = Date.from(ZonedDateTime.of(2018, 1, 1, 0, 0, 0, 0, ZoneId.systemDefault()).toInstant());
     List<Commune> list = service.getAllCommune(year2018);
     assertNotNull("CommuneService returned a null list", list);
     assertEquals(632, list.size());
@@ -152,8 +152,8 @@ public class TestCommuneService
    */
   @Test
   public void testGettingCommuneList1998() {
-    Date year2017 = new GregorianCalendar(1998, 1, 1, 0, 0, 0).getTime();
-    List<Commune> list = service.getAllCommune(year2017);
+    Date year1998 = Date.from(ZonedDateTime.of(1998, 1, 1, 0, 0, 0, 0, ZoneId.systemDefault()).toInstant());
+    List<Commune> list = service.getAllCommune(year1998);
     assertNotNull("CommuneService returned a null list", list);
     assertEquals(0, list.size());
   }
@@ -163,7 +163,7 @@ public class TestCommuneService
    */
   @Test
   public void testGettingCommuneList2018dept91() {
-    Date year2018 = new GregorianCalendar(2018, 1, 1, 0, 0, 0).getTime();
+    Date year2018 = Date.from(ZonedDateTime.of(2018, 1, 1, 0, 0, 0, 0, ZoneId.systemDefault()).toInstant());
     List<Commune> list = service.getAllCommune("91", "", year2018);
     assertNotNull("CommuneService returned a null list", list);
     assertEquals(196, list.size());
@@ -174,7 +174,7 @@ public class TestCommuneService
    */
   @Test
   public void testGettingCommuneList2018dept99() {
-    Date year2018 = new GregorianCalendar(2018, 1, 1, 0, 0, 0).getTime();
+    Date year2018 = Date.from(ZonedDateTime.of(2018, 1, 1, 0, 0, 0, 0, ZoneId.systemDefault()).toInstant());
     List<Commune> list = service.getAllCommune("99", "", year2018);
     assertNotNull("CommuneService returned a null list", list);
     assertEquals(0, list.size());
@@ -185,8 +185,8 @@ public class TestCommuneService
    */
   @Test
   public void testGettingCommuneList1998dept91() {
-    Date year2017 = new GregorianCalendar(1998, 1, 1, 0, 0, 0).getTime();
-    List<Commune> list = service.getAllCommune("91", "", year2017);
+    Date year1998 = Date.from(ZonedDateTime.of(1998, 1, 1, 0, 0, 0, 0, ZoneId.systemDefault()).toInstant());
+    List<Commune> list = service.getAllCommune("91", "", year1998);
     assertNotNull("CommuneService returned a null list", list);
     assertEquals(0, list.size());
   }
@@ -196,7 +196,7 @@ public class TestCommuneService
    */
   @Test
   public void testGettingCommuneList2018nomSaint() {
-    Date year2018 = new GregorianCalendar(2018, 1, 1, 0, 0, 0).getTime();
+    Date year2018 = Date.from(ZonedDateTime.of(2018, 1, 1, 0, 0, 0, 0, ZoneId.systemDefault()).toInstant());
     List<Commune> list = service.getAllCommune("", "Saint", year2018);
     assertNotNull("CommuneService returned a null list", list);
     assertEquals(71, list.size());
@@ -207,7 +207,7 @@ public class TestCommuneService
    */
   @Test
   public void testGettingCommuneList2018Dept92nomANTO() {
-    Date year2018 = new GregorianCalendar(2018, 1, 1, 0, 0, 0).getTime();
+    Date year2018 = Date.from(ZonedDateTime.of(2018, 1, 1, 0, 0, 0, 0, ZoneId.systemDefault()).toInstant());
     List<Commune> list = service.getAllCommune("92", "ANTO", year2018);
     assertNotNull("CommuneService returned a null list", list);
     assertEquals(1, list.size());
@@ -295,17 +295,20 @@ public class TestCommuneService
   @Test
   public void testGettingCommuneForDate() {
     List<Commune> list;
-    Calendar cal = Calendar.getInstance();
-    cal.set(2018, 1, 2);
-    list = service.getAllCommune(cal.getTime());
+    Date date = Date.from(ZonedDateTime.of(2018, 1, 1, 0, 0, 0, 0, ZoneId.systemDefault()).toInstant());
+    list = service.getAllCommune(date);
     assertNotNull("CommuneService returned a null list", list);
     assertEquals(632, list.size());
     for (Commune commune : list) {
       assertNotNull("Hibernate returned a List but an Entity is null",
                     commune);
     }
-    cal.set(1998, 1, 2);
-    list = service.getAllCommune(cal.getTime());
+    date = Date.from(ZonedDateTime.of(1998, 1, 1, 0, 0, 0, 0, ZoneId.systemDefault()).toInstant());
+    list = service.getAllCommune(date);
+    assertNotNull("CommuneService returned a null list", list);
+    assertEquals(0, list.size());
+    date = null;
+    list = service.getAllCommune(date);
     assertNotNull("CommuneService returned a null list", list);
     assertEquals(0, list.size());
   }

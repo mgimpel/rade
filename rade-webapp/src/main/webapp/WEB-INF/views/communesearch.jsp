@@ -22,43 +22,74 @@
 <jsp:include page="aesn_header.jsp" />
 <script>
 	$(document).ready(function(){
-		loadDepartement();
+		getBassins(${searchCommune.codeCirconscription});
+		getRegionsAndDepts(${searchCommune.codeRegion}, ${searchCommune.codeDepartement});
 		$("#formCommune").keydown(function (e) {
-			if(e.which == 13) validerForm();
+			if(e.which == 13) submitForm();
 		});
 	});
 
-	function loadDepartement() {
-		$.getJSON("${pageContext.request.contextPath}/referentiel/commune/json/deptlist",
-				{"regionId": $("#codeRegion").val()},
+	function buildOptions(data, current, text){
+		var arr = [];
+		$.each(data, function(key, val) {
+			arr.push({"key" : key, "val" : val});
+		});
+		arr = arr.sort(function (a, b) {
+			return a.val.localeCompare(b.val);
+		});
+		var option = "<option value='-1'>" + text + "</option>";
+		$.each(arr, function(index, obj) {
+			option +=  "<option value='" + obj.key + "'" + (obj.key != current ? ">" : " selected='selected'>") + obj.val + "</option>";
+		});
+		return option;
+	}
+
+	function getDepts() {
+		var currentDept = (arguments.length > 0 && arguments[0] !== null) ? arguments[0] : $("#codeDepartement").val();
+		$.getJSON("${pageContext.request.contextPath}/referentiel/json/deptlist",
+				{"code": $("#codeRegion").val(), "date": $("#dateEffet").val()},
 				function(data){
-			var current = $("#codeDepartement").val();
-			var option = "<option value='-1'>Sélectionner un département...</option>";
-			$.each(data, function(key, val) {
-				option +=  "<option value='" + key + "'" + (key != current ? ">" : " selected='selected'>") + val + "</option>";
-			});
-			$("#codeDepartement").html(option);
+			$("#codeDepartement").html(buildOptions(data, currentDept, "Sélectionner un département..."));
 		});
 	}
 
-	function annuler() {
+	function getRegionsAndDepts() {
+		var currentReg = arguments.length > 0 ? arguments[0] : $("#codeRegion").val();
+		var currentDept = arguments.length > 1 ? arguments[1] : $("#codeDepartement").val();
+		$.getJSON("${pageContext.request.contextPath}/referentiel/json/regionlist",
+				{"date": $("#dateEffet").val()},
+				function(data){
+			$("#codeRegion").html(buildOptions(data, currentReg, "Sélectionner une région..."));
+			getDepts(currentDept);
+		});
+	}
+
+	function getBassins() {
+		var currentBassin = (arguments.length > 0 && arguments[0] !== null) > 0 ? arguments[0] : $("#codeCirconscription").val();
+		$.getJSON("${pageContext.request.contextPath}/referentiel/json/bassinlist",
+				function(data){
+			$("#codeCirconscription").html(buildOptions(data, currentBassin, "Sélectionner une circonscription..."));
+		});
+	}
+
+	function resetForm() {
 		$("#typeAction").attr("name", "annuler");
 		$("#formCommune")[0].submit();
 	}
 
-	function validerForm() {
-		if(verifierForm()) {
+	function submitForm() {
+		if(validateForm()) {
 			$("#typeAction").attr("name", "valider");
 			$("#formCommune")[0].submit();
 		}
 	}
 
-	function verifierForm() {
-		var nomEnrichi = document.getElementById("nomEnrichi").value;
-		var codeRegion = document.getElementById("codeRegion").value;
-		var codeDepartement = document.getElementById("codeDepartement").value;
-		var circonscription = document.getElementById("codeCirconscription").value;
-		var codeInsee = document.getElementById("codeInsee").value;
+	function validateForm() {
+		var nomEnrichi = $("#nomEnrichi").val();
+		var codeRegion = $("#codeRegion").val();
+		var codeDepartement = $("#codeDepartement").val();
+		var circonscription = $("#codeCirconscription").val();
+		var codeInsee = $("#codeInsee").val();
 		if(codeInsee != "" && codeInsee != null) {
 			if(!/^[0-9a-zA-Z]{2}[0-9]{3}$/.test(codeInsee)) {
 				alert("Le code INSEE doit être composé de cinq chiffres ou de deux lettres et trois chiffres");
@@ -100,9 +131,8 @@
 							<tr>
 								<td class="text-right"><form:label path="codeRegion">Region:</form:label></td>
 								<td>
-									<form:select class="input-aesn-20" path="codeRegion" onchange="loadDepartement()">
+									<form:select class="input-aesn-20" path="codeRegion" onchange="getDepts();">
 										<form:option value="-1" label="Sélectionner une région..." />
-										<form:options items="${searchCommune.regionsByCodeInsee}" />
 									</form:select>
 								</td>
 							</tr>
@@ -111,7 +141,6 @@
 								<td>
 									<form:select class="input-aesn-20" path="codeDepartement">
 										<form:option value="-1" label="Sélectionner un département..." />
-										<form:options items="${searchCommune.departementsByCodeInsee}" />
 									</form:select>
 								</td>
 							</tr>
@@ -120,19 +149,18 @@
 								<td>
 									<form:select class="input-aesn-20" path="codeCirconscription">
 										<form:option value="-1" label="Sélectionner une circonscription..." />
-										<form:options items="${searchCommune.circonscriptionByCode}" />
 									</form:select>
 								</td>
 							</tr>
 							<tr>
-								<td class="text-right"><label for="dateEffet">Date d'effet:</label></td>
-								<td><form:input type="date" path="dateEffet" /></td>
+								<td class="text-right"><form:label path="dateEffet">Date d'effet:</form:label></td>
+								<td><form:input type="date" path="dateEffet" onchange="getRegionsAndDepts();"/></td>
 							</tr>
 							<tr>
 								<td class="text-right" colspan="2">
 									<input type="hidden" name="valider" id="typeAction">
-									<input type="button" class="btn btn-sm btn-aesn" value="Annuler" onclick="annuler();">
-									<input type="button" class="btn btn-sm btn-aesn" value="Rechercher" onclick="validerForm();">
+									<input type="button" class="btn btn-sm btn-aesn" value="Annuler" onclick="resetForm();">
+									<input type="button" class="btn btn-sm btn-aesn" value="Rechercher" onclick="submitForm();">
 								</td>
 							</tr>
 						</tbody>

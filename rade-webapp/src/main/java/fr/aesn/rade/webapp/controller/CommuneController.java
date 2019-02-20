@@ -21,7 +21,6 @@ import fr.aesn.rade.common.modelplus.CommunePlusWithGenealogie;
 import fr.aesn.rade.common.util.DateConversionUtils;
 import fr.aesn.rade.persist.model.Departement;
 import fr.aesn.rade.persist.model.Region;
-import fr.aesn.rade.service.BassinService;
 import fr.aesn.rade.service.CommunePlusService;
 import fr.aesn.rade.service.DepartementService;
 import fr.aesn.rade.service.RegionService;
@@ -34,9 +33,7 @@ import java.io.OutputStream;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -48,11 +45,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 /**
- * Spring MVC controller for searching and displaying communes
+ * Spring MVC controller for searching and displaying communes.
  * @author sophie.belin
  */
 @Slf4j
@@ -73,9 +69,6 @@ public class CommuneController {
   /** Departement Service. */
   @Autowired
   private DepartementService departementService;
-  /** Bassin Service. */
-  @Autowired
-  private BassinService bassinService;
 
   /**
    * Export de la liste des communes au format Excel
@@ -194,14 +187,9 @@ public class CommuneController {
    * @return Vue correspondant à liste des résultats
    */
   @RequestMapping(params = "annuler", value = "/resultats", method = RequestMethod.POST)
-  public String annulerForm(Model model,
-                           @ModelAttribute("searchCommune") SearchCommune searchCommune) {
+  public String resetForm(Model model,
+                          @ModelAttribute("searchCommune") SearchCommune searchCommune) {
     searchCommune.reset();
-    if(searchCommune.getListeResultats() != null) {
-      searchCommune.getListeResultats().clear();
-    } else {
-      searchCommune.setListeResultats(new ArrayList<>());
-    }
     return initRechercheCommuneView(searchCommune, model);
   }
 
@@ -224,7 +212,7 @@ public class CommuneController {
       try {
         dateValidite = DateConversionUtils.formatStringToDateUrl(dateParam);
       } catch (ParseException e) {
-        log.info("Le format de la date est invalide ({}) : {}", DateConversionUtils.URL_DATE_FORMAT, dateParam);
+        log.info("Invalid Date format ({}) : {}", DateConversionUtils.URL_DATE_FORMAT, dateParam);
       }
     }
     log.debug("Display commune: {}", code);
@@ -271,9 +259,6 @@ public class CommuneController {
     if(searchCommune.getDateEffet() == null){
       searchCommune.setDateEffet(new Date());
     }
-    searchCommune.setDepartementsByCodeInsee(departementService.getAllDepartement(searchCommune.getDateEffet()));
-    searchCommune.setRegionsByCodeInsee(regionService.getAllRegion(searchCommune.getDateEffet()));
-    searchCommune.setCirconscriptionByCode(bassinService.getAllBassin());
     model.addAttribute("searchCommune", searchCommune);
     model.addAttribute("titre", "Rechercher une Commune");
     return "communesearch";
@@ -309,34 +294,6 @@ public class CommuneController {
       listeResultats.add(new DisplayCommune(commune));
     }
     return listeResultats;
-  }
-
-  /**
-   * Renvoie la liste des départements en fonction de la région pour l'affichage de la liste 
-   * déroulante "départements" de la page de recherche.
-   * @param regionId 
-   * @param dateParam
-   * @return Tableau associatif comprenant le code insee et le nom de chaque département
-   */
-  @RequestMapping(value = "/json/deptlist", method = RequestMethod.GET)
-  public @ResponseBody Map<String,String> getJsonDepartementList(
-          @RequestParam(value = "regionId", required = false) String regionId,
-          @RequestParam(value = "date", required = false) String dateParam) {
-    Date date = null;
-    if (dateParam == null || dateParam.isEmpty()) {
-      try {
-        date = DateConversionUtils.formatStringToDateUrl(dateParam);
-      } catch (ParseException e) {
-        log.info("Invalid date format, expected yyyy-MM-dd but was {}", dateParam);
-      }
-    }
-    String region = (regionId == null || regionId.isEmpty() || "-1".equals(regionId) ? null : regionId);
-    List<Departement> depts = departementService.getDepartementForRegion(region, date);
-    HashMap<String,String> departementByRegion = new HashMap<>();
-    for(Departement dept : depts) {
-      departementByRegion.put(dept.getCodeInsee(), dept.getNomEnrichi());
-    }
-    return departementByRegion;
   }
 
   /**

@@ -20,7 +20,6 @@ package fr.aesn.rade.rs.impl;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -35,6 +34,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import fr.aesn.rade.common.util.DateConversionUtils;
 import fr.aesn.rade.persist.model.CirconscriptionBassin;
 import fr.aesn.rade.persist.model.Commune;
 import fr.aesn.rade.persist.model.Delegation;
@@ -458,13 +458,11 @@ public class RestServiceImpl
     if (rawString == null) {
       return "";
     }
-    String string = null;
     try {
-      string = URLDecoder.decode(rawString, "UTF-8");
+      return URLDecoder.decode(rawString, "UTF-8");
     } catch (UnsupportedEncodingException e) {
       throw new RestRequestException("Could not decode " + rawString, e);
     }
-    return string;
   }
 
   /**
@@ -475,18 +473,15 @@ public class RestServiceImpl
    */
   private static final Date decodeDate(final String rawDate)
     throws RestRequestException {
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-    Date date = null;
     if (rawDate == null) {
-      date = new Date();
+      return new Date();
     } else {
       try {
-        date = sdf.parse(rawDate);
+        return DateConversionUtils.formatStringToDateUrl(rawDate);
       } catch (ParseException e) {
         throw new RestRequestException("Could not parse date " + rawDate, e);
       }
     }
-    return date;
   }
 
   /**

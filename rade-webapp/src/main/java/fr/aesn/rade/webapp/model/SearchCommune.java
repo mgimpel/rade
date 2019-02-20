@@ -19,15 +19,9 @@ package fr.aesn.rade.webapp.model;
 
 import fr.aesn.rade.common.modelplus.CommunePlusWithGenealogie;
 import fr.aesn.rade.common.util.DateConversionUtils;
-import fr.aesn.rade.persist.model.CirconscriptionBassin;
-import fr.aesn.rade.persist.model.Departement;
-import fr.aesn.rade.persist.model.Region;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -40,21 +34,19 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Slf4j
 @Getter @Setter
 public class SearchCommune {
-  public static final int PAGE_SIZE = 10;
+  public static final int PAGE_SIZE = 20;
+  // Champs requête
+  private String codeInsee;
+  private String nomEnrichi;
   private String codeRegion;
   private String codeDepartement;
   private String codeCirconscription;
   @DateTimeFormat(pattern="yyyy-MM-dd")
   private Date dateEffet;
-  private String codeInsee;
-  private String nomEnrichi;
-  private int page;
-  private List<Departement> departements;
-  private Map<String,String> departementsByCodeInsee;
-  private Map<String,String> regionsByCodeInsee;
-  private Map<String, String> circonscriptionByCode;
-  private List<DisplayCommune> listeResultats;
+  // Résultats
   private List<CommunePlusWithGenealogie> communes;
+  private List<DisplayCommune> listeResultats;
+  private int page;
 
   /**
    * Constructor.
@@ -67,13 +59,25 @@ public class SearchCommune {
    * Resets the search criteria.
    */
   public void reset() {
+    reset(new Date());
+  }
+
+  /**
+   * Resets the search criteria.
+   */
+  public void reset(Date date) {
     codeInsee = null;
     codeDepartement = "-1";
     codeRegion = "-1";
     codeCirconscription = "-1";
     nomEnrichi = null;
-    dateEffet = new Date();
+    dateEffet = date;
     page = 1;
+    if(listeResultats != null) {
+      listeResultats.clear();
+    } else {
+      listeResultats = new ArrayList<>();
+    }
   }
 
   /**
@@ -154,69 +158,5 @@ public class SearchCommune {
       return 0;
     }
     return ((itemCount - 1) / pageSize) + 1;
-  }
-
-  /**
-   * Sets the Regions map from the given Regions list.
-   * @param regions Regions list.
-   */
-  public void setRegionsByCodeInsee(List<Region> regions) {
-    regionsByCodeInsee = new HashMap<>();
-    if(regions != null) {
-      for(Region r : regions) {
-        if(!regionsByCodeInsee.containsKey(r.getCodeInsee())){
-          regionsByCodeInsee.put(r.getCodeInsee(), r.getNomEnrichi() );
-        }
-      }
-      regionsByCodeInsee = sortByValue(regionsByCodeInsee);
-    }
-  }
-
-  /**
-   * Sets the Departements map from the given Departements list.
-   * @param departements Departements list.
-   */
-  public void setDepartementsByCodeInsee(List<Departement> departements) {
-    departementsByCodeInsee = new HashMap<>();
-    if(departements != null) {
-      for(Departement r : departements) {
-        if(!departementsByCodeInsee.containsKey(r.getCodeInsee())) {
-          departementsByCodeInsee.put(r.getCodeInsee(), r.getNomEnrichi() );
-        }
-      }
-      this.departementsByCodeInsee = sortByValue(departementsByCodeInsee);
-      this.departements = departements;
-    }
-  }
-
-  /**
-   * Sets the Bassins map from the given Bassins list.
-   * @param bassins Bassins list.
-   */
-  public void setCirconscriptionByCode(List<CirconscriptionBassin> bassins) {
-    circonscriptionByCode = new HashMap<>();
-    if(bassins != null){
-      for(CirconscriptionBassin c : bassins) {
-        if(!circonscriptionByCode.containsKey(c.getCode())) {
-          circonscriptionByCode.put(c.getCode(), c.getLibelleLong());
-        }
-      }
-      this.circonscriptionByCode = sortByValue(circonscriptionByCode);
-    }
-  }
-
-  /**
-   * Static method for sorting the given map.
-   * @param map
-   * @return Sorted map.
-   */
-  private static <K, V extends Comparable<? super V>> Map<K, V> sortByValue(Map<K, V> map) {
-    List<Map.Entry<K, V>> list = new ArrayList<>(map.entrySet());
-    list.sort(Map.Entry.comparingByValue());
-    Map<K, V> result = new LinkedHashMap<>();
-    for (Map.Entry<K, V> entry : list) {
-      result.put(entry.getKey(), entry.getValue());
-    }
-    return result;
   }
 }
