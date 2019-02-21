@@ -50,7 +50,8 @@ public class ExportExcel
    * @param list the list of Communes to export.
    */
   @Override
-  public void exportCommune(OutputStream os, List<CommunePlusWithGenealogie> list) {
+  public void exportCommune(final OutputStream os,
+                            final List<CommunePlusWithGenealogie> list) {
     Workbook wb = buildCommuneWorkbook(list);
     try {
       wb.write(os);
@@ -64,7 +65,7 @@ public class ExportExcel
    * @param list the list of Communes to export.
    * @return the Excel Workbook containing the given Communes list.
    */
-  private Workbook buildCommuneWorkbook(List<CommunePlusWithGenealogie> list) {
+  private static Workbook buildCommuneWorkbook(final List<CommunePlusWithGenealogie> list) {
     Workbook wb = new HSSFWorkbook();
     Sheet sheet = wb.createSheet("Liste des communes");
     CreationHelper creationHelper = wb.getCreationHelper();
@@ -135,7 +136,7 @@ public class ExportExcel
    * @param wb
    * @return
    */
-  private CellStyle getHeaderCellStyle(Workbook wb) {
+  private static CellStyle getHeaderCellStyle(final Workbook wb) {
     CellStyle styleHeader = wb.createCellStyle();
     Font fontHeader = wb.createFont();
     fontHeader.setBold(true);

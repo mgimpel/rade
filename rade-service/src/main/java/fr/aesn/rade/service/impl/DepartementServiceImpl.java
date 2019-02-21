@@ -156,7 +156,7 @@ public class DepartementServiceImpl
     if (list == null) {
       return null;
     }
-    Date testdate = date == null ? new Date() : date;
+    Date testdate = (date == null ? new Date() : date);
     for (Departement dept : list) {
       if (SharedBusinessRules.isEntiteAdministrativeValid(dept, testdate)) {
         // Suppose database correct (au plus 1 valeur valide)

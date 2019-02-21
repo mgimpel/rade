@@ -31,7 +31,6 @@ import fr.aesn.rade.webapp.model.SearchCommune;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -71,25 +70,12 @@ public class CommuneController {
   private DepartementService departementService;
 
   /**
-   * Export de la liste des communes au format Excel
-   * @param response 
-   * @param searchCommune Objet contenant la recherche
+   * Attribut de session du contrôleur
+   * @return Objet de recherche de commune
    */
-  @RequestMapping(value = "/export", method = RequestMethod.POST)
-  public void exportCommunesExcel(HttpServletResponse response,
-      @ModelAttribute("searchCommune") SearchCommune searchCommune) {
-    Export export = new ExportExcel();
-    searchCommune.setListeResultats(paginateResultatsCommune(searchCommune, true));
-    response.setContentType("application/vnd.ms-excel");
-    response.setHeader("Content-Disposition", "attachment; filename=\"" + DEFAULT_EXPORT_FILENAME + "\"");
-    try {
-      OutputStream out = response.getOutputStream();
-      export.exportCommune(out, searchCommune.getCommunes());
-      out.flush();
-      out.close();
-    } catch (IOException ex) {
-      log.info("Echec lors de l'export au format excel", ex.getMessage());
-    }
+  @ModelAttribute("searchCommune")
+  private SearchCommune searchCommune() {
+    return new SearchCommune();
   }
 
   /**
@@ -99,85 +85,9 @@ public class CommuneController {
    * @return Vue correspondant à liste des résultats
    */
   @RequestMapping(method = RequestMethod.GET)
-  public String communesearch(Model model,
+  public String getSearchForm(Model model,
                               @ModelAttribute("searchCommune") SearchCommune searchCommune) {
-    return initRechercheCommuneView(searchCommune, model);
-  }
-
-  /**
-   * Appel de la page de résultats de commune.
-   * @param model
-   * @param searchCommune 
-   * @return Vue correspondant à liste des résultats
-   */
-  @RequestMapping(value = "/resultats", method = RequestMethod.GET)
-  public String communeresults(Model model,
-                               @ModelAttribute("searchCommune") SearchCommune searchCommune) {
-    String view;
-    if(searchCommune.getCommunes() != null && !searchCommune.getCommunes().isEmpty()) {
-      searchCommune.setListeResultats(paginateResultatsCommune(searchCommune, false));
-      view = initResultatsRechercheCommuneView(searchCommune, model);
-    } else {
-      view = initRechercheCommuneView(searchCommune, model);
-    }
-    return view;
-  }
-
-  /**
-   * Recherche d'une commune via la méthode POST en fonction d'une liste de critères
-   * @param searchCommune 
-   * @param model
-   * @return Vue de la page de recherche ou des résultats
-   */
-  @RequestMapping(params = "valider", value = "/resultats", method = RequestMethod.POST)
-  public String communedisplay(@ModelAttribute("searchCommune") SearchCommune searchCommune,
-                               Model model) {
-    log.debug("Search for commune with criteria: {}", searchCommune);
-    List<CommunePlusWithGenealogie> communes = null;
-
-    if(!(searchCommune.getCodeInsee() == null
-        && "-1".equals(searchCommune.getCodeDepartement())
-        && "-1".equals(searchCommune.getCodeCirconscription())
-        && "-1".equals(searchCommune.getCodeRegion())
-        && (searchCommune.getNomEnrichi() == null || searchCommune.getNomEnrichi().isEmpty()))) {
-      String dept   = "-1".equals(searchCommune.getCodeDepartement()) ? null : searchCommune.getCodeDepartement();
-      String region = "-1".equals(searchCommune.getCodeRegion()) ? null : searchCommune.getCodeRegion();
-      String bassin = "-1".equals(searchCommune.getCodeCirconscription()) ? null : searchCommune.getCodeCirconscription();
-      communes = communePlusService.getCommuneByCriteria(searchCommune.getCodeInsee(),
-                                          dept,
-                                          region,
-                                          bassin,
-                                          searchCommune.getNomEnrichi(),
-                                          searchCommune.getDateEffet());
-      if(communes == null || communes.isEmpty()){
-        model.addAttribute("errorRecherche", "La recherche n'a donné aucun résultat.");
-      }
-    } else {
-      model.addAttribute("errorRecherche", "Au moins un des champs doit être renseigné");
-    }
-
-    if(communes == null || communes.isEmpty()) {
-      return initRechercheCommuneView(searchCommune, model);
-    } else {
-      searchCommune.setCommunes(communes);
-      searchCommune.setPage("1");
-      if(communes.size() == 1) {
-        CommunePlusWithGenealogie commune = communes.iterator().next();
-        Date dateValidite;
-        if(searchCommune.getDateEffet() == null) {
-          dateValidite = new Date();
-        } else {
-          dateValidite = searchCommune.getDateEffet();
-        }
-        return "redirect:/referentiel/commune/"
-               + commune.getCommunePlus().getCodeInsee() + "?date="
-               + DateConversionUtils.formatDateToStringUrl(dateValidite);
-      } else {
-        model.addAttribute("searchCommune", searchCommune);
-        model.addAttribute("titre", "Liste des résultats");
-        return "redirect:/referentiel/commune/resultats?page=1";
-      }
-    }
+    return viewCommuneSearch(model, searchCommune);
   }
 
   /**
@@ -187,10 +97,76 @@ public class CommuneController {
    * @return Vue correspondant à liste des résultats
    */
   @RequestMapping(params = "annuler", value = "/resultats", method = RequestMethod.POST)
-  public String resetForm(Model model,
-                          @ModelAttribute("searchCommune") SearchCommune searchCommune) {
+  public String resetSearchForm(Model model,
+                                @ModelAttribute("searchCommune") SearchCommune searchCommune) {
     searchCommune.reset();
-    return initRechercheCommuneView(searchCommune, model);
+    return "redirect:/referentiel/commune";
+  }
+
+  /**
+   * Recherche d'une commune via la méthode POST en fonction d'une liste de critères
+   * @param searchCommune 
+   * @param model
+   * @return Vue de la page de recherche ou des résultats
+   */
+  @RequestMapping(params = "valider", value = "/resultats", method = RequestMethod.POST)
+  public String submitSearchForm(Model model,
+                                 @ModelAttribute("searchCommune") SearchCommune searchCommune) {
+    log.debug("Search for commune with criteria: {}", searchCommune);
+    String dept   = "-1".equals(searchCommune.getCodeDepartement())
+                   ? null : searchCommune.getCodeDepartement();
+    String region = "-1".equals(searchCommune.getCodeRegion())
+                   ? null : searchCommune.getCodeRegion();
+    String bassin = "-1".equals(searchCommune.getCodeCirconscription())
+                   ? null : searchCommune.getCodeCirconscription();
+    if(searchCommune.getCodeInsee() == null
+        && dept == null && region == null && bassin == null
+        && (searchCommune.getNomEnrichi() == null || searchCommune.getNomEnrichi().isEmpty())) {
+      model.addAttribute("errorRecherche", "Au moins un des champs doit être renseigné");
+      return viewCommuneSearch(model, searchCommune);
+    }
+    List<CommunePlusWithGenealogie> communes = null;
+    communes = communePlusService.getCommuneByCriteria(searchCommune.getCodeInsee(),
+                                          dept,
+                                          region,
+                                          bassin,
+                                          searchCommune.getNomEnrichi(),
+                                          searchCommune.getDateEffet());
+    if(communes == null || communes.isEmpty()){
+      model.addAttribute("errorRecherche", "La recherche n'a donné aucun résultat.");
+      return viewCommuneSearch(model, searchCommune);
+    }
+    searchCommune.setCommunes(communes);
+    searchCommune.setPage("1");
+    if(communes.size() == 1) {
+      CommunePlusWithGenealogie commune = communes.get(0);
+      Date dateValidite = searchCommune.getDateEffet();
+      if (dateValidite == null) {
+        dateValidite = new Date();
+      }
+      return "redirect:/referentiel/commune/"
+             + commune.getCommunePlus().getCodeInsee() + "?date="
+             + DateConversionUtils.formatDateToStringUrl(dateValidite);
+    } else {
+      return "redirect:/referentiel/commune/resultats?page=1";
+    }
+  }
+
+  /**
+   * Appel de la page de résultats de commune.
+   * @param model
+   * @param searchCommune 
+   * @return Vue correspondant à liste des résultats
+   */
+  @RequestMapping(value = "/resultats", method = RequestMethod.GET)
+  public String getResultList(Model model,
+                              @ModelAttribute("searchCommune") SearchCommune searchCommune) {
+    if(searchCommune.getCommunes() != null && !searchCommune.getCommunes().isEmpty()) {
+      searchCommune.buildListeResultats();
+      return viewCommuneResults(model, searchCommune);
+    } else {
+      return viewCommuneSearch(model, searchCommune);
+    }
   }
 
   /**
@@ -202,12 +178,11 @@ public class CommuneController {
    * de résultats
    */
   @RequestMapping(value = "/{code}")
-  public String communedisplay(@PathVariable("code") String code,
+  public String getDisplayPage(Model model,
+                               @PathVariable("code") String code,
                                @RequestParam(value = "date", required = false) String dateParam,
-                               Model model) {
-    String view = "communesearch";
+                               @ModelAttribute("searchCommune") SearchCommune searchCommune) {
     Date dateValidite = null;
-
     if(dateParam != null) {
       try {
         dateValidite = DateConversionUtils.formatStringToDateUrl(dateParam);
@@ -222,15 +197,15 @@ public class CommuneController {
         Departement departement = departementService.getDepartementByCode(commune.getCommunePlus().getDepartement(), dateValidite);
         Region region = regionService.getRegionByCode(departement.getRegion(), dateValidite);
         DisplayCommune displayCommune = new DisplayCommune(commune, departement, region);
-        view = initDetailCommuneView(displayCommune, model);
+        return viewCommuneDisplay(model, displayCommune);
       } else {
         model.addAttribute("errorRecherche", "La commune recherchée n'existe pas");
+        return viewCommuneSearch(model, searchCommune);
       }
     } else {
-      view = initRechercheCommuneView(new SearchCommune(), model);
       model.addAttribute("errorRecherche", "La recherche n'a rien retourné");
+      return viewCommuneSearch(model, searchCommune);
     }
-    return view;
   }
 
   /**
@@ -239,8 +214,7 @@ public class CommuneController {
    * @param model
    * @return Vue due la page de recherche
    */
-  private String initDetailCommuneView(DisplayCommune displayCommune, 
-                                      Model model) {
+  private String viewCommuneDisplay(Model model, DisplayCommune displayCommune) {
     model.addAttribute("titre", "Commune / Détail commune "
                                  + displayCommune.getCodeInsee()
                                  + " "
@@ -255,12 +229,12 @@ public class CommuneController {
    * @param model
    * @return Vue due la page de recherche
    */
-  private String initRechercheCommuneView(SearchCommune searchCommune, Model model) {
+  private String viewCommuneSearch(Model model, SearchCommune searchCommune) {
     if(searchCommune.getDateEffet() == null){
       searchCommune.setDateEffet(new Date());
     }
-    model.addAttribute("searchCommune", searchCommune);
     model.addAttribute("titre", "Rechercher une Commune");
+    model.addAttribute("searchCommune", searchCommune);
     return "communesearch";
   }
 
@@ -270,38 +244,29 @@ public class CommuneController {
    * @param model
    * @return Vue due la page de résultats
    */
-  private String initResultatsRechercheCommuneView(SearchCommune searchCommune,
-                                                   Model model) {
-    searchCommune.setListeResultats(paginateResultatsCommune(searchCommune, false));
-    model.addAttribute("searchCommune", searchCommune);
+  private String viewCommuneResults(Model model, SearchCommune searchCommune) {
     model.addAttribute("titre", "Liste des résultats");
+    model.addAttribute("searchCommune", searchCommune);
     return "communeresults";
   }
 
   /**
-   * Méthode de pagination des communes
-   * @param searchCommune 
-   * @param allCommune 
-   * @return Liste des communes affichés sur la page des résultats
+   * Export de la liste des communes au format Excel
+   * @param response 
+   * @param searchCommune Objet contenant la recherche
    */
-  private List<DisplayCommune> paginateResultatsCommune(SearchCommune searchCommune, boolean allCommune) {
-    List<DisplayCommune> listeResultats = new ArrayList<>();
-    int firstCommuneIndex = allCommune ? 0 : searchCommune.getFirstCommuneIndex();
-    int lastCommuneIndex = allCommune ? searchCommune.getCommunes().size() : searchCommune.getLastCommuneIndex();
-
-    for(int i = firstCommuneIndex ; i < lastCommuneIndex ; i++) {
-      CommunePlusWithGenealogie commune = searchCommune.getCommunes().get(i);
-      listeResultats.add(new DisplayCommune(commune));
+  @RequestMapping(value = "/export", method = RequestMethod.POST)
+  public void exportExcel(HttpServletResponse response,
+                          @ModelAttribute("searchCommune") SearchCommune searchCommune) {
+    response.setContentType("application/vnd.ms-excel");
+    response.setHeader("Content-Disposition",
+                       "attachment; filename=\"" + DEFAULT_EXPORT_FILENAME + "\"");
+    Export export = new ExportExcel();
+    try (OutputStream out = response.getOutputStream()) {
+      export.exportCommune(out, searchCommune.getCommunes());
+      out.flush();
+    } catch (IOException e) {
+      log.info("Echec lors de l'export au format excel", e);
     }
-    return listeResultats;
-  }
-
-  /**
-   * Attribut de session du contrôleur
-   * @return Objet de recherche de commune
-   */
-  @ModelAttribute("searchCommune")
-  private SearchCommune searchCommune() {
-    return new SearchCommune();
   }
 }

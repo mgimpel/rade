@@ -20,7 +20,6 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <jsp:include page="aesn_header.jsp" />
-<style type="text/css">@import url("${pageContext.request.contextPath}/webjars/font-awesome/css/all.min.css");</style>
 <div class="row justify-content-center">
 	<div class="col-4">
 		<c:if test="${param.error != null}">

@@ -34,7 +34,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Slf4j
 @Getter @Setter
 public class SearchCommune {
-  public static final int PAGE_SIZE = 20;
+  public static final int PAGE_SIZE = 10;
   // Champs requête
   private String codeInsee;
   private String nomEnrichi;
@@ -159,4 +159,19 @@ public class SearchCommune {
     }
     return ((itemCount - 1) / pageSize) + 1;
   }
+
+  /**
+   * Build the result list for the current page number.
+   */
+  public void buildListeResultats() {
+    List<DisplayCommune> list = new ArrayList<>();
+    int firstCommuneIndex = getFirstCommuneIndex();
+    int lastCommuneIndex = getLastCommuneIndex();
+    for(int i = firstCommuneIndex; i < lastCommuneIndex; i++) {
+      CommunePlusWithGenealogie commune = getCommunes().get(i);
+      list.add(new DisplayCommune(commune));
+    }
+    listeResultats = list;
+  }
+
 }

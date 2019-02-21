@@ -307,10 +307,10 @@ public class TestCommuneService
     list = service.getAllCommune(date);
     assertNotNull("CommuneService returned a null list", list);
     assertEquals(0, list.size());
-    date = null;
+    date = null; // i.e. current date
     list = service.getAllCommune(date);
     assertNotNull("CommuneService returned a null list", list);
-    assertEquals(0, list.size());
+    assertEquals(632, list.size());
   }
 
   /**

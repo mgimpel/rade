@@ -71,7 +71,8 @@ public class RegionServiceImpl
   public List<Region> getAllRegion(final Date date) {
     log.debug("Region list requested for Date: date={}", date);
     List<Region> list = regionJpaDao.findAll();
-    list.removeIf(e -> !SharedBusinessRules.isEntiteAdministrativeValid(e, date));
+    Date testDate = (date == null ? new Date() : date);
+    list.removeIf(e -> !SharedBusinessRules.isEntiteAdministrativeValid(e, testDate));
     return list;
   }
 
@@ -155,7 +156,7 @@ public class RegionServiceImpl
     if (list == null) {
       return null;
     }
-    Date testdate = date == null ? new Date() : date;
+    Date testdate = (date == null ? new Date() : date);
     for (Region reg : list) {
       if (SharedBusinessRules.isEntiteAdministrativeValid(reg, testdate)) {
         // Suppose database correct (au plus 1 valeur valide)
