@@ -30,7 +30,6 @@ import fr.aesn.rade.webapp.model.DisplayCommune;
 import fr.aesn.rade.webapp.model.SearchCommune;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
@@ -137,16 +136,13 @@ public class CommuneController {
       return viewCommuneSearch(model, searchCommune);
     }
     searchCommune.setCommunes(communes);
-    searchCommune.setPage("1");
+    searchCommune.setPage(1);
     if(communes.size() == 1) {
       CommunePlusWithGenealogie commune = communes.get(0);
-      Date dateValidite = searchCommune.getDateEffet();
-      if (dateValidite == null) {
-        dateValidite = new Date();
-      }
+      Date date = searchCommune.getDateEffet();
       return "redirect:/referentiel/commune/"
-             + commune.getCommunePlus().getCodeInsee() + "?date="
-             + DateConversionUtils.formatDateToStringUrl(dateValidite);
+             + commune.getCommunePlus().getCodeInsee()
+             + (date == null ? "" : "?date=" + DateConversionUtils.toUrlString(date));
     } else {
       return "redirect:/referentiel/commune/resultats?page=1";
     }
@@ -161,11 +157,11 @@ public class CommuneController {
   @RequestMapping(value = "/resultats", method = RequestMethod.GET)
   public String getResultList(Model model,
                               @ModelAttribute("searchCommune") SearchCommune searchCommune) {
-    if(searchCommune.getCommunes() != null && !searchCommune.getCommunes().isEmpty()) {
+    if(searchCommune.getCommunes() != null && searchCommune.getCommunes().size() > 1) {
       searchCommune.buildListeResultats();
       return viewCommuneResults(model, searchCommune);
     } else {
-      return viewCommuneSearch(model, searchCommune);
+      return "redirect:/referentiel/commune";
     }
   }
 
@@ -182,14 +178,7 @@ public class CommuneController {
                                @PathVariable("code") String code,
                                @RequestParam(value = "date", required = false) String dateParam,
                                @ModelAttribute("searchCommune") SearchCommune searchCommune) {
-    Date dateValidite = null;
-    if(dateParam != null) {
-      try {
-        dateValidite = DateConversionUtils.formatStringToDateUrl(dateParam);
-      } catch (ParseException e) {
-        log.info("Invalid Date format ({}) : {}", DateConversionUtils.URL_DATE_FORMAT, dateParam);
-      }
-    }
+    Date dateValidite = DateConversionUtils.urlStringToDate(dateParam, new Date());
     log.debug("Display commune: {}", code);
     if (code != null) {
       CommunePlusWithGenealogie commune = communePlusService.getCommuneWithGenealogie(code, dateValidite);

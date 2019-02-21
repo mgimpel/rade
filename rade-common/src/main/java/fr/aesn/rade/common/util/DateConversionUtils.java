@@ -46,7 +46,7 @@ public class DateConversionUtils {
    * @param date Date to format.
    * @return a the formatted date.
    */
-  public static String formatDateToStringUrl(Date date) {
+  public static String toUrlString(Date date) {
     if(date == null) {
       return null;
     }
@@ -60,7 +60,7 @@ public class DateConversionUtils {
    * @return the parsed Date.
    * @throws ParseException if problem parsing the given String.
    */
-  public static Date formatStringToDateUrl(String date)
+  public static Date urlStringToDate(String date)
     throws ParseException {
     if(date == null) {
       return null;
@@ -70,11 +70,29 @@ public class DateConversionUtils {
   }
 
   /**
+   * Convert the given String to a Date.
+   * @param date String to format.
+   * @param defaultDate the date to return if the String could not be parsed.
+   * @return the parsed Date.
+   */
+  public static Date urlStringToDate(String date, Date defaultDate) {
+    if(date == null) {
+      return defaultDate;
+    }
+    SimpleDateFormat sdf = new SimpleDateFormat(URL_DATE_FORMAT);
+    try {
+      return sdf.parse(date);
+    } catch (ParseException e) {
+      return defaultDate;
+    }
+  }
+
+  /**
    * Convert the given date to a String for use in the UI.
    * @param date Date to format.
    * @return a the formatted date.
    */
-  public static String formatDateToStringUi(Date date) {
+  public static String toUiString(Date date) {
     if(date == null) {
       return null;
     }

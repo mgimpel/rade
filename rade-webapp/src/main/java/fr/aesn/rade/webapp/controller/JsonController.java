@@ -19,7 +19,6 @@ package fr.aesn.rade.webapp.controller;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -141,16 +140,6 @@ public class JsonController {
    * @return the parsed date String.
    */
   private static final Date decodeDate(final String rawDate) {
-    if (rawDate == null) {
-      return new Date();
-    } else {
-      try {
-        return DateConversionUtils.formatStringToDateUrl(rawDate);
-      } catch (ParseException e) {
-        log.info("Could not parse date ({}): {} - {}",
-                 DateConversionUtils.URL_DATE_FORMAT, rawDate, e.getMessage());
-        return new Date();
-      }
-    }
+    return DateConversionUtils.urlStringToDate(rawDate, new Date());
   }
 }

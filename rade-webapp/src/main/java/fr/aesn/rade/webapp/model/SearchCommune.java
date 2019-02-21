@@ -24,14 +24,12 @@ import java.util.Date;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
- * Formulaire de recherche d'une commune
+ * Model for the Commune Search form and subsequent results.
  * @author sophie.belin
  */
-@Slf4j
 @Getter @Setter
 public class SearchCommune {
   public static final int PAGE_SIZE = 10;
@@ -56,16 +54,16 @@ public class SearchCommune {
   }
 
   /**
-   * Resets the search criteria.
+   * Resets the search criteria and subsequent results.
    */
   public void reset() {
     reset(new Date());
   }
 
   /**
-   * Resets the search criteria.
+   * Resets the search criteria and subsequent results.
    */
-  public void reset(Date date) {
+  public void reset(final Date date) {
     codeInsee = null;
     codeDepartement = "-1";
     codeRegion = "-1";
@@ -78,36 +76,22 @@ public class SearchCommune {
     } else {
       listeResultats = new ArrayList<>();
     }
-  }
-
-  /**
-   * Renvoie la date au format dd/MM/yyyy 
-   * ou un département
-   * @param date 
-   * @return Date
-   */
-  public String getDateIHM(Date date) {
-    return DateConversionUtils.formatDateToStringUi(date);
+    communes = null;
   }
 
   /**
    * Set the page number.
-   * @param stringPage page number.
+   * @param numPage page number.
    */
-  public void setPage(String stringPage) {
-    try {
-      int numPage = Integer.parseInt(stringPage);
-      if(numPage <= getPageMax()) {
-        page = numPage;
-      }
-    } catch(NumberFormatException e) {
-      log.info("Cannot set page: Invalid parameter {}", stringPage);
+  public void setPage(final int numPage) {
+    if(numPage <= getPageMax()) {
+      page = numPage;
     }
   }
 
   /**
-   * Renvoie l'index de la première commune
-   * @return Index 
+   * Returns the index of the first item on the current page.
+   * @return the index of the first item on the current page.
    */
   public int getFirstCommuneIndex() {
     if(communes == null || communes.isEmpty()) {
@@ -119,8 +103,8 @@ public class SearchCommune {
   }
 
   /**
-   * Renvoie l'index de la dernière commune
-   * @return Index
+   * Returns the index of the last item on the current page.
+   * @return the index of the last item on the current page.
    */
   public int getLastCommuneIndex() {
     if(communes == null || communes.isEmpty()) {
@@ -134,30 +118,14 @@ public class SearchCommune {
   }
 
   /**
-   * Renvoie le nombre de pages au total pour afficher l'ensemble des comunes
-   * ou un département
-   * @return Nombre de page
+   * Returns the number of pages needed to display all the results.
+   * @return the number of pages needed to display all the results.
    */
   public int getPageMax() {
-    if(communes != null && !communes.isEmpty()) {
-      return pagesNeeded(PAGE_SIZE, communes.size());
-    } else {
+    if(communes == null || communes.isEmpty()) {
       return 1;
     }
-  }
-
-  /**
-   * Return the number of pages needed to display the given number of items and
-   * the size of the page.
-   * @param pageSize maximum number of items per page.
-   * @param itemCount number of items.
-   * @return the number of pages needed.
-   */
-  private int pagesNeeded(int pageSize, int itemCount) {
-    if (itemCount <= 0 || pageSize <= 0) {
-      return 0;
-    }
-    return ((itemCount - 1) / pageSize) + 1;
+    return ((communes.size() - 1) / PAGE_SIZE) + 1;
   }
 
   /**
@@ -168,10 +136,18 @@ public class SearchCommune {
     int firstCommuneIndex = getFirstCommuneIndex();
     int lastCommuneIndex = getLastCommuneIndex();
     for(int i = firstCommuneIndex; i < lastCommuneIndex; i++) {
-      CommunePlusWithGenealogie commune = getCommunes().get(i);
+      CommunePlusWithGenealogie commune = communes.get(i);
       list.add(new DisplayCommune(commune));
     }
     listeResultats = list;
   }
 
+  /**
+   * Returns the given Date as a String in a UI compatible format (dd/MM/yyyy).
+   * @param date the date to convert.
+   * @return the given Date as a String in a UI compatible format (dd/MM/yyyy).
+   */
+  public static String getDateIHM(final Date date) {
+    return DateConversionUtils.toUiString(date);
+  }
 }

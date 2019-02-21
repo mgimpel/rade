@@ -477,7 +477,7 @@ public class RestServiceImpl
       return new Date();
     } else {
       try {
-        return DateConversionUtils.formatStringToDateUrl(rawDate);
+        return DateConversionUtils.urlStringToDate(rawDate);
       } catch (ParseException e) {
         throw new RestRequestException("Could not parse date " + rawDate, e);
       }

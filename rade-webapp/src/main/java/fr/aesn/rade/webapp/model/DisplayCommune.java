@@ -102,24 +102,6 @@ public class DisplayCommune {
   }
 
   /**
-   * Renvoie la date comme String au format IHM: dd/MM/yyyy
-   * @param date la date à formatter.
-   * @return date formatée.
-   */
-  public String getDateIHM(Date date) {
-    return DateConversionUtils.formatDateToStringUi(date);
-  }
-
-  /**
-   * Renvoie la date comme String au format URL: yyyy-MM-dd
-   * @param date la date à formatter.
-   * @return date formatée.
-   */
-  public String getDateUrl(Date date) {
-    return DateConversionUtils.formatDateToStringUrl(date);
-  }
-
-  /**
    * Renvoie l'url correspondant à l'entité.
    * @param codeInsee 
    * @param dateFinValidite 
@@ -129,13 +111,21 @@ public class DisplayCommune {
     if(codeInsee == null) {
       return null;
     }
-    Date date;
-    if(dateFinValidite == null) {
-      date = new Date();
+    String url = appContext + CommuneController.REQUEST_MAPPING + "/" + codeInsee;
+    if (dateFinValidite == null) {
+      return url;
     } else {
-      date = new Date(dateFinValidite.getTime() - 1);
+      Date date = new Date(dateFinValidite.getTime() - 1);
+      return url + "?date=" + DateConversionUtils.toUrlString(date);
     }
-    return appContext + CommuneController.REQUEST_MAPPING + "/" + codeInsee
-           + "?date=" + DateConversionUtils.formatDateToStringUrl(date);
+  }
+
+  /**
+   * Renvoie la date comme String au format IHM: dd/MM/yyyy
+   * @param date la date à formatter.
+   * @return date formatée.
+   */
+  public static String getDateIHM(final Date date) {
+    return DateConversionUtils.toUiString(date);
   }
 }

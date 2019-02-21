@@ -39,11 +39,11 @@ public class TestDateConversionUtils {
     // 1st January at 00h 00m 00s (midnight)
     assertEquals("Error converting URL format String to Date",
                  Date.from(ZonedDateTime.of(2019, 1, 1, 0, 0, 0, 0, ZoneId.systemDefault()).toInstant()),
-                 DateConversionUtils.formatStringToDateUrl("2019-01-01"));
+                 DateConversionUtils.urlStringToDate("2019-01-01"));
     // 31st December at 00h 00m 00s (midnight)
     assertEquals("Error converting URL format String to Date",
                  Date.from(ZonedDateTime.of(2019, 12, 31, 0, 0, 0, 0, ZoneId.systemDefault()).toInstant()),
-                 DateConversionUtils.formatStringToDateUrl("2019-12-31"));
+                 DateConversionUtils.urlStringToDate("2019-12-31"));
   }
 
   /**
@@ -53,7 +53,7 @@ public class TestDateConversionUtils {
   @Test(expected = ParseException.class)
   public void testFormatStringToDateUrlException()
     throws ParseException {
-    DateConversionUtils.formatStringToDateUrl("01/01/2019");
+    DateConversionUtils.urlStringToDate("01/01/2019");
   }
 
   /**
@@ -66,17 +66,17 @@ public class TestDateConversionUtils {
     date = Date.from(ZonedDateTime.of(2019, 1, 28, 0, 0, 0, 0, ZoneId.systemDefault()).toInstant());
     assertEquals("Error converting date to URL format String",
                  "2019-01-28",
-                 DateConversionUtils.formatDateToStringUrl(date));
+                 DateConversionUtils.toUrlString(date));
     // 28th January at 12h 00m 00s (noon)
     date = Date.from(ZonedDateTime.of(2019, 1, 28, 12, 0, 0, 0, ZoneId.systemDefault()).toInstant());
     assertEquals("Error converting date to URL format String",
                  "2019-01-28",
-                 DateConversionUtils.formatDateToStringUrl(date));
+                 DateConversionUtils.toUrlString(date));
     // 28th January at 23h 59m 59s 999999999ns (1 nanosecond to midnight)
     date = Date.from(ZonedDateTime.of(2019, 1, 28, 23, 59, 59, 999999999, ZoneId.systemDefault()).toInstant());
     assertEquals("Error converting date to URL format String",
                  "2019-01-28",
-                 DateConversionUtils.formatDateToStringUrl(date));
+                 DateConversionUtils.toUrlString(date));
   }
 
   /**
@@ -89,16 +89,16 @@ public class TestDateConversionUtils {
     date = Date.from(ZonedDateTime.of(2019, 1, 28, 0, 0, 0, 0, ZoneId.systemDefault()).toInstant());
     assertEquals("Error converting date to URL format String",
                  "28/01/2019",
-                 DateConversionUtils.formatDateToStringUi(date));
+                 DateConversionUtils.toUiString(date));
     // 28th January at 12h 00m 00s (noon)
     date = Date.from(ZonedDateTime.of(2019, 1, 28, 12, 0, 0, 0, ZoneId.systemDefault()).toInstant());
     assertEquals("Error converting date to URL format String",
                  "28/01/2019",
-                 DateConversionUtils.formatDateToStringUi(date));
+                 DateConversionUtils.toUiString(date));
     // 28th January at 23h 59m 59s 999999999ns (1 nanosecond to midnight)
     date = Date.from(ZonedDateTime.of(2019, 1, 28, 23, 59, 59, 999999999, ZoneId.systemDefault()).toInstant());
     assertEquals("Error converting date to URL format String",
                  "28/01/2019",
-                 DateConversionUtils.formatDateToStringUi(date));
+                 DateConversionUtils.toUiString(date));
   }
 }
