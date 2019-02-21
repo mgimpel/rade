@@ -17,6 +17,7 @@
  */%>
 <%/* $Id$ */%>
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@page import="fr.aesn.rade.common.util.DateConversionUtils" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <jsp:include page="aesn_header.jsp" />
 <div class="row justify-content-center">
@@ -89,12 +90,12 @@
 								<table class="w-100 h-100">
 									<tr>
 										<td class="w-16">Début validité :</td>
-										<td>${displayCommune.getDateIHM(displayCommune.debutValidite)}</td>
+										<td>${DateConversionUtils.toUiString(displayCommune.debutValidite)}</td>
 									</tr>
 									<c:if test="${displayCommune.finValidite != null}">
 										<tr>
 											<td>Fin validité :</td>
-											<td>${displayCommune.getDateIHM(displayCommune.finValidite)}</td>
+											<td>${DateConversionUtils.toUiString(displayCommune.finValidite)}</td>
 										</tr>
 									</c:if>
 									<c:if test="${displayCommune.motifModification != null}">
@@ -123,7 +124,7 @@
 										<tr>
 											<td class="w-16 text-center"><a href="${displayCommune.getUrlEntite(pageContext.request.contextPath, genealogieParent.key, genealogieParent.value.entity.finValidite)}">${genealogieParent.key}</a></td>
 											<td>${genealogieParent.value.entity.nomEnrichi}</td>
-											<td class="w-25">${displayCommune.getDateIHM(genealogieParent.value.entity.debutValidite)}</td>
+											<td class="w-25">${DateConversionUtils.toUiString(genealogieParent.value.entity.debutValidite)}</td>
 										</tr>
 									</c:forEach>
 								</table>
@@ -144,7 +145,7 @@
 										<tr>
 											<td class="w-16 text-center"><a href="${displayCommune.getUrlEntite(pageContext.request.contextPath, genealogieEnfant.key, genealogieEnfant.value.entity.finValidite)}">${genealogieEnfant.key}</a></td>
 											<td>${genealogieEnfant.value.entity.nomEnrichi}</td>
-											<td class="w-25">${displayCommune.getDateIHM(genealogieEnfant.value.entity.debutValidite)}</td>
+											<td class="w-25">${DateConversionUtils.toUiString(genealogieEnfant.value.entity.debutValidite)}</td>
 										</tr>
 									</c:forEach>
 								</table>

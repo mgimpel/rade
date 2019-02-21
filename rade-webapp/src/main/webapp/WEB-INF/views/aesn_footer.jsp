@@ -16,8 +16,9 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */%>
 <%/* $Id$ */%>
-<%@ page import="java.text.*,java.util.*" %>
-<%@ page import="fr.aesn.rade.common.util.Version" %>
+<%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@page import="java.text.*,java.util.*" %>
+<%@page import="fr.aesn.rade.common.util.Version" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <c:set var="path" value="${pageContext.request.contextPath}"/>

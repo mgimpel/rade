@@ -18,7 +18,6 @@
 package fr.aesn.rade.webapp.model;
 
 import fr.aesn.rade.common.modelplus.CommunePlusWithGenealogie;
-import fr.aesn.rade.common.util.DateConversionUtils;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -140,14 +139,5 @@ public class SearchCommune {
       list.add(new DisplayCommune(commune));
     }
     listeResultats = list;
-  }
-
-  /**
-   * Returns the given Date as a String in a UI compatible format (dd/MM/yyyy).
-   * @param date the date to convert.
-   * @return the given Date as a String in a UI compatible format (dd/MM/yyyy).
-   */
-  public static String getDateIHM(final Date date) {
-    return DateConversionUtils.toUiString(date);
   }
 }

@@ -119,13 +119,4 @@ public class DisplayCommune {
       return url + "?date=" + DateConversionUtils.toUrlString(date);
     }
   }
-
-  /**
-   * Renvoie la date comme String au format IHM: dd/MM/yyyy
-   * @param date la date à formatter.
-   * @return date formatée.
-   */
-  public static String getDateIHM(final Date date) {
-    return DateConversionUtils.toUiString(date);
-  }
 }

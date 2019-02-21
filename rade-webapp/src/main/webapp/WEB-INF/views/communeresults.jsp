@@ -17,6 +17,7 @@
  */%>
 <%/* $Id$ */%>
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@page import="fr.aesn.rade.common.util.DateConversionUtils" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@taglib prefix="aesn" tagdir="/WEB-INF/tags"%>
@@ -49,7 +50,7 @@
 						</c:if>
 						<c:if test="${!searchCommune.dateEffet.equals('') && searchCommune.dateEffet != null}">
 							<td style="text-align: right;width: 100px"><strong>Date d'effet : </strong></td>
-							<td>${searchCommune.getDateIHM(searchCommune.dateEffet)}</td>
+							<td>${DateConversionUtils.toUiString(searchCommune.dateEffet)}</td>
 						</c:if>
 					</tr>
 				</table>
@@ -73,8 +74,8 @@
 				<tr>
 					<td><a href="${communeDisplay.getUrlEntite(pageContext.request.contextPath, communeDisplay.codeInsee, communeDisplay.finValidite)}">${communeDisplay.codeInsee}</a></td>
 					<td><a href="${communeDisplay.getUrlEntite(pageContext.request.contextPath, communeDisplay.codeInsee, communeDisplay.finValidite)}">${communeDisplay.nomEnrichi}</a></td>
-					<td class="text-center">${communeDisplay.getDateIHM(communeDisplay.debutValidite)}</td>
-					<td class="text-center">${communeDisplay.getDateIHM(communeDisplay.finValidite)}</td>
+					<td class="text-center">${DateConversionUtils.toUiString(communeDisplay.debutValidite)}</td>
+					<td class="text-center">${DateConversionUtils.toUiString(communeDisplay.finValidite)}</td>
 					<td class="text-center">${communeDisplay.motifModification}</td>
 					<td>
 						<c:forEach items="${communeDisplay.parents}" var="genealogieParent">
