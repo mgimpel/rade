@@ -38,8 +38,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.async.DeferredResult;
 import org.springframework.web.multipart.MultipartFile;
@@ -74,7 +75,7 @@ public class BatchController {
    * @param model MVC model passed to JSP.
    * @return View for the Info Batch Upload page
    */
-  @RequestMapping(value = "/info", method = RequestMethod.GET)
+  @GetMapping("/info")
   public String infoGet(final Model model) {
     log.debug("Requesting /batch/info");
     model.addAttribute("titre", "Batch Info");
@@ -87,7 +88,7 @@ public class BatchController {
    * @param model MVC model passed to JSP.
    * @return View for the Sandre Batch Upload page
    */
-  @RequestMapping(value = "/sandre", method = RequestMethod.GET)
+  @GetMapping("/sandre")
   public String sandreGet(final Model model) {
     log.debug("Requesting /batch/sandre");
     model.addAttribute("titre", "Batch Sandre");
@@ -102,7 +103,7 @@ public class BatchController {
    * @return View for the page.
    * @throws IOException if there was a problem recovering and saving file.
    */
-  @RequestMapping(value = "/info", method = RequestMethod.POST)
+  @PostMapping("/info")
   public String infoPost(final Model model,
                          @RequestParam("file") final MultipartFile file)
     throws IOException {
@@ -133,7 +134,7 @@ public class BatchController {
    * @return View for the page.
    * @throws IOException if there was a problem recovering and saving file.
    */
-  @RequestMapping(value = "/sandre", method = RequestMethod.POST)
+  @PostMapping("/sandre")
   public DeferredResult<String> sandrePost(final Model model,
                                            @RequestParam("file") final MultipartFile file)
     throws IOException {
@@ -167,7 +168,7 @@ public class BatchController {
    * @return the path to the temporary file.
    * @throws IOException if there was a problem recovering and saving file.
    */
-  private Path storeTempFile(final MultipartFile file)
+  private static Path storeTempFile(final MultipartFile file)
     throws IOException {
     Path tmpDir = Paths.get(System.getProperty("java.io.tmpdir")
                           + File.separator + "rade" + File.separator

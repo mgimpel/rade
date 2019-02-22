@@ -21,100 +21,91 @@
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <jsp:include page="aesn_header.jsp" />
 <script>
-	$(document).ready(function(){
-		getBassins(${searchCommune.codeCirconscription});
-		getRegionsAndDepts(${searchCommune.codeRegion}, ${searchCommune.codeDepartement});
-		$("#formCommune").keydown(function (e) {
-			if(e.which == 13) submitForm();
-		});
+$(document).ready(function(){
+	getBassins(${searchCommune.codeCirconscription});
+	getRegionsAndDepts(${searchCommune.codeRegion}, ${searchCommune.codeDepartement});
+	$("#formCommune").keydown(function (e) {
+		if(e.which == 13) submitForm();
 	});
-
-	function buildOptions(data, current, text){
-		var arr = [];
-		$.each(data, function(key, val) {
-			arr.push({"key" : key, "val" : val});
-		});
-		arr = arr.sort(function (a, b) {
-			return a.val.localeCompare(b.val);
-		});
-		var option = "<option value='-1'>" + text + "</option>";
-		$.each(arr, function(index, obj) {
-			option +=  "<option value='" + obj.key + "'" + (obj.key != current ? ">" : " selected='selected'>") + obj.val + "</option>";
-		});
-		return option;
-	}
-
-	function getDepts() {
-		var currentDept = (arguments.length > 0 && arguments[0] !== null) ? arguments[0] : $("#codeDepartement").val();
-		$.getJSON("${pageContext.request.contextPath}/referentiel/json/deptlist",
-				{"code": $("#codeRegion").val(), "date": $("#dateEffet").val()},
-				function(data){
-			$("#codeDepartement").html(buildOptions(data, currentDept, "Sélectionner un département..."));
-		});
-	}
-
-	function getRegionsAndDepts() {
-		var currentReg = arguments.length > 0 ? arguments[0] : $("#codeRegion").val();
-		var currentDept = arguments.length > 1 ? arguments[1] : $("#codeDepartement").val();
-		$.getJSON("${pageContext.request.contextPath}/referentiel/json/regionlist",
-				{"date": $("#dateEffet").val()},
-				function(data){
-			$("#codeRegion").html(buildOptions(data, currentReg, "Sélectionner une région..."));
-			getDepts(currentDept);
-		});
-	}
-
-	function getBassins() {
-		var currentBassin = (arguments.length > 0 && arguments[0] !== null) > 0 ? arguments[0] : $("#codeCirconscription").val();
-		$.getJSON("${pageContext.request.contextPath}/referentiel/json/bassinlist",
-				function(data){
-			$("#codeCirconscription").html(buildOptions(data, currentBassin, "Sélectionner une circonscription..."));
-		});
-	}
-
-	function resetForm() {
-		$("#typeAction").attr("name", "annuler");
+});
+function radealert(msg) {
+	$(".alert").text(msg);
+	$(".alert").removeClass("d-none");
+}
+function buildOptions(data, current, text){
+	var arr = [];
+	$.each(data, function(key, val) {
+		arr.push({"key" : key, "val" : val});
+	});
+	arr = arr.sort(function (a, b) {
+		return a.val.localeCompare(b.val);
+	});
+	var option = "<option value='-1'>" + text + "</option>";
+	$.each(arr, function(index, obj) {
+		option +=  "<option value='" + obj.key + "'" + (obj.key != current ? ">" : " selected='selected'>") + obj.val + "</option>";
+	});
+	return option;
+}
+function getDepts() {
+	var currentDept = (arguments.length > 0 && arguments[0] !== null) ? arguments[0] : $("#codeDepartement").val();
+	$.getJSON("${pageContext.request.contextPath}/referentiel/json/deptlist",
+			{"code": $("#codeRegion").val(), "date": $("#dateEffet").val()},
+			function(data){
+		$("#codeDepartement").html(buildOptions(data, currentDept, "Sélectionner un département..."));
+	});
+}
+function getRegionsAndDepts() {
+	var currentReg = arguments.length > 0 ? arguments[0] : $("#codeRegion").val();
+	var currentDept = arguments.length > 1 ? arguments[1] : $("#codeDepartement").val();
+	$.getJSON("${pageContext.request.contextPath}/referentiel/json/regionlist",
+			{"date": $("#dateEffet").val()},
+			function(data){
+		$("#codeRegion").html(buildOptions(data, currentReg, "Sélectionner une région..."));
+		getDepts(currentDept);
+	});
+}
+function getBassins() {
+	var currentBassin = (arguments.length > 0 && arguments[0] !== null) > 0 ? arguments[0] : $("#codeCirconscription").val();
+	$.getJSON("${pageContext.request.contextPath}/referentiel/json/bassinlist",
+			function(data){
+		$("#codeCirconscription").html(buildOptions(data, currentBassin, "Sélectionner une circonscription..."));
+	});
+}
+function resetForm() {
+	$("#typeAction").attr("name", "annuler");
+	$("#formCommune")[0].submit();
+}
+function submitForm() {
+	if(validateForm()) {
+		$("#typeAction").attr("name", "valider");
 		$("#formCommune")[0].submit();
 	}
-
-	function submitForm() {
-		if(validateForm()) {
-			$("#typeAction").attr("name", "valider");
-			$("#formCommune")[0].submit();
-		}
+}
+function validateForm() {
+	var nomEnrichi = $("#nomEnrichi").val();
+	var codeRegion = $("#codeRegion").val();
+	var codeDepartement = $("#codeDepartement").val();
+	var circonscription = $("#codeCirconscription").val();
+	var codeInsee = $("#codeInsee").val();
+	if(codeInsee && !/^[0-9][0-9abAB][0-9]{3}$/.test(codeInsee)) {
+		radealert("Le code INSEE doit être composé de cinq chiffres ou lettres");
+		return false;
 	}
-
-	function validateForm() {
-		var nomEnrichi = $("#nomEnrichi").val();
-		var codeRegion = $("#codeRegion").val();
-		var codeDepartement = $("#codeDepartement").val();
-		var circonscription = $("#codeCirconscription").val();
-		var codeInsee = $("#codeInsee").val();
-		if(codeInsee != "" && codeInsee != null) {
-			if(!/^[0-9a-zA-Z]{2}[0-9]{3}$/.test(codeInsee)) {
-				alert("Le code INSEE doit être composé de cinq chiffres ou de deux lettres et trois chiffres");
-				return false;
-			}
-		}
-		var dateEffet = document.getElementById("dateEffet").value;
-		if(dateEffet != "" && dateEffet != null){
-			if(!/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(dateEffet)) {
-				alert("La date n'est pas valide");
-				return false;
-			}
-		}
-		if(codeInsee == "" && nomEnrichi == "" && codeRegion == "-1" && codeDepartement == "-1" && circonscription == "-1") {
-			alert("Au moins un des champs doit être renseigné");
-			return false;
-		}
-		return true;
+	var dateEffet = $("#dateEffet").val();
+	if(dateEffet && !/^[12][0-9]{3}-[01][0-9]-[0-3][0-9]$/.test(dateEffet)) {
+		radealert("La date n'est pas valide");
+		return false;
 	}
+	if(codeInsee == "" && nomEnrichi == "" && codeRegion == "-1" && codeDepartement == "-1" && circonscription == "-1") {
+		radealert("Au moins un des champs doit être renseigné");
+		return false;
+	}
+	return true;
+}
 </script>
 <div class="row justify-content-center">
 	<div class="col-12">
-		<c:if test="${errorRecherche != null && !errorRecherche.equals('')}">
-			<div class="alert alert-danger">${errorRecherche}</div>
-		</c:if>
+		<div class="<c:if test="${errorRecherche == null || errorRecherche.equals('')}">d-none </c:if>alert alert-danger">${errorRecherche}</div>
 		<div class="card card-aesn">
 			<div class="card-body card-body-aesn">
 				<form:form id="formCommune" action="${pageContext.request.contextPath}/referentiel/commune/resultats" method="POST" modelAttribute="searchCommune">

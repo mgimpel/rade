@@ -26,34 +26,26 @@
 	<div class="col-12">
 		<div class="card card-aesn">
 			<div class="card-body card-body-aesn">
-				<table>
-					<tr>
-						<c:if test="${!searchCommune.codeInsee.equals('') && searchCommune.codeInsee != null}">
-							<td style="text-align: right; width: 100px"><strong>Code INSEE :</strong></td>
-							<td>${searchCommune.codeInsee}</td>
-						</c:if>
-						<c:if test="${!searchCommune.nomEnrichi.equals('') && searchCommune.nomEnrichi != null}">
-							<td style="text-align: right; width: 100px"><strong>Nom : </strong></td>
-							<td>${searchCommune.nomEnrichi}</td>
-						</c:if>
-						<c:if test="${!searchCommune.codeRegion.equals('-1') && searchCommune.codeRegion != null}">
-							<td style="text-align: right;width: 100px"><strong>Région : </strong></td>
-							<td>${searchCommune.codeRegion}</td>
-						</c:if>
-						<c:if test="${!searchCommune.codeDepartement.equals('-1') && searchCommune.codeDepartement != null}">
-							<td style="text-align: right;width: 100px"><strong>Département : </strong></td>
-							<td>${searchCommune.codeDepartement}</td>
-						</c:if>
-						<c:if test="${!searchCommune.codeCirconscription.equals('-1') && searchCommune.codeCirconscription != null}">
-							<td style="text-align: right;width: 100px"><strong>Circonscription : </strong></td>
-							<td>${searchCommune.codeCirconscription}</td>
-						</c:if>
-						<c:if test="${!searchCommune.dateEffet.equals('') && searchCommune.dateEffet != null}">
-							<td style="text-align: right;width: 100px"><strong>Date d'effet : </strong></td>
-							<td>${DateConversionUtils.toUiString(searchCommune.dateEffet)}</td>
-						</c:if>
-					</tr>
-				</table>
+				<div class="row justify-content-center">
+					<c:if test="${searchCommune.codeInsee != null && !searchCommune.codeInsee.isEmpty()}">
+						<div class="col text-center"><strong>Code INSEE</strong> : ${searchCommune.codeInsee}</div>
+					</c:if>
+					<c:if test="${searchCommune.nomEnrichi != null && !searchCommune.nomEnrichi.isEmpty()}">
+						<div class="col text-center"><strong>Nom</strong> : ${searchCommune.nomEnrichi}</div>
+					</c:if>
+					<c:if test="${searchCommune.codeRegion != null && !searchCommune.codeRegion.equals('-1')}">
+						<div class="col text-center"><strong>Région</strong> : ${searchCommune.codeRegion}</div>
+					</c:if>
+					<c:if test="${searchCommune.codeDepartement != null && !searchCommune.codeDepartement.equals('-1')}">
+						<div class="col text-center"><strong>Département</strong> : ${searchCommune.codeDepartement}</div>
+					</c:if>
+					<c:if test="${searchCommune.codeCirconscription != null && !searchCommune.codeCirconscription.equals('-1')}">
+						<div class="col text-center"><strong>Circonscription</strong> : ${searchCommune.codeCirconscription}</div>
+					</c:if>
+					<c:if test="${searchCommune.dateEffet != null}">
+						<div class="col text-center"><strong>Date d'effet</strong> : ${DateConversionUtils.toUiString(searchCommune.dateEffet)}</div>
+					</c:if>
+				</div>
 			</div>
 		</div>
 		<aesn:paging baseUrl="/referentiel/commune/resultats?page=" currentPage="${searchCommune.getPage()}" maxPage="${searchCommune.getPageMax()}"/>

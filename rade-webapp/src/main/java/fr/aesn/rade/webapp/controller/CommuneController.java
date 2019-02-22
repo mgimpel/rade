@@ -38,10 +38,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
@@ -84,7 +85,7 @@ public class CommuneController {
    * @param searchCommune search details for the model.
    * @return the corresponding view.
    */
-  @RequestMapping(method = RequestMethod.GET)
+  @GetMapping()
   public String getSearchForm(final Model model,
                               @ModelAttribute("searchCommune") final SearchCommune searchCommune) {
     return viewCommuneSearch(model, searchCommune);
@@ -96,7 +97,7 @@ public class CommuneController {
    * @param searchCommune search details for the model.
    * @return redirect back to the search form.
    */
-  @RequestMapping(params = "annuler", value = "/resultats", method = RequestMethod.POST)
+  @PostMapping(params = "annuler", value = "/resultats")
   public String resetSearchForm(final Model model,
                                 @ModelAttribute("searchCommune") final SearchCommune searchCommune) {
     searchCommune.reset();
@@ -109,7 +110,7 @@ public class CommuneController {
    * @param searchCommune search details for the model.
    * @return the corresponding view or redirect appropriately.
    */
-  @RequestMapping(params = "valider", value = "/resultats", method = RequestMethod.POST)
+  @PostMapping(params = "valider", value = "/resultats")
   public String submitSearchForm(final Model model,
                                  @ModelAttribute("searchCommune") final SearchCommune searchCommune) {
     log.debug("Search for commune with criteria: {}", searchCommune);
@@ -155,7 +156,7 @@ public class CommuneController {
    * @param searchCommune search details for the model.
    * @return the corresponding view or redirect appropriately.
    */
-  @RequestMapping(value = "/resultats", method = RequestMethod.GET)
+  @GetMapping("/resultats")
   public String getResultList(final Model model,
                               @ModelAttribute("searchCommune") final SearchCommune searchCommune) {
     if(searchCommune.getCommunes() != null && searchCommune.getCommunes().size() > 1) {
@@ -173,7 +174,7 @@ public class CommuneController {
    * @param searchCommune search details for the model.
    * @return the corresponding view.
    */
-  @RequestMapping(value = "/{code}")
+  @GetMapping("/{code}")
   public String getDisplayPage(final Model model,
                                @PathVariable("code") final String code,
                                @RequestParam(value = "date", required = false) final String dateParam,
@@ -244,7 +245,7 @@ public class CommuneController {
    * @param response Servlet Response Object.
    * @param searchCommune Objet contenant la recherche
    */
-  @RequestMapping(value = "/export", method = RequestMethod.POST)
+  @PostMapping("/export")
   public void exportExcel(final HttpServletResponse response,
                           @ModelAttribute("searchCommune") final SearchCommune searchCommune) {
     response.setContentType("application/vnd.ms-excel");

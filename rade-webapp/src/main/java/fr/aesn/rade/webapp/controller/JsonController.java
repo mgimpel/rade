@@ -25,8 +25,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -68,7 +68,7 @@ public class JsonController {
    * @param rawDate the date at which the returned data is valid.
    * @return JSON list of Departements (code and name).
    */
-  @RequestMapping(value = "/deptlist", method = RequestMethod.GET)
+  @GetMapping("/deptlist")
   public @ResponseBody Map<String,String> getDepartementList(
           @RequestParam(value = "code", required = false) final String rawCode,
           @RequestParam(value = "date", required = false) final String rawDate) {
@@ -90,7 +90,7 @@ public class JsonController {
    * @param rawDate the date at which the returned data is valid.
    * @return JSON list of Regions (code and name).
    */
-  @RequestMapping(value = "/regionlist", method = RequestMethod.GET)
+  @GetMapping("/regionlist")
   public @ResponseBody Map<String,String> getRegionList(
           @RequestParam(value = "date", required = false) final String rawDate) {
     Date date = decodeDate(rawDate);
@@ -107,7 +107,7 @@ public class JsonController {
    * parameters.
    * @return JSON list of Bassins (code and name).
    */
-  @RequestMapping(value = "/bassinlist", method = RequestMethod.GET)
+  @GetMapping("/bassinlist")
   public @ResponseBody Map<String,String> getBassinList() {
     List<CirconscriptionBassin> bassins = bassinService.getAllBassin();
     HashMap<String, String> list = new HashMap<>();
