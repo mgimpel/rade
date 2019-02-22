@@ -71,10 +71,11 @@ public class BatchController {
 
   /**
    * Info Batch Upload mapping.
+   * @param model MVC model passed to JSP.
    * @return View for the Info Batch Upload page
    */
   @RequestMapping(value = "/info", method = RequestMethod.GET)
-  public String infoGet(Model model) {
+  public String infoGet(final Model model) {
     log.debug("Requesting /batch/info");
     model.addAttribute("titre", "Batch Info");
     model.addAttribute("entite", new SearchEntite());
@@ -83,10 +84,11 @@ public class BatchController {
 
   /**
    * Sandre Batch Upload mapping.
+   * @param model MVC model passed to JSP.
    * @return View for the Sandre Batch Upload page
    */
   @RequestMapping(value = "/sandre", method = RequestMethod.GET)
-  public String sandreGet(Model model) {
+  public String sandreGet(final Model model) {
     log.debug("Requesting /batch/sandre");
     model.addAttribute("titre", "Batch Sandre");
     model.addAttribute("entite", new SearchEntite());
@@ -95,14 +97,14 @@ public class BatchController {
 
   /**
    * Upload file and run Info batch.
-   * @param file the HTTP submitted file. 
    * @param model MVC model passed to JSP.
+   * @param file the HTTP submitted file. 
    * @return View for the page.
    * @throws IOException if there was a problem recovering and saving file.
    */
   @RequestMapping(value = "/info", method = RequestMethod.POST)
-  public String infoPost(@RequestParam("file") MultipartFile file,
-                         Model model)
+  public String infoPost(final Model model,
+                         @RequestParam("file") final MultipartFile file)
     throws IOException {
     log.debug("Posting to /batch/info");
     model.addAttribute("titre", "Batch Info");
@@ -126,14 +128,14 @@ public class BatchController {
 
   /**
    * Upload file and run Sandre import batch.
-   * @param file the HTTP submitted file. 
    * @param model MVC model passed to JSP.
+   * @param file the HTTP submitted file. 
    * @return View for the page.
    * @throws IOException if there was a problem recovering and saving file.
    */
   @RequestMapping(value = "/sandre", method = RequestMethod.POST)
-  public DeferredResult<String> sandrePost(@RequestParam("file") MultipartFile file,
-                                           Model model)
+  public DeferredResult<String> sandrePost(final Model model,
+                                           @RequestParam("file") final MultipartFile file)
     throws IOException {
     log.debug("Posting to /batch/sandre");
     model.addAttribute("titre", "Batch Sandre");

@@ -57,13 +57,13 @@ public class ReferentielController {
    * Entite search mapping
    * Recherche d'entité (commune, région, département, bassin, délégation) par
    * code.
-   * @param entite
    * @param model
+   * @param entite
    * @return redirect to the suitable entity search
    */
   @RequestMapping("/entiteSearch")
-  public String entiteSearch(@ModelAttribute SearchEntite entite,
-                             Model model) {
+  public String entiteSearch(final Model model,
+                             @ModelAttribute final SearchEntite entite) {
     log.info("Recherche d'entités, type : {}, code :{}",
              entite.getType(), entite.getCode());
     if(entite.getCode() != null && !entite.getCode().isEmpty()) {
@@ -78,17 +78,17 @@ public class ReferentielController {
 
   /**
    * Region Search mapping.
-   * @param code INSEE code for Region.
    * @param model MVC model passed to JSP.
+   * @param code INSEE code for Region.
    * @return View for the page.
    */
   @RequestMapping(value = "/region", method = RequestMethod.GET)
-  public String regionsearch(@RequestParam(value = "code", required = false) String code,
-                             Model model) {
+  public String regionsearch(final Model model,
+                             @RequestParam(value = "code", required = false) final String code) {
     log.debug("Search for region: {}", code);
     if (code != null) {
       Region region = regionService.getRegionByCode(code, new Date());
-      return (regiondisplay(region, model));
+      return (regiondisplay(model, region));
     }
     model.addAttribute("titre", "Recherche Region");
     model.addAttribute("region", new Region());
@@ -97,37 +97,37 @@ public class ReferentielController {
 
   /**
    * Region Search mapping.
-   * @param criteria Region search criteria entered in form.
-   * @param result binding to Region object result.
    * @param model MVC model passed to JSP.
+   * @param result binding to Region object result.
+   * @param criteria Region search criteria entered in form.
    * @return View for the page.
    */
   @RequestMapping(value = "/region", method = RequestMethod.POST)
-  public String regiondisplay(@ModelAttribute("region") Region criteria, 
-                              BindingResult result,
-                              Model model) {
+  public String regiondisplay(final Model model,
+                              final BindingResult result,
+                              @ModelAttribute("region") final Region criteria) {
     log.debug("Search for region with criteria: {}", criteria);
     if (result.hasErrors()) {
       return "error";
     }
     Region region = regionService.getRegionByCode(criteria.getCodeInsee(), new Date());
-    return (regiondisplay(region, model));
+    return (regiondisplay(model, region));
   }
 
   /**
    * Region Search mapping.
-   * @param code INSEE code for Region.
    * @param model MVC model passed to JSP.
+   * @param code INSEE code for Region.
    * @return View for the page.
    */
   @RequestMapping(value = "/region/{code}")
-  public String regiondisplay(@PathVariable("code") String code, 
-                              Model model) {
+  public String regiondisplay(final Model model,
+                              @PathVariable("code") final String code) {
     log.debug("Display region: {}", code);
     if (code != null) {
       Region region = regionService.getRegionByCode(code, new Date());
       if (region != null) {
-        return (regiondisplay(region, model));
+        return (regiondisplay(model, region));
       }
     }
     return "redirect:/referentiel/region";
@@ -138,8 +138,8 @@ public class ReferentielController {
    * @param model the Spring MVC model.
    * @return View for the region display page.
    */
-  private String regiondisplay(Region region, 
-                               Model model) {
+  private String regiondisplay(final Model model,
+                               final Region region) {
     model.addAttribute("titre", "Region");
     model.addAttribute("region", region);
     return "regiondisplay";
@@ -147,13 +147,13 @@ public class ReferentielController {
 
   /**
    * Departement Search mapping.
-   * @param code INSEE code for Departement.
    * @param model MVC model passed to JSP.
+   * @param code INSEE code for Departement.
    * @return View for the page.
    */
   @RequestMapping(value = "/departement", method = RequestMethod.GET)
-  public String departementsearch(@RequestParam(value = "code", required = false) String code,
-                                  Model model) {
+  public String departementsearch(final Model model,
+                                  @RequestParam(value = "code", required = false) final String code) {
     log.debug("Search for departement: {}", code);
     model.addAttribute("titre", "Recherche Département");
     return "todo";
@@ -161,13 +161,13 @@ public class ReferentielController {
 
   /**
    * Bassin Search mapping.
-   * @param code Sandre code for Bassin.
    * @param model MVC model passed to JSP.
+   * @param code Sandre code for Bassin.
    * @return View for the page.
    */
   @RequestMapping(value = "/bassin", method = RequestMethod.GET)
-  public String bassinsearch(@RequestParam(value = "code", required = false) String code,
-                             Model model) {
+  public String bassinsearch(final Model model,
+                             @RequestParam(value = "code", required = false) final String code) {
     log.debug("Search for bassin: {}", code);
     model.addAttribute("titre", "Recherche Bassin");
     return "todo";
@@ -175,13 +175,13 @@ public class ReferentielController {
 
   /**
    * Delegation Search mapping.
-   * @param code Delegation code.
    * @param model MVC model passed to JSP.
+   * @param code Delegation code.
    * @return View for the page.
    */
   @RequestMapping(value = "/delegation", method = RequestMethod.GET)
-  public String delegationsearch(@RequestParam(value = "code", required = false) String code,
-                                 Model model) {
+  public String delegationsearch(final Model model,
+                                 @RequestParam(value = "code", required = false) final String code) {
     log.debug("Search for delegation: {}", code);
     model.addAttribute("titre", "Recherche Délégation");
     return "todo";

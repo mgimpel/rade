@@ -58,6 +58,7 @@ public class CommuneController {
   public static final String REQUEST_MAPPING = "/referentiel/commune";
   /** Default name for the export file. */
   public static final String DEFAULT_EXPORT_FILENAME = "export-communes";
+
   /** Commune Service. */
   @Autowired
   private CommunePlusService communePlusService;
@@ -69,8 +70,8 @@ public class CommuneController {
   private DepartementService departementService;
 
   /**
-   * Attribut de session du contrôleur
-   * @return Objet de recherche de commune
+   * Session Attribute Bean for Search Parameters and Result.
+   * @return Session Attribute Bean for Search Parameters and Result.
    */
   @ModelAttribute("searchCommune")
   private SearchCommune searchCommune() {
@@ -78,39 +79,39 @@ public class CommuneController {
   }
 
   /**
-   * Appel de la page de recherche de commune. 
-   * @param model
-   * @param searchCommune 
-   * @return Vue correspondant à liste des résultats
+   * Get the Search Form. 
+   * @param model MVC model passed to JSP.
+   * @param searchCommune search details for the model.
+   * @return the corresponding view.
    */
   @RequestMapping(method = RequestMethod.GET)
-  public String getSearchForm(Model model,
-                              @ModelAttribute("searchCommune") SearchCommune searchCommune) {
+  public String getSearchForm(final Model model,
+                              @ModelAttribute("searchCommune") final SearchCommune searchCommune) {
     return viewCommuneSearch(model, searchCommune);
   }
 
   /**
-   * Remise à zéro du formulaire de recherche
-   * @param model
-   * @param searchCommune 
-   * @return Vue correspondant à liste des résultats
+   * Reset the search form.
+   * @param model MVC model passed to JSP.
+   * @param searchCommune search details for the model.
+   * @return redirect back to the search form.
    */
   @RequestMapping(params = "annuler", value = "/resultats", method = RequestMethod.POST)
-  public String resetSearchForm(Model model,
-                                @ModelAttribute("searchCommune") SearchCommune searchCommune) {
+  public String resetSearchForm(final Model model,
+                                @ModelAttribute("searchCommune") final SearchCommune searchCommune) {
     searchCommune.reset();
     return "redirect:/referentiel/commune";
   }
 
   /**
-   * Recherche d'une commune via la méthode POST en fonction d'une liste de critères
-   * @param searchCommune 
-   * @param model
-   * @return Vue de la page de recherche ou des résultats
+   * Submit (POST) the search form.
+   * @param model MVC model passed to JSP.
+   * @param searchCommune search details for the model.
+   * @return the corresponding view or redirect appropriately.
    */
   @RequestMapping(params = "valider", value = "/resultats", method = RequestMethod.POST)
-  public String submitSearchForm(Model model,
-                                 @ModelAttribute("searchCommune") SearchCommune searchCommune) {
+  public String submitSearchForm(final Model model,
+                                 @ModelAttribute("searchCommune") final SearchCommune searchCommune) {
     log.debug("Search for commune with criteria: {}", searchCommune);
     String dept   = "-1".equals(searchCommune.getCodeDepartement())
                    ? null : searchCommune.getCodeDepartement();
@@ -149,16 +150,15 @@ public class CommuneController {
   }
 
   /**
-   * Appel de la page de résultats de commune.
-   * @param model
-   * @param searchCommune 
-   * @return Vue correspondant à liste des résultats
+   * Get the search result list.
+   * @param model MVC model passed to JSP.
+   * @param searchCommune search details for the model.
+   * @return the corresponding view or redirect appropriately.
    */
   @RequestMapping(value = "/resultats", method = RequestMethod.GET)
-  public String getResultList(Model model,
-                              @ModelAttribute("searchCommune") SearchCommune searchCommune) {
+  public String getResultList(final Model model,
+                              @ModelAttribute("searchCommune") final SearchCommune searchCommune) {
     if(searchCommune.getCommunes() != null && searchCommune.getCommunes().size() > 1) {
-      searchCommune.buildListeResultats();
       return viewCommuneResults(model, searchCommune);
     } else {
       return "redirect:/referentiel/commune";
@@ -166,18 +166,18 @@ public class CommuneController {
   }
 
   /**
-   * Recherche d'une commune via son code Insee 
+   * Get the Commune display page.
+   * @param model MVC model passed to JSP.
    * @param code Code INSEE de la commune affichée
    * @param dateParam Date de validité de la commune passée en tant que paramètre optionnel 
-   * @param model
-   * @return Vue de la page de recherche ou des résultats en fonction du nombre 
-   * de résultats
+   * @param searchCommune search details for the model.
+   * @return the corresponding view.
    */
   @RequestMapping(value = "/{code}")
-  public String getDisplayPage(Model model,
-                               @PathVariable("code") String code,
-                               @RequestParam(value = "date", required = false) String dateParam,
-                               @ModelAttribute("searchCommune") SearchCommune searchCommune) {
+  public String getDisplayPage(final Model model,
+                               @PathVariable("code") final String code,
+                               @RequestParam(value = "date", required = false) final String dateParam,
+                               @ModelAttribute("searchCommune") final SearchCommune searchCommune) {
     Date dateValidite = DateConversionUtils.urlStringToDate(dateParam, new Date());
     log.debug("Display commune: {}", code);
     if (code != null) {
@@ -198,12 +198,39 @@ public class CommuneController {
   }
 
   /**
-   * Initialisation de la page d'affichage d'une commune
-   * @param displayCommune 
-   * @param model
-   * @return Vue due la page de recherche
+   * Setup model and return view for the search page.
+   * @param model MVC model passed to JSP.
+   * @param searchCommune search details for the model.
+   * @return View for the search page
    */
-  private String viewCommuneDisplay(Model model, DisplayCommune displayCommune) {
+  private String viewCommuneSearch(final Model model,
+                                   final SearchCommune searchCommune) {
+    model.addAttribute("titre", "Rechercher une Commune");
+    model.addAttribute("searchCommune", searchCommune);
+    return "communesearch";
+  }
+
+  /**
+   * Setup model and return view for the result page.
+   * @param model MVC model passed to JSP.
+   * @param searchCommune search details for the model.
+   * @return View for the result page
+   */
+  private String viewCommuneResults(final Model model,
+                                    final SearchCommune searchCommune) {
+    model.addAttribute("titre", "Liste des résultats");
+    model.addAttribute("searchCommune", searchCommune);
+    return "communeresults";
+  }
+
+  /**
+   * Setup model and return view for the display page.
+   * @param model MVC model passed to JSP.
+   * @param displayCommune entity details for the model.
+   * @return View for the display page
+   */
+  private String viewCommuneDisplay(final Model model,
+                                    final DisplayCommune displayCommune) {
     model.addAttribute("titre", "Commune / Détail commune "
                                  + displayCommune.getCodeInsee()
                                  + " "
@@ -213,40 +240,13 @@ public class CommuneController {
   }
 
   /**
-   * Initialisation de la page de recherche
-   * @param searchCommune 
-   * @param model
-   * @return Vue due la page de recherche
-   */
-  private String viewCommuneSearch(Model model, SearchCommune searchCommune) {
-    if(searchCommune.getDateEffet() == null){
-      searchCommune.setDateEffet(new Date());
-    }
-    model.addAttribute("titre", "Rechercher une Commune");
-    model.addAttribute("searchCommune", searchCommune);
-    return "communesearch";
-  }
-
-  /**
-   * Initialisation de la page de résultats
-   * @param searchCommune 
-   * @param model
-   * @return Vue due la page de résultats
-   */
-  private String viewCommuneResults(Model model, SearchCommune searchCommune) {
-    model.addAttribute("titre", "Liste des résultats");
-    model.addAttribute("searchCommune", searchCommune);
-    return "communeresults";
-  }
-
-  /**
    * Export de la liste des communes au format Excel
-   * @param response 
+   * @param response Servlet Response Object.
    * @param searchCommune Objet contenant la recherche
    */
   @RequestMapping(value = "/export", method = RequestMethod.POST)
-  public void exportExcel(HttpServletResponse response,
-                          @ModelAttribute("searchCommune") SearchCommune searchCommune) {
+  public void exportExcel(final HttpServletResponse response,
+                          @ModelAttribute("searchCommune") final SearchCommune searchCommune) {
     response.setContentType("application/vnd.ms-excel");
     response.setHeader("Content-Disposition",
                        "attachment; filename=\"" + DEFAULT_EXPORT_FILENAME + "\"");

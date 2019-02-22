@@ -28,13 +28,12 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 /**
  * Affichage d'une commune.
  * @author sophie.belin
  */
-@Getter @NoArgsConstructor
+@Getter
 public class DisplayCommune {
   private String codeInsee;
   private String motifModification;
@@ -57,7 +56,7 @@ public class DisplayCommune {
    * Constructor.
    * @param communePlusWithGenealogie Commune details.
    */
-  public DisplayCommune(CommunePlusWithGenealogie communePlusWithGenealogie) {
+  public DisplayCommune(final CommunePlusWithGenealogie communePlusWithGenealogie) {
     CommunePlus commune = communePlusWithGenealogie.getCommunePlus();
     this.codeInsee = commune.getCodeInsee();
     this.nomMajuscule = commune.getNomMajuscule();
@@ -92,9 +91,9 @@ public class DisplayCommune {
    * @param departement Departement details.
    * @param region Region details.
    */
-  public DisplayCommune(CommunePlusWithGenealogie communePlusWithGenealogie,
-                        Departement departement,
-                        Region region) {
+  public DisplayCommune(final CommunePlusWithGenealogie communePlusWithGenealogie,
+                        final Departement departement,
+                        final Region region) {
     this(communePlusWithGenealogie);
     this.nomDepartement = departement.getNomEnrichi();
     this.codeDepartement = departement.getCodeInsee();
@@ -102,12 +101,15 @@ public class DisplayCommune {
   }
 
   /**
-   * Renvoie l'url correspondant à l'entité.
-   * @param codeInsee 
+   * Returns the URL to display the Entity.
+   * @param appContext application Context
+   * @param codeInsee the code INSEE of the Entity
    * @param dateFinValidite 
-   * @return L'url permettant d'afficher l'entité
+   * @return the URL to display the Entity.
    */
-  public String getUrlEntite(String appContext, String codeInsee, Date dateFinValidite) {
+  public static String getUrlEntite(final String appContext,
+                                    final String codeInsee,
+                                    final Date dateFinValidite) {
     if(codeInsee == null) {
       return null;
     }

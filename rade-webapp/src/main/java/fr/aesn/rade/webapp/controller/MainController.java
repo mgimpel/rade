@@ -52,7 +52,7 @@ public class MainController {
    * @return View for the Login page.
    */
   @RequestMapping("/login")
-  public String login(Model model) {
+  public String login(final Model model) {
     log.debug("Requesting /login");
     model.addAttribute("titre", "Login");
     return "login";
@@ -76,12 +76,21 @@ public class MainController {
     return "redirect:/login?logout";
   }
 
+  /**
+   * Help page.
+   * @param model MVC model passed to JSP.
+   * @return View for the Help page.
+   */
   @RequestMapping("/aide")
-  public String aide(Model model) {
+  public String aide(final Model model) {
     model.addAttribute("titre", "Aide");
     return "aide";
   }
 
+  /**
+   * FAQ page.
+   * @return redirect to help page.
+   */
   @RequestMapping("/faq")
   public String faq() {
     return "redirect:/aide";

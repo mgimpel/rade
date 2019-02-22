@@ -42,7 +42,6 @@ public class SearchCommune {
   private Date dateEffet;
   // Résultats
   private List<CommunePlusWithGenealogie> communes;
-  private List<DisplayCommune> listeResultats;
   private int page;
 
   /**
@@ -70,11 +69,6 @@ public class SearchCommune {
     nomEnrichi = null;
     dateEffet = date;
     page = 1;
-    if(listeResultats != null) {
-      listeResultats.clear();
-    } else {
-      listeResultats = new ArrayList<>();
-    }
     communes = null;
   }
 
@@ -92,7 +86,7 @@ public class SearchCommune {
    * Returns the index of the first item on the current page.
    * @return the index of the first item on the current page.
    */
-  public int getFirstCommuneIndex() {
+  private int getFirstCommuneIndex() {
     if(communes == null || communes.isEmpty()) {
       return 1;
     }
@@ -105,7 +99,7 @@ public class SearchCommune {
    * Returns the index of the last item on the current page.
    * @return the index of the last item on the current page.
    */
-  public int getLastCommuneIndex() {
+  private int getLastCommuneIndex() {
     if(communes == null || communes.isEmpty()) {
       return 1;
     }
@@ -128,9 +122,10 @@ public class SearchCommune {
   }
 
   /**
-   * Build the result list for the current page number.
+   * Build and return the result list for the current page number.
+   * @return the result list for the current page number.
    */
-  public void buildListeResultats() {
+  public List<DisplayCommune> getListeResultats() {
     List<DisplayCommune> list = new ArrayList<>();
     int firstCommuneIndex = getFirstCommuneIndex();
     int lastCommuneIndex = getLastCommuneIndex();
@@ -138,6 +133,6 @@ public class SearchCommune {
       CommunePlusWithGenealogie commune = communes.get(i);
       list.add(new DisplayCommune(commune));
     }
-    listeResultats = list;
+    return list;
   }
 }

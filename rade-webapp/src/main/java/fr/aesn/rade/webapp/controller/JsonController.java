@@ -70,8 +70,8 @@ public class JsonController {
    */
   @RequestMapping(value = "/deptlist", method = RequestMethod.GET)
   public @ResponseBody Map<String,String> getDepartementList(
-          @RequestParam(value = "code", required = false) String rawCode,
-          @RequestParam(value = "date", required = false) String rawDate) {
+          @RequestParam(value = "code", required = false) final String rawCode,
+          @RequestParam(value = "date", required = false) final String rawDate) {
     Date date = decodeDate(rawDate);
     String code = rawCode == null || rawCode.isEmpty() || "-1".equals(rawCode)
                 ? null
@@ -92,7 +92,7 @@ public class JsonController {
    */
   @RequestMapping(value = "/regionlist", method = RequestMethod.GET)
   public @ResponseBody Map<String,String> getRegionList(
-          @RequestParam(value = "date", required = false) String rawDate) {
+          @RequestParam(value = "date", required = false) final String rawDate) {
     Date date = decodeDate(rawDate);
     List<Region> regions = regionService.getAllRegion(date);
     HashMap<String, String> list = new HashMap<>();
