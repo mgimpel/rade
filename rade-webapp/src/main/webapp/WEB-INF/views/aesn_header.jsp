@@ -86,7 +86,7 @@
 				<!-- Breadcrumb Row -->
 				<div class="row aesn-breadcrumb">
 					<div class="col-auto">
-						<p>Vous êtes ici:</p>
+						<p><spring:message code="header.breadcrumb.here"/></p>
 					</div>
 					<div class="col-auto">
 						<nav aria-label="breadcrumb aesn-breadcrumb-nav">
@@ -106,7 +106,7 @@
 								<option value="bassin">Bassin</option>
 								<option value="delegation">Délégation</option>
 							</select>
-							<button class="form-control form-control-sm mr-3" type="submit">Rechercher</button>
+							<button class="form-control form-control-sm mr-3" type="submit"><spring:message code="header.breadcrumb.search.button"/></button>
 						</form>
 					</div>
 				</div>
@@ -117,34 +117,34 @@
 							<ul class="navbar-nav">
 								<li class="nav-item dropdown active">
 									<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-										Référentiel
+										<spring:message code="header.menu.title.referentiel"/>
 									</a>
 									<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-										<a class="dropdown-item" href="${path}/referentiel/region">Recherche Région</a>
-										<a class="dropdown-item" href="${path}/referentiel/departement">Recherche Département</a>
-										<a class="dropdown-item" href="${path}/referentiel/commune">Recherche Commune</a>
-										<a class="dropdown-item" href="${path}/referentiel/bassin">Recherche Bassin</a>
-										<a class="dropdown-item" href="${path}/referentiel/delegation">Recherche Délégation</a>
+										<a class="dropdown-item" href="${path}/referentiel/region"><spring:message code="header.menu.item.searchregion"/></a>
+										<a class="dropdown-item" href="${path}/referentiel/departement"><spring:message code="header.menu.item.searchdepartment"/></a>
+										<a class="dropdown-item" href="${path}/referentiel/commune"><spring:message code="header.menu.item.searchcommune"/></a>
+										<a class="dropdown-item" href="${path}/referentiel/bassin"><spring:message code="header.menu.item.searchbassin"/></a>
+										<a class="dropdown-item" href="${path}/referentiel/delegation"><spring:message code="header.menu.item.searchdelegation"/></a>
 									</div>
 								</li>
 								<li class="nav-item dropdown active">
 									<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-										Historique
+										<spring:message code="header.menu.title.history"/>
 									</a>
 									<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-										<a class="dropdown-item" href="${path}/audit/search">Recherche Audit</a>
+										<a class="dropdown-item" href="${path}/audit/search"><spring:message code="header.menu.item.searchaudit"/></a>
 									</div>
 								</li>
 								<sec:authorize access="hasAuthority('RAD_ADMIN')">
 								<li class="nav-item dropdown active">
 									<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-										Administration
+										<spring:message code="header.menu.title.admin"/>
 									</a>
 									<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-										<a class="dropdown-item" href="${path}/actuator/info">Info Rade</a>
-										<a class="dropdown-item" href="${path}/actuator/health">Etat Rade</a>
-										<a class="dropdown-item" href="${path}/actuator/logfile">Log Rade</a>
-										<a class="dropdown-item" href="${path}/services">Services</a>
+										<a class="dropdown-item" href="${path}/actuator/info"><spring:message code="header.menu.item.admin.info"/></a>
+										<a class="dropdown-item" href="${path}/actuator/health"><spring:message code="header.menu.item.admin.status"/></a>
+										<a class="dropdown-item" href="${path}/actuator/logfile"><spring:message code="header.menu.item.admin.logs"/></a>
+										<a class="dropdown-item" href="${path}/services"><spring:message code="header.menu.item.admin.services"/></a>
 									</div>
 								</li>
 								</sec:authorize>

@@ -33,17 +33,17 @@
 				<form name="loginForm" action="/login" method="post">
 					<div class="form-group">
 						<div class="input-group">
-							<div class="input-group-prepend input-group-text btn-aesn"><i class="fas fa-user"></i></div>
+							<div class="input-group-prepend input-group-text btn-aesn"><i class="fas fa-user" aria-hidden="true"></i><span class="sr-only"><spring:message code="login.username"/></span></div>
 							<input type="text" class="form-control form-aesn" name="username" placeholder="<spring:message code="login.username.placeholder"/>" required="" autofocus="">
 						</div>
 					</div>
 					<div class="form-group">
 						<div class="input-group input-group-md">
-							<div class="input-group-prepend input-group-text btn-aesn"><i class="fas fa-lock"></i></div>
+							<div class="input-group-prepend input-group-text btn-aesn"><i class="fas fa-lock" aria-hidden="true"></i><span class="sr-only"><spring:message code="login.password"/></span></div>
 							<input type="password" class="form-control form-aesn" name="password" placeholder="<spring:message code="login.password.placeholder"/>" required="">
 						</div>
 					</div>
-					<button type="submit" class="form-control btn-aesn" name="submit"><i class="fas fa-sign-in-alt"></i> <spring:message code="login.submit"/></button>
+					<button type="submit" class="form-control btn-aesn" name="submit"><i class="fas fa-sign-in-alt" aria-hidden="true"></i> <spring:message code="login.submit"/></button>
 				</form>
 			</div>
 		</div>
