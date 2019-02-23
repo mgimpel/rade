@@ -56,8 +56,8 @@
 				</div>
 				<div class="row mt-1">
 					<div class="col-auto">
-						<sec:authorize access="isAuthenticated()"><b><sec:authentication property="principal.username" /></b><br><a href='${path}/logout'>Se déconnecter</a></sec:authorize>
-						<sec:authorize access="!isAuthenticated()"><br><a href='${path}/login'>Se connecter</a></sec:authorize>
+						<sec:authorize access="isAuthenticated()"><b><sec:authentication property="principal.username" /></b><br><a href='${path}/logout'><spring:message code="header.logout"/></a></sec:authorize>
+						<sec:authorize access="!isAuthenticated()"><br><a href='${path}/login'><spring:message code="header.login"/></a></sec:authorize>
 					</div>
 				</div>
 			</div>
@@ -86,7 +86,7 @@
 				<!-- Breadcrumb Row -->
 				<div class="row aesn-breadcrumb">
 					<div class="col-auto">
-						<p><spring:message code="header.breadcrumb.here"/></p>
+						<p><spring:message code="header.breadcrumb.here"/>:</p>
 					</div>
 					<div class="col-auto">
 						<nav aria-label="breadcrumb aesn-breadcrumb-nav">
@@ -98,13 +98,13 @@
 					</div>
 					<div class="col-auto ml-auto">
 						<form id="entite" class="form-inline" action="${path}/referentiel/entiteSearch" method="post">
-							<input class="form-control" type="text" id="code" name="code" placeholder="code" value="" maxlength="5"/>
+							<input class="form-control" type="text" id="code" name="code" placeholder="<spring:message code="header.breadcrumb.search.placeholder"/>" value="" maxlength="5"/>
 							<select class="form-control" id="type" name="type" disabled="disabled">
-								<option value="region">Région</option>
-								<option value="dept">Département</option>
-								<option value="commune" selected="selected">Commune</option>
-								<option value="bassin">Bassin</option>
-								<option value="delegation">Délégation</option>
+								<option value="region"><spring:message code="header.breadcrumb.search.option.region"/></option>
+								<option value="dept"><spring:message code="header.breadcrumb.search.option.department"/></option>
+								<option value="commune" selected="selected"><spring:message code="header.breadcrumb.search.option.commune"/></option>
+								<option value="bassin"><spring:message code="header.breadcrumb.search.option.bassin"/></option>
+								<option value="delegation"><spring:message code="header.breadcrumb.search.option.delegation"/></option>
 							</select>
 							<button class="form-control form-control-sm mr-3" type="submit"><spring:message code="header.breadcrumb.search.button"/></button>
 						</form>

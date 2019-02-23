@@ -18,6 +18,7 @@
 <%/* $Id$ */%>
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <jsp:include page="aesn_header.jsp" />
 <script>
@@ -51,7 +52,7 @@ function getDepts() {
 	$.getJSON("${pageContext.request.contextPath}/referentiel/json/deptlist",
 			{"code": $("#codeRegion").val(), "date": $("#dateEffet").val()},
 			function(data){
-		$("#codeDepartement").html(buildOptions(data, currentDept, "Sélectionner un département..."));
+		$("#codeDepartement").html(buildOptions(data, currentDept, "<spring:message code='communesearch.option.choosedept'/>"));
 	});
 }
 function getRegionsAndDepts() {
@@ -60,7 +61,7 @@ function getRegionsAndDepts() {
 	$.getJSON("${pageContext.request.contextPath}/referentiel/json/regionlist",
 			{"date": $("#dateEffet").val()},
 			function(data){
-		$("#codeRegion").html(buildOptions(data, currentReg, "Sélectionner une région..."));
+		$("#codeRegion").html(buildOptions(data, currentReg, "<spring:message code='communesearch.option.chooseregion'/>"));
 		getDepts(currentDept);
 	});
 }
@@ -68,7 +69,7 @@ function getBassins() {
 	var currentBassin = (arguments.length > 0 && arguments[0] !== null) > 0 ? arguments[0] : $("#codeCirconscription").val();
 	$.getJSON("${pageContext.request.contextPath}/referentiel/json/bassinlist",
 			function(data){
-		$("#codeCirconscription").html(buildOptions(data, currentBassin, "Sélectionner une circonscription..."));
+		$("#codeCirconscription").html(buildOptions(data, currentBassin, "<spring:message code='communesearch.option.choosebassin'/>"));
 	});
 }
 function resetForm() {
@@ -88,16 +89,16 @@ function validateForm() {
 	var circonscription = $("#codeCirconscription").val();
 	var codeInsee = $("#codeInsee").val();
 	if(codeInsee && !/^[0-9][0-9abAB][0-9]{3}$/.test(codeInsee)) {
-		radealert("Le code INSEE doit être composé de cinq chiffres ou lettres");
+		radealert("<spring:message code='communesearch.error.code'/>");
 		return false;
 	}
 	var dateEffet = $("#dateEffet").val();
 	if(dateEffet && !/^[12][0-9]{3}-[01][0-9]-[0-3][0-9]$/.test(dateEffet)) {
-		radealert("La date n'est pas valide");
+		radealert("<spring:message code='communesearch.error.date'/>");
 		return false;
 	}
 	if(codeInsee == "" && nomEnrichi == "" && codeRegion == "-1" && codeDepartement == "-1" && circonscription == "-1") {
-		radealert("Au moins un des champs doit être renseigné");
+		radealert("<spring:message code='communesearch.error.empty'/>");
 		return false;
 	}
 	return true;
@@ -112,15 +113,15 @@ function validateForm() {
 					<table class="w-100">
 						<tbody style="vertical-align:baseline;">
 							<tr>
-								<td class="text-right"><form:label path="codeInsee">Code INSEE:</form:label></td>
+								<td class="text-right"><form:label path="codeInsee"><spring:message code='communesearch.label.code'/>:</form:label></td>
 								<td><form:input class="pt-0 pb-0 pl-1" path="codeInsee"/></td>
 							</tr>
 							<tr>
-								<td class="text-right"><form:label path="nomEnrichi">Nom:</form:label></td>
+								<td class="text-right"><form:label path="nomEnrichi"><spring:message code='communesearch.label.name'/>:</form:label></td>
 								<td><form:input class="input-aesn-20 pt-0 pb-0 pl-1" path="nomEnrichi"/></td>
 							</tr>
 							<tr>
-								<td class="text-right"><form:label path="codeRegion">Region:</form:label></td>
+								<td class="text-right"><form:label path="codeRegion"><spring:message code='communesearch.label.region'/>:</form:label></td>
 								<td>
 									<form:select class="input-aesn-20" path="codeRegion" onchange="getDepts();">
 										<form:option value="-1" label="Sélectionner une région..." />
@@ -128,7 +129,7 @@ function validateForm() {
 								</td>
 							</tr>
 							<tr>
-								<td class="text-right"><form:label path="codeDepartement">Département:</form:label></td>
+								<td class="text-right"><form:label path="codeDepartement"><spring:message code='communesearch.label.department'/>:</form:label></td>
 								<td>
 									<form:select class="input-aesn-20" path="codeDepartement">
 										<form:option value="-1" label="Sélectionner un département..." />
@@ -136,7 +137,7 @@ function validateForm() {
 								</td>
 							</tr>
 							<tr>
-								<td class="text-right"><form:label path="codeCirconscription">Circonscription bassin:</form:label></td>
+								<td class="text-right"><form:label path="codeCirconscription"><spring:message code='communesearch.label.bassin'/>:</form:label></td>
 								<td>
 									<form:select class="input-aesn-20" path="codeCirconscription">
 										<form:option value="-1" label="Sélectionner une circonscription..." />
@@ -144,14 +145,14 @@ function validateForm() {
 								</td>
 							</tr>
 							<tr>
-								<td class="text-right"><form:label path="dateEffet">Date d'effet:</form:label></td>
+								<td class="text-right"><form:label path="dateEffet"><spring:message code='communesearch.label.date'/>:</form:label></td>
 								<td><form:input type="date" path="dateEffet" onchange="getRegionsAndDepts();"/></td>
 							</tr>
 							<tr>
 								<td class="text-right" colspan="2">
 									<input type="hidden" name="valider" id="typeAction">
-									<input type="button" class="btn btn-sm btn-aesn" value="Annuler" onclick="resetForm();">
-									<input type="button" class="btn btn-sm btn-aesn" value="Rechercher" onclick="submitForm();">
+									<input type="button" class="btn btn-sm btn-aesn" value="<spring:message code='communesearch.button.reset'/>" onclick="resetForm();">
+									<input type="button" class="btn btn-sm btn-aesn" value="<spring:message code='communesearch.button.submit'/>" onclick="submitForm();">
 								</td>
 							</tr>
 						</tbody>

@@ -19,6 +19,7 @@
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@page import="fr.aesn.rade.common.util.DateConversionUtils" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@taglib prefix="aesn" tagdir="/WEB-INF/tags"%>
 <jsp:include page="aesn_header.jsp" />
@@ -28,22 +29,22 @@
 			<div class="card-body card-body-aesn">
 				<div class="row justify-content-center">
 					<c:if test="${searchCommune.codeInsee != null && !searchCommune.codeInsee.isEmpty()}">
-						<div class="col text-center"><strong>Code INSEE</strong> : ${searchCommune.codeInsee}</div>
+						<div class="col text-center"><strong><spring:message code='communeresult.label.code'/></strong> : ${searchCommune.codeInsee}</div>
 					</c:if>
 					<c:if test="${searchCommune.nomEnrichi != null && !searchCommune.nomEnrichi.isEmpty()}">
-						<div class="col text-center"><strong>Nom</strong> : ${searchCommune.nomEnrichi}</div>
+						<div class="col text-center"><strong><spring:message code='communeresult.label.name'/></strong> : ${searchCommune.nomEnrichi}</div>
 					</c:if>
 					<c:if test="${searchCommune.codeRegion != null && !searchCommune.codeRegion.equals('-1')}">
-						<div class="col text-center"><strong>Région</strong> : ${searchCommune.codeRegion}</div>
+						<div class="col text-center"><strong><spring:message code='communeresult.label.region'/></strong> : ${searchCommune.codeRegion}</div>
 					</c:if>
 					<c:if test="${searchCommune.codeDepartement != null && !searchCommune.codeDepartement.equals('-1')}">
-						<div class="col text-center"><strong>Département</strong> : ${searchCommune.codeDepartement}</div>
+						<div class="col text-center"><strong><spring:message code='communeresult.label.department'/></strong> : ${searchCommune.codeDepartement}</div>
 					</c:if>
 					<c:if test="${searchCommune.codeCirconscription != null && !searchCommune.codeCirconscription.equals('-1')}">
-						<div class="col text-center"><strong>Circonscription</strong> : ${searchCommune.codeCirconscription}</div>
+						<div class="col text-center"><strong><spring:message code='communeresult.label.basin'/></strong> : ${searchCommune.codeCirconscription}</div>
 					</c:if>
 					<c:if test="${searchCommune.dateEffet != null}">
-						<div class="col text-center"><strong>Date d'effet</strong> : ${DateConversionUtils.toUiString(searchCommune.dateEffet)}</div>
+						<div class="col text-center"><strong><spring:message code='communeresult.label.date'/></strong> : ${DateConversionUtils.toUiString(searchCommune.dateEffet)}</div>
 					</c:if>
 				</div>
 			</div>
@@ -51,16 +52,16 @@
 		<aesn:paging baseUrl="/referentiel/commune/resultats?page=" currentPage="${searchCommune.getPage()}" maxPage="${searchCommune.getPageMax()}"/>
 		<table class="table table-sm table-bordered table-striped table-aesn w-100 mb-0">
 			<tr>
-				<th colspan="4" class="w-50">Commune</th>
-				<th colspan="2">Entités mères</th>
+				<th colspan="4" class="w-50"><spring:message code='communeresult.tablecol.commune'/></th>
+				<th colspan="2"><spring:message code='communeresult.tablecol.parents'/></th>
 			</tr>
 			<tr>
-				<th style="width: 6%">Code</th>
-				<th style="width: 20%">Nom</th>
-				<th style="width: 12%">Début validité</th>
-				<th style="width: 12%">Fin validité</th>
-				<th class="w-25">Motif de modification</th>
-				<th>Code INSEE</th>
+				<th style="width: 6%"><spring:message code='communeresult.tablecol.commune.code'/></th>
+				<th style="width: 20%"><spring:message code='communeresult.tablecol.commune.name'/></th>
+				<th style="width: 12%"><spring:message code='communeresult.tablecol.commune.start'/></th>
+				<th style="width: 12%"><spring:message code='communeresult.tablecol.commune.end'/></th>
+				<th class="w-25"><spring:message code='communeresult.tablecol.parents.reason'/></th>
+				<th><spring:message code='communeresult.tablecol.parents.code'/></th>
 			</tr>
 			<c:forEach items="${searchCommune.listeResultats}" var="communeDisplay">
 				<tr>
@@ -80,11 +81,11 @@
 		<aesn:paging baseUrl="/referentiel/commune/resultats?page=" currentPage="${searchCommune.getPage()}" maxPage="${searchCommune.getPageMax()}"/>
 		<div class="row justify-content-between">
 			<div class="col-auto">
-				<a class="btn btn-sm btn-aesn" href="${pageContext.request.contextPath}/referentiel/commune">&lt;&lt; Retour</a>
+				<a class="btn btn-sm btn-aesn" href="${pageContext.request.contextPath}/referentiel/commune">&lt;&lt; <spring:message code='communeresult.button.back'/></a>
 			</div>
 			<div class="col-auto">
 				<form id="formExcel" action="${pageContext.request.contextPath}/referentiel/commune/export" method="POST">
-					<button class="btn btn-sm btn-aesn" type="submit">Exporter sous excel</button>
+					<button class="btn btn-sm btn-aesn" type="submit"><spring:message code='communeresult.button.export'/></button>
 				</form>
 			</div>
 		</div>
