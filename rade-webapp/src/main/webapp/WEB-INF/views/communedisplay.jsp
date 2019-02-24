@@ -27,32 +27,32 @@
 			<div class="card-body card-body-aesn">
 				<div class="row">
 					<div class="col-6">
-						<h5>Attributs commune</h5>
+						<h5><spring:message code='communedisplay.details'/></h5>
 						<div class="card card-aesn">
 							<div class="card-body card-body-aesn">
 								<table class="w-100 h-100">
 									<tr>
-										<td class="w-33">Code INSEE :</td>
+										<td class="w-33"><spring:message code='communedisplay.details.code'/> :</td>
 										<td>${displayCommune.codeInsee}</td>
 									</tr>
 									<c:if test="${displayCommune.article != '' && displayCommune.article != null}">
 										<tr>
-											<td>Article :</td>
+											<td><spring:message code='communedisplay.details.article'/> :</td>
 											<td>${displayCommune.article}</td>  
 										</tr>
 									</c:if>
 									<c:if test="${displayCommune.articleEnrichi != '' && displayCommune.articleEnrichi != null}">
 										<tr>
-											<td>Article enrichi :</td>
+											<td><spring:message code='communedisplay.details.richarticle'/> :</td>
 											<td>${displayCommune.articleEnrichi}</td>
 										</tr>
 									</c:if>
 									<tr>
-										<td>Nom commune :</td>
+										<td><spring:message code='communedisplay.details.name'/> :</td>
 										<td>${displayCommune.nomMajuscule}</td>
 									</tr>
 									<tr>
-										<td>Nom commune enrichi :</td>
+										<td><spring:message code='communedisplay.details.richname'/> :</td>
 										<td>${displayCommune.nomEnrichi}</td>
 									</tr>
 								</table>
@@ -60,21 +60,21 @@
 						</div>
 					</div>
 					<div class="col-6">
-						<h5>Rattachement commune</h5>
+						<h5><spring:message code='communedisplay.geo'/></h5>
 						<div class="card card-aesn">
 							<div class="card-body card-body-aesn">
 								<table class="w-100 h-100">
 									<tr>
-										<td class="w-33">Département :</td>
+										<td class="w-33"><spring:message code='communedisplay.geo.dept'/> :</td>
 										<td>${displayCommune.nomDepartement} (${displayCommune.codeDepartement})</td>
 									</tr>
 									<tr>
-										<td>Région :</td>
+										<td><spring:message code='communedisplay.geo.region'/> :</td>
 										<td>${displayCommune.nomRegion}</td>
 									</tr>
 									<c:if test="${displayCommune.nomBassin != null}">
 										<tr>
-											<td>Bassin :</td>
+											<td><spring:message code='communedisplay.geo.bassin'/> :</td>
 											<td>${displayCommune.nomBassin} (${displayCommune.codeBassin})</td>
 										</tr>
 									</c:if>
@@ -85,23 +85,23 @@
 				</div>
 				<div class="row mt-2">
 					<div class="col-12">
-						<h5>Données historisation INSEE</h5>
+						<h5><spring:message code='communedisplay.history'/></h5>
 						<div class="card card-aesn">
 							<div class="card-body card-body-aesn">
 								<table class="w-100 h-100">
 									<tr>
-										<td class="w-16">Début validité :</td>
+										<td class="w-16"><spring:message code='communedisplay.history.start'/> :</td>
 										<td>${DateConversionUtils.toUiString(displayCommune.debutValidite)}</td>
 									</tr>
 									<c:if test="${displayCommune.finValidite != null}">
 										<tr>
-											<td>Fin validité :</td>
+											<td><spring:message code='communedisplay.history.end'/> :</td>
 											<td>${DateConversionUtils.toUiString(displayCommune.finValidite)}</td>
 										</tr>
 									</c:if>
 									<c:if test="${displayCommune.motifModification != null}">
 										<tr>
-											<td>Motif de modification :</td>
+											<td><spring:message code='communedisplay.history.reason'/> :</td>
 											<td>${displayCommune.motifModification}</td>
 										</tr>
 									</c:if>
@@ -112,13 +112,13 @@
 				</div>
 				<div class="row mt-2">
 					<div class="col-6">
-						<h5>Entités mères</h5>
+						<h5><spring:message code='communedisplay.parents'/></h5>
 						<div class="card card-aesn">
 							<div class="card-body card-body-aesn">
 								<table class="w-100 h-100">
 									<c:if test="${displayCommune.parents.isEmpty()}">
 										<tr>
-											<td>Aucune entités mères</td>
+											<td><spring:message code='communedisplay.parents.none'/></td>
 										</tr>
 									</c:if>
 									<c:forEach items="${displayCommune.parents}" var="genealogieParent">
@@ -133,13 +133,13 @@
 						</div>
 					</div>
 					<div class="col-6">
-						<h5>Entités filles</h5>
+						<h5><spring:message code='communedisplay.children'/></h5>
 						<div class="card card-aesn">
 							<div class="card-body card-body-aesn">
 								<table class="w-100 h-100">
 									<c:if test="${displayCommune.enfants.isEmpty()}">
 										<tr>
-											<td>Aucune entités filles</td>
+											<td><spring:message code='communedisplay.children.none'/></td>
 										</tr>
 									</c:if>
 									<c:forEach items="${displayCommune.enfants}" var="genealogieEnfant">
@@ -158,7 +158,7 @@
 		</div>
 		<div class="row mt-2">
 			<div class="col-auto">
-				<a class="btn btn-sm btn-aesn" href="${pageContext.request.contextPath}/referentiel/commune/resultats">&lt;&lt; Retour</a>
+				<a class="btn btn-sm btn-aesn" href="${pageContext.request.contextPath}/referentiel/commune/resultats">&lt;&lt; <spring:message code='communedisplay.button.back'/></a>
 			</div>
 		</div>
 	</div>
