@@ -41,7 +41,7 @@
 						<div class="col text-center"><strong><spring:message code='communeresult.label.department'/></strong> : ${searchCommune.codeDepartement}</div>
 					</c:if>
 					<c:if test="${searchCommune.codeCirconscription != null && !searchCommune.codeCirconscription.equals('-1')}">
-						<div class="col text-center"><strong><spring:message code='communeresult.label.basin'/></strong> : ${searchCommune.codeCirconscription}</div>
+						<div class="col text-center"><strong><spring:message code='communeresult.label.bassin'/></strong> : ${searchCommune.codeCirconscription}</div>
 					</c:if>
 					<c:if test="${searchCommune.dateEffet != null}">
 						<div class="col text-center"><strong><spring:message code='communeresult.label.date'/></strong> : ${DateConversionUtils.toUiString(searchCommune.dateEffet)}</div>
