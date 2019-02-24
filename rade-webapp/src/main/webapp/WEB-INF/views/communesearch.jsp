@@ -106,7 +106,7 @@ function validateForm() {
 </script>
 <div class="row justify-content-center">
 	<div class="col-12">
-		<div class="<c:if test="${errorRecherche == null || errorRecherche.equals('')}">d-none </c:if>alert alert-danger">${errorRecherche}</div>
+		<div class="<c:if test="${errorMessage == null || errorMessage.equals('')}">d-none </c:if>alert alert-danger">${errorMessage}</div>
 		<div class="card card-aesn">
 			<div class="card-body card-body-aesn">
 				<form:form id="formCommune" action="${pageContext.request.contextPath}/referentiel/commune/resultats" method="POST" modelAttribute="searchCommune">

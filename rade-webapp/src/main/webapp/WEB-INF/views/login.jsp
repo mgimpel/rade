@@ -23,10 +23,10 @@
 <div class="row justify-content-center">
 	<div class="col-4">
 		<c:if test="${param.error != null}">
-			<div class="alert alert-danger">Invalid username and password.</div>
+			<div class="alert alert-danger"><spring:message code="login.error"/></div>
 		</c:if>
 		<c:if test="${param.logout != null}">
-			<div class="alert alert-success">You have been logged out successfully.</div>
+			<div class="alert alert-success"><spring:message code="login.logout"/></div>
 		</c:if>
 		<div class="card card-aesn">
 			<div class="card-body">

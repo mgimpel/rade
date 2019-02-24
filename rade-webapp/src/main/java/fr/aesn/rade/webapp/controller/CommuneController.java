@@ -32,10 +32,12 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import javax.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -60,6 +62,9 @@ public class CommuneController {
   /** Default name for the export file. */
   public static final String DEFAULT_EXPORT_FILENAME = "export-communes";
 
+  /** I18n message source. */
+  @Autowired
+  private MessageSource messageSource;
   /** Commune Service. */
   @Autowired
   private CommunePlusService communePlusService;
@@ -106,12 +111,14 @@ public class CommuneController {
 
   /**
    * Submit (POST) the search form.
+   * @param locale locale in which to do the lookup.
    * @param model MVC model passed to JSP.
    * @param searchCommune search details for the model.
    * @return the corresponding view or redirect appropriately.
    */
   @PostMapping(params = "valider", value = "/resultats")
-  public String submitSearchForm(final Model model,
+  public String submitSearchForm(final Locale locale,
+		                         final Model model,
                                  @ModelAttribute("searchCommune") final SearchCommune searchCommune) {
     log.debug("Search for commune with criteria: {}", searchCommune);
     String dept   = "-1".equals(searchCommune.getCodeDepartement())
@@ -123,7 +130,7 @@ public class CommuneController {
     if(searchCommune.getCodeInsee() == null
         && dept == null && region == null && bassin == null
         && (searchCommune.getNomEnrichi() == null || searchCommune.getNomEnrichi().isEmpty())) {
-      model.addAttribute("errorRecherche", "Au moins un des champs doit être renseigné");
+      model.addAttribute("errorMessage", messageSource.getMessage("communesearch.error.empty", null, locale));
       return viewCommuneSearch(model, searchCommune);
     }
     List<CommunePlusWithGenealogie> communes = null;
@@ -134,7 +141,7 @@ public class CommuneController {
                                           searchCommune.getNomEnrichi(),
                                           searchCommune.getDateEffet());
     if(communes == null || communes.isEmpty()){
-      model.addAttribute("errorRecherche", "La recherche n'a donné aucun résultat.");
+      model.addAttribute("errorMessage", messageSource.getMessage("communesearch.error.noresult", null, locale));
       return viewCommuneSearch(model, searchCommune);
     }
     searchCommune.setCommunes(communes);
