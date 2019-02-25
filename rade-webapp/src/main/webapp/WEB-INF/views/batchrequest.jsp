@@ -17,33 +17,27 @@
  */%>
 <%/* $Id$ */%>
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <jsp:include page="aesn_header.jsp" />
 <div class="row justify-content-center">
 	<div class="col-12">
 		<div class="card card-aesn">
 			<div class="card-body">
-				<table class="w-100">
-					<tr>
-						<td>OriginalFileName: </td>
-						<td>${file.originalFilename}</td>
-					</tr>
-					<tr>
-						<td>Type:</td>
-						<td>${file.contentType}</td>
-					</tr>
-					<tr>
-						<td>Name:</td>
-						<td>${file.name}</td>
-					</tr>
-					<tr>
-						<td>Size:</td>
-						<td>${file.size}</td>
-					</tr>
-					<tr>
-						<td>URI:</td>
-						<td>${uri}</td>
-					</tr>
-				</table>
+				<form name="batchForm" action="${pageContext.request.contextPath}${postpath}" method="post" enctype="multipart/form-data">
+					<table class="w-100">
+						<tr>
+							<td class="w-25"><label for="file"><spring:message code='batchrequest.label.file'/>:</label></td>
+							<td><label class="btn btn-aesn"><spring:message code='batchrequest.button.browse'/><input type="file" name="file" onchange="$('#filename').html(this.files[0].name)" hidden></label>
+								<span class="label label-info" id="filename"></span>
+							</td>
+						</tr>
+						<tr>
+							<td><input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/></td>
+							<td><input type="submit" class="btn btn-aesn" name="submit" value="<spring:message code='batchrequest.button.submit'/>"></td>
+						</tr>
+					</table>
+				</form>
 			</div>
 		</div>
 	</div>

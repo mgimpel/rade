@@ -68,6 +68,14 @@
         class="fr.aesn.rade.batch.tasks.sandre.CommuneSandreProcessor"/>
 
   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+  <!-- Tasklets -->
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+  <!-- Delete Communes Sandre from JPA Repository Tasklet -->
+  <bean id="deleteAllCommuneSandreTasklet" scope="step"
+        class="fr.aesn.rade.batch.tasks.sandre.DeleteAllCommuneSandreTasklet"/>
+
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
   <!-- Jobs -->
   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 

@@ -27,76 +27,61 @@
          http://www.springframework.org/schema/batch
          http://www.springframework.org/schema/batch/spring-batch.xsd">
 
-  <import resource="classpath*:/**/batch-job-info.xml"/>
-  <import resource="classpath*:/**/batch-job-sandre.xml"/>
-  <import resource="classpath*:/**/batch-job-misc.xml"/>
-
   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
   <!-- Readers -->
   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+  <!-- ItemReader which reads data from Sandre commune file -->
+  <bean id="delegationItemReader" scope="step"
+        class="org.springframework.batch.item.file.FlatFileItemReader">
+    <property name="resource" value="#{jobParameters['inputFile']}"/>
+    <property name="encoding" value="windows-1252"/>
+    <property name="linesToSkip" value="1"/>
+    <property name="lineMapper">
+      <bean class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
+        <property name="fieldSetMapper">
+          <bean class="org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper"
+                p:targetType="fr.aesn.rade.persist.model.Delegation"
+                p:strict="false"/>
+        </property>
+        <property name="lineTokenizer">
+          <bean class="org.springframework.batch.item.file.transform.DelimitedLineTokenizer"
+                p:names="ID,acheminement,adresse1,adresse2,adresse3,adresse4,adresse5,code,codePostal,email,fax,libelle,siteWeb,telephone,telephone2,telephone3"
+                p:delimiter=";"/>
+        </property>
+      </bean>
+    </property>
+  </bean>
 
   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
   <!-- Writers -->
   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
-  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-  <!-- Processors -->
-  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+  <!-- ItemWriter which writes the data to the database -->
+  <bean id="delegationItemWriter" scope="step"
+        class="org.springframework.batch.item.database.JpaItemWriter"
+        p:entityManagerFactory-ref="entityManagerFactory"/>
 
   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
   <!-- Tasklets -->
   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
-  <!-- Delete File Tasklet -->
-  <bean id="deleteFileTasklet" scope="step"
-        class="fr.aesn.rade.batch.util.DeleteFileTasklet"/>
+  <!-- Delete Delegations from JPA Repository Tasklet -->
+  <bean id="deleteAllDelegationTasklet" scope="step"
+        class="fr.aesn.rade.batch.tasks.misc.DeleteAllDelegationTasklet"/>
 
   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
   <!-- Jobs -->
   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
-  <!-- Info Job -->
-  <batch:job id="webInfoJob">
-    <batch:step id="webInfoStep1" next="webInfoStep2">
-      <batch:tasklet ref="infoTasklet"/>
-    </batch:step>
-    <batch:step id="webInfoStep2">
-      <batch:tasklet ref="deleteFileTasklet"/>
-    </batch:step>
-  </batch:job>
-
   <!-- The Commune Sandre Full Import Job -->
-  <batch:job id="webImportCommuneSandreJob">
-    <batch:step id="webImportCommuneSandreStep1" next="webImportCommuneSandreStep2">
-      <batch:tasklet ref="deleteAllCommuneSandreTasklet"/>
-    </batch:step>
-    <batch:step id="webImportCommuneSandreStep2" next="webImportCommuneSandreStep3">
-      <batch:tasklet transaction-manager="transactionManager">
-        <batch:chunk reader="communeSandreItemReader"
-                     processor="communeSandreItemProcessor"
-                     writer="communeSandreItemWriter"
-                     commit-interval="100"/>
-      </batch:tasklet>
-    </batch:step>
-    <batch:step id="webImportCommuneSandreStep3">
-      <batch:tasklet ref="deleteFileTasklet"/>
-    </batch:step>
-  </batch:job>
-
-  <!-- The Delegation Full Import Job -->
-  <batch:job id="webImportDelegationJob">
-    <batch:step id="webImportDelegationStep1" next="webImportDelegationStep2">
-      <batch:tasklet ref="deleteAllDelegationTasklet"/>
-    </batch:step>
-    <batch:step id="webImportDelegationStep2" next="webImportDelegationStep3">
+  <batch:job id="importDelegationJob">
+    <batch:step id="importDelegationStep1">
       <batch:tasklet transaction-manager="transactionManager">
         <batch:chunk reader="delegationItemReader"
                      writer="delegationItemWriter"
                      commit-interval="100"/>
       </batch:tasklet>
-    </batch:step>
-    <batch:step id="webImportDelegationStep3">
-      <batch:tasklet ref="deleteFileTasklet"/>
     </batch:step>
   </batch:job>
 </beans>

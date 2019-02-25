@@ -15,7 +15,7 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 /* $Id$ */
-package fr.aesn.rade.batch.tasks.csv;
+package fr.aesn.rade.batch.tasks.sandre;
 
 import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.scope.context.ChunkContext;

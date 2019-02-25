@@ -21,29 +21,13 @@
 <div class="row justify-content-center">
 	<div class="col-12">
 		<div class="card card-aesn">
-			<div class="card-body">
-				<table class="w-100">
-					<tr>
-						<td>OriginalFileName: </td>
-						<td>${file.originalFilename}</td>
-					</tr>
-					<tr>
-						<td>Type:</td>
-						<td>${file.contentType}</td>
-					</tr>
-					<tr>
-						<td>Name:</td>
-						<td>${file.name}</td>
-					</tr>
-					<tr>
-						<td>Size:</td>
-						<td>${file.size}</td>
-					</tr>
-					<tr>
-						<td>URI:</td>
-						<td>${uri}</td>
-					</tr>
-				</table>
+			<div class="card-body card-body-aesn">
+				<p>Les Batchs suivants sont présent:
+				<ul>
+					<li><a href="${pageContext.request.contextPath}/batch/info">Batch Info</a></li>
+					<li><a href="${pageContext.request.contextPath}/batch/sandre">Batch Sandre</a></li>
+					<li><a href="${pageContext.request.contextPath}/batch/delegation">Batch Délégation</a></li>
+				</ul>
 			</div>
 		</div>
 	</div>

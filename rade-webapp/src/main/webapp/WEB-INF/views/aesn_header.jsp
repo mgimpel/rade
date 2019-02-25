@@ -145,6 +145,7 @@
 										<a class="dropdown-item" href="${path}/actuator/health"><spring:message code="header.menu.item.admin.status"/></a>
 										<a class="dropdown-item" href="${path}/actuator/logfile"><spring:message code="header.menu.item.admin.logs"/></a>
 										<a class="dropdown-item" href="${path}/services"><spring:message code="header.menu.item.admin.services"/></a>
+										<a class="dropdown-item" href="${path}/batch"><spring:message code="header.menu.item.admin.batch"/></a>
 									</div>
 								</li>
 								</sec:authorize>
