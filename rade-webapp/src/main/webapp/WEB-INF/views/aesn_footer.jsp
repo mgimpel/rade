@@ -25,7 +25,7 @@
 		<!-- Footer -->
 		<div class="row mt-4">
 			<div class="col-lg-2 aesn-footer"><%
-				SimpleDateFormat ft = new SimpleDateFormat("d MMMMM yyyy");
+				SimpleDateFormat ft = new SimpleDateFormat("d MMMMM yyyy", request.getLocale());
 				out.print(ft.format(new Date()));
 			%></div>
 			<div class="col-lg-10 aesn-footer aesn-footer-border">
@@ -33,7 +33,7 @@
 <c:forEach var="menuitem" items="${footermenu}">
 				<a href="<c:url value="${menuitem.value}"/>" target="_blank">${menuitem.key}</a>&nbsp;&nbsp;|&nbsp;
 </c:forEach>
-				<%out.print(Version.PROJECT_VERSION);%>
+				<a href="${path}/actuator/info"><%out.print(Version.PROJECT_VERSION);%></a>
 			</div>
 		</div>
 	</div>

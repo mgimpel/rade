@@ -249,9 +249,7 @@ public class BatchController {
    */
   private void runAsynchronousJob(final Job job,
                                   final JobParameters params) {
-    ForkJoinPool.commonPool().submit(() -> {
-      runSynchronousJob(job, params);
-    });
+    ForkJoinPool.commonPool().submit(() -> runSynchronousJob(job, params));
   }
 
   /**

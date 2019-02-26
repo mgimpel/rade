@@ -23,16 +23,13 @@
 <jsp:include page="aesn_header.jsp" />
 <script>
 $(document).ready(function(){
+	urlRadeAlert();
 	getBassins(${searchCommune.codeCirconscription});
 	getRegionsAndDepts(${searchCommune.codeRegion}, ${searchCommune.codeDepartement});
 	$("#formCommune").keydown(function (e) {
 		if(e.which == 13) submitForm();
 	});
 });
-function radealert(msg) {
-	$(".alert").text(msg);
-	$(".alert").removeClass("d-none");
-}
 function buildOptions(data, current, text){
 	var arr = [];
 	$.each(data, function(key, val) {
@@ -89,24 +86,21 @@ function validateForm() {
 	var circonscription = $("#codeCirconscription").val();
 	var codeInsee = $("#codeInsee").val();
 	if(codeInsee && !/^[0-9][0-9abAB][0-9]{3}$/.test(codeInsee)) {
-		radealert("<spring:message code='communesearch.error.code'/>");
-		return false;
+		return radeAlert("<spring:message code='communesearch.error.code'/>", "warning", false);
 	}
 	var dateEffet = $("#dateEffet").val();
 	if(dateEffet && !/^[12][0-9]{3}-[01][0-9]-[0-3][0-9]$/.test(dateEffet)) {
-		radealert("<spring:message code='communesearch.error.date'/>");
-		return false;
+		return radeAlert("<spring:message code='communesearch.error.date'/>", "warning", false);
 	}
 	if(codeInsee == "" && nomEnrichi == "" && codeRegion == "-1" && codeDepartement == "-1" && circonscription == "-1") {
-		radealert("<spring:message code='communesearch.error.empty'/>");
-		return false;
+		return radeAlert("<spring:message code='communesearch.error.empty'/>", "warning", false);
 	}
 	return true;
 }
 </script>
 <div class="row justify-content-center">
 	<div class="col-12">
-		<div class="<c:if test="${errorMessage == null || errorMessage.equals('')}">d-none </c:if>alert alert-danger">${errorMessage}</div>
+		<div class="<c:if test="${errorMessage == null || errorMessage.equals('')}">d-none </c:if>alert alert-danger" id="alert">${errorMessage}</div>
 		<div class="card card-aesn">
 			<div class="card-body card-body-aesn">
 				<form:form id="formCommune" action="${pageContext.request.contextPath}/referentiel/commune/resultats" method="POST" modelAttribute="searchCommune">

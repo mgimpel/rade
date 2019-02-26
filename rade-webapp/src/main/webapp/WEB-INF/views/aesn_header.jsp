@@ -35,6 +35,7 @@
 	<link rel="stylesheet" href="${path}/webjars/bootstrap/css/bootstrap.min.css" type="text/css">
 	<link rel="stylesheet" href="${path}/css/aesn.css" type="text/css">
 	<script src="${path}/webjars/jquery/jquery.min.js" type="text/javascript"></script>
+	<script src="${path}/js/aesn.js" type="text/javascript"></script>
 	<script type="text/javascript">
 	function accederRapidement() {
 		var select = document.getElementById('sel_acces_rapide');
