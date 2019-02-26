@@ -53,8 +53,8 @@ function getDepts() {
 	});
 }
 function getRegionsAndDepts() {
-	var currentReg = arguments.length > 0 ? arguments[0] : $("#codeRegion").val();
-	var currentDept = arguments.length > 1 ? arguments[1] : $("#codeDepartement").val();
+	var currentReg = arguments.length > 0 ? arguments[0] : $("#codeRegion").val(),
+		currentDept = arguments.length > 1 ? arguments[1] : $("#codeDepartement").val();
 	$.getJSON("${pageContext.request.contextPath}/referentiel/json/regionlist",
 			{"date": $("#dateEffet").val()},
 			function(data){
@@ -80,11 +80,11 @@ function submitForm() {
 	}
 }
 function validateForm() {
-	var nomEnrichi = $("#nomEnrichi").val();
-	var codeRegion = $("#codeRegion").val();
-	var codeDepartement = $("#codeDepartement").val();
-	var circonscription = $("#codeCirconscription").val();
-	var codeInsee = $("#codeInsee").val();
+	var nomEnrichi = $("#nomEnrichi").val(),
+		codeRegion = $("#codeRegion").val(),
+		codeDepartement = $("#codeDepartement").val(),
+		circonscription = $("#codeCirconscription").val(),
+		codeInsee = $("#codeInsee").val();
 	if(codeInsee && !/^[0-9][0-9abAB][0-9]{3}$/.test(codeInsee)) {
 		return radeAlert("<spring:message code='communesearch.error.code'/>", "warning", false);
 	}
