@@ -15,7 +15,7 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 /* $Id$ */
-package fr.aesn.rade.webapp.model;
+package fr.aesn.rade.webapp.mvc.referentiel;
 
 import fr.aesn.rade.common.modelplus.CommunePlusWithGenealogie;
 import java.util.ArrayList;
@@ -30,7 +30,7 @@ import org.springframework.format.annotation.DateTimeFormat;
  * @author sophie.belin
  */
 @Getter @Setter
-public class SearchCommune {
+public class CommuneSearchModel {
   public static final int PAGE_SIZE = 10;
   // Champs requête
   private String codeInsee;
@@ -47,7 +47,7 @@ public class SearchCommune {
   /**
    * Constructor.
    */
-  public SearchCommune() {
+  public CommuneSearchModel() {
     reset();
   }
 
@@ -125,13 +125,13 @@ public class SearchCommune {
    * Build and return the result list for the current page number.
    * @return the result list for the current page number.
    */
-  public List<DisplayCommune> getListeResultats() {
-    List<DisplayCommune> list = new ArrayList<>();
+  public List<CommuneDisplayModel> getListeResultats() {
+    List<CommuneDisplayModel> list = new ArrayList<>();
     int firstCommuneIndex = getFirstCommuneIndex();
     int lastCommuneIndex = getLastCommuneIndex();
     for(int i = firstCommuneIndex; i < lastCommuneIndex; i++) {
       CommunePlusWithGenealogie commune = communes.get(i);
-      list.add(new DisplayCommune(commune));
+      list.add(new CommuneDisplayModel(commune));
     }
     return list;
   }

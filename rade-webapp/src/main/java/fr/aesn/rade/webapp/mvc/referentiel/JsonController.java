@@ -15,7 +15,7 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 /* $Id$ */
-package fr.aesn.rade.webapp.controller;
+package fr.aesn.rade.webapp.mvc.referentiel;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;

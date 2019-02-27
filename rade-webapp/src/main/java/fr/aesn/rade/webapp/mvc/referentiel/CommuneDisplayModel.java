@@ -15,14 +15,13 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 /* $Id$ */
-package fr.aesn.rade.webapp.model;
+package fr.aesn.rade.webapp.mvc.referentiel;
 
 import fr.aesn.rade.common.modelplus.CommunePlus;
 import fr.aesn.rade.common.modelplus.CommunePlusWithGenealogie;
 import fr.aesn.rade.common.util.DateConversionUtils;
 import fr.aesn.rade.persist.model.Departement;
 import fr.aesn.rade.persist.model.Region;
-import fr.aesn.rade.webapp.controller.CommuneController;
 
 import java.util.Date;
 import java.util.Iterator;
@@ -34,7 +33,7 @@ import lombok.Getter;
  * @author sophie.belin
  */
 @Getter
-public class DisplayCommune {
+public class CommuneDisplayModel {
   private String codeInsee;
   private String motifModification;
   private String nomEnrichi;
@@ -56,7 +55,7 @@ public class DisplayCommune {
    * Constructor.
    * @param communePlusWithGenealogie Commune details.
    */
-  public DisplayCommune(final CommunePlusWithGenealogie communePlusWithGenealogie) {
+  public CommuneDisplayModel(final CommunePlusWithGenealogie communePlusWithGenealogie) {
     CommunePlus commune = communePlusWithGenealogie.getCommunePlus();
     this.codeInsee = commune.getCodeInsee();
     this.nomMajuscule = commune.getNomMajuscule();
@@ -91,13 +90,22 @@ public class DisplayCommune {
    * @param departement Departement details.
    * @param region Region details.
    */
-  public DisplayCommune(final CommunePlusWithGenealogie communePlusWithGenealogie,
-                        final Departement departement,
-                        final Region region) {
+  public CommuneDisplayModel(final CommunePlusWithGenealogie communePlusWithGenealogie,
+                             final Departement departement,
+                             final Region region) {
     this(communePlusWithGenealogie);
     this.nomDepartement = departement.getNomEnrichi();
     this.codeDepartement = departement.getCodeInsee();
     this.nomRegion = region.getNomEnrichi();
+  }
+
+  /**
+   * Returns the URL to display the Entity.
+   * @param appContext application Context
+   * @return the URL to display the Entity.
+   */
+  public String getUrlEntite(final String appContext) {
+    return getUrlEntite(appContext, codeInsee, finValidite);
   }
 
   /**

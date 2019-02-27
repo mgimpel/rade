@@ -37,7 +37,7 @@ import lombok.extern.slf4j.Slf4j;
 @EnableAutoConfiguration(exclude={BatchAutoConfiguration.class})
 @ImportResource("classpath:application-context.xml")
 @ComponentScan({"fr.aesn.rade.webapp.config",
-                "fr.aesn.rade.webapp.controller"})
+                "fr.aesn.rade.webapp.mvc"})
 public class SpringBootWebApplication
   extends SpringBootServletInitializer {
   @Override

@@ -1,5 +1,5 @@
 /*  This file is part of the Rade project (https://github.com/mgimpel/rade).
- *  Copyright (C) 2018 Marc Gimpel
+ *  Copyright (C) 2018 Fadhel Helali
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,8 +15,20 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 /* $Id$ */
+package fr.aesn.rade.webapp.mvc.referentiel;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 /**
- * This package contains MVC Controllers (SpringMVC) for the Rade Web
- * Application.
+ * Model for the Breadcrumb bar Search Form present on every page.
+ * @author fadhel.helali
  */
-package fr.aesn.rade.webapp.controller;
+@Getter @Setter @NoArgsConstructor
+public class ReferentielSearchModel {
+  /** Code INSEE. */
+  private String code;
+  /** Type du code (Commune, Departement, Region, ...). */
+  private String type;
+}

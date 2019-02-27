@@ -24,8 +24,8 @@
 <script>
 $(document).ready(function(){
 	urlRadeAlert();
-	getBassins(${searchCommune.codeCirconscription});
-	getRegionsAndDepts(${searchCommune.codeRegion}, ${searchCommune.codeDepartement});
+	getBassins(${communeSearch.codeCirconscription});
+	getRegionsAndDepts(${communeSearch.codeRegion}, ${communeSearch.codeDepartement});
 	$("#formCommune").keydown(function (e) {
 		if(e.which == 13) submitForm();
 	});
@@ -103,7 +103,7 @@ function validateForm() {
 		<div class="<c:if test="${errorMessage == null || errorMessage.equals('')}">d-none </c:if>alert alert-danger" id="alert">${errorMessage}</div>
 		<div class="card card-aesn">
 			<div class="card-body card-body-aesn">
-				<form:form id="formCommune" action="${pageContext.request.contextPath}/referentiel/commune/resultats" method="POST" modelAttribute="searchCommune">
+				<form:form id="formCommune" action="${pageContext.request.contextPath}/referentiel/commune/resultats" method="POST" modelAttribute="communeSearch">
 					<table class="w-100">
 						<tbody style="vertical-align:baseline;">
 							<tr>

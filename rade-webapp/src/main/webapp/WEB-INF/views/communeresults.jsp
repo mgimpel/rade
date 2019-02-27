@@ -28,28 +28,28 @@
 		<div class="card card-aesn">
 			<div class="card-body card-body-aesn">
 				<div class="row justify-content-center">
-					<c:if test="${searchCommune.codeInsee != null && !searchCommune.codeInsee.isEmpty()}">
-						<div class="col text-center"><strong><spring:message code='communeresult.label.code'/></strong> : ${searchCommune.codeInsee}</div>
+					<c:if test="${communeSearch.codeInsee != null && !communeSearch.codeInsee.isEmpty()}">
+						<div class="col text-center"><strong><spring:message code='communeresult.label.code'/></strong> : ${communeSearch.codeInsee}</div>
 					</c:if>
-					<c:if test="${searchCommune.nomEnrichi != null && !searchCommune.nomEnrichi.isEmpty()}">
-						<div class="col text-center"><strong><spring:message code='communeresult.label.name'/></strong> : ${searchCommune.nomEnrichi}</div>
+					<c:if test="${communeSearch.nomEnrichi != null && !communeSearch.nomEnrichi.isEmpty()}">
+						<div class="col text-center"><strong><spring:message code='communeresult.label.name'/></strong> : ${communeSearch.nomEnrichi}</div>
 					</c:if>
-					<c:if test="${searchCommune.codeRegion != null && !searchCommune.codeRegion.equals('-1')}">
-						<div class="col text-center"><strong><spring:message code='communeresult.label.region'/></strong> : ${searchCommune.codeRegion}</div>
+					<c:if test="${communeSearch.codeRegion != null && !communeSearch.codeRegion.equals('-1')}">
+						<div class="col text-center"><strong><spring:message code='communeresult.label.region'/></strong> : ${communeSearch.codeRegion}</div>
 					</c:if>
-					<c:if test="${searchCommune.codeDepartement != null && !searchCommune.codeDepartement.equals('-1')}">
-						<div class="col text-center"><strong><spring:message code='communeresult.label.department'/></strong> : ${searchCommune.codeDepartement}</div>
+					<c:if test="${communeSearch.codeDepartement != null && !communeSearch.codeDepartement.equals('-1')}">
+						<div class="col text-center"><strong><spring:message code='communeresult.label.department'/></strong> : ${communeSearch.codeDepartement}</div>
 					</c:if>
-					<c:if test="${searchCommune.codeCirconscription != null && !searchCommune.codeCirconscription.equals('-1')}">
-						<div class="col text-center"><strong><spring:message code='communeresult.label.bassin'/></strong> : ${searchCommune.codeCirconscription}</div>
+					<c:if test="${communeSearch.codeCirconscription != null && !communeSearch.codeCirconscription.equals('-1')}">
+						<div class="col text-center"><strong><spring:message code='communeresult.label.bassin'/></strong> : ${communeSearch.codeCirconscription}</div>
 					</c:if>
-					<c:if test="${searchCommune.dateEffet != null}">
-						<div class="col text-center"><strong><spring:message code='communeresult.label.date'/></strong> : ${DateConversionUtils.toUiString(searchCommune.dateEffet)}</div>
+					<c:if test="${communeSearch.dateEffet != null}">
+						<div class="col text-center"><strong><spring:message code='communeresult.label.date'/></strong> : ${DateConversionUtils.toUiString(communeSearch.dateEffet)}</div>
 					</c:if>
 				</div>
 			</div>
 		</div>
-		<aesn:paging baseUrl="/referentiel/commune/resultats?page=" currentPage="${searchCommune.getPage()}" maxPage="${searchCommune.getPageMax()}"/>
+		<aesn:paging baseUrl="/referentiel/commune/resultats?page=" currentPage="${communeSearch.getPage()}" maxPage="${communeSearch.getPageMax()}"/>
 		<table class="table table-sm table-bordered table-striped table-aesn w-100 mb-0">
 			<tr>
 				<th colspan="4" class="w-50"><spring:message code='communeresult.tablecol.commune'/></th>
@@ -63,22 +63,22 @@
 				<th class="w-25"><spring:message code='communeresult.tablecol.parents.reason'/></th>
 				<th><spring:message code='communeresult.tablecol.parents.code'/></th>
 			</tr>
-			<c:forEach items="${searchCommune.listeResultats}" var="communeDisplay">
+			<c:forEach items="${communeSearch.listeResultats}" var="commune">
 				<tr>
-					<td><a href="${communeDisplay.getUrlEntite(pageContext.request.contextPath, communeDisplay.codeInsee, communeDisplay.finValidite)}">${communeDisplay.codeInsee}</a></td>
-					<td><a href="${communeDisplay.getUrlEntite(pageContext.request.contextPath, communeDisplay.codeInsee, communeDisplay.finValidite)}">${communeDisplay.nomEnrichi}</a></td>
-					<td class="text-center">${DateConversionUtils.toUiString(communeDisplay.debutValidite)}</td>
-					<td class="text-center">${DateConversionUtils.toUiString(communeDisplay.finValidite)}</td>
-					<td class="text-center">${communeDisplay.motifModification}</td>
+					<td><a href="${commune.getUrlEntite(pageContext.request.contextPath)}">${commune.codeInsee}</a></td>
+					<td><a href="${commune.getUrlEntite(pageContext.request.contextPath)}">${commune.nomEnrichi}</a></td>
+					<td class="text-center">${DateConversionUtils.toUiString(commune.debutValidite)}</td>
+					<td class="text-center">${DateConversionUtils.toUiString(commune.finValidite)}</td>
+					<td class="text-center">${commune.motifModification}</td>
 					<td>
-						<c:forEach items="${communeDisplay.parents}" var="genealogieParent">
-							<a href="${communeDisplay.getUrlEntite(pageContext.request.contextPath, genealogieParent.key, genealogieParent.value.entity.finValidite)}">${genealogieParent.key}</a>
+						<c:forEach items="${commune.parents}" var="genealogieParent">
+							<a href="${commune.getUrlEntite(pageContext.request.contextPath, genealogieParent.key, genealogieParent.value.entity.finValidite)}">${genealogieParent.key}</a>
 						</c:forEach>
 					</td>
 				</tr>
 			</c:forEach>
 		</table>
-		<aesn:paging baseUrl="/referentiel/commune/resultats?page=" currentPage="${searchCommune.getPage()}" maxPage="${searchCommune.getPageMax()}"/>
+		<aesn:paging baseUrl="/referentiel/commune/resultats?page=" currentPage="${communeSearch.getPage()}" maxPage="${communeSearch.getPageMax()}"/>
 		<div class="row justify-content-between">
 			<div class="col-auto">
 				<a class="btn btn-sm btn-aesn" href="${pageContext.request.contextPath}/referentiel/commune">&lt;&lt; <spring:message code='communeresult.button.back'/></a>

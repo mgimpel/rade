@@ -15,7 +15,7 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 /* $Id$ */
-package fr.aesn.rade.webapp.controller;
+package fr.aesn.rade.webapp.mvc.referentiel;
 
 import java.util.Date;
 
@@ -31,7 +31,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import fr.aesn.rade.persist.model.Region;
 import fr.aesn.rade.service.RegionService;
-import fr.aesn.rade.webapp.model.SearchEntite;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -63,7 +62,7 @@ public class ReferentielController {
    */
   @RequestMapping("/entiteSearch")
   public String entiteSearch(final Model model,
-                             @ModelAttribute final SearchEntite entite) {
+                             @ModelAttribute final ReferentielSearchModel entite) {
     log.info("Recherche d'entités, type : {}, code :{}",
              entite.getType(), entite.getCode());
     if(entite.getCode() != null && !entite.getCode().isEmpty()) {
