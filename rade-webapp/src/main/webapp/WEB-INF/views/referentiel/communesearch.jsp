@@ -20,7 +20,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<jsp:include page="aesn_header.jsp" />
+<jsp:include page="../aesn_header.jsp" />
 <script>
 $(document).ready(function(){
 	urlRadeAlert();
@@ -156,4 +156,4 @@ function validateForm() {
 		</div>
 	</div>
 </div>
-<jsp:include page="aesn_footer.jsp" />
+<jsp:include page="../aesn_footer.jsp" />

@@ -215,7 +215,7 @@ public class CommuneController {
                                    final CommuneSearchModel communeSearchModel) {
     model.addAttribute("titre", "Rechercher une Commune");
     model.addAttribute("communeSearch", communeSearchModel);
-    return "communesearch";
+    return "referentiel/communesearch";
   }
 
   /**
@@ -228,7 +228,7 @@ public class CommuneController {
                                     final CommuneSearchModel communeSearchModel) {
     model.addAttribute("titre", "Liste des résultats");
     model.addAttribute("communeSearch", communeSearchModel);
-    return "communeresults";
+    return "referentiel/communeresults";
   }
 
   /**
@@ -244,7 +244,7 @@ public class CommuneController {
                                  + " "
                                  + communeDisplayModel.getNomEnrichi());
     model.addAttribute("communeDisplay", communeDisplayModel);
-    return "communedisplay";
+    return "referentiel/communedisplay";
   }
 
   /**

@@ -22,7 +22,7 @@
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<spring:eval var="appname" expression="@applicationName"/>
+<spring:eval var="appname" expression="@environment.getProperty('app.name')"/>
 <c:set var="path" value="${pageContext.request.contextPath}"/>
 <html>
 <head>

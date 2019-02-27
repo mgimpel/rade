@@ -86,7 +86,7 @@ public class BatchController {
   @GetMapping()
   public String home(final Model model) {
     model.addAttribute("titre", "Batch");
-    return "batch";
+    return "admin/batch";
   }
 
   /**
@@ -101,7 +101,7 @@ public class BatchController {
     log.debug("Requesting /batch/info");
     model.addAttribute("titre", messageSource.getMessage("batchrequest.title.info", null, locale));
     model.addAttribute("postpath", "/batch/info");
-    return "batchrequest";
+    return "admin/batchrequest";
   }
 
   /**
@@ -132,7 +132,7 @@ public class BatchController {
       model.addAttribute("params", exec.getJobParameters().getParameters());
       model.addAttribute("status", exec.getExitStatus());
     }
-    return "batchresult";
+    return "admin/batchresult";
   }
 
   /**
@@ -147,7 +147,7 @@ public class BatchController {
     log.debug("Requesting /batch/sandre");
     model.addAttribute("titre", messageSource.getMessage("batchrequest.title.sandre", null, locale));
     model.addAttribute("postpath", "/batch/sandre");
-    return "batchrequest";
+    return "admin/batchrequest";
   }
 
   /**
@@ -175,7 +175,7 @@ public class BatchController {
     model.addAttribute("uri", tmpFile.toUri());
     runAsynchronousJob(sandreJob, jobBuilder.toJobParameters());
     model.addAttribute("message", "For more details see <a href=\"../actuator/logfile\" target=\"_blank\">log file</a>");
-    return "batchresult";
+    return "admin/batchresult";
   }
 
   /**
@@ -190,7 +190,7 @@ public class BatchController {
     log.debug("Requesting /batch/delegation");
     model.addAttribute("titre", messageSource.getMessage("batchrequest.title.delegation", null, locale));
     model.addAttribute("postpath", "/batch/delegation");
-    return "batchrequest";
+    return "admin/batchrequest";
   }
 
   /**
@@ -219,7 +219,7 @@ public class BatchController {
       model.addAttribute("status", exec.getExitStatus());
     }
     model.addAttribute("message", "For more details see <a href=\"../actuator/logfile\" target=\"_blank\">log file</a>");
-    return "batchresult";
+    return "admin/batchresult";
   }
 
   /**

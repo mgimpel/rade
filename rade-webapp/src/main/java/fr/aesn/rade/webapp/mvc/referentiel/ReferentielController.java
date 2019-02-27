@@ -91,7 +91,7 @@ public class ReferentielController {
     }
     model.addAttribute("titre", "Recherche Region");
     model.addAttribute("region", new Region());
-    return "regionsearch";
+    return "referentiel/regionsearch";
   }
 
   /**
@@ -141,7 +141,7 @@ public class ReferentielController {
                                final Region region) {
     model.addAttribute("titre", "Region");
     model.addAttribute("region", region);
-    return "regiondisplay";
+    return "referentiel/regiondisplay";
   }
 
   /**
