@@ -29,7 +29,7 @@
 			<c:forEach begin="1" end="${maxPage}" step="1" var="numPage">
 				<c:choose>
 					<c:when test="${numPage == currentPage}">
-						<li class="page-item active" aria-current="page"><a class="page-link" href="#">${numPage}<span class="sr-only">(current)</a></span></li>
+						<li class="page-item active" aria-current="page"><a class="page-link" href="#">${numPage}<span class="sr-only">(current)</span></a></li>
 					</c:when>
 					<c:when test="${numPage <= 2
 								|| numPage >= maxPage - 1

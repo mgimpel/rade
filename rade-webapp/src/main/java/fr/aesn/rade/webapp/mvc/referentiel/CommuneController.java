@@ -87,24 +87,28 @@ public class CommuneController {
 
   /**
    * Get the Search Form. 
+   * @param locale locale in which to do the lookup.
    * @param model MVC model passed to JSP.
    * @param communeSearchModel search details for the model.
    * @return the corresponding view.
    */
   @GetMapping()
-  public String getSearchForm(final Model model,
+  public String getSearchForm(final Locale locale,
+                              final Model model,
                               @ModelAttribute(COMMUNE_SEARCH_MODEL) final CommuneSearchModel communeSearchModel) {
-    return viewCommuneSearch(model, communeSearchModel);
+    return viewCommuneSearch(locale, model, communeSearchModel);
   }
 
   /**
    * Reset the search form.
+   * @param locale locale in which to do the lookup.
    * @param model MVC model passed to JSP.
    * @param communeSearchModel search details for the model.
    * @return redirect back to the search form.
    */
   @PostMapping(params = "annuler", value = "/resultats")
-  public String resetSearchForm(final Model model,
+  public String resetSearchForm(final Locale locale,
+                                final Model model,
                                 @ModelAttribute(COMMUNE_SEARCH_MODEL) final CommuneSearchModel communeSearchModel) {
     communeSearchModel.reset();
     return "redirect:/referentiel/commune";
@@ -132,7 +136,7 @@ public class CommuneController {
         && dept == null && region == null && bassin == null
         && (communeSearchModel.getNomEnrichi() == null || communeSearchModel.getNomEnrichi().isEmpty())) {
       model.addAttribute("errorMessage", messageSource.getMessage("communesearch.error.empty", null, locale));
-      return viewCommuneSearch(model, communeSearchModel);
+      return viewCommuneSearch(locale, model, communeSearchModel);
     }
     List<CommunePlusWithGenealogie> communes = null;
     communes = communePlusService.getCommuneByCriteria(communeSearchModel.getCodeInsee(),
@@ -143,7 +147,7 @@ public class CommuneController {
                                           communeSearchModel.getDateEffet());
     if(communes == null || communes.isEmpty()){
       model.addAttribute("errorMessage", messageSource.getMessage("communesearch.error.noresult", null, locale));
-      return viewCommuneSearch(model, communeSearchModel);
+      return viewCommuneSearch(locale, model, communeSearchModel);
     }
     communeSearchModel.setCommunes(communes);
     communeSearchModel.setPage(1);
@@ -160,15 +164,17 @@ public class CommuneController {
 
   /**
    * Get the search result list.
+   * @param locale locale in which to do the lookup.
    * @param model MVC model passed to JSP.
    * @param communeSearchModel search details for the model.
    * @return the corresponding view or redirect appropriately.
    */
   @GetMapping("/resultats")
-  public String getResultList(final Model model,
+  public String getResultList(final Locale locale,
+                              final Model model,
                               @ModelAttribute(COMMUNE_SEARCH_MODEL) final CommuneSearchModel communeSearchModel) {
     if(communeSearchModel.getCommunes() != null && communeSearchModel.getCommunes().size() > 1) {
-      return viewCommuneResults(model, communeSearchModel);
+      return viewCommuneResults(locale, model, communeSearchModel);
     } else {
       return "redirect:/referentiel/commune";
     }
@@ -176,6 +182,7 @@ public class CommuneController {
 
   /**
    * Get the Commune display page.
+   * @param locale locale in which to do the lookup.
    * @param model MVC model passed to JSP.
    * @param code Code INSEE de la commune affichée
    * @param dateParam Date de validité de la commune passée en tant que paramètre optionnel 
@@ -183,7 +190,8 @@ public class CommuneController {
    * @return the corresponding view.
    */
   @GetMapping("/{code}")
-  public String getDisplayPage(final Model model,
+  public String getDisplayPage(final Locale locale,
+                               final Model model,
                                @PathVariable("code") final String code,
                                @RequestParam(value = "date", required = false) final String dateParam,
                                @ModelAttribute(COMMUNE_SEARCH_MODEL) final CommuneSearchModel communeSearchModel) {
@@ -194,55 +202,60 @@ public class CommuneController {
       if(commune != null) {
         Departement departement = departementService.getDepartementByCode(commune.getCommunePlus().getDepartement(), dateValidite);
         Region region = regionService.getRegionByCode(departement.getRegion(), dateValidite);
-        return viewCommuneDisplay(model, new CommuneDisplayModel(commune, departement, region));
+        return viewCommuneDisplay(locale, model, new CommuneDisplayModel(commune, departement, region));
       } else {
         model.addAttribute("errorRecherche", "La commune recherchée n'existe pas");
-        return viewCommuneSearch(model, communeSearchModel);
+        return viewCommuneSearch(locale, model, communeSearchModel);
       }
     } else {
       model.addAttribute("errorRecherche", "La recherche n'a rien retourné");
-      return viewCommuneSearch(model, communeSearchModel);
+      return viewCommuneSearch(locale, model, communeSearchModel);
     }
   }
 
   /**
    * Setup model and return view for the search page.
+   * @param locale locale in which to do the lookup.
    * @param model MVC model passed to JSP.
    * @param communeSearchModel search details for the model.
    * @return View for the search page
    */
-  private String viewCommuneSearch(final Model model,
+  private String viewCommuneSearch(final Locale locale,
+                                   final Model model,
                                    final CommuneSearchModel communeSearchModel) {
-    model.addAttribute("titre", "Rechercher une Commune");
+    model.addAttribute("titre", messageSource.getMessage("communesearch.title", null, locale));
     model.addAttribute("communeSearch", communeSearchModel);
     return "referentiel/communesearch";
   }
 
   /**
    * Setup model and return view for the result page.
+   * @param locale locale in which to do the lookup.
    * @param model MVC model passed to JSP.
    * @param communeSearchModel search details for the model.
    * @return View for the result page
    */
-  private String viewCommuneResults(final Model model,
+  private String viewCommuneResults(final Locale locale,
+                                    final Model model,
                                     final CommuneSearchModel communeSearchModel) {
-    model.addAttribute("titre", "Liste des résultats");
+    model.addAttribute("titre", messageSource.getMessage("communeresult.title", null, locale));
     model.addAttribute("communeSearch", communeSearchModel);
     return "referentiel/communeresults";
   }
 
   /**
    * Setup model and return view for the display page.
+   * @param locale locale in which to do the lookup.
    * @param model MVC model passed to JSP.
    * @param communeDisplayModel entity details for the model.
    * @return View for the display page
    */
-  private String viewCommuneDisplay(final Model model,
+  private String viewCommuneDisplay(final Locale locale,
+                                    final Model model,
                                     final CommuneDisplayModel communeDisplayModel) {
-    model.addAttribute("titre", "Commune / Détail commune "
-                                 + communeDisplayModel.getCodeInsee()
-                                 + " "
-                                 + communeDisplayModel.getNomEnrichi());
+    model.addAttribute("titre", messageSource.getMessage("communedisplay.title", null, locale)
+                                 + ": " + communeDisplayModel.getCodeInsee()
+                                 + " " + communeDisplayModel.getNomEnrichi());
     model.addAttribute("communeDisplay", communeDisplayModel);
     return "referentiel/communedisplay";
   }
