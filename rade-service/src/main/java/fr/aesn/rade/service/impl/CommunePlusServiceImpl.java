@@ -241,7 +241,6 @@ public class CommunePlusServiceImpl
    * @param commune the CommunePlus
    * @return a CommunePlusWithGenealogie built from the given CommunePlus.
    */
-  @Transactional(readOnly = true)
   private CommunePlusWithGenealogie buildCommuneWithGenealogie(final CommunePlus commune) {
     log.debug("Building Genealogie for {}", commune);
     CommunePlusWithGenealogie result = new CommunePlusWithGenealogie(commune);
