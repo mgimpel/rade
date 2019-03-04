@@ -18,6 +18,8 @@
 package fr.aesn.rade.webapp.export;
 
 import fr.aesn.rade.common.modelplus.CommunePlusWithGenealogie;
+import fr.aesn.rade.common.modelplus.GenealogieSimple;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
@@ -111,10 +113,10 @@ public class ExportExcel
       
       StringBuilder sb = new StringBuilder();
       String motif = null;
-      for (Map.Entry<String, CommunePlusWithGenealogie.GenealogieTypeAndEntity> entry : commune.getParents().entrySet()) {
+      for (Map.Entry<String, GenealogieSimple> entry : commune.getParents().entrySet()) {
         sb.append(entry.getKey());
         sb.append(" ");
-        motif = entry.getValue().getType().getLibelleLong();
+        motif = entry.getValue().getTypeModification().getLibelleLong();
       }
       if(motif != null){
         row.createCell(4).setCellValue(motif);

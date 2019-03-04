@@ -72,7 +72,7 @@
 					<td class="text-center">${commune.motifModification}</td>
 					<td>
 						<c:forEach items="${commune.parents}" var="genealogieParent">
-							<a href="${commune.getUrlEntite(pageContext.request.contextPath, genealogieParent.key, genealogieParent.value.entity.finValidite)}">${genealogieParent.key}</a>
+							<a href="${commune.getUrlEntite(pageContext.request.contextPath, genealogieParent.key, genealogieParent.value.finValidite)}">${genealogieParent.key}</a>
 						</c:forEach>
 					</td>
 				</tr>

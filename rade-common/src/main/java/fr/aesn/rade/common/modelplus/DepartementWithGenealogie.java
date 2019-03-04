@@ -21,19 +21,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 import fr.aesn.rade.common.InvalidArgumentException;
-import fr.aesn.rade.persist.model.Commune;
+import fr.aesn.rade.persist.model.Departement;
 import fr.aesn.rade.persist.model.TypeGenealogieEntiteAdmin;
 import lombok.Getter;
 
 /**
- * Enhanced Commune with all the INSEE Genealogie details.
- *
  * @author Marc Gimpel (mgimpel@gmail.com)
+ *
  */
-public class CommunePlusWithGenealogie {
+public class DepartementWithGenealogie {
   /** The Enhanced Commune details. */
   @Getter
-  private final CommunePlus communePlus;
+  private final Departement departement;
   /** Map of Parent Communes and modification details, indexed by codeINSEE. */
   @Getter
   private final Map<String, GenealogieSimple> parents;
@@ -43,10 +42,10 @@ public class CommunePlusWithGenealogie {
 
   /**
    * Constructor.
-   * @param communePlus
+   * @param departement
    */
-  public CommunePlusWithGenealogie(CommunePlus communePlus) {
-    this.communePlus = communePlus;
+  public DepartementWithGenealogie(Departement departement) {
+    this.departement = departement;
     parents = new HashMap<>();
     enfants = new HashMap<>();
   }
@@ -58,12 +57,12 @@ public class CommunePlusWithGenealogie {
    * @throws InvalidArgumentException if an argument was null.
    */
   public void addParent(TypeGenealogieEntiteAdmin type,
-                        Commune entity)
+                        Departement entity)
     throws InvalidArgumentException {
     if (type == null || entity == null) {
       throw new InvalidArgumentException("Mandatory argument was null.");
     }
-    if (!"COM".equals(entity.getTypeEntiteAdmin().getCode())) {
+    if (!"DEP".equals(type.getCode())) {
       throw new InvalidArgumentException("Incoherant Genealogie type.");
     }
     parents.put(entity.getCodeInsee(),
@@ -77,12 +76,12 @@ public class CommunePlusWithGenealogie {
    * @throws InvalidArgumentException if an argument was null.
    */
   public void addEnfant(TypeGenealogieEntiteAdmin type,
-                        Commune entity)
+                        Departement entity)
     throws InvalidArgumentException {
     if (type == null || entity == null) {
       throw new InvalidArgumentException("Mandatory argument was null.");
     }
-    if (!"COM".equals(entity.getTypeEntiteAdmin().getCode())) {
+    if (!"DEP".equals(type.getCode())) {
       throw new InvalidArgumentException("Incoherant Genealogie type.");
     }
     enfants.put(entity.getCodeInsee(),

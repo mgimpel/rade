@@ -241,6 +241,7 @@ public class CommunePlusServiceImpl
    * @param commune the CommunePlus
    * @return a CommunePlusWithGenealogie built from the given CommunePlus.
    */
+  @Transactional(readOnly = true)
   private CommunePlusWithGenealogie buildCommuneWithGenealogie(final CommunePlus commune) {
     log.debug("Building Genealogie for {}", commune);
     CommunePlusWithGenealogie result = new CommunePlusWithGenealogie(commune);
@@ -256,7 +257,7 @@ public class CommunePlusServiceImpl
           try {
             result.addParent(parent.getTypeGenealogie(), opt.get());
           } catch (InvalidArgumentException e) {
-            log.warn("This should never happen! parent must exist: {}", parent);
+            log.warn("This should never happen! parent must exist ({}): {}", e.getMessage(), parent);
           }
         } else {
           log.warn("This should never happen! parent must exist: {}", parent);
@@ -273,10 +274,10 @@ public class CommunePlusServiceImpl
           try {
             result.addEnfant(enfant.getTypeGenealogie(), opt.get());
           } catch (InvalidArgumentException e) {
-            log.warn("This should never happen! enfant must exist: {}", enfant);
+            log.warn("This should never happen! child must exist ({}): {}", e.getMessage(), enfant);
           }
         } else {
-          log.warn("This should never happen! parent must exist: {}", enfant);
+          log.warn("This should never happen! child must exist: {}", enfant);
         }
       }
     }

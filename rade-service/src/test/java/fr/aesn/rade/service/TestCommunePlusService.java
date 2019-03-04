@@ -21,6 +21,7 @@ import static org.junit.Assert.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.junit.*;
@@ -70,6 +71,7 @@ public class TestCommunePlusService
         .addScript("db/sql/insert-Departement.sql")
         .addScript("db/sql/insert-CommuneSandre-Test.sql")
         .addScript("db/sql/insert-Commune-Test.sql")
+        .addScript("db/sql/insert-CommuneGenealogie-Test.sql")
         .build();
   }
 
@@ -164,5 +166,14 @@ public class TestCommunePlusService
     assertEquals("Hibernate returned the wrong number of results",2,communes.size());
     communes = service.getCommuneByCriteria(null,"91","11",null,"éVi",sdf.parse("1998-01-01"));
     assertEquals("Hibernate returned the wrong number of results",0,communes.size());
+  }
+
+  @Test
+  public void testGetCommuneWithGenealogie() {
+    CommunePlusWithGenealogie com = service.getCommuneWithGenealogie("95040", new Date());
+    assertEquals("Hibernate returned a Commune, but the Id doesn't match",
+                 "95040", com.getCommunePlus().getCodeInsee());
+    assertEquals(2, com.getParents().size());
+    assertEquals(0, com.getEnfants().size());
   }
 }

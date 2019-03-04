@@ -123,9 +123,9 @@
 									</c:if>
 									<c:forEach items="${communeDisplay.parents}" var="genealogieParent">
 										<tr>
-											<td class="w-16 text-center"><a href="${communeDisplay.getUrlEntite(pageContext.request.contextPath, genealogieParent.key, genealogieParent.value.entity.finValidite)}">${genealogieParent.key}</a></td>
-											<td>${genealogieParent.value.entity.nomEnrichi}</td>
-											<td class="w-25">${DateConversionUtils.toUiString(genealogieParent.value.entity.debutValidite)}</td>
+											<td class="w-16 text-center"><a href="${communeDisplay.getUrlEntite(pageContext.request.contextPath, genealogieParent.key, genealogieParent.value.finValidite)}">${genealogieParent.key}</a></td>
+											<td>${genealogieParent.value.nom}</td>
+											<td class="w-25">${DateConversionUtils.toUiString(genealogieParent.value.debutValidite)}</td>
 										</tr>
 									</c:forEach>
 								</table>
@@ -144,9 +144,9 @@
 									</c:if>
 									<c:forEach items="${communeDisplay.enfants}" var="genealogieEnfant">
 										<tr>
-											<td class="w-16 text-center"><a href="${communeDisplay.getUrlEntite(pageContext.request.contextPath, genealogieEnfant.key, genealogieEnfant.value.entity.finValidite)}">${genealogieEnfant.key}</a></td>
-											<td>${genealogieEnfant.value.entity.nomEnrichi}</td>
-											<td class="w-25">${DateConversionUtils.toUiString(genealogieEnfant.value.entity.debutValidite)}</td>
+											<td class="w-16 text-center"><a href="${communeDisplay.getUrlEntite(pageContext.request.contextPath, genealogieEnfant.key, genealogieEnfant.value.finValidite)}">${genealogieEnfant.key}</a></td>
+											<td>${genealogieEnfant.value.nom}</td>
+											<td class="w-25">${DateConversionUtils.toUiString(genealogieEnfant.value.debutValidite)}</td>
 										</tr>
 									</c:forEach>
 								</table>

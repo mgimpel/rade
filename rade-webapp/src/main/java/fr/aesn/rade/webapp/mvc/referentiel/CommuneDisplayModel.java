@@ -19,6 +19,7 @@ package fr.aesn.rade.webapp.mvc.referentiel;
 
 import fr.aesn.rade.common.modelplus.CommunePlus;
 import fr.aesn.rade.common.modelplus.CommunePlusWithGenealogie;
+import fr.aesn.rade.common.modelplus.GenealogieSimple;
 import fr.aesn.rade.common.util.DateConversionUtils;
 import fr.aesn.rade.persist.model.Departement;
 import fr.aesn.rade.persist.model.Region;
@@ -48,8 +49,8 @@ public class CommuneDisplayModel {
   private String nomRegion;
   private Date debutValidite;
   private Date finValidite;
-  private Map<String, CommunePlusWithGenealogie.GenealogieTypeAndEntity> parents;
-  private Map<String, CommunePlusWithGenealogie.GenealogieTypeAndEntity> enfants;
+  private Map<String, GenealogieSimple> parents;
+  private Map<String, GenealogieSimple> enfants;
 
   /**
    * Constructor.
@@ -66,16 +67,16 @@ public class CommuneDisplayModel {
     this.articleEnrichi = commune.getArticleEnrichi();
     this.parents = communePlusWithGenealogie.getParents();
     this.enfants = communePlusWithGenealogie.getEnfants();
-    Map<String, CommunePlusWithGenealogie.GenealogieTypeAndEntity> genealogie = null;
+    Map<String, GenealogieSimple> genealogie = null;
     if(!parents.isEmpty()) {
       genealogie = communePlusWithGenealogie.getParents();
     } else if(!enfants.isEmpty()) {
       genealogie = communePlusWithGenealogie.getEnfants();
     }
     if (genealogie != null) {
-      Iterator<Map.Entry<String, CommunePlusWithGenealogie.GenealogieTypeAndEntity>> it = genealogie.entrySet().iterator();
+      Iterator<Map.Entry<String, GenealogieSimple>> it = genealogie.entrySet().iterator();
       if(it.hasNext()){
-        this.motifModification = (it.next().getValue()).getType().getLibelleLong();
+        this.motifModification = (it.next().getValue()).getTypeModification().getLibelleLong();
       }
     }
     if(communePlusWithGenealogie.getCommunePlus().getCirconscriptionBassin() != null){

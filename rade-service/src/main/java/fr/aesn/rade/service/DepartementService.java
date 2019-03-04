@@ -21,6 +21,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import fr.aesn.rade.common.modelplus.DepartementWithGenealogie;
 import fr.aesn.rade.persist.model.Departement;
 
 /**
@@ -92,6 +93,17 @@ public interface DepartementService {
    * @return list of Departements within the given region, at the given date.
    */
   public List<Departement> getDepartementForRegion(String region, Date date);
+
+  /**
+   * Get the Departement with the given code at the given date, and all it's
+   * genealogie.
+   * @param code the Departement code.
+   * @param date the date at which the code was valid
+   * @return the Departement with the given code at the given date, and all
+   * it's genealogie.
+   */
+  public DepartementWithGenealogie getDepartementWithGenealogie(final String code,
+                                                                final String date);
 
   /**
    * Invalidates the given departement by setting the departements finValidite

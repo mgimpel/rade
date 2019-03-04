@@ -24,14 +24,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import fr.aesn.rade.common.InvalidArgumentException;
+import fr.aesn.rade.common.modelplus.DepartementWithGenealogie;
 import fr.aesn.rade.common.util.SharedBusinessRules;
 import fr.aesn.rade.persist.dao.DepartementJpaDao;
 import fr.aesn.rade.persist.model.Departement;
+import fr.aesn.rade.persist.model.EntiteAdministrative;
+import fr.aesn.rade.persist.model.GenealogieEntiteAdmin;
 import fr.aesn.rade.service.DepartementService;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -202,6 +207,71 @@ public class DepartementServiceImpl
       list.removeIf(e -> !region.equals(e.getRegion()));
       return list;
     }
+  }
+
+  /**
+   * Get the Departement with the given code at the given date, and all it's
+   * genealogie.
+   * @param code the Departement code.
+   * @param date the date at which the code was valid
+   * @return the Departement with the given code at the given date, and all
+   * it's genealogie.
+   */
+  @Override
+  public DepartementWithGenealogie getDepartementWithGenealogie(final String code,
+                                                                final String date) {
+    Departement dept = getDepartementByCode(code, date);
+    if (dept == null) {
+      return null;
+    }
+    return buildDepartementWithGenealogie(dept);
+  }
+
+  /**
+   * Build a DepartementWithGenealogie from the given Departement.
+   * @param dept the Departement
+   * @return a DepartementWithGenealogie built from the given Departement.
+   */
+  private DepartementWithGenealogie buildDepartementWithGenealogie(final Departement dept) {
+    log.debug("Building Genealogie for {}", dept);
+    DepartementWithGenealogie result = new DepartementWithGenealogie(dept);
+    EntiteAdministrative tempEntity;
+    Optional<Departement> opt;
+    Set<GenealogieEntiteAdmin> parents = dept.getParents();
+    if (parents != null) {
+      for (GenealogieEntiteAdmin parent : parents) {
+        tempEntity = parent.getParentEnfant().getParent();
+        assert "DEP".equals(tempEntity.getTypeEntiteAdmin().getCode());
+        opt = departementJpaDao.findById(tempEntity.getId());
+        if (opt.isPresent()) {
+          try {
+            result.addParent(parent.getTypeGenealogie(), opt.get());
+          } catch (InvalidArgumentException e) {
+            log.warn("This should never happen! parent must exist: {}", parent);
+          }
+        } else {
+          log.warn("This should never happen! parent must exist: {}", parent);
+        }
+      }
+    }
+    Set<GenealogieEntiteAdmin> enfants = dept.getEnfants();
+    if (enfants != null) {
+      for (GenealogieEntiteAdmin enfant : enfants) {
+        tempEntity = enfant.getParentEnfant().getEnfant();
+        assert "DEP".equals(tempEntity.getTypeEntiteAdmin().getCode());
+        opt = departementJpaDao.findById(tempEntity.getId());
+        if (opt.isPresent()) {
+          try {
+            result.addEnfant(enfant.getTypeGenealogie(), opt.get());
+          } catch (InvalidArgumentException e) {
+            log.warn("This should never happen! enfant must exist: {}", enfant);
+          }
+        } else {
+          log.warn("This should never happen! parent must exist: {}", enfant);
+        }
+      }
+    }
+    return result;
   }
 
   /**
