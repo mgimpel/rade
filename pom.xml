@@ -22,7 +22,7 @@
 
   <groupId>fr.aesn.rade</groupId>
   <artifactId>rade</artifactId>
-  <version>0.9-SNAPSHOT</version>
+  <version>0.9</version>
   <packaging>pom</packaging>
 
   <name>Rade Project</name>
@@ -666,6 +666,6 @@
   <scm>
     <connection>scm:git:https://github.com/mgimpel/rade.git</connection>
     <url>https://github.com/mgimpel/rade</url>
-    <tag>HEAD</tag>
+    <tag>rade-0.9</tag>
   </scm>
 </project>
