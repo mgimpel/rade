@@ -124,13 +124,13 @@ public class TestDelegation extends AbstractTestEntity {
     assertEquals("Hibernate returned a Delegation, but the ID doesn't match",
                  "SIEGE", delegation.getCode());
     assertEquals("Hibernate returned a Delegation, but the Libelle doesn't match",
-                 "Siège", delegation.getLibelle());
+                 "SIEGE DFIR", delegation.getLibelle());
     assertEquals("Hibernate returned a Delegation, but the Acheminement doesn't match",
-                 "Nanterre Cedex - France", delegation.getAcheminement());
+                 "Nanterre Cedex", delegation.getAcheminement());
     assertEquals("Hibernate returned a Delegation, but the Addresse1 doesn't match",
                  "Agence de l'eau Seine-Normandie", delegation.getAdresse1());
     assertEquals("Hibernate returned a Delegation, but the Addresse2 doesn't match",
-                 "Siège", delegation.getAdresse2());
+                 "Siège DFIR", delegation.getAdresse2());
     assertEquals("Hibernate returned a Delegation, but the Addresse3 doesn't match",
                  "51, rue Salvador Allende", delegation.getAdresse3());
     assertEquals("Hibernate returned a Delegation, but the Addresse4 doesn't match",

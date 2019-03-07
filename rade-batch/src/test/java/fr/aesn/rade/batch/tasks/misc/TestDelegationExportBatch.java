@@ -19,8 +19,11 @@ package fr.aesn.rade.batch.tasks.misc;
 
 import static org.junit.Assert.*;
 
-import java.util.List;
-import java.util.Optional;
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.stream.Stream;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -46,15 +49,13 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import fr.aesn.rade.batch.tasks.SpringBatchTestConfiguration;
-import fr.aesn.rade.persist.dao.DelegationJpaDao;
-import fr.aesn.rade.persist.model.Delegation;
 
 /**
  * Test the Delegation Import Job.
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-public class TestDelegationImportBatch {
+public class TestDelegationExportBatch {
   /** Static Spring Configuration. */
   @Configuration
   @ImportResource(locations = "classpath*:batch-job-misc.xml")
@@ -65,9 +66,6 @@ public class TestDelegationImportBatch {
   /** Spring Context. */
   @Autowired
   protected ApplicationContext context;
-  /** JPA DAO used to check data imported by Batch. */
-  @Autowired
-  protected DelegationJpaDao delegationJpaDao;
   /** JobLauncherTestUtils for JUnit to test Batch Jobs. */
   protected JobLauncherTestUtils jobLauncherTestUtils;
 
@@ -82,6 +80,7 @@ public class TestDelegationImportBatch {
         .setScriptEncoding("windows-1252")
         .setName("testdb")
         .addScript("db/sql/create-tables.sql")
+        .addScript("db/sql/insert-Delegation.sql")
         .build();
   }
 
@@ -101,7 +100,7 @@ public class TestDelegationImportBatch {
     jobLauncherTestUtils = new JobLauncherTestUtils();
     jobLauncherTestUtils.setJobRepository(context.getBean("jobRepository", JobRepository.class));
     jobLauncherTestUtils.setJobLauncher(context.getBean("jobLauncher", JobLauncher.class));
-    jobLauncherTestUtils.setJob(context.getBean("importDelegationJob", Job.class));
+    jobLauncherTestUtils.setJob(context.getBean("exportDelegationJob", Job.class));
   }
 
   /**
@@ -117,7 +116,7 @@ public class TestDelegationImportBatch {
   @Test
   public void testJobExists() {
     assertNotNull("The job was not found",
-                  context.getBean("importDelegationJob", Job.class));
+                  context.getBean("exportDelegationJob", Job.class));
   }
 
   /**
@@ -125,49 +124,29 @@ public class TestDelegationImportBatch {
    * @throws Exception exception launching job
    */
   @Test
-  public void testImportDelegationJob() throws Exception {
+  public void testExportDelegationJob() throws Exception {
+
+    Path tmpDir = Paths.get(System.getProperty("java.io.tmpdir")
+                          + File.separator + "rade-test" + File.separator
+                          + "batch" + File.separator)
+                       .toAbsolutePath()
+                       .normalize();
+    if (!Files.exists(tmpDir)) {
+      Files.createDirectories(tmpDir);
+    }
+    Path tmpFile = Files.createTempFile(tmpDir, "delegations.csv", null);
     JobParametersBuilder jobBuilder = new JobParametersBuilder();
-    jobBuilder.addString("inputFile", "classpath:batchfiles/misc/delegation.csv");
+    jobBuilder.addString("outputFile", tmpFile.toUri().toString());
     JobParameters jobParameters = jobBuilder.toJobParameters();
     JobExecution jobExecution = jobLauncherTestUtils.launchJob(jobParameters);
     assertEquals("Batch Failed to complete",
                  BatchStatus.COMPLETED, jobExecution.getStatus());
-    List<Delegation> list = delegationJpaDao.findAll();
-    assertEquals("Batch imported the wrong number of lines",
-                 7, list.size());
-    Optional<Delegation> opt = delegationJpaDao.findById("SIEGE");
-    assertTrue("Batch didn't import SIEGE", opt.isPresent());
-    Delegation delegation = opt.get();
-    assertNotNull("The batch imported SIEGE is null", delegation);
-    assertEquals("Hibernate returned a Delegation, but the ID doesn't match",
-                 "SIEGE", delegation.getCode());
-    assertEquals("Hibernate returned a Delegation, but the Libelle doesn't match",
-                 "SIEGE DFIR", delegation.getLibelle());
-    assertEquals("Hibernate returned a Delegation, but the Acheminement doesn't match",
-                 "Nanterre Cedex", delegation.getAcheminement());
-    assertEquals("Hibernate returned a Delegation, but the Addresse1 doesn't match",
-                 "Agence de l'eau Seine-Normandie", delegation.getAdresse1());
-    assertEquals("Hibernate returned a Delegation, but the Addresse2 doesn't match",
-                 "Siège DFIR", delegation.getAdresse2());
-    assertEquals("Hibernate returned a Delegation, but the Addresse3 doesn't match",
-                 "51, rue Salvador Allende", delegation.getAdresse3());
-    assertEquals("Hibernate returned a Delegation, but the Addresse4 doesn't match",
-                 "", delegation.getAdresse4());
-    assertEquals("Hibernate returned a Delegation, but the Addresse5 doesn't match",
-                 "Nanterre", delegation.getAdresse5());
-    assertEquals("Hibernate returned a Delegation, but the Code Postal doesn't match",
-                 "92027", delegation.getCodePostal());
-    assertEquals("Hibernate returned a Delegation, but the E-mail doesn't match",
-                 "xxx", delegation.getEmail());
-    assertEquals("Hibernate returned a Delegation, but the Fax doesn't match",
-                 "01 41 20 16 09", delegation.getFax());
-    assertEquals("Hibernate returned a Delegation, but the Site Web doesn't match",
-                 "http://www.eau-seine-normandie.fr/", delegation.getSiteWeb());
-    assertEquals("Hibernate returned a Delegation, but the Telephone doesn't match",
-                 "01 41 20 16 00", delegation.getTelephone());
-    assertEquals("Hibernate returned a Delegation, but the Telephone2 doesn't match",
-                 "", delegation.getTelephone2());
-    assertEquals("Hibernate returned a Delegation, but the Telephone3 doesn't match",
-                 "", delegation.getTelephone3());
+    assertTrue("Batch export file does not exist", Files.exists(tmpFile));
+    assertEquals("Batch export file is wrong size", 1975, Files.size(tmpFile));
+    try (Stream<String> lines = Files.lines(tmpFile)) {
+      assertEquals("Batch export should have 8 lines (header + 7 delegations)",
+                   8, lines.count());
+    }
+    assertTrue("Could not delete Batch file", Files.deleteIfExists(tmpFile));
   }
 }

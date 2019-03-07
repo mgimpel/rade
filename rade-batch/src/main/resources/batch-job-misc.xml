@@ -31,6 +31,13 @@
   <!-- Readers -->
   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
+  <!-- ItemReader which reads data from the database -->
+  <bean id="delegationDbItemReader" scope="step"
+        class="org.springframework.batch.item.database.JpaPagingItemReader"
+        p:entityManagerFactory-ref="entityManagerFactory"
+        p:queryString="select d from Delegation d"
+        p:pageSize="100"/>
+
   <!-- ItemReader which reads data from CSV file -->
   <bean id="delegationFileItemReader" scope="step"
         class="org.springframework.batch.item.file.FlatFileItemReader">
@@ -46,19 +53,12 @@
         </property>
         <property name="lineTokenizer">
           <bean class="org.springframework.batch.item.file.transform.DelimitedLineTokenizer"
-                p:names="ID,acheminement,adresse1,adresse2,adresse3,adresse4,adresse5,code,codePostal,email,fax,libelle,siteWeb,telephone,telephone2,telephone3"
+                p:names="code,libelle,acheminement,adresse1,adresse2,adresse3,adresse4,adresse5,codePostal,email,fax,siteWeb,telephone,telephone2,telephone3"
                 p:delimiter=";"/>
         </property>
       </bean>
     </property>
   </bean>
-
-  <!-- ItemReader which reads data from the database -->
-  <bean id="delegationDbItemReader" scope="step"
-        class="org.springframework.batch.item.database.JpaPagingItemReader"
-        p:entityManagerFactory-ref="entityManagerFactory"
-        p:queryString="select d from Delegation d"
-        p:pageSize="100"/>
 
   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
   <!-- Writers -->
@@ -72,20 +72,21 @@
   <!-- ItemWriter which writes the data to a CSV File -->
   <bean id="delegationFileItemWriter" scope="step"
         class="org.springframework.batch.item.file.FlatFileItemWriter">
-    <property name="resource" value="#{jobParameters['outputFile']}" />
+    <property name="resource" value="#{jobParameters['outputFile']}"/>
+    <property name="encoding" value="windows-1252"/>
     <property name="shouldDeleteIfExists" value="true" />
     <property name="lineAggregator">
       <bean class="org.springframework.batch.item.file.transform.DelimitedLineAggregator">
-        <property name="delimiter" value=";" />
+        <property name="delimiter" value=";"/>
         <property name="fieldExtractor">
           <bean class="org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor"
-                p:names="code, libelle, acheminement, adresse1, adresse2, adresse3, adresse4, adresse5, codePostal, email, fax, siteWeb, telephone, telephone2, telephone3"/>
+                p:names="code,libelle,acheminement,adresse1,adresse2,adresse3,adresse4,adresse5,codePostal,email,fax,siteWeb,telephone,telephone2,telephone3"/>
         </property>
       </bean>
     </property>
     <property name="headerCallback">
       <bean class="fr.aesn.rade.batch.util.StringHeaderWriter"
-            p:header="//code, libelle, acheminement, adresse1, adresse2, adresse3, adresse4, adresse5, codePostal, email, fax, siteWeb, telephone, telephone2, telephone3" />
+            p:header="//code,libelle,acheminement,adresse1,adresse2,adresse3,adresse4,adresse5,codePostal,email,fax,siteWeb,telephone,telephone2,telephone3"/>
     </property>
   </bean>
 
@@ -112,7 +113,7 @@
     </batch:step>
   </batch:job>
 
-    <!-- The Delegation Export Job -->
+  <!-- The Delegation Export Job -->
   <batch:job id="exportDelegationJob">
     <batch:step id="exportDelegationStep1">
       <batch:tasklet transaction-manager="transactionManager">

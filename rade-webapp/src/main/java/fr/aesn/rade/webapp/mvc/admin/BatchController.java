@@ -19,6 +19,7 @@ package fr.aesn.rade.webapp.mvc.admin;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -26,6 +27,8 @@ import java.nio.file.StandardCopyOption;
 import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.ForkJoinPool;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
@@ -72,11 +75,14 @@ public class BatchController {
   /** Batch Import Communes Sandre Job. */
   @Autowired
   @Qualifier("webImportCommuneSandreJob")
-  private Job sandreJob;
+  private Job importSandreJob;
   /** Batch Import Delegation Job. */
   @Autowired
   @Qualifier("webImportDelegationJob")
-  private Job delegationJob;
+  private Job importDelegationJob;
+  @Autowired
+  @Qualifier("exportDelegationJob")
+  private Job exportDelegationJob;
 
   /**
    * Main Batch Page mapping.
@@ -142,8 +148,8 @@ public class BatchController {
    * @return View for the Batch Upload page
    */
   @GetMapping("/sandre")
-  public String sandreGet(final Locale locale,
-                          final Model model) {
+  public String sandreImportGet(final Locale locale,
+                                final Model model) {
     log.debug("Requesting /batch/sandre");
     model.addAttribute("titre", messageSource.getMessage("batchrequest.title.sandre", null, locale));
     model.addAttribute("postpath", "/batch/sandre");
@@ -159,9 +165,9 @@ public class BatchController {
    * @throws IOException if there was a problem recovering and saving file.
    */
   @PostMapping("/sandre")
-  public String sandrePost(final Locale locale,
-                           final Model model,
-                           @RequestParam("file") final MultipartFile file)
+  public String sandreImportPost(final Locale locale,
+                                 final Model model,
+                                 @RequestParam("file") final MultipartFile file)
     throws IOException {
     log.debug("Posting to /batch/sandre");
     model.addAttribute("titre", messageSource.getMessage("batchresult.title.sandre", null, locale));
@@ -173,7 +179,7 @@ public class BatchController {
     jobBuilder.addString("auditNote", "Import " + file.getOriginalFilename());
     model.addAttribute("file", file);
     model.addAttribute("uri", tmpFile.toUri());
-    runAsynchronousJob(sandreJob, jobBuilder.toJobParameters());
+    runAsynchronousJob(importSandreJob, jobBuilder.toJobParameters());
     model.addAttribute("message", "For more details see <a href=\"../actuator/logfile\" target=\"_blank\">log file</a>");
     return "admin/batchresult";
   }
@@ -185,8 +191,8 @@ public class BatchController {
    * @return View for the Batch Upload page
    */
   @GetMapping("/delegation")
-  public String delegationGet(final Locale locale,
-                              final Model model) {
+  public String delegationImportGet(final Locale locale,
+                                    final Model model) {
     log.debug("Requesting /batch/delegation");
     model.addAttribute("titre", messageSource.getMessage("batchrequest.title.delegation", null, locale));
     model.addAttribute("postpath", "/batch/delegation");
@@ -202,9 +208,9 @@ public class BatchController {
    * @throws IOException if there was a problem recovering and saving file.
    */
   @PostMapping("/delegation")
-  public String delegationPost(final Locale locale,
-                               final Model model,
-                               @RequestParam("file") final MultipartFile file)
+  public String delegationImportPost(final Locale locale,
+                                     final Model model,
+                                     @RequestParam("file") final MultipartFile file)
     throws IOException {
     log.debug("Posting to /batch/delegation");
     model.addAttribute("titre", messageSource.getMessage("batchresult.title.delegation", null, locale));
@@ -213,13 +219,35 @@ public class BatchController {
     jobBuilder.addString("inputFile", tmpFile.toUri().toString());
     model.addAttribute("file", file);
     model.addAttribute("uri", tmpFile.toUri());
-    JobExecution exec = runSynchronousJob(delegationJob, jobBuilder.toJobParameters());
+    JobExecution exec = runSynchronousJob(importDelegationJob, jobBuilder.toJobParameters());
     if (exec != null) {
       model.addAttribute("params", exec.getJobParameters().getParameters());
       model.addAttribute("status", exec.getExitStatus());
     }
     model.addAttribute("message", "For more details see <a href=\"../actuator/logfile\" target=\"_blank\">log file</a>");
     return "admin/batchresult";
+  }
+
+  @GetMapping("/delegationexport")
+  public void delegationExportPost(final HttpServletResponse response) throws IOException {
+    Path tmpFile = createTempFile("batch", "delegations.csv");
+    JobParametersBuilder jobBuilder = new JobParametersBuilder();
+    jobBuilder.addString("outputFile", tmpFile.toUri().toString());
+    JobExecution exec = runSynchronousJob(exportDelegationJob, jobBuilder.toJobParameters());
+    log.info("Export Delegation batch exit status: {}", exec.getExitStatus());
+    response.setContentType("text/csv");
+    /* "Content-Disposition : attachment" will directly download;
+        may provide save as popup, based on your browser setting.
+       "Content-Disposition : inline" will show viewable types (images/text/pdf/...) in the browser
+        while others(e.g zip) will be directly downloaded. */
+    response.setHeader("Content-Disposition", "attachment; filename=\"delegations.csv\"");
+    response.setContentLength((int)Files.size(tmpFile));
+    try (OutputStream out = response.getOutputStream()) {
+      Files.copy(tmpFile, out);
+      Files.delete(tmpFile);
+    } catch (IOException e) {
+      log.info("Error exporting Batch result", e);
+    }
   }
 
   /**
@@ -260,17 +288,31 @@ public class BatchController {
    */
   private static Path storeTempFile(final MultipartFile file)
     throws IOException {
+    Path tmpFile = createTempFile("uploads", file.getOriginalFilename());
+    Files.copy(file.getInputStream(), tmpFile, StandardCopyOption.REPLACE_EXISTING);
+    return tmpFile;
+  }
+
+  /**
+   * Create a temporary file in a temporary location based on the given
+   * sub-directory and using the given filename. 
+   * @param subdir the sub-directory in which to create the temporary file.
+   * @param filename the base filename for the temporary file.
+   * @return the path to the temporary file.
+   * @throws IOException if there was a problem creating the temporary directory.
+   */
+  private static Path createTempFile(final String subdir,
+                                     final String filename)
+    throws IOException {
     Path tmpDir = Paths.get(System.getProperty("java.io.tmpdir")
                           + File.separator + "rade" + File.separator
-                          + "uploads" + File.separator)
+                          + subdir + File.separator)
                        .toAbsolutePath()
                        .normalize();
     if (!Files.exists(tmpDir)) {
       log.info("Creating Temporary Directory: {}", tmpDir);
       Files.createDirectories(tmpDir);
     }
-    Path tmpFile = Files.createTempFile(tmpDir, file.getOriginalFilename(), null);
-    Files.copy(file.getInputStream(), tmpFile, StandardCopyOption.REPLACE_EXISTING);
-    return tmpFile;
+    return Files.createTempFile(tmpDir, filename, null);
   }
 }

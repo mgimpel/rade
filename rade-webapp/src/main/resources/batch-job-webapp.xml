@@ -90,8 +90,8 @@
     </batch:step>
     <batch:step id="webImportDelegationStep2" next="webImportDelegationStep3">
       <batch:tasklet transaction-manager="transactionManager">
-        <batch:chunk reader="delegationItemReader"
-                     writer="delegationItemWriter"
+        <batch:chunk reader="delegationFileItemReader"
+                     writer="delegationDbItemWriter"
                      commit-interval="100"/>
       </batch:tasklet>
     </batch:step>
