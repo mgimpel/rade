@@ -1,5 +1,5 @@
 ID;ACHEMINEMENT;ADRESSE1;ADRESSE2;ADRESSE3;ADRESSE4;ADRESSE5;CODE;CODE_POSTAL;EMAIL;FAX;LIBELLE;SITEWEB;TELEPHONE;TELEPHONE2;TELEPHONE3
-1;Nanterre Cedex;Agence de l'eau Seine-Normandie;Siège;51, rue Salvador Allende;;Nanterre;SIEGE;92027;xxx;01 41 20 16 09;Siège DFIRCQ;http://www.eau-seine-normandie.fr/;01 41 20 16 00;;
+1;Nanterre Cedex;Agence de l'eau Seine-Normandie;Siège DFIR;51, rue Salvador Allende;;Nanterre;SIEGE;92027;xxx;01 41 20 16 09;SIEGE DFIR;http://www.eau-seine-normandie.fr/;01 41 20 16 00;;
 21;Nanterre Cedex;Agence de l'eau Seine-Normandie;Direction Territoriale Seine Francilienne;51, rue Salvador Allende;;Nanterre;DSF;92027;dtsf@aesn.fr;01 41 20 16 09;Direction Territoriale Seine Francilienne;http://www.eau-seine-normandie.fr/;01 41 20 16 00;;
 22;Hérouville-Saint-Clair Cedex;Agence de l'eau Seine-Normandie;Direction Territoriale et Maritime des Bocages Normands;1, rue de la Pompe;CS 70087;Hérouville-Saint-Clair;DBN;14203;dbn@aesn.fr;02 31 46 20 20;Direction Territoriale et Maritime des Bocages Normands;http://www.eau-seine-normandie.fr/;02 31 46 20 20;;
 23;Rouen Cedex 1;Agence de l'eau Seine-Normandie;Direction Territoriale et Maritime Seine-Aval;Hangar C;Espace des Marégraphes - CS 41174;Rouen;DSAV;76176;dsav@aesn.fr;02 35 63 61 30;Direction Territoriale et Maritime Seine-Aval;http://www.eau-seine-normandie.fr/;02 35 63 61 30;;
