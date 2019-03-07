@@ -28,14 +28,14 @@ Le projet est conçu autour des librairies Spring, en particulier Spring-Boot po
 
 Pour lancer l'application web:
 ```sh
-$ java -jar rade-webapp\target\rade-webapp.war
+$ java -jar rade-webapp/target/rade-webapp.war
 ```
 Pour lancer l'application web avec des fichiers de configurations spécifiques
 ```sh
-$ java -D"config.file.xml=file:D:/Work/rade/application-dev-context.xml" -D"logging.config=D:/Work/rade/logback-debug.xml" -jar rade-webapp\target\rade-webapp.war
+$ java -D"config.file.xml=file:D:/Work/rade/application-dev-context.xml" -D"logging.config=D:/Work/rade/logback-debug.xml" -jar rade-webapp/target/rade-webapp.war
 ```
 
-Pour lancer un batch:
+Pour lancer un batch en ligne de commande:
 ```sh
-$ java -jar rade-batch\target\rade-batch.jar -h
+$ java -jar rade-batchrunner/target/rade-batchrunner.jar -h
 ```
