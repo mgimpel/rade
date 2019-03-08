@@ -30,6 +30,7 @@ import java.util.concurrent.ForkJoinPool;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobParameters;
@@ -228,12 +229,21 @@ public class BatchController {
     return "admin/batchresult";
   }
 
+  /**
+   * 
+   * @param response
+   * @throws IOException
+   */
   @GetMapping("/delegationexport")
   public void delegationExportPost(final HttpServletResponse response) throws IOException {
     Path tmpFile = createTempFile("batch", "delegations.csv");
     JobParametersBuilder jobBuilder = new JobParametersBuilder();
     jobBuilder.addString("outputFile", tmpFile.toUri().toString());
     JobExecution exec = runSynchronousJob(exportDelegationJob, jobBuilder.toJobParameters());
+    if (!ExitStatus.COMPLETED.equals(exec.getExitStatus())) {
+      Files.delete(tmpFile);
+      throw new IOException("Batch failed: " + exec.getExitStatus());
+    }
     log.info("Export Delegation batch exit status: {}", exec.getExitStatus());
     response.setContentType("text/csv");
     /* "Content-Disposition : attachment" will directly download;
@@ -244,9 +254,10 @@ public class BatchController {
     response.setContentLength((int)Files.size(tmpFile));
     try (OutputStream out = response.getOutputStream()) {
       Files.copy(tmpFile, out);
-      Files.delete(tmpFile);
     } catch (IOException e) {
       log.info("Error exporting Batch result", e);
+    } finally {
+      Files.delete(tmpFile);
     }
   }
 

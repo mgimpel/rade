@@ -17,15 +17,23 @@
 /* $Id$ */
 package fr.aesn.rade.webapp.mvc;
 
+import java.io.IOException;
+import java.util.Date;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -81,7 +89,7 @@ public class MainController {
    * @param model MVC model passed to JSP.
    * @return View for the Help page.
    */
-  @RequestMapping("/aide")
+  @GetMapping("/aide")
   public String aide(final Model model) {
     model.addAttribute("titre", "Aide");
     return "aide";
@@ -91,8 +99,27 @@ public class MainController {
    * FAQ page.
    * @return redirect to help page.
    */
-  @RequestMapping("/faq")
+  @GetMapping("/faq")
   public String faq() {
     return "redirect:/aide";
+  }
+
+  /**
+   * Error page to display if the controller threw an Exception.
+   * @param model MVC model passed to JSP.
+   * @param e exception that was thrown.
+   * @return View for the page.
+   */
+  @ExceptionHandler(IOException.class)
+  @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+  public String handleIOException(final Model model,
+                                  final Exception e) {
+    model.addAttribute("timestamp", new Date());
+    model.addAttribute("error", "Internal Server Error");
+    model.addAttribute("status", "500");
+    model.addAttribute("message", e.getMessage());
+    model.addAttribute("exception", e.getClass().getName());
+    model.addAttribute("trace", ExceptionUtils.getStackTrace(e));
+    return "error";
   }
 }

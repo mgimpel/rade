@@ -18,9 +18,10 @@
  */%>
 <%/* $Id$ */%>
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<c:set var="titre" value="${(empty titre) ? 'Error Page' : titre}" scope="request"/>
 <jsp:include page="aesn_header.jsp" />
-<h1>Error Page</h1>
-<table>
+<table cellpadding="5">
 	<tr>
 		<td>Date</td>
 		<td>${timestamp}</td>
@@ -42,7 +43,7 @@
 		<td>${exception}</td>
 	</tr>
 	<tr>
-		<td>Trace</td>
+		<td valign="top">Trace</td>
 		<td>
 			<pre>${trace}</pre>
 		</td>
