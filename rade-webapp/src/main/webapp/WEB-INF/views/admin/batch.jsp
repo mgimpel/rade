@@ -25,8 +25,9 @@
 				<p>Les Batchs suivants sont présent:
 				<ul>
 					<li><a href="${pageContext.request.contextPath}/batch/info">Batch Info</a></li>
-					<li><a href="${pageContext.request.contextPath}/batch/sandre">Batch Sandre</a></li>
-					<li><a href="${pageContext.request.contextPath}/batch/delegation">Batch Délégation</a></li>
+					<li><a href="${pageContext.request.contextPath}/batch/sandreimport">Batch Import Sandre</a></li>
+					<li><a href="${pageContext.request.contextPath}/batch/delegationimport">Batch Import Délégation</a></li>
+					<li><a href="${pageContext.request.contextPath}/batch/delegationexport">Batch Export Délégation</a></li>
 				</ul>
 			</div>
 		</div>

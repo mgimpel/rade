@@ -18,28 +18,27 @@
 package fr.aesn.rade.common;
 
 /**
- * Thrown to indicate that a method has been passed an invalid argument.
- *
- * Similar to IllegalArgumentExcept but not a RuntimeException.
+ * Application Specific Exception for Rade.
+ * Serves as the parent of all other Application Specific Exception for Rade.
  *
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
-public class InvalidArgumentException
+public class RadeException
   extends Exception {
   /** Unique Identifier for Serializable Class. */
-  private static final long serialVersionUID = -9154258871123779620L;
+  private static final long serialVersionUID = 8559382998584981452L;
 
   /**
    * Constructs a new exception with null as its detail message.
    */
-  public InvalidArgumentException() {
+  public RadeException() {
   }
 
   /**
    * Constructs a new exception with the specified detail message.
    * @param message the detail message.
    */
-  public InvalidArgumentException(String message) {
+  public RadeException(String message) {
     super(message);
   }
 
@@ -47,7 +46,7 @@ public class InvalidArgumentException
    * Constructs a new exception with the specified cause.
    * @param cause the cause.
    */
-  public InvalidArgumentException(Throwable cause) {
+  public RadeException(Throwable cause) {
     super(cause);
   }
 
@@ -56,7 +55,7 @@ public class InvalidArgumentException
    * @param message the detail message.
    * @param cause the cause.
    */
-  public InvalidArgumentException(String message, Throwable cause) {
+  public RadeException(String message, Throwable cause) {
     super(message, cause);
   }
 }

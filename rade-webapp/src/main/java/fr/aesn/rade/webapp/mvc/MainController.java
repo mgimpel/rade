@@ -17,13 +17,15 @@
 /* $Id$ */
 package fr.aesn.rade.webapp.mvc;
 
-import java.io.IOException;
 import java.util.Date;
+import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -35,6 +37,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import fr.aesn.rade.common.RadeException;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -44,6 +47,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Controller
 public class MainController {
+  /** I18n message source. */
+  @Autowired
+  private MessageSource messageSource;
 
   /**
    * Homepage mapping.
@@ -56,13 +62,15 @@ public class MainController {
 
   /**
    * Login mapping.
+   * @param locale locale in which to do the lookup.
    * @param model MVC model passed to JSP.
    * @return View for the Login page.
    */
   @RequestMapping("/login")
-  public String login(final Model model) {
+  public String login(final Locale locale,
+                      final Model model) {
     log.debug("Requesting /login");
-    model.addAttribute("titre", "Login");
+    model.addAttribute("titre", messageSource.getMessage("login.title", null, locale));
     return "login";
   }
 
@@ -86,12 +94,14 @@ public class MainController {
 
   /**
    * Help page.
+   * @param locale locale in which to do the lookup.
    * @param model MVC model passed to JSP.
    * @return View for the Help page.
    */
   @GetMapping("/aide")
-  public String aide(final Model model) {
-    model.addAttribute("titre", "Aide");
+  public String aide(final Locale locale,
+                     final Model model) {
+    model.addAttribute("titre", messageSource.getMessage("aide.title", null, locale));
     return "aide";
   }
 
@@ -106,16 +116,18 @@ public class MainController {
 
   /**
    * Error page to display if the controller threw an Exception.
+   * @param locale locale in which to do the lookup.
    * @param model MVC model passed to JSP.
    * @param e exception that was thrown.
    * @return View for the page.
    */
-  @ExceptionHandler(IOException.class)
+  @ExceptionHandler(RadeException.class)
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-  public String handleIOException(final Model model,
-                                  final Exception e) {
+  public String handleRadeException(final Locale locale,
+                                    final Model model,
+                                    final Exception e) {
     model.addAttribute("timestamp", new Date());
-    model.addAttribute("error", "Internal Server Error");
+    model.addAttribute("error", messageSource.getMessage("error.500", null, locale));
     model.addAttribute("status", "500");
     model.addAttribute("message", e.getMessage());
     model.addAttribute("exception", e.getClass().getName());

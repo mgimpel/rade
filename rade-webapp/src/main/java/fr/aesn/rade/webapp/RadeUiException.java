@@ -15,31 +15,31 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 /* $Id$ */
-package fr.aesn.rade.common;
+package fr.aesn.rade.webapp;
+
+import fr.aesn.rade.common.RadeException;
 
 /**
- * Thrown to indicate that a method has been passed an invalid argument.
- *
- * Similar to IllegalArgumentExcept but not a RuntimeException.
+ * General UI Exception for Rade.
  *
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
-public class InvalidArgumentException
-  extends Exception {
+public class RadeUiException
+  extends RadeException {
   /** Unique Identifier for Serializable Class. */
-  private static final long serialVersionUID = -9154258871123779620L;
+  private static final long serialVersionUID = 9138511605737118190L;
 
   /**
    * Constructs a new exception with null as its detail message.
    */
-  public InvalidArgumentException() {
+  public RadeUiException() {
   }
 
   /**
    * Constructs a new exception with the specified detail message.
    * @param message the detail message.
    */
-  public InvalidArgumentException(String message) {
+  public RadeUiException(String message) {
     super(message);
   }
 
@@ -47,7 +47,7 @@ public class InvalidArgumentException
    * Constructs a new exception with the specified cause.
    * @param cause the cause.
    */
-  public InvalidArgumentException(Throwable cause) {
+  public RadeUiException(Throwable cause) {
     super(cause);
   }
 
@@ -56,7 +56,7 @@ public class InvalidArgumentException
    * @param message the detail message.
    * @param cause the cause.
    */
-  public InvalidArgumentException(String message, Throwable cause) {
+  public RadeUiException(String message, Throwable cause) {
     super(message, cause);
   }
 }
