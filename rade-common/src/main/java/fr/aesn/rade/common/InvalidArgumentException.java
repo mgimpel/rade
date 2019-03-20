@@ -39,7 +39,7 @@ public class InvalidArgumentException
    * Constructs a new exception with the specified detail message.
    * @param message the detail message.
    */
-  public InvalidArgumentException(String message) {
+  public InvalidArgumentException(final String message) {
     super(message);
   }
 
@@ -47,7 +47,7 @@ public class InvalidArgumentException
    * Constructs a new exception with the specified cause.
    * @param cause the cause.
    */
-  public InvalidArgumentException(Throwable cause) {
+  public InvalidArgumentException(final Throwable cause) {
     super(cause);
   }
 
@@ -56,7 +56,8 @@ public class InvalidArgumentException
    * @param message the detail message.
    * @param cause the cause.
    */
-  public InvalidArgumentException(String message, Throwable cause) {
+  public InvalidArgumentException(final String message,
+                                  final Throwable cause) {
     super(message, cause);
   }
 }

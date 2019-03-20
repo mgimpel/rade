@@ -103,7 +103,7 @@ public interface DepartementService {
    * it's genealogie.
    */
   public DepartementWithGenealogie getDepartementWithGenealogie(final String code,
-                                                                final String date);
+                                                                final Date date);
 
   /**
    * Invalidates the given departement by setting the departements finValidite

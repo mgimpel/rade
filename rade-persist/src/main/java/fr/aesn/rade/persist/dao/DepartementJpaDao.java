@@ -17,9 +17,11 @@
 /* $Id$ */
 package fr.aesn.rade.persist.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import fr.aesn.rade.persist.model.Departement;
 
@@ -36,4 +38,14 @@ public interface DepartementJpaDao
    * @return a List of Departement with the given CodeInsee.
    */
   public List<Departement> findByCodeInsee(String codeInsee);
+
+  @Query("SELECT DISTINCT(d) FROM Departement d"
+               + " WHERE (d.region LIKE ?1)"
+               + " AND (UPPER(d.nomMajuscule) LIKE UPPER(?2) OR UPPER(d.nomEnrichi) LIKE UPPER(?2))" 
+               + " AND (d.debutValidite IS NULL OR d.debutValidite <= ?3)"
+               + " AND (d.finValidite IS NULL OR d.finValidite > ?3)"
+               + " ORDER BY d.nomEnrichi")
+  public List<Departement> findByRegionLikeAndNomEnrichiLikeIgnoreCaseValidOnDate(String region, 
+                                                                                  String nameLike, 
+                                                                                  Date date);
 }

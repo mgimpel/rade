@@ -54,7 +54,7 @@
     <spring-security.version>5.1.4.RELEASE</spring-security.version>
     <spring-batch.version>4.1.1.RELEASE</spring-batch.version>
     <hibernate.version>5.4.1.Final</hibernate.version>
-    <cxf.version>3.3.0</cxf.version>
+    <cxf.version>3.3.1</cxf.version>
     <cglib.version>3.2.10</cglib.version>
     <slf4j.version>1.7.26</slf4j.version>
     <logback.version>1.2.3</logback.version>

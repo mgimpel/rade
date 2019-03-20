@@ -19,6 +19,7 @@ package fr.aesn.rade.service.impl;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -210,6 +211,40 @@ public class DepartementServiceImpl
   }
 
   /**
+   * 
+   * @param code
+   * @param region
+   * @param nameLike
+   * @param date
+   * @return
+   */
+  public List<DepartementWithGenealogie> getDepartementByCriteria(final String code,
+                                                                  final String region,
+                                                                  final String nameLike,
+                                                                  final Date date) {
+    log.debug("Departement with Genealogie requested with criteria: " +
+              "code={}, region={}, name={}, date={}",
+              code, region, nameLike, date);
+    List<DepartementWithGenealogie> departementPlus = new ArrayList<>();
+    if(code != null && !code.isEmpty()) { // Rechercher par code INSEE (ignorer region, ...)
+      DepartementWithGenealogie deptGenealogie = getDepartementWithGenealogie(code, date);
+      if(deptGenealogie != null) {
+          departementPlus.add(deptGenealogie);
+      }
+      return departementPlus;
+    }
+    // Rechercher les communes en fonction du nom, dept, region
+    Date testdate = (date == null ? new Date() : date);
+    String testname = (nameLike == null || nameLike.isEmpty() ? "%" : "%" + nameLike + "%");
+    String testregion = (region == null || region.isEmpty() ? "%" : region);
+    List<Departement> depts = departementJpaDao.findByRegionLikeAndNomEnrichiLikeIgnoreCaseValidOnDate(testregion, testname, testdate);;
+    for (Departement dept : depts) {
+      departementPlus.add(buildDepartementWithGenealogie(dept));
+    }
+    return departementPlus;
+  }
+
+  /**
    * Get the Departement with the given code at the given date, and all it's
    * genealogie.
    * @param code the Departement code.
@@ -219,7 +254,7 @@ public class DepartementServiceImpl
    */
   @Override
   public DepartementWithGenealogie getDepartementWithGenealogie(final String code,
-                                                                final String date) {
+                                                                final Date date) {
     Departement dept = getDepartementByCode(code, date);
     if (dept == null) {
       return null;

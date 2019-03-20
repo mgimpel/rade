@@ -187,13 +187,13 @@ public class CommunePlusServiceImpl
     String testname = (nameLike == null || nameLike.isEmpty() ? "%" : "%" + nameLike + "%");
     if ((dept == null || dept.isEmpty()) && (region == null || region.isEmpty())) {
       // neither region or departement are given
-      communes = communeJpaDao.findByCodeInseeLikeAndDepartementLikeAndNomEnrichiLikeIgnoreCaseValidOnDate("%", "%", testname, testdate);
+      communes = communeJpaDao.findByDepartementLikeAndNomEnrichiLikeIgnoreCaseValidOnDate("%", testname, testdate);
     } else if ((dept == null || dept.isEmpty()) && (region != null && !region.isEmpty())) {
       // only region is given
-      communes = communeJpaDao.findByCodeInseeLikeAndRegionLikeAndNomEnrichiLikeIgnoreCaseValidOnDate("%", region, testname, testdate);
+      communes = communeJpaDao.findByRegionLikeAndNomEnrichiLikeIgnoreCaseValidOnDate(region, testname, testdate);
     } else {
       // department is given
-      communes = communeJpaDao.findByCodeInseeLikeAndDepartementLikeAndNomEnrichiLikeIgnoreCaseValidOnDate("%", dept, testname, testdate);
+      communes = communeJpaDao.findByDepartementLikeAndNomEnrichiLikeIgnoreCaseValidOnDate(dept, testname, testdate);
     }
     // Filter les communes en fonction du bassin et récupérer le genealogie
     CommuneSandre sandre;
