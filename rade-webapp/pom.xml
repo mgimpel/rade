@@ -23,12 +23,16 @@
   <parent>
     <groupId>fr.aesn.rade</groupId>
     <artifactId>rade</artifactId>
-    <version>0.7-SNAPSHOT</version>
+    <version>0.10-SNAPSHOT</version>
   </parent>
   <artifactId>rade-webapp</artifactId>
   <packaging>war</packaging>
 
   <name>Rade WebApp</name>
+
+  <properties>
+    <start-class>fr.aesn.rade.webapp.SpringBootWebApplication</start-class>
+  </properties>
 
   <dependencies>
     <dependency>
@@ -49,6 +53,11 @@
     <dependency>
       <groupId>fr.aesn.rade</groupId>
       <artifactId>rade-rs</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>fr.aesn.rade</groupId>
+      <artifactId>rade-batch</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
@@ -196,6 +205,28 @@
       <scope>runtime</scope>
     </dependency>
 
+    <!-- WebJars -->
+    <dependency>
+      <groupId>org.webjars</groupId>
+      <artifactId>webjars-locator</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.webjars</groupId>
+      <artifactId>bootstrap</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.webjars</groupId>
+      <artifactId>jquery</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.webjars</groupId>
+      <artifactId>popper.js</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.webjars</groupId>
+      <artifactId>font-awesome</artifactId>
+    </dependency>
+
     <!-- Database drivers -->
     <dependency>
       <groupId>org.apache.derby</groupId>
@@ -216,6 +247,10 @@
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-dbcp2</artifactId>
       <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.poi</groupId>
+      <artifactId>poi</artifactId>
     </dependency>
 
     <!-- Servlet -->
@@ -257,6 +292,20 @@
       </resource>
     </resources>
     <plugins>
+      <plugin>
+        <groupId>net.alchim31.maven</groupId>
+        <artifactId>yuicompressor-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>compress</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <suffix>.min</suffix>
+        </configuration>
+      </plugin>
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>

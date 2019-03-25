@@ -47,7 +47,9 @@ public class DelegationListDto {
   public static DelegationListDto fromEntityList(final List<Delegation> delegations) {
     List<DelegationDto> dtos = new ArrayList<>(delegations.size());
     for (Delegation delegation : delegations) {
-      dtos.add(DelegationDto.fromEntity(delegation));
+      if (delegation != null) {
+        dtos.add(DelegationDto.fromEntity(delegation));
+      }
     }
     DelegationListDto dto = new DelegationListDto();
     dto.setDelegations(dtos);

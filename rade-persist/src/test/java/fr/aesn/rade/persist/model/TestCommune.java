@@ -82,8 +82,8 @@ public class TestCommune extends AbstractTestEntity {
     audit.setNote("Import initial");
     Commune obj1 = new Commune();
     Commune obj2 = new Commune();
-    obj1.setId(135233);
-    obj1.setDebutValidite(sdf.parse("2018-04-01"));
+    obj1.setId(37570);
+    obj1.setDebutValidite(sdf.parse("1999-01-01"));
     obj1.setFinValidite(null);
     obj1.setArticleEnrichi(null);
     obj1.setNomMajuscule("BASSE-TERRE");
@@ -94,8 +94,8 @@ public class TestCommune extends AbstractTestEntity {
     obj1.setAudit(audit);
     obj1.setCodeInsee("97105");
     obj1.setDepartement("971");
-    obj2.setId(135233);
-    obj2.setDebutValidite(sdf.parse("2018-04-01"));
+    obj2.setId(37570);
+    obj2.setDebutValidite(sdf.parse("1999-01-01"));
     obj2.setFinValidite(null);
     obj2.setArticleEnrichi(null);
     obj2.setNomMajuscule("BASSE-TERRE");
@@ -106,7 +106,7 @@ public class TestCommune extends AbstractTestEntity {
     obj2.setAudit(audit);
     obj2.setCodeInsee("97105");
     obj2.setDepartement("971");
-    assertTrue("String should contain value", obj1.toString().contains("135233"));
+    assertTrue("String should contain value", obj1.toString().contains("37570"));
     assertTrue("String should contain value", obj1.toString().contains(obj1.getDebutValidite().toString()));
     assertTrue("String should contain value", obj1.toString().contains("null"));
     assertTrue("String should contain value", obj1.toString().contains(obj1.getNomMajuscule()));
@@ -134,12 +134,12 @@ public class TestCommune extends AbstractTestEntity {
   @Test
   public void testGettingAnEntity() throws ParseException {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-    Commune com = entityManager.find(Commune.class, 135233);
+    Commune com = entityManager.find(Commune.class, 37570);
     assertNotNull("Hibernate didn't return a Commune", com);
     assertEquals("Hibernate returned a Commune, but the Id doesn't match",
-                 135233, com.getId().intValue());
+                 37570, com.getId().intValue());
     assertEquals("Hibernate returned a Commune, but a field doesn't match",
-                 sdf.parse("2018-01-01"), com.getDebutValidite());
+                 sdf.parse("1999-01-01"), com.getDebutValidite());
     assertNull("Hibernate returned a Commune, but a field doesn't match",
                com.getFinValidite());
     assertNull("Hibernate returned a Commune, but a field doesn't match",
@@ -170,7 +170,7 @@ public class TestCommune extends AbstractTestEntity {
     List<Commune> objs = entityManager.createQuery("FROM Commune", Commune.class).getResultList();
     assertNotNull("Hibernate didn't return a List", objs);
     assertEquals("Hibernate returned a List, but the wrong size",
-                 632, objs.size());
+                 639, objs.size());
     for (Commune obj: objs) {
       assertNotNull("Hibernate returned a List but an Entity is null", obj);
     }

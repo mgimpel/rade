@@ -91,6 +91,7 @@ public class HabilitationsAuthenticationProvider
   @Override
   protected UserDetails retrieveUser(String username,
                                      UsernamePasswordAuthenticationToken authentication) {
+    log.debug("Retrieving details for user {}", username);
     if (authentication == null) {
       throw new BadCredentialsException("Authentication Token was null");
     }
@@ -167,6 +168,7 @@ public class HabilitationsAuthenticationProvider
       throw new BadCredentialsException("Authentication Token was null");
     }
     String name = authentication.getName();
+    log.debug("Authenticating user", name);
     Object credentials = authentication.getCredentials();
     if (credentials == null) {
       throw new BadCredentialsException("Credentials were null");
@@ -181,11 +183,11 @@ public class HabilitationsAuthenticationProvider
       }
       log.info("User authenticated: {}", name);
     } catch (HabilitationException e) {
-      log.debug("Unable to authenticate user {}", name, e);
+      log.warn("Unable to authenticate user {}", name, e);
       throw new BadCredentialsException("Unable to authenticate user " + name,
                                         e);
     } catch (RemoteException e) {
-      log.debug("Unable to authenticate user {}", name, e);
+      log.warn("Unable to authenticate user {}", name, e);
       throw new AuthenticationServiceException("Unable to authenticate user "
                                                + name, e);
     }

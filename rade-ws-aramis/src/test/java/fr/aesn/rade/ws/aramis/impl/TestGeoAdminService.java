@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -83,7 +84,7 @@ public class TestGeoAdminService {
                                                communeBuilder("Ambérieu-en-Bugey", "AMBERIEU-EN-BUGEY", "01004", "06"),
                                                communeBuilder("Ambérieux-en-Dombes", "AMBERIEUX-EN-DOMBES", "01005", "06"));
     List<CommunePlus> nocommunes = Collections.<CommunePlus>emptyList();
-    Date year2018 = new GregorianCalendar(2018, 1, 1, 0, 0, 0).getTime();
+    Date year2018 = new GregorianCalendar(2018, Calendar.JANUARY, 1).getTime();
     when(communePlusService.getAllCommune(any())).thenAnswer(invocation -> {
       Date date = (Date) invocation.getArguments()[0];
       return date.after(year2018) ? communes : nocommunes;

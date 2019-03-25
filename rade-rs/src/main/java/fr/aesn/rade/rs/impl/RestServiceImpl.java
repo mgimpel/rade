@@ -20,7 +20,7 @@ package fr.aesn.rade.rs.impl;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -34,6 +34,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import fr.aesn.rade.common.util.DateConversionUtils;
 import fr.aesn.rade.persist.model.CirconscriptionBassin;
 import fr.aesn.rade.persist.model.Commune;
 import fr.aesn.rade.persist.model.Delegation;
@@ -88,19 +89,39 @@ public class RestServiceImpl
   /**
    * Get all Region.
    * @param req HTTP Request (for determining base path of Rest Service).
-   * @param rawdate the date at which the returned data is valid.
+   * @param rawCodes list of INSEE code of the Region.
+   * @param rawDate the date at which the returned data is valid.
    * @return list of all Region.
    */
   @GET
   @Path(REST_PATH_REGION)
   @Produces(MediaType.APPLICATION_JSON)
   public Response getAllRegion(@Context final HttpServletRequest req,
-                               @QueryParam("date") final String rawdate) {
-    log.info("Executing operation getAllRegion with date {}", rawdate);
+                               @QueryParam("code") final List<String> rawCodes,
+                               @QueryParam("date") final String rawDate) {
+    log.info("Executing operation getAllRegion with code {} and date {}",
+             rawCodes, rawDate);
+    List<Region> regions = null;
     try {
-      Date date = decodeDate(rawdate);
-      List<Region> regions = regionService.getAllRegion(date);
-      if (regions.isEmpty()) {
+      Date date = decodeDate(rawDate);
+      if (rawCodes != null && !rawCodes.isEmpty()) {
+        String code = null;
+        Region region = null;
+        regions = new ArrayList<>(rawCodes.size());
+        for (String rawCode : rawCodes) {
+          code = decodeString(rawCode);
+          region = regionService.getRegionByCode(code, date);
+          if (region != null) {
+              regions.add(region);
+          }
+        }
+        log.debug("found {} regions for the given codes", regions.size());
+      } else {
+        regions = regionService.getAllRegion(date);
+        log.debug("found {} regions", regions.size());
+      }
+      // send response
+      if (regions == null || regions.isEmpty()) {
         return Response.status(Response.Status.NOT_FOUND)
                        .build();
       } else {
@@ -118,20 +139,20 @@ public class RestServiceImpl
   /**
    * Get the Region with the given INSEE code.
    * @param req HTTP Request (for determining base path of Rest Service).
-   * @param rawcode the INSEE code of the Region.
-   * @param rawdate the date at which the returned data is valid.
+   * @param rawCode the INSEE code of the Region.
+   * @param rawDate the date at which the returned data is valid.
    * @return the Region with the given INSEE code.
    */
   @GET
   @Path(REST_PATH_REGION + "{code}")
   @Produces(MediaType.APPLICATION_JSON)
   public Response getRegion(@Context final HttpServletRequest req,
-                            @PathParam("code") final String rawcode,
-                            @QueryParam("date") final String rawdate) {
-    log.info("Executing operation getRegion with code {} and date {}", rawcode, rawdate);
+                            @PathParam("code") final String rawCode,
+                            @QueryParam("date") final String rawDate) {
+    log.info("Executing operation getRegion with code {} and date {}", rawCode, rawDate);
     try {
-      String code = decodeString(rawcode);
-      Date date = decodeDate(rawdate);
+      String code = decodeString(rawCode);
+      Date date = decodeDate(rawDate);
       Region region = regionService.getRegionByCode(code, date);
       if (region == null) {
         return Response.status(Response.Status.NOT_FOUND)
@@ -151,19 +172,39 @@ public class RestServiceImpl
   /**
    * Get all Departement.
    * @param req HTTP Request (for determining base path of Rest Service).
-   * @param rawdate the date at which the returned data is valid.
+   * @param rawCodes list of INSEE code of the Departement.
+   * @param rawDate the date at which the returned data is valid.
    * @return list of all Departement.
    */
   @GET
   @Path(REST_PATH_DEPARTEMENT)
   @Produces(MediaType.APPLICATION_JSON)
   public Response getAllDepartement(@Context final HttpServletRequest req,
-                                    @QueryParam("date") final String rawdate) {
-    log.info("Executing operation getAllDepartement with date {}", rawdate);
+                                    @QueryParam("code") final List<String> rawCodes,
+                                    @QueryParam("date") final String rawDate) {
+    log.info("Executing operation getAllDepartement with code {} and date {}",
+             rawCodes, rawDate);
+    List<Departement> depts = null;
     try {
-      Date date = decodeDate(rawdate);
-      List<Departement> depts = departementService.getAllDepartement(date);
-      if (depts.isEmpty()) {
+      Date date = decodeDate(rawDate);
+      if (rawCodes != null && !rawCodes.isEmpty()) {
+        String code = null;
+        Departement dept = null;
+        depts = new ArrayList<>(rawCodes.size());
+        for (String rawCode : rawCodes) {
+          code = decodeString(rawCode);
+          dept = departementService.getDepartementByCode(code, date);
+          if (dept != null) {
+            depts.add(dept);
+          }
+        }
+        log.debug("found {} departements for the given codes", depts.size());
+      } else {
+        depts = departementService.getAllDepartement(date);
+        log.debug("found {} departements", depts.size());
+      }
+      // send response
+      if (depts == null || depts.isEmpty()) {
         return Response.status(Response.Status.NOT_FOUND)
                        .build();
       } else {
@@ -181,20 +222,20 @@ public class RestServiceImpl
   /**
    * Get the Departement with the given INSEE code.
    * @param req HTTP Request (for determining base path of Rest Service).
-   * @param rawcode the INSEE code of the Departement.
-   * @param rawdate the date at which the returned data is valid.
+   * @param rawCode the INSEE code of the Departement.
+   * @param rawDate the date at which the returned data is valid.
    * @return the Departement with the given INSEE code.
    */
   @GET
   @Path(REST_PATH_DEPARTEMENT + "{code}")
   @Produces(MediaType.APPLICATION_JSON)
   public Response getDepartement(@Context final HttpServletRequest req,
-                                 @PathParam("code") final String rawcode,
-                                 @QueryParam("date") final String rawdate) {
-    log.info("Executing operation getDepartement with code {} and date {}", rawcode, rawdate);
+                                 @PathParam("code") final String rawCode,
+                                 @QueryParam("date") final String rawDate) {
+    log.info("Executing operation getDepartement with code {} and date {}", rawCode, rawDate);
     try {
-      String code = decodeString(rawcode);
-      Date date = decodeDate(rawdate);
+      String code = decodeString(rawCode);
+      Date date = decodeDate(rawDate);
       Departement dept = departementService.getDepartementByCode(code, date);
       if (dept == null) {
         return Response.status(Response.Status.NOT_FOUND)
@@ -214,26 +255,51 @@ public class RestServiceImpl
   /**
    * Get all Commune matching the request parameters.
    * @param req HTTP Request (for determining base path of Rest Service).
+   * @param rawCodes list of INSEE code of the Commune
+   * (if no codes are given dept and namelike are used). 
+   * @param rawDept the Departement INSEE code of the Commune
+   * (not used if codes are given).
+   * @param rawNameLike a part of the Commune enrich name
+   * (not used if codes are given).
    * @param rawDate the date at which the returned data is valid.
-   * @param rawDept the Departement INSEE code of the Commune.
-   * @param rawNameLike a part of the Commune enrich name.
    * @return list of all Commune matching the request parameters.
    */
   @GET
   @Path(REST_PATH_COMMUNE)
   @Produces(MediaType.APPLICATION_JSON)
   public Response getAllCommune(@Context final HttpServletRequest req,
+                                @QueryParam("code") final List<String> rawCodes,
                                 @QueryParam("dept") final String rawDept,
                                 @QueryParam("namelike") final String rawNameLike,
                                 @QueryParam("date") final String rawDate) {
-    log.info("Executing operation getAllCommune with dept {}, name like {} and date {}",
-             rawDept, rawNameLike, rawDate);
+    log.info("Executing operation getAllCommune with code {}, dept {}, name like {} and date {}",
+             rawCodes, rawDept, rawNameLike, rawDate);
+    List<Commune> communes = null;
     try {
       Date date = decodeDate(rawDate);
-      String dept = decodeString(rawDept);
-      String nameLike = decodeString(rawNameLike);
-      List<Commune> communes = communeService.getAllCommune(dept, nameLike, date);
-      if (communes.isEmpty()) {
+      // if Query Parameter "code" is present, ignore "dept" and "namelike"
+      if (rawCodes != null && !rawCodes.isEmpty()) {
+        String code = null;
+        Commune commune = null;
+        communes = new ArrayList<>(rawCodes.size());
+        for (String rawCode : rawCodes) {
+          code = decodeString(rawCode);
+          commune = communeService.getCommuneByCode(code, date);
+          if (commune != null) {
+            communes.add(commune);
+          }
+        }
+        log.debug("found {} communes for the given codes", communes.size());
+      }
+      // if Query Parameter "code" is NOT present, use "dept" and "namelike"
+      else {
+        String dept = decodeString(rawDept);
+        String nameLike = decodeString(rawNameLike);
+        communes = communeService.getAllCommune(dept, nameLike, date);
+        log.debug("found {} communes for the given criteria", communes.size());
+      }
+      // send response
+      if (communes == null || communes.isEmpty()) {
         return Response.status(Response.Status.NOT_FOUND)
                        .build();
       } else {
@@ -251,20 +317,20 @@ public class RestServiceImpl
   /**
    * Get the Commune with the given INSEE code.
    * @param req HTTP Request (for determining base path of Rest Service).
-   * @param rawcode the INSEE code of the Commune.
-   * @param rawdate the date at which the returned data is valid.
+   * @param rawCode the INSEE code of the Commune.
+   * @param rawDate the date at which the returned data is valid.
    * @return the Commune with the given INSEE code.
    */
   @GET
   @Path(REST_PATH_COMMUNE + "{code}")
   @Produces(MediaType.APPLICATION_JSON)
   public Response getCommune(@Context final HttpServletRequest req,
-                             @PathParam("code") final String rawcode,
-                             @QueryParam("date") final String rawdate) {
-    log.info("Executing operation getCommune with code {} and date {}", rawcode, rawdate);
+                             @PathParam("code") final String rawCode,
+                             @QueryParam("date") final String rawDate) {
+    log.info("Executing operation getCommune with code {} and date {}", rawCode, rawDate);
     try {
-      String code = decodeString(rawcode);
-      Date date = decodeDate(rawdate);
+      String code = decodeString(rawCode);
+      Date date = decodeDate(rawDate);
       Commune commune = communeService.getCommuneByCode(code, date);
       if (commune == null) {
         return Response.status(Response.Status.NOT_FOUND)
@@ -304,17 +370,17 @@ public class RestServiceImpl
   /**
    * Get the Delegation with the given code.
    * @param req HTTP Request (for determining base path of Rest Service).
-   * @param rawcode the code of the Delegation.
+   * @param rawCode the code of the Delegation.
    * @return the Delegation with the given code.
    */
   @GET
   @Path(REST_PATH_DELEGATION + "{code}")
   @Produces(MediaType.APPLICATION_JSON)
   public Response getDelegation(@Context final HttpServletRequest req,
-                                @PathParam("code") final String rawcode) {
-    log.info("Executing operation getDelegation with code {}", rawcode);
+                                @PathParam("code") final String rawCode) {
+    log.info("Executing operation getDelegation with code {}", rawCode);
     try {
-      String code = decodeString(rawcode);
+      String code = decodeString(rawCode);
       Delegation delegation = delegationService.getDelegationById(code);
       if (delegation == null) {
         return Response.status(Response.Status.NOT_FOUND)
@@ -354,17 +420,17 @@ public class RestServiceImpl
   /**
    * Get the CirconscriptionBassin with the given code.
    * @param req HTTP Request (for determining base path of Rest Service).
-   * @param rawcode the code of the CirconscriptionBassin.
+   * @param rawCode the code of the CirconscriptionBassin.
    * @return the CirconscriptionBassin with the given code.
    */
   @GET
   @Path(REST_PATH_CIRCONSCRIPTION_BASSIN + "{code}")
   @Produces(MediaType.APPLICATION_JSON)
   public Response getBassin(@Context final HttpServletRequest req,
-                            @PathParam("code") final String rawcode) {
-    log.info("Executing operation getBassin with code {}", rawcode);
+                            @PathParam("code") final String rawCode) {
+    log.info("Executing operation getBassin with code {}", rawCode);
     try {
-      String code = decodeString(rawcode);
+      String code = decodeString(rawCode);
       CirconscriptionBassin bassin = bassinService.getBassinByCode(code);
       if (bassin == null) {
         return Response.status(Response.Status.NOT_FOUND)
@@ -392,35 +458,30 @@ public class RestServiceImpl
     if (rawString == null) {
       return "";
     }
-    String string = null;
     try {
-      string = URLDecoder.decode(rawString, "UTF-8");
+      return URLDecoder.decode(rawString, "UTF-8");
     } catch (UnsupportedEncodingException e) {
       throw new RestRequestException("Could not decode " + rawString, e);
     }
-    return string;
   }
 
   /**
    * Check and parse the given date String.
-   * @param rawdate the date String to check and parse.
+   * @param rawDate the date String to check and parse.
    * @return the parsed date String.
    * @throws RestRequestException if the date String could not be parsed.
    */
-  private static final Date decodeDate(final String rawdate)
+  private static final Date decodeDate(final String rawDate)
     throws RestRequestException {
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-    Date date = null;
-    if (rawdate == null) {
-      date = new Date();
+    if (rawDate == null) {
+      return new Date();
     } else {
       try {
-        date = sdf.parse(rawdate);
+        return DateConversionUtils.urlStringToDate(rawDate);
       } catch (ParseException e) {
-        throw new RestRequestException("Could not parse date " + rawdate, e);
+        throw new RestRequestException("Could not parse date " + rawDate, e);
       }
     }
-    return date;
   }
 
   /**

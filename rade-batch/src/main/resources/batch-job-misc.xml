@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--/*
+ *  This file is part of the Rade project (https://github.com/mgimpel/rade).
+ *  Copyright (C) 2018 Marc Gimpel
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */-->
+<!-- $Id$ -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:batch="http://www.springframework.org/schema/batch"
+       xsi:schemaLocation="
+         http://www.springframework.org/schema/beans
+         http://www.springframework.org/schema/beans/spring-beans.xsd
+         http://www.springframework.org/schema/batch
+         http://www.springframework.org/schema/batch/spring-batch.xsd">
+
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+  <!-- Readers -->
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+  <!-- ItemReader which reads data from the database -->
+  <bean id="delegationDbItemReader" scope="step"
+        class="org.springframework.batch.item.database.JpaPagingItemReader"
+        p:entityManagerFactory-ref="entityManagerFactory"
+        p:queryString="select d from Delegation d"
+        p:pageSize="100"/>
+
+  <!-- ItemReader which reads data from CSV file -->
+  <bean id="delegationFileItemReader" scope="step"
+        class="org.springframework.batch.item.file.FlatFileItemReader">
+    <property name="resource" value="#{jobParameters['inputFile']}"/>
+    <property name="encoding" value="windows-1252"/>
+    <property name="linesToSkip" value="1"/>
+    <property name="lineMapper">
+      <bean class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
+        <property name="fieldSetMapper">
+          <bean class="org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper"
+                p:targetType="fr.aesn.rade.persist.model.Delegation"
+                p:strict="false"/>
+        </property>
+        <property name="lineTokenizer">
+          <bean class="org.springframework.batch.item.file.transform.DelimitedLineTokenizer"
+                p:names="code,libelle,acheminement,adresse1,adresse2,adresse3,adresse4,adresse5,codePostal,email,fax,siteWeb,telephone,telephone2,telephone3"
+                p:delimiter=";"/>
+        </property>
+      </bean>
+    </property>
+  </bean>
+
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+  <!-- Writers -->
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+  <!-- ItemWriter which writes the data to the database -->
+  <bean id="delegationDbItemWriter" scope="step"
+        class="org.springframework.batch.item.database.JpaItemWriter"
+        p:entityManagerFactory-ref="entityManagerFactory"/>
+
+  <!-- ItemWriter which writes the data to a CSV File -->
+  <bean id="delegationFileItemWriter" scope="step"
+        class="org.springframework.batch.item.file.FlatFileItemWriter">
+    <property name="resource" value="#{jobParameters['outputFile']}"/>
+    <property name="encoding" value="windows-1252"/>
+    <property name="shouldDeleteIfExists" value="true" />
+    <property name="lineAggregator">
+      <bean class="org.springframework.batch.item.file.transform.DelimitedLineAggregator">
+        <property name="delimiter" value=";"/>
+        <property name="fieldExtractor">
+          <bean class="org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor"
+                p:names="code,libelle,acheminement,adresse1,adresse2,adresse3,adresse4,adresse5,codePostal,email,fax,siteWeb,telephone,telephone2,telephone3"/>
+        </property>
+      </bean>
+    </property>
+    <property name="headerCallback">
+      <bean class="fr.aesn.rade.batch.util.StringHeaderWriter"
+            p:header="//code,libelle,acheminement,adresse1,adresse2,adresse3,adresse4,adresse5,codePostal,email,fax,siteWeb,telephone,telephone2,telephone3"/>
+    </property>
+  </bean>
+
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+  <!-- Tasklets -->
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+  <!-- Delete Delegations from JPA Repository Tasklet -->
+  <bean id="deleteAllDelegationTasklet" scope="step"
+        class="fr.aesn.rade.batch.tasks.misc.DeleteAllDelegationTasklet"/>
+
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+  <!-- Jobs -->
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+  <!-- The Delegation Import Job (NB: doesn't delete Delegations in DB) -->
+  <batch:job id="importDelegationJob">
+    <batch:step id="importDelegationStep1">
+      <batch:tasklet transaction-manager="transactionManager">
+        <batch:chunk reader="delegationFileItemReader"
+                     writer="delegationDbItemWriter"
+                     commit-interval="100"/>
+      </batch:tasklet>
+    </batch:step>
+  </batch:job>
+
+  <!-- The Delegation Export Job -->
+  <batch:job id="exportDelegationJob">
+    <batch:step id="exportDelegationStep1">
+      <batch:tasklet transaction-manager="transactionManager">
+        <batch:chunk reader="delegationDbItemReader"
+                     writer="delegationFileItemWriter"
+                     commit-interval="100"/>
+      </batch:tasklet>
+    </batch:step>
+  </batch:job>
+</beans>

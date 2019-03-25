@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--/*
+ *  This file is part of the Rade project (https://github.com/mgimpel/rade).
+ *  Copyright (C) 2018 Marc Gimpel
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */-->
+<!-- $Id$ -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+       xmlns:batch="http://www.springframework.org/schema/batch"
+       xsi:schemaLocation="
+         http://www.springframework.org/schema/beans
+         http://www.springframework.org/schema/beans/spring-beans.xsd
+         http://www.springframework.org/schema/context
+         http://www.springframework.org/schema/context/spring-context.xsd
+         http://www.springframework.org/schema/tx
+         http://www.springframework.org/schema/tx/spring-tx.xsd
+         http://www.springframework.org/schema/data/jpa 
+         http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
+         http://www.springframework.org/schema/batch
+         http://www.springframework.org/schema/batch/spring-batch.xsd">
+
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+  <!-- Persistence (Database & Hibernate) & Service Layers -->
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+  <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close"
+        p:driverClassName="${db.driver}"
+        p:url="${db.jdbcurl}"
+        p:username="${db.username}"
+        p:password="${db.password}"/>
+
+  <!-- Create default configuration for Hibernate -->
+  <bean id="jpaVendorAdapter" 
+        class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
+
+  <!-- Configure the entity manager factory bean -->
+  <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
+        p:dataSource-ref="dataSource"
+        p:packagesToScan="fr.aesn.rade.persist.model"
+        p:jpaVendorAdapter-ref="jpaVendorAdapter"/>
+
+  <bean id="entityManager"
+        factory-bean="entityManagerFactory"
+        factory-method="createEntityManager"/>
+
+  <!-- Configure the transaction manager bean -->
+  <bean id="transactionManager"
+        class="org.springframework.orm.jpa.JpaTransactionManager"
+        p:entityManagerFactory-ref="entityManagerFactory"/>
+
+  <!-- Enable annotation driven transaction management -->
+  <tx:annotation-driven/>
+
+  <!-- Configure Spring Data JPA -->
+  <jpa:repositories base-package="fr.aesn.rade.persist.dao"/>
+
+  <!-- Service Layer -->
+  <context:component-scan base-package="fr.aesn.rade.service"/>
+
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+  <!-- Batch -->
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+  <!--This repository is only really intended for use in testing and rapid prototyping-->
+  <bean id="jobRepository" class="org.springframework.batch.core.repository.support.MapJobRepositoryFactoryBean"/>
+
+  <bean id="jobLauncher" class="org.springframework.batch.core.launch.support.SimpleJobLauncher"
+        p:jobRepository-ref="jobRepository"/>
+
+  <import resource="classpath*:batch-job-info.xml"/>
+  <import resource="classpath*:batch-job-misc.xml"/>
+  <import resource="classpath*:batch-job-insee.xml"/>
+  <import resource="classpath*:batch-job-sandre.xml"/>
+  <import resource="classpath*:batch-job-hexaposte.xml"/>
+
+</beans>

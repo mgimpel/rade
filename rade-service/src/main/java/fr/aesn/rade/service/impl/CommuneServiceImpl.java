@@ -83,7 +83,8 @@ public class CommuneServiceImpl
   @Transactional(readOnly = true)
   public List<Commune> getAllCommune(final Date date) {
     log.debug("Commune list requested for Date: date={}", date);
-    return communeJpaDao.findAllValidOnDate(date);
+    Date testDate = (date == null ? new Date() : date);
+    return communeJpaDao.findAllValidOnDate(testDate);
   }
 
   /**
@@ -101,14 +102,15 @@ public class CommuneServiceImpl
                                      final Date date){
     log.debug("Commune list requested for Date, Department and Name: date={}, departement={}, name like={}",
               date, dept, nameLike);
+    Date testDate = (date == null ? new Date() : date);
     if (StringUtils.isEmpty(dept) && StringUtils.isEmpty(nameLike))
-      return communeJpaDao.findAllValidOnDate(date);
+      return communeJpaDao.findAllValidOnDate(testDate);
     else if(!StringUtils.isEmpty(dept) && StringUtils.isEmpty(nameLike))
-      return communeJpaDao.findByDepartementValidOnDate(dept, date);
+      return communeJpaDao.findByDepartementValidOnDate(dept, testDate);
     else if(StringUtils.isEmpty(dept) && !StringUtils.isEmpty(nameLike))
-      return communeJpaDao.findByNameLikeValidOnDate(nameLike, date);
+      return communeJpaDao.findByNameLikeValidOnDate(nameLike, testDate);
     else if(!StringUtils.isEmpty(dept) && !StringUtils.isEmpty(nameLike))
-      return communeJpaDao.findByDepartementAndNameLikeValidOnDate(dept, nameLike, date);
+      return communeJpaDao.findByDepartementAndNameLikeValidOnDate(dept, nameLike, testDate);
     return null;
   }
 
@@ -189,7 +191,8 @@ public class CommuneServiceImpl
   @Transactional(readOnly = true)
   public Commune getCommuneByCode(final String code, final Date date) {
     log.debug("Commune requested by code and date: code={}, date={}", code, date);
-    return communeJpaDao.findByCodeInseeValidOnDate(code, date);
+    Date testDate = (date == null ? new Date() : date);
+    return communeJpaDao.findByCodeInseeValidOnDate(code, testDate);
   }
 
   /**

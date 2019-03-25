@@ -19,19 +19,25 @@ package fr.aesn.rade.service.impl;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import fr.aesn.rade.common.InvalidArgumentException;
+import fr.aesn.rade.common.modelplus.DepartementWithGenealogie;
 import fr.aesn.rade.common.util.SharedBusinessRules;
 import fr.aesn.rade.persist.dao.DepartementJpaDao;
 import fr.aesn.rade.persist.model.Departement;
+import fr.aesn.rade.persist.model.EntiteAdministrative;
+import fr.aesn.rade.persist.model.GenealogieEntiteAdmin;
 import fr.aesn.rade.service.DepartementService;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -66,10 +72,13 @@ public class DepartementServiceImpl
    * @param date the date at which the code was valid
    * @return a List of all the Departement.
    */
+  @Override
+  @Transactional(readOnly = true)
   public List<Departement> getAllDepartement(final Date date) {
     log.debug("Departement list requested for Date: date={}", date);
     List<Departement> list = departementJpaDao.findAll();
-    list.removeIf(e -> !SharedBusinessRules.isEntiteAdministrativeValid(e, date));
+    Date testDate = (date == null ? new Date() : date);
+    list.removeIf(e -> !SharedBusinessRules.isEntiteAdministrativeValid(e, testDate));
     return list;
   }
 
@@ -126,6 +135,8 @@ public class DepartementServiceImpl
    * @param code the Departement code.
    * @return list of Departements that have historically had the given code.
    */
+  @Override
+  @Transactional(readOnly = true)
   public List<Departement> getDepartementByCode(final String code) {
     log.debug("Departement requested by code: code={}", code);
     return departementJpaDao.findByCodeInsee(code);
@@ -144,13 +155,14 @@ public class DepartementServiceImpl
    * @param date the date at which the code was valid
    * @return the Departement with the given code at the given date.
    */
+  @Override
   public Departement getDepartementByCode(final String code, final Date date) {
     log.debug("Departement requested by code and date: code={}, date={}", code, date);
     List<Departement> list = getDepartementByCode(code);
     if (list == null) {
       return null;
     }
-    Date testdate = date == null ? new Date() : date;
+    Date testdate = (date == null ? new Date() : date);
     for (Departement dept : list) {
       if (SharedBusinessRules.isEntiteAdministrativeValid(dept, testdate)) {
         // Suppose database correct (au plus 1 valeur valide)
@@ -166,6 +178,7 @@ public class DepartementServiceImpl
    * @param date the date at which the code was valid
    * @return the Departement with the given code at the given date.
    */
+  @Override
   public Departement getDepartementByCode(final String code,
                                           final String date) {
     log.debug("Departement requested by code and date: code={}, date={}", code, date);
@@ -176,6 +189,124 @@ public class DepartementServiceImpl
       log.warn("Departement requested by code and date: Exception parsing date {}", date, e);
       return null;
     }
+  }
+
+  /**
+   * Get all the Departements within a given region, at the given date.
+   * @param region the regions code.
+   * @param date the date at which the Departments are valid.
+   * @return list of Departements within the given region, at the given date.
+   */
+  @Override
+  public List<Departement> getDepartementForRegion(String region, Date date) {
+    log.debug("Departement list requested for region: region={}, date={}",
+              region, date);
+    List<Departement> list = getAllDepartement(date);
+    if (region == null || region.isEmpty()) {
+      return list;
+    } else {
+      list.removeIf(e -> !region.equals(e.getRegion()));
+      return list;
+    }
+  }
+
+  /**
+   * 
+   * @param code
+   * @param region
+   * @param nameLike
+   * @param date
+   * @return
+   */
+  public List<DepartementWithGenealogie> getDepartementByCriteria(final String code,
+                                                                  final String region,
+                                                                  final String nameLike,
+                                                                  final Date date) {
+    log.debug("Departement with Genealogie requested with criteria: " +
+              "code={}, region={}, name={}, date={}",
+              code, region, nameLike, date);
+    List<DepartementWithGenealogie> departementPlus = new ArrayList<>();
+    if(code != null && !code.isEmpty()) { // Rechercher par code INSEE (ignorer region, ...)
+      DepartementWithGenealogie deptGenealogie = getDepartementWithGenealogie(code, date);
+      if(deptGenealogie != null) {
+          departementPlus.add(deptGenealogie);
+      }
+      return departementPlus;
+    }
+    // Rechercher les communes en fonction du nom, dept, region
+    Date testdate = (date == null ? new Date() : date);
+    String testname = (nameLike == null || nameLike.isEmpty() ? "%" : "%" + nameLike + "%");
+    String testregion = (region == null || region.isEmpty() ? "%" : region);
+    List<Departement> depts = departementJpaDao.findByRegionLikeAndNomEnrichiLikeIgnoreCaseValidOnDate(testregion, testname, testdate);;
+    for (Departement dept : depts) {
+      departementPlus.add(buildDepartementWithGenealogie(dept));
+    }
+    return departementPlus;
+  }
+
+  /**
+   * Get the Departement with the given code at the given date, and all it's
+   * genealogie.
+   * @param code the Departement code.
+   * @param date the date at which the code was valid
+   * @return the Departement with the given code at the given date, and all
+   * it's genealogie.
+   */
+  @Override
+  public DepartementWithGenealogie getDepartementWithGenealogie(final String code,
+                                                                final Date date) {
+    Departement dept = getDepartementByCode(code, date);
+    if (dept == null) {
+      return null;
+    }
+    return buildDepartementWithGenealogie(dept);
+  }
+
+  /**
+   * Build a DepartementWithGenealogie from the given Departement.
+   * @param dept the Departement
+   * @return a DepartementWithGenealogie built from the given Departement.
+   */
+  private DepartementWithGenealogie buildDepartementWithGenealogie(final Departement dept) {
+    log.debug("Building Genealogie for {}", dept);
+    DepartementWithGenealogie result = new DepartementWithGenealogie(dept);
+    EntiteAdministrative tempEntity;
+    Optional<Departement> opt;
+    Set<GenealogieEntiteAdmin> parents = dept.getParents();
+    if (parents != null) {
+      for (GenealogieEntiteAdmin parent : parents) {
+        tempEntity = parent.getParentEnfant().getParent();
+        assert "DEP".equals(tempEntity.getTypeEntiteAdmin().getCode());
+        opt = departementJpaDao.findById(tempEntity.getId());
+        if (opt.isPresent()) {
+          try {
+            result.addParent(parent.getTypeGenealogie(), opt.get());
+          } catch (InvalidArgumentException e) {
+            log.warn("This should never happen! parent must exist: {}", parent);
+          }
+        } else {
+          log.warn("This should never happen! parent must exist: {}", parent);
+        }
+      }
+    }
+    Set<GenealogieEntiteAdmin> enfants = dept.getEnfants();
+    if (enfants != null) {
+      for (GenealogieEntiteAdmin enfant : enfants) {
+        tempEntity = enfant.getParentEnfant().getEnfant();
+        assert "DEP".equals(tempEntity.getTypeEntiteAdmin().getCode());
+        opt = departementJpaDao.findById(tempEntity.getId());
+        if (opt.isPresent()) {
+          try {
+            result.addEnfant(enfant.getTypeGenealogie(), opt.get());
+          } catch (InvalidArgumentException e) {
+            log.warn("This should never happen! enfant must exist: {}", enfant);
+          }
+        } else {
+          log.warn("This should never happen! parent must exist: {}", enfant);
+        }
+      }
+    }
+    return result;
   }
 
   /**

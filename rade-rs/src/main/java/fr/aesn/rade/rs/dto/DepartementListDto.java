@@ -47,7 +47,9 @@ public class DepartementListDto {
   public static DepartementListDto fromEntityList(final List<Departement> depts) {
     List<DepartementDto> dtos = new ArrayList<>(depts.size());
     for (Departement dept : depts) {
-      dtos.add(DepartementDto.fromEntity(dept));
+      if (dept != null) {
+        dtos.add(DepartementDto.fromEntity(dept));
+      }
     }
     DepartementListDto dto = new DepartementListDto();
     dto.setDepartments(dtos);

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--/*
+ *  This file is part of the Rade project (https://github.com/mgimpel/rade).
+ *  Copyright (C) 2018 Marc Gimpel
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */-->
+<!-- $Id$ -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:batch="http://www.springframework.org/schema/batch"
+       xsi:schemaLocation="
+         http://www.springframework.org/schema/beans
+         http://www.springframework.org/schema/beans/spring-beans.xsd
+         http://www.springframework.org/schema/batch
+         http://www.springframework.org/schema/batch/spring-batch.xsd">
+
+  <import resource="classpath*:/**/batch-job-info.xml"/>
+  <import resource="classpath*:/**/batch-job-sandre.xml"/>
+  <import resource="classpath*:/**/batch-job-misc.xml"/>
+
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+  <!-- Readers -->
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+  <!-- Writers -->
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+  <!-- Processors -->
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+  <!-- Tasklets -->
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+  <!-- Delete File Tasklet -->
+  <bean id="deleteFileTasklet" scope="step"
+        class="fr.aesn.rade.batch.util.DeleteFileTasklet"/>
+
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+  <!-- Jobs -->
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+  <!-- Info Job -->
+  <batch:job id="webInfoJob">
+    <batch:step id="webInfoStep1" next="webInfoStep2">
+      <batch:tasklet ref="infoTasklet"/>
+    </batch:step>
+    <batch:step id="webInfoStep2">
+      <batch:tasklet ref="deleteFileTasklet"/>
+    </batch:step>
+  </batch:job>
+
+  <!-- The Commune Sandre Full Import Job -->
+  <batch:job id="webImportCommuneSandreJob">
+    <batch:step id="webImportCommuneSandreStep1" next="webImportCommuneSandreStep2">
+      <batch:tasklet ref="deleteAllCommuneSandreTasklet"/>
+    </batch:step>
+    <batch:step id="webImportCommuneSandreStep2" next="webImportCommuneSandreStep3">
+      <batch:tasklet transaction-manager="transactionManager">
+        <batch:chunk reader="communeSandreItemReader"
+                     processor="communeSandreItemProcessor"
+                     writer="communeSandreItemWriter"
+                     commit-interval="100"/>
+      </batch:tasklet>
+    </batch:step>
+    <batch:step id="webImportCommuneSandreStep3">
+      <batch:tasklet ref="deleteFileTasklet"/>
+    </batch:step>
+  </batch:job>
+
+  <!-- The Delegation Full Import Job -->
+  <batch:job id="webImportDelegationJob">
+    <batch:step id="webImportDelegationStep1" next="webImportDelegationStep2">
+      <batch:tasklet ref="deleteAllDelegationTasklet"/>
+    </batch:step>
+    <batch:step id="webImportDelegationStep2" next="webImportDelegationStep3">
+      <batch:tasklet transaction-manager="transactionManager">
+        <batch:chunk reader="delegationFileItemReader"
+                     writer="delegationDbItemWriter"
+                     commit-interval="100"/>
+      </batch:tasklet>
+    </batch:step>
+    <batch:step id="webImportDelegationStep3">
+      <batch:tasklet ref="deleteFileTasklet"/>
+    </batch:step>
+  </batch:job>
+</beans>

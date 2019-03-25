@@ -88,9 +88,9 @@ cat > $BATCH_CONTEXT << EOF
   <import resource="classpath:batch-default-context.xml"/>
 </beans>
 EOF
-java -jar ../../../../rade-batch/target/rade-batch.jar -c file:$BATCH_CONTEXT -i file:../resources/batchfiles/sandre/COM_20181016_SANDRE.csv -j importCommuneSandreJob
-java -jar ../../../../rade-batch/target/rade-batch.jar -c file:$BATCH_CONTEXT -i file:../resources/batchfiles/hexaposte/AMAHXP38c-201809-NOV2011.txt -j importHexaposteJob
-java -jar ../../../../rade-batch/target/rade-batch.jar -c file:$BATCH_CONTEXT -i file:../resources/batchfiles/insee/comsimp1999.txt -d 1999-01-01 -j importCommuneSimpleInseeJob
-java -jar ../../../../rade-batch/target/rade-batch.jar -c file:$BATCH_CONTEXT -i file:../resources/batchfiles/insee/historiq2018-modified.txt -d 1999-01-02 -j importCommuneInseeHistoryJob
+java -jar ../../../../rade-batchrunner/target/rade-batchrunner.jar -c file:$BATCH_CONTEXT -i file:../resources/batchfiles/sandre/COM_20181016_SANDRE.csv -j importCommuneSandreJob
+java -jar ../../../../rade-batchrunner/target/rade-batchrunner.jar -c file:$BATCH_CONTEXT -i file:../resources/batchfiles/hexaposte/AMAHXP38c-201809-NOV2011.txt -j importHexaposteJob
+java -jar ../../../../rade-batchrunner/target/rade-batchrunner.jar -c file:$BATCH_CONTEXT -i file:../resources/batchfiles/insee/comsimp1999.txt -d 1999-01-01 -j importCommuneSimpleInseeJob
+java -jar ../../../../rade-batchrunner/target/rade-batchrunner.jar -c file:$BATCH_CONTEXT -i file:../resources/batchfiles/insee/historiq2018-modified.txt -d 1999-01-02 -j importCommuneInseeHistoryJob
 rm $BATCH_PROPERTIES
 rm $BATCH_CONTEXT

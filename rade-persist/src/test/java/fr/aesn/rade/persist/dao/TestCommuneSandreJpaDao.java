@@ -66,7 +66,7 @@ public class TestCommuneSandreJpaDao extends AbstractTestJpaDao {
   public void testGettingEntityList() {
     List<CommuneSandre> list = jpaDao.findAll();
     assertNotNull("JpaDao returned a null list", list);
-    assertEquals(101, list.size());
+    assertEquals(102, list.size());
     for (CommuneSandre obj : list) {
       assertNotNull("Hibernate returned a List but an Entity is null",
                     obj);
@@ -137,10 +137,10 @@ public class TestCommuneSandreJpaDao extends AbstractTestJpaDao {
     List<CommuneSandre> result;
     result = jpaDao.findAllValidOnDate(sdf.parse("2018-01-01"));
     assertEquals("Hibernate returned the wrong number of results",
-                 101, result.size());
+                 102, result.size());
     result = jpaDao.findAllValidOnDate(sdf.parse("2010-01-01"));
     assertEquals("Hibernate returned the wrong number of results",
-                 100, result.size());
+                 101, result.size());
     result = jpaDao.findAllValidOnDate(sdf.parse("2000-01-01"));
     assertEquals("Hibernate returned the wrong number of results",
                  0, result.size());

@@ -136,6 +136,18 @@
   </jaxrs:server>
 
   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+  <!-- Batch -->
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+  <!--This repository is only really intended for use in testing and rapid prototyping-->
+  <bean id="jobRepository" class="org.springframework.batch.core.repository.support.MapJobRepositoryFactoryBean"/>
+
+  <bean id="jobLauncher" class="org.springframework.batch.core.launch.support.SimpleJobLauncher"
+        p:jobRepository-ref="jobRepository"/>
+
+  <import resource="classpath*:/**/batch-job-webapp.xml"/>
+
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
   <!-- Spring Security -->
   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
@@ -156,22 +168,18 @@
   <!-- Spring MVC -->
   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
-  <bean id="applicationName" class="java.lang.String">
-    <constructor-arg value="${app.name}"/>
-  </bean>
-
   <util:map id="headerMenu">
     <entry key="Tiers" value="http://tiers.aesn.fr/"/>
     <entry key="Sitouref" value="http://sitouref.aesn.fr/"/>
-    <entry key="Aides" value="http://aides.aesn.fr/"/>
-    <entry key="Dequado" value="http://dequado.aesn.fr/"/>
+    <entry key="Aides" value="http://aides.aesn.fr/Aides/"/>
+    <entry key="Dequado" value="http://dequado.aesn.fr/Dequado/"/>
   </util:map>
 
   <util:map id="footerMenu">
     <entry key="Contact" value="http://www.eau-seine-normandie.fr/nous_contacter"/>
     <entry key="Glossaire" value="http://www.eau-seine-normandie.fr/glossaire"/>
     <entry key="A propos de" value="http://www.eau-seine-normandie.fr/agence-de-leau/presentation-et-competences"/>
-    <entry key="FAQ" value="faq.jsp"/>
+    <entry key="FAQ" value="/faq"/>
   </util:map>
 
 </beans>

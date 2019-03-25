@@ -105,4 +105,65 @@ public interface CommuneJpaDao
   public List<Commune> findByDepartementAndNameLikeValidOnDate(String dept,
                                                                String nameLike,
                                                                Date date);
+
+  /**
+   * Returns a List of all Commune using the given department and commune name.
+   * @param dept the department of the Communes.
+   * @param nameLike a pattern to search for Communes with a name resembling.
+   * @return a List of all Commune matching the given parameters.
+   */
+  public List<Commune> findByDepartementLikeAndNomEnrichiLikeIgnoreCase(String dept, 
+                                                                        String nameLike);
+
+  /**
+   * Returns a List of all Commune using the given department, commune name and
+   * date.
+   * @param dept the department of the Communes.
+   * @param nameLike a pattern to search for Communes with a name resembling.
+   * @param date the date at which the Communes were valid.
+   * @return a List of all Commune matching the given parameters.
+   */
+  @Query("SELECT DISTINCT(c) FROM Commune c"
+               + " WHERE (c.departement LIKE ?1)"
+               + " AND (UPPER(c.nomMajuscule) LIKE UPPER(?2) OR UPPER(c.nomEnrichi) LIKE UPPER(?2))" 
+               + " AND (c.debutValidite IS NULL OR c.debutValidite <= ?3)"
+               + " AND (c.finValidite IS NULL OR c.finValidite > ?3)"
+               + " ORDER BY c.nomEnrichi")
+  public List<Commune> findByDepartementLikeAndNomEnrichiLikeIgnoreCaseValidOnDate(String dept, 
+                                                                                   String nameLike, 
+                                                                                   Date date);
+
+  /**
+   * Returns a List of all Commune using the given Code region and commune name.
+   * @param region the region of the Communes.
+   * @param nameLike a pattern to search for Communes with a name resembling.
+   * @return a List of all Commune matching the given parameters.
+   */
+  @Query("SELECT DISTINCT(c) FROM Commune c, Departement d"
+               + " WHERE c.departement = d.codeInsee"
+               + " AND (d.region LIKE ?1)"
+               + " AND (UPPER(c.nomMajuscule) LIKE UPPER(?2) OR UPPER(c.nomEnrichi) LIKE UPPER(?2))"
+               + " ORDER BY c.nomEnrichi")
+  public List<Commune> findByRegionLikeAndNomEnrichiLikeIgnoreCase(String region, 
+                                                                   String nameLike);
+
+  /**
+   * Returns a List of all Commune using the given region, commune name and
+   * date.
+   * @param codeInsee the code INSEE of the Communes.
+   * @param region the region of the Communes.
+   * @param nameLike a pattern to search for Communes with a name resembling.
+   * @param date the date at which the Communes were valid.
+   * @return a List of all Commune matching the given parameters.
+   */
+  @Query("SELECT DISTINCT(c) FROM Commune c, Departement d"
+               + " WHERE c.departement = d.codeInsee"
+               + " AND (d.region LIKE ?1)"
+               + " AND (UPPER(c.nomMajuscule) LIKE UPPER(?2) OR UPPER(c.nomEnrichi) LIKE UPPER(?2))"
+               + " AND (c.debutValidite IS NULL OR c.debutValidite <= ?3)"
+               + " AND (c.finValidite IS NULL OR c.finValidite > ?3)"
+               + " ORDER BY c.nomEnrichi")
+  public List<Commune> findByRegionLikeAndNomEnrichiLikeIgnoreCaseValidOnDate(String region, 
+                                                                              String nameLike, 
+                                                                              Date date);
 }

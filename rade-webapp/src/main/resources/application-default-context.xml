@@ -53,16 +53,22 @@
 
   <!-- Configure the data source bean -->
   <jdbc:embedded-database id="dataSource" type="DERBY">
-    <jdbc:script location="classpath:db/sql/create-tables.sql" />
-    <jdbc:script location="classpath:db/sql/insert-TypeEntiteAdmin.sql" />
-    <jdbc:script location="classpath:db/sql/insert-TypeNomClair.sql" />
-    <jdbc:script location="classpath:db/sql/insert-Audit.sql" />
-    <jdbc:script location="classpath:db/sql/insert-CirconscriptionBassin.sql" />
-    <jdbc:script location="classpath:db/sql/insert-Region.sql" />
-    <jdbc:script location="classpath:db/sql/insert-Departement.sql" />
-    <!--jdbc:script location="classpath:db/sql/insert-Commune.sql" /-->
-    <jdbc:script location="classpath:db/sql/insert-Delegation.sql" />
-    <!--jdbc:script location="classpath:db/sql/insert-Hexaposte.sql" /-->
+    <jdbc:script encoding="UTF-8" location="classpath:db/sql/create-tables.sql" />
+    <jdbc:script encoding="UTF-8" location="classpath:db/sql/insert-TypeEntiteAdmin.sql" />
+    <jdbc:script encoding="UTF-8" location="classpath:db/sql/insert-TypeNomClair.sql" />
+    <jdbc:script encoding="UTF-8" location="classpath:db/sql/insert-StatutModification.sql" />
+    <jdbc:script encoding="UTF-8" location="classpath:db/sql/insert-TypeGenealogieEntiteAdmin.sql" />
+    <jdbc:script encoding="UTF-8" location="classpath:db/sql/insert-Audit.sql" />
+    <jdbc:script encoding="UTF-8" location="classpath:db/sql/insert-CirconscriptionBassin.sql" />
+    <jdbc:script encoding="UTF-8" location="classpath:db/sql/insert-Region.sql" />
+    <jdbc:script encoding="UTF-8" location="classpath:db/sql/insert-Departement.sql" />
+    <!--jdbc:script encoding="UTF-8" location="classpath:db/sql/insert-Commune.sql" /-->
+    <!--jdbc:script encoding="UTF-8" location="classpath:db/sql/insert-CommuneSandre.sql" /-->
+    <jdbc:script encoding="UTF-8" location="classpath:db/sql/insert-Delegation.sql" />
+    <!--jdbc:script encoding="UTF-8" location="classpath:db/sql/insert-Hexaposte.sql" /-->
+    <jdbc:script encoding="UTF-8" location="classpath:db/sql/insert-RegionGenealogie.sql" />
+    <jdbc:script encoding="UTF-8" location="classpath:db/sql/insert-DepartementGenealogie.sql" />
+    <!--jdbc:script encoding="UTF-8" location="classpath:db/sql/insert-CommuneGenealogie.sql" /-->
   </jdbc:embedded-database>
 <!--
   <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close"
@@ -137,6 +143,18 @@
   </jaxrs:server>
 
   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+  <!-- Batch -->
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+  <!--This repository is only really intended for use in testing and rapid prototyping-->
+  <bean id="jobRepository" class="org.springframework.batch.core.repository.support.MapJobRepositoryFactoryBean"/>
+
+  <bean id="jobLauncher" class="org.springframework.batch.core.launch.support.SimpleJobLauncher"
+        p:jobRepository-ref="jobRepository"/>
+
+  <import resource="classpath*:/**/batch-job-webapp.xml"/>
+
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
   <!-- Spring Security -->
   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
@@ -177,22 +195,18 @@
   <!-- Spring MVC -->
   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
-  <bean id="applicationName" class="java.lang.String">
-    <constructor-arg value="${app.name}"/>
-  </bean>
-
   <util:map id="headerMenu">
     <entry key="Tiers" value="http://tiers.aesn.fr/"/>
     <entry key="Sitouref" value="http://sitouref.aesn.fr/"/>
-    <entry key="Aides" value="http://aides.aesn.fr/"/>
-    <entry key="Dequado" value="http://dequado.aesn.fr/"/>
+    <entry key="Aides" value="http://aides.aesn.fr/Aides/"/>
+    <entry key="Dequado" value="http://dequado.aesn.fr/Dequado/"/>
   </util:map>
 
   <util:map id="footerMenu">
     <entry key="Contact" value="http://www.eau-seine-normandie.fr/nous_contacter"/>
     <entry key="Glossaire" value="http://www.eau-seine-normandie.fr/glossaire"/>
     <entry key="A propos de" value="http://www.eau-seine-normandie.fr/agence-de-leau/presentation-et-competences"/>
-    <entry key="FAQ" value="faq.jsp"/>
+    <entry key="FAQ" value="/faq"/>
   </util:map>
 
 </beans>

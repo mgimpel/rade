@@ -47,7 +47,9 @@ public class CommuneListDto {
   public static CommuneListDto fromEntityList(final List<Commune> communes) {
     List<CommuneDto> dtos = new ArrayList<>(communes.size());
     for (Commune commune : communes) {
-      dtos.add(CommuneDto.fromEntity(commune));
+      if (commune != null) {
+        dtos.add(CommuneDto.fromEntity(commune));
+      }
     }
     CommuneListDto dto = new CommuneListDto();
     dto.setCommunes(dtos);
