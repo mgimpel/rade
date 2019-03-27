@@ -34,6 +34,7 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletResponse;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -64,16 +65,16 @@ public class CommuneController {
   public static final String DEFAULT_EXPORT_FILENAME = "export-communes";
 
   /** I18n message source. */
-  @Autowired
+  @Autowired @Setter 
   private MessageSource messageSource;
   /** Commune Service. */
-  @Autowired
+  @Autowired @Setter 
   private CommunePlusService communePlusService;
   /** Region Service. */
-  @Autowired
+  @Autowired @Setter 
   private RegionService regionService;
   /** Departement Service. */
-  @Autowired
+  @Autowired @Setter 
   private DepartementService departementService;
 
   /**
