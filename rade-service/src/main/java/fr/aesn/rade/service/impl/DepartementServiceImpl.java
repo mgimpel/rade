@@ -237,7 +237,7 @@ public class DepartementServiceImpl
     Date testdate = (date == null ? new Date() : date);
     String testname = (nameLike == null || nameLike.isEmpty() ? "%" : "%" + nameLike + "%");
     String testregion = (region == null || region.isEmpty() ? "%" : region);
-    List<Departement> depts = departementJpaDao.findByRegionLikeAndNomEnrichiLikeIgnoreCaseValidOnDate(testregion, testname, testdate);;
+    List<Departement> depts = departementJpaDao.findByRegionLikeAndNomEnrichiLikeIgnoreCaseValidOnDate(testregion, testname, testdate);
     for (Departement dept : depts) {
       departementPlus.add(buildDepartementWithGenealogie(dept));
     }
