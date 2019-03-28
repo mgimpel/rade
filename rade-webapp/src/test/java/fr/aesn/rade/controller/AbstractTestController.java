@@ -1,4 +1,3 @@
-
 /*  This file is part of the Rade project (https://github.com/mgimpel/rade).
  *  Copyright (C) 2018 Marc Gimpel
  *
@@ -20,15 +19,18 @@ package fr.aesn.rade.controller;
 
 import java.lang.annotation.Annotation;
 import java.util.Properties;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.sql.DataSource;
+
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -42,53 +44,41 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
+
 import fr.aesn.rade.persist.model.Audit;
 import fr.aesn.rade.persist.model.EntiteAdministrative;
 import fr.aesn.rade.persist.model.Evenement;
 import fr.aesn.rade.persist.tools.AnnotationUtils;
 
 /**
- * Abstract JUnit Test Class for Services.
+ * Abstract JUnit Test Class for Spring Controllers,
+ * based on Abstract JUnit Test Class for Services
+ * (fr.aesn.rade.service.AbstractTestService).
  *
- *  * @author Adrien GUILLARD (adrien.guillard@sully-group.fr)
+ * @author Adrien GUILLARD (adrien.guillard@sully-group.fr)
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration
 @TestExecutionListeners(DependencyInjectionTestExecutionListener.class)
 public abstract class AbstractTestController {
-
-  /**
-   * Static Spring Configuration.
-   */
+  /** Static Spring Configuration. */
   @Configuration
   @EnableJpaRepositories(basePackages = "fr.aesn.rade.persist.dao")
+  @ComponentScan(basePackages = "fr.aesn.rade.service")
   protected static class Config {
-
-    /**
-     * GeneratedValue Annotation of type Identity because Derby cannot do
-     * type Sequence.
-     */
+    /** GeneratedValue Annotation of type Identity because Derby cannot do type Sequence. */
     protected Annotation identity = new GeneratedValue() {
-      @Override
-      public Class<? extends Annotation> annotationType() {
+      @Override public Class<? extends Annotation> annotationType() {
         return GeneratedValue.class;
       }
-
-      @Override
-      public String generator() {
+      @Override public String generator() {
         return "";
       }
-
-      @Override
-      public GenerationType strategy() {
+      @Override public GenerationType strategy() {
         return GenerationType.IDENTITY;
       }
     };
-
-    /**
-     * Modify Annotations on Entities because Derby cannot do Sequence
-     * GeneratedValue
-     */
+    /** Modify Annotations on Entities because Derby cannot do Sequence GeneratedValue */
     protected void overrideAnnotations() {
       try {
         AnnotationUtils.getFieldAnnotations(Audit.class, "id")
@@ -101,10 +91,8 @@ public abstract class AbstractTestController {
         System.out.println("This Should never happen (unless the classes have been changed)");
       }
     }
-
     /**
      * In memory Derby Database.
-     *
      * @return In memory Derby Database.
      */
     @Bean
@@ -116,7 +104,6 @@ public abstract class AbstractTestController {
       ds.setPassword("");
       return ds;
     }
-
     @Bean
     protected EntityManagerFactory entityManagerFactory() {
       overrideAnnotations();
@@ -134,12 +121,10 @@ public abstract class AbstractTestController {
       entityManagerFactoryBean.afterPropertiesSet();
       return entityManagerFactoryBean.getObject();
     }
-
     @Bean
     protected EntityManager entityManager() {
       return entityManagerFactory().createEntityManager();
     }
-
     @Bean
     protected JpaTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
       JpaTransactionManager transactionManager = new JpaTransactionManager();
@@ -147,13 +132,9 @@ public abstract class AbstractTestController {
       return transactionManager;
     }
   }
-  /**
-   * In Memory Derby Database Instance.
-   */
+  /** In Memory Derby Database Instance. */
   protected static EmbeddedDatabase db;
-  /**
-   * Entity Manager.
-   */
+  /** Entity Manager. */
   @Autowired
   protected EntityManager entityManager;
 

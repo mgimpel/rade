@@ -1,4 +1,25 @@
+/*  This file is part of the Rade project (https://github.com/mgimpel/rade).
+ *  Copyright (C) 2018 Marc Gimpel
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+/* $Id$ */
 package fr.aesn.rade.controller;
+
+import static org.hamcrest.Matchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 import java.text.SimpleDateFormat;
 import org.junit.*;
@@ -32,13 +53,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.View;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
 import org.hamcrest.collection.IsMapContaining;
 
 /**
@@ -46,48 +62,29 @@ import org.hamcrest.collection.IsMapContaining;
  *
  * @author Adrien GUILLARD (adrien.guillard@sully-group.fr)
  */
-@Slf4j
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration
 @WebAppConfiguration
-public class TestCommuneController extends AbstractTestController {
-
-  /**
-   * DAO for the Controller to be tested.
-   */
+public class TestCommuneController
+  extends AbstractTestController {
+  /** Service for Communes. */
   @Autowired
-  private CommuneJpaDao communeJpaDao;
-  /**
-   * Data Access Object for CommuneSandre.
-   */
-  @Autowired
-  private CommuneSandreJpaDao communeSandreJpaDao;
-  /**
-   * Data Access Object for Region .
-   */
-  @Autowired
-  private RegionJpaDao regionJpaDao;
-  /**
-   * Departement Service.
-   */
-  @Autowired
-  private DepartementJpaDao departementJpaDao;
-  /**
-   * Controller to be tested.
-   */
-  @InjectMocks
-  private CommuneController controller;
-  /**
-   * The service to be used for test.
-   */
   private CommunePlusService service;
-  private RegionService serviceReg;
+  /** Service for Departements. */
+  @Autowired
   private DepartementService serviceDep;
-  @Mock
-  View mockView;
-  private MockMvc mockMvc;
+  /** Service for Regions. */
+  @Autowired
+  private RegionService serviceReg;
+  /** Web application Context. */
   @Autowired
   private WebApplicationContext wac;
+
+  @InjectMocks
+  private CommuneController controller;
+  @Mock
+  private View mockView;
+  private MockMvc mockMvc;
 
   /**
    * Set up the Test Environment.
@@ -95,9 +92,11 @@ public class TestCommuneController extends AbstractTestController {
   @BeforeClass
   public static void setUpClass() {
     // create temporary database for Hibernate
-    db = new EmbeddedDatabaseBuilder().setType(EmbeddedDatabaseType.DERBY).setScriptEncoding("UTF-8")
+    db = new EmbeddedDatabaseBuilder()
+            .setType(EmbeddedDatabaseType.DERBY)
+            .setScriptEncoding("UTF-8")
             .setName("testdb")
-            .setName("testdb").addScript("db/sql/create-tables.sql")
+            .addScript("db/sql/create-tables.sql")
             .addScript("db/sql/insert-StatutModification.sql")
             .addScript("db/sql/insert-TypeEntiteAdmin.sql")
             .addScript("db/sql/insert-TypeGenealogieEntiteAdmin.sql")
@@ -125,18 +124,9 @@ public class TestCommuneController extends AbstractTestController {
 
   /**
    * Set up the Test Environment.
-   *
-   * @throws java.lang.Exception
    */
   @Before
-  public void setUp() throws Exception {
-    service = new CommunePlusServiceImpl();
-    ((CommunePlusServiceImpl) service).setCommuneJpaDao(communeJpaDao);
-    ((CommunePlusServiceImpl) service).setCommuneSandreJpaDao(communeSandreJpaDao);
-    serviceReg = new RegionServiceImpl();
-    serviceDep = new DepartementServiceImpl();
-    ((RegionServiceImpl) serviceReg).setRegionJpaDao(regionJpaDao);
-    ((DepartementServiceImpl) serviceDep).setDepartementJpaDao(departementJpaDao);
+  public void setUp() {
     controller = new CommuneController();
     controller.setCommunePlusService(service);
     controller.setDepartementService(serviceDep);
@@ -157,17 +147,13 @@ public class TestCommuneController extends AbstractTestController {
    * Test getting the home page .
    */
   @Test
-  public void testHomePage() {
-    try {
-      this.mockMvc.perform(get("/referentiel/commune"))
+  public void testHomePage() throws Exception {
+    this.mockMvc.perform(get("/referentiel/commune"))
               .andExpect(status().isOk());
-    } catch (Exception ex) {
-      log.error("This Should never happen");
-    }
   }
 
   /**
-   * Test getting the Commune display page .
+   * Test getting the Commune display page.
    *
    * @throws java.lang.Exception
    */

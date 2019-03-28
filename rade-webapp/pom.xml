@@ -253,6 +253,13 @@
       <artifactId>poi</artifactId>
     </dependency>
 
+    <!-- Unit Testing -->
+    <dependency>
+      <groupId>org.hamcrest</groupId>
+      <artifactId>hamcrest</artifactId>
+      <scope>test</scope>
+    </dependency>
+
     <!-- Servlet -->
     <dependency>
       <groupId>org.apache.tomcat.embed</groupId>
@@ -272,17 +279,6 @@
       <groupId>org.apache.taglibs</groupId>
       <artifactId>taglibs-standard-impl</artifactId>
       <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.hamcrest</groupId>
-      <artifactId>hamcrest-all</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.mockito</groupId>
-      <artifactId>mockito-all</artifactId>
-      <scope>test</scope>
-      <type>jar</type>
     </dependency>
   </dependencies>
 
