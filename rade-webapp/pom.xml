@@ -253,6 +253,13 @@
       <artifactId>poi</artifactId>
     </dependency>
 
+    <!-- Unit Testing -->
+    <dependency>
+      <groupId>org.hamcrest</groupId>
+      <artifactId>hamcrest</artifactId>
+      <scope>test</scope>
+    </dependency>
+
     <!-- Servlet -->
     <dependency>
       <groupId>org.apache.tomcat.embed</groupId>
