@@ -29,9 +29,11 @@ import javax.sql.DataSource;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
@@ -130,6 +132,17 @@ public abstract class AbstractTestController {
       JpaTransactionManager transactionManager = new JpaTransactionManager();
       transactionManager.setEntityManagerFactory(entityManagerFactory);
       return transactionManager;
+    }
+    @Bean
+    protected MessageSource messageSource() {
+      ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+      messageSource.setBasenames("i18n/messages");
+      messageSource.setDefaultEncoding("UTF-8");
+      messageSource.setFallbackToSystemLocale(true);
+      messageSource.setCacheSeconds(-1);
+      messageSource.setAlwaysUseMessageFormat(false);
+      messageSource.setUseCodeAsDefaultMessage(true);
+      return messageSource;
     }
   }
   /** In Memory Derby Database Instance. */
