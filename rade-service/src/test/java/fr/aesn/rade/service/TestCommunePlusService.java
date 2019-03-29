@@ -125,6 +125,8 @@ public class TestCommunePlusService
     communes = service.getCommuneByCriteria(null,"91",null,"03","éVi",sdf.parse("1998-01-01"));
     assertEquals("Hibernate returned the wrong number of results",0,communes.size());
     communes = service.getCommuneByCriteria(null,null,"11",null,null,null);
+    assertEquals("Hibernate returned the wrong number of results",507,communes.size());
+    communes = service.getCommuneByCriteria(null,null,"11",null,null,sdf.parse("2018-01-01"));
     assertEquals("Hibernate returned the wrong number of results",503,communes.size());
     communes = service.getCommuneByCriteria(null,null,"11","03",null,null);
     assertEquals("Hibernate returned the wrong number of results",1,communes.size());
@@ -170,7 +172,7 @@ public class TestCommunePlusService
 
   @Test
   public void testGetCommuneWithGenealogie() {
-    CommunePlusWithGenealogie com = service.getCommuneWithGenealogie("95040", new Date());
+    CommunePlusWithGenealogie com = service.getCommuneValidOnDateWithGenealogie("95040", new Date());
     assertEquals("Hibernate returned a Commune, but the Id doesn't match",
                  "95040", com.getCommunePlus().getCodeInsee());
     assertEquals(2, com.getParents().size());

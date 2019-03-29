@@ -46,7 +46,8 @@ public interface CommuneJpaDao
    */
   @Query("SELECT c FROM Commune c"
                + " WHERE (c.debutValidite IS NULL OR c.debutValidite <= ?1)"
-               + " AND (c.finValidite IS NULL OR c.finValidite > ?1)")
+               + " AND (c.finValidite IS NULL OR c.finValidite > ?1)"
+               + " ORDER BY c.nomEnrichi")
   public List<Commune> findAllValidOnDate(Date date);
 
   /**
@@ -71,7 +72,8 @@ public interface CommuneJpaDao
   @Query("SELECT c FROM Commune c"
                + " WHERE c.departement = ?1"
                + " AND (c.debutValidite IS NULL OR c.debutValidite <= ?2)"
-               + " AND (c.finValidite IS NULL OR c.finValidite > ?2)")
+               + " AND (c.finValidite IS NULL OR c.finValidite > ?2)"
+               + " ORDER BY c.nomEnrichi")
   public List<Commune> findByDepartementValidOnDate(String dept,
                                                     Date date);
 
@@ -85,7 +87,8 @@ public interface CommuneJpaDao
   @Query("SELECT c FROM Commune c"
                + " WHERE (c.nomMajuscule LIKE '%' || UPPER(?1) || '%')"
                + " AND (c.debutValidite IS NULL OR c.debutValidite <= ?2)"
-               + " AND (c.finValidite IS NULL OR c.finValidite > ?2)")
+               + " AND (c.finValidite IS NULL OR c.finValidite > ?2)"
+               + " ORDER BY c.nomEnrichi")
   public List<Commune> findByNameLikeValidOnDate(String nameLike,
                                                  Date date);
 
@@ -101,7 +104,8 @@ public interface CommuneJpaDao
                + " WHERE c.departement = ?1"
                + " AND (c.nomMajuscule LIKE '%' || UPPER(?2) || '%')"
                + " AND (c.debutValidite IS NULL OR c.debutValidite <= ?3)"
-               + " AND (c.finValidite IS NULL OR c.finValidite > ?3)")
+               + " AND (c.finValidite IS NULL OR c.finValidite > ?3)"
+               + " ORDER BY c.nomEnrichi")
   public List<Commune> findByDepartementAndNameLikeValidOnDate(String dept,
                                                                String nameLike,
                                                                Date date);
@@ -112,8 +116,8 @@ public interface CommuneJpaDao
    * @param nameLike a pattern to search for Communes with a name resembling.
    * @return a List of all Commune matching the given parameters.
    */
-  public List<Commune> findByDepartementLikeAndNomEnrichiLikeIgnoreCase(String dept, 
-                                                                        String nameLike);
+  public List<Commune> findByDepartementLikeAndNomEnrichiLikeIgnoreCaseOrderByNomEnrichiAsc(String dept, 
+                                                                                            String nameLike);
 
   /**
    * Returns a List of all Commune using the given department, commune name and
