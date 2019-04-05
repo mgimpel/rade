@@ -34,12 +34,15 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletResponse;
+
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -133,9 +136,9 @@ public class CommuneController {
                    ? null : communeSearchModel.getCodeRegion();
     String bassin = "-1".equals(communeSearchModel.getCodeCirconscription())
                    ? null : communeSearchModel.getCodeCirconscription();
-    if(communeSearchModel.getCodeInsee() == null
+    if( StringUtils.isEmpty(communeSearchModel.getCodeInsee())
         && dept == null && region == null && bassin == null
-        && (communeSearchModel.getNomEnrichi() == null || communeSearchModel.getNomEnrichi().isEmpty())) {
+        && StringUtils.isEmpty(communeSearchModel.getNomEnrichi())) {
       model.addAttribute("errorMessage", messageSource.getMessage("communesearch.error.empty", null, locale));
       return viewCommuneSearch(locale, model, communeSearchModel);
     }
