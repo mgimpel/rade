@@ -64,6 +64,9 @@ public class CommuneController {
   public static final String REQUEST_MAPPING = "/referentiel/commune";
   /** Session Attribute of the Commune Search Model. */
   public static final String COMMUNE_SEARCH_MODEL = "communeSearchModel";
+  /** Session Attribute of the Commune Display Model. */
+  public static final String COMMUNE_DISPLAY_MODEL = "communeDisplay";
+  
   /** Default name for the export file. */
   public static final String DEFAULT_EXPORT_FILENAME = "export-communes";
 
@@ -208,11 +211,11 @@ public class CommuneController {
         Region region = regionService.getRegionByCode(departement.getRegion(), dateValidite);
         return viewCommuneDisplay(locale, model, new CommuneDisplayModel(commune, departement, region));
       } else {
-        model.addAttribute("errorRecherche", "La commune recherchée n'existe pas");
+        model.addAttribute("errorRecherche", messageSource.getMessage("communesearch.error.noresult", null, locale));
         return viewCommuneSearch(locale, model, communeSearchModel);
       }
     } else {
-      model.addAttribute("errorRecherche", "La recherche n'a rien retourné");
+      model.addAttribute("errorRecherche", messageSource.getMessage("communesearch.error.noresult", null, locale));
       return viewCommuneSearch(locale, model, communeSearchModel);
     }
   }
@@ -260,7 +263,7 @@ public class CommuneController {
     model.addAttribute("titre", messageSource.getMessage("communedisplay.title", null, locale)
                                  + ": " + communeDisplayModel.getCodeInsee()
                                  + " " + communeDisplayModel.getNomEnrichi());
-    model.addAttribute("communeDisplay", communeDisplayModel);
+    model.addAttribute(COMMUNE_DISPLAY_MODEL, communeDisplayModel);
     return "referentiel/communedisplay";
   }
 

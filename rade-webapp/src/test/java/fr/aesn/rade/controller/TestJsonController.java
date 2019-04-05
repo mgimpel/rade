@@ -45,14 +45,14 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.hamcrest.Matchers.hasSize;
 
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.View;
-
-import static org.hamcrest.Matchers.*;
 
 /**
  * Spring MVC Test for JsonController .
@@ -104,17 +104,12 @@ public class TestJsonController extends AbstractTestController {
             .setScriptEncoding("UTF-8")
             .setName("testdb")
             .addScript("db/sql/create-tables.sql")
-            .addScript("db/sql/insert-StatutModification.sql")
             .addScript("db/sql/insert-TypeEntiteAdmin.sql")
-            .addScript("db/sql/insert-TypeGenealogieEntiteAdmin.sql")
             .addScript("db/sql/insert-TypeNomClair.sql")
             .addScript("db/sql/insert-Audit.sql")
             .addScript("db/sql/insert-CirconscriptionBassin.sql")
             .addScript("db/sql/insert-Region.sql")
             .addScript("db/sql/insert-Departement.sql")
-            .addScript("db/sql/insert-CommuneSandre-Test.sql")
-            .addScript("db/sql/insert-Commune-Test.sql")
-            .addScript("db/sql/insert-CommuneGenealogie-Test.sql")
             .build();
   }
 
@@ -141,41 +136,41 @@ public class TestJsonController extends AbstractTestController {
   }
 
   /**
-   * Test getting the depertement Json .
+   * Test getting the json departement list.
    *
    * @throws Exception if there was an Exception processing request.
    */
   @Test
-  public void testGettingJsonDepertementsList() throws Exception {
+  public void testGettingJsonDepartementsListWithNoParams() throws Exception {
     this.mockMvc.perform(get("/referentiel/json/deptlist").locale(locale))
             .andExpect(status().isOk())
             .andExpect(content().contentType(APPLICATION_JSON_UTF8))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.10").value("Aube"))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.75").value("Paris"))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.69").value("Rhône"))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.2B").value("Haute-Corse"))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.*", hasSize(101)));
+            .andExpect(jsonPath("$.10").value("Aube"))
+            .andExpect(jsonPath("$.976").value("Mayotte"))
+            .andExpect(jsonPath("$.69").value("Rhône"))
+            .andExpect(jsonPath("$.2B").value("Haute-Corse"))
+            .andExpect(jsonPath("$.*", hasSize(101)));
   }
-
+  
   /**
    * Test getting the json region list .
    *
    * @throws Exception if there was an Exception processing request.
    */
   @Test
-  public void testGettingJsonRegionsList() throws Exception {
+  public void testGettingJsonRegionsListWithNoParams() throws Exception {
     this.mockMvc.perform(get("/referentiel/json/regionlist").locale(locale))
             .andExpect(status().isOk())
             .andExpect(content().contentType(APPLICATION_JSON_UTF8))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.11").value("Île-de-France"))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.93").value("Provence-Alpes-Côte d'Azur"))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.94").value("Corse"))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.06").value("Mayotte"))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.*", hasSize(18)));
+            .andExpect(jsonPath("$.11").value("Île-de-France"))
+            .andExpect(jsonPath("$.93").value("Provence-Alpes-Côte d'Azur"))
+            .andExpect(jsonPath("$.94").value("Corse"))
+            .andExpect(jsonPath("$.06").value("Mayotte"))
+            .andExpect(jsonPath("$.*", hasSize(18)));
   }
 
   /**
-   * Test getting the Json depertement List .
+   * Test getting the json bassin list .
    *
    * @throws Exception if there was an Exception processing request.
    */
@@ -184,10 +179,10 @@ public class TestJsonController extends AbstractTestController {
     this.mockMvc.perform(get("/referentiel/json/bassinlist").locale(locale))
             .andExpect(status().isOk())
             .andExpect(content().contentType(APPLICATION_JSON_UTF8))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.10").value("REUNION"))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.06").value("RHONE-MEDITERRANEE"))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.08").value("MARTINIQUE"))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.09").value("GUYANE"))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.*", hasSize(12)));
+            .andExpect(jsonPath("$.10").value("REUNION"))
+            .andExpect(jsonPath("$.06").value("RHONE-MEDITERRANEE"))
+            .andExpect(jsonPath("$.08").value("MARTINIQUE"))
+            .andExpect(jsonPath("$.09").value("GUYANE"))
+            .andExpect(jsonPath("$.*", hasSize(12)));
   }
 }

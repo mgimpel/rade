@@ -80,17 +80,11 @@ public class TestReferentielController
             .setType(EmbeddedDatabaseType.DERBY)
             .setScriptEncoding("UTF-8").setName("testdb")
             .addScript("db/sql/create-tables.sql")
-            .addScript("db/sql/insert-StatutModification.sql")
             .addScript("db/sql/insert-TypeEntiteAdmin.sql")
-            .addScript("db/sql/insert-TypeGenealogieEntiteAdmin.sql")
             .addScript("db/sql/insert-TypeNomClair.sql")
             .addScript("db/sql/insert-Audit.sql")
-            .addScript("db/sql/insert-CirconscriptionBassin.sql")
             .addScript("db/sql/insert-Region.sql")
             .addScript("db/sql/insert-Departement.sql")
-            .addScript("db/sql/insert-CommuneSandre-Test.sql")
-            .addScript("db/sql/insert-Commune-Test.sql")
-            .addScript("db/sql/insert-CommuneGenealogie-Test.sql")
             .build();
   }
 
@@ -124,24 +118,24 @@ public class TestReferentielController
   }
 
   /**
-   * Test getting Entity Search With code insee is empty as parameter.
+   * Test getting Entity Search with an empty code insee as parameter.
    *
    * @throws Exception if there was an Exception processing request.
    */
   @Test
-  public void SearchEntityGetWithCodeIsEmpty() throws Exception {
+  public void testSearchEntityGetWithEmptyCode() throws Exception {
     this.mockMvc.perform(get("/referentiel/entiteSearch").locale(locale).param("codeInsee", ""))
             .andExpect(status().isOk())
             .andExpect(view().name("home"));
   }
 
   /**
-   * Test Entity Search With code Insee is empty and entity type is commune.
+   * Test Entity Search with an empty code Insee and entity type is "commune".
    *
    * @throws Exception if there was an Exception processing request.
    */
   @Test
-  public void SearchEntityWithCodeIsEmpty() throws Exception {
+  public void testSearchEntityWithEmptyCode() throws Exception {
     ReferentielSearchModel referentielSearchModel = new ReferentielSearchModel();
     referentielSearchModel.setCode("");
     referentielSearchModel.setType("commune");
@@ -151,12 +145,12 @@ public class TestReferentielController
   }
 
   /**
-   * Test Entity Search With code Insee Exist .
+   * Test Entity Search with an existing code Insee.
    *
    * @throws Exception if there was an Exception processing request.
    */
   @Test
-  public void SearchEntityWithCodeExist() throws Exception {
+  public void testSearchEntityWithCode() throws Exception {
     ReferentielSearchModel referentielSearchModel = new ReferentielSearchModel();
     referentielSearchModel.setCode("97402");
     referentielSearchModel.setType("commune");
@@ -165,13 +159,14 @@ public class TestReferentielController
             .andExpect(view().name("redirect:/referentiel/commune/97402"));
   }
 
-  /**
-   * Test Entity Search With code Insee is null .
+  
+    /**
+   * Test Entity Search with a null code Insee.
    *
    * @throws Exception if there was an Exception processing request.
    */
   @Test
-  public void SearchEntityWithCodeIsNull() throws Exception {
+  public void testSearchEntityWithNullCode() throws Exception {
     ReferentielSearchModel referentielSearchModel = new ReferentielSearchModel();
     referentielSearchModel.setCode(null);
     referentielSearchModel.setType("commune");
