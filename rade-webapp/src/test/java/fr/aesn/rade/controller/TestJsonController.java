@@ -160,14 +160,14 @@ public class TestJsonController extends AbstractTestController {
    */
   @Test
   public void testGettingJsonDepertementsListWithDate() throws Exception {
-    this.mockMvc.perform(get("/referentiel/json/deptlist").sessionAttr("date","06/04/2019").locale(locale))
+    this.mockMvc.perform(get("/referentiel/json/deptlist").param("date","2001-09-01").locale(locale))
             .andExpect(status().isOk())
             .andExpect(content().contentType(APPLICATION_JSON_UTF8))
             .andExpect(jsonPath("$.10").value("Aube"))
-            .andExpect(jsonPath("$.976").value("Mayotte"))
+            .andExpect(jsonPath("$.973").value("Guyane"))
             .andExpect(jsonPath("$.69").value("Rhône"))
             .andExpect(jsonPath("$.2B").value("Haute-Corse"))
-            .andExpect(jsonPath("$.*", hasSize(101)));
+            .andExpect(jsonPath("$.*", hasSize(100)));
   }
   
   /**
@@ -177,12 +177,32 @@ public class TestJsonController extends AbstractTestController {
    */
   @Test
   public void testGettingJsonDepertementsListWithDateAndCode() throws Exception {
-    this.mockMvc.perform(get("/referentiel/json/deptlist").param("code", "97402").sessionAttr("date","09/11/2018").locale(locale))
+    this.mockMvc.perform(get("/referentiel/json/deptlist").param("code", "11").param("date","2018-09-01").locale(locale))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(APPLICATION_JSON_UTF8))
+            .andExpect(jsonPath("$.75").value("Paris"))
+            .andExpect(jsonPath("$.77").value("Seine-et-Marne"))
+            .andExpect(jsonPath("$.78").value("Yvelines"))
+            .andExpect(jsonPath("$.91").value("Essonne"))
+            .andExpect(jsonPath("$.92").value("Hauts-de-Seine"))
+            .andExpect(jsonPath("$.93").value("Seine-Saint-Denis"))
+            .andExpect(jsonPath("$.94").value("Val-de-Marne"))
+            .andExpect(jsonPath("$.95").value("Val-d'Oise"))
+            .andExpect(jsonPath("$.*", hasSize(8)));
+  }
+ 
+  /**
+   * Test getting the depertement Json with date and code not exist as parameters .
+   *
+   * @throws Exception if there was an Exception processing request.
+   */
+  @Test
+  public void testGettingJsonDepertementsListWithDateAndCodeNotExist() throws Exception {
+    this.mockMvc.perform(get("/referentiel/json/deptlist").param("code","86").param("date","2016-09-01").locale(locale))
             .andExpect(status().isOk())
             .andExpect(content().contentType(APPLICATION_JSON_UTF8))
             .andExpect(jsonPath("$.*", hasSize(0)));
   }
-  
   /**
    * Test getting the json region list .
    *
@@ -206,14 +226,14 @@ public class TestJsonController extends AbstractTestController {
    */
   @Test
   public void testGettingJsonRegionsListWithDate() throws Exception {
-    this.mockMvc.perform(get("/referentiel/json/regionlist").sessionAttr("date", new Date()).locale(locale))
+    this.mockMvc.perform(get("/referentiel/json/regionlist").param("date","1999-04-06").locale(locale))
             .andExpect(status().isOk())
             .andExpect(content().contentType(APPLICATION_JSON_UTF8))
             .andExpect(jsonPath("$.11").value("Île-de-France"))
             .andExpect(jsonPath("$.93").value("Provence-Alpes-Côte d'Azur"))
             .andExpect(jsonPath("$.94").value("Corse"))
-            .andExpect(jsonPath("$.06").value("Mayotte"))
-            .andExpect(jsonPath("$.*", hasSize(18)));
+            .andExpect(jsonPath("$.04").value("Réunion"))
+            .andExpect(jsonPath("$.*", hasSize(26)));
   }
 
   /**
