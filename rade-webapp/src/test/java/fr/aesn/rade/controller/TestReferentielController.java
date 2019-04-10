@@ -52,14 +52,10 @@ import org.springframework.web.servlet.View;
 public class TestReferentielController
         extends AbstractTestController {
 
-  /**
-   * Service for Regions.
-   */
+  /** Service for Regions. */
   @Autowired
   private RegionService regionService;
-  /**
-   * Web application Context.
-   */
+  /** Web application Context. */
   @Autowired
   private WebApplicationContext context;
 
@@ -108,7 +104,6 @@ public class TestReferentielController
 
   /**
    * Test getting the Entity Search page .
-   *
    * @throws Exception if there was an Exception processing request.
    */
   @Test
@@ -119,7 +114,6 @@ public class TestReferentielController
 
   /**
    * Test getting Entity Search with an empty code insee as parameter.
-   *
    * @throws Exception if there was an Exception processing request.
    */
   @Test
@@ -131,7 +125,6 @@ public class TestReferentielController
 
   /**
    * Test Entity Search with an empty code Insee and entity type is "commune".
-   *
    * @throws Exception if there was an Exception processing request.
    */
   @Test
@@ -146,7 +139,6 @@ public class TestReferentielController
 
   /**
    * Test Entity Search with an existing code Insee.
-   *
    * @throws Exception if there was an Exception processing request.
    */
   @Test
@@ -160,9 +152,8 @@ public class TestReferentielController
   }
 
   
-    /**
+   /**
    * Test Entity Search with a null code Insee.
-   *
    * @throws Exception if there was an Exception processing request.
    */
   @Test
