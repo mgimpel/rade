@@ -21,6 +21,7 @@ import fr.aesn.rade.service.BassinService;
 import fr.aesn.rade.service.DepartementService;
 
 import java.nio.charset.Charset;
+import java.util.Date;
 import java.util.Locale;
 
 import org.junit.*;
@@ -151,6 +152,36 @@ public class TestJsonController extends AbstractTestController {
             .andExpect(jsonPath("$.2B").value("Haute-Corse"))
             .andExpect(jsonPath("$.*", hasSize(101)));
   }
+
+  /**
+   * Test getting the depertement Json with date as parameters .
+   *
+   * @throws Exception if there was an Exception processing request.
+   */
+  @Test
+  public void testGettingJsonDepertementsListWithDate() throws Exception {
+    this.mockMvc.perform(get("/referentiel/json/deptlist").sessionAttr("date","06/04/2019").locale(locale))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(APPLICATION_JSON_UTF8))
+            .andExpect(jsonPath("$.10").value("Aube"))
+            .andExpect(jsonPath("$.976").value("Mayotte"))
+            .andExpect(jsonPath("$.69").value("Rhône"))
+            .andExpect(jsonPath("$.2B").value("Haute-Corse"))
+            .andExpect(jsonPath("$.*", hasSize(101)));
+  }
+  
+  /**
+   * Test getting the depertement Json with date and code as parameters .
+   *
+   * @throws Exception if there was an Exception processing request.
+   */
+  @Test
+  public void testGettingJsonDepertementsListWithDateAndCode() throws Exception {
+    this.mockMvc.perform(get("/referentiel/json/deptlist").param("code", "97402").sessionAttr("date","09/11/2018").locale(locale))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(APPLICATION_JSON_UTF8))
+            .andExpect(jsonPath("$.*", hasSize(0)));
+  }
   
   /**
    * Test getting the json region list .
@@ -160,6 +191,22 @@ public class TestJsonController extends AbstractTestController {
   @Test
   public void testGettingJsonRegionsListWithNoParams() throws Exception {
     this.mockMvc.perform(get("/referentiel/json/regionlist").locale(locale))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(APPLICATION_JSON_UTF8))
+            .andExpect(jsonPath("$.11").value("Île-de-France"))
+            .andExpect(jsonPath("$.93").value("Provence-Alpes-Côte d'Azur"))
+            .andExpect(jsonPath("$.94").value("Corse"))
+            .andExpect(jsonPath("$.06").value("Mayotte"))
+            .andExpect(jsonPath("$.*", hasSize(18)));
+  }
+  /**
+   * Test getting the json region list with date.
+   *
+   * @throws Exception if there was an Exception processing request.
+   */
+  @Test
+  public void testGettingJsonRegionsListWithDate() throws Exception {
+    this.mockMvc.perform(get("/referentiel/json/regionlist").sessionAttr("date", new Date()).locale(locale))
             .andExpect(status().isOk())
             .andExpect(content().contentType(APPLICATION_JSON_UTF8))
             .andExpect(jsonPath("$.11").value("Île-de-France"))
