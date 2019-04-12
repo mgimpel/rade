@@ -28,12 +28,13 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 import lombok.Getter;
+import lombok.ToString;
 
 /**
  * Affichage d'une commune.
  * @author sophie.belin
  */
-@Getter
+@ToString @Getter
 public class CommuneDisplayModel {
   private String codeInsee;
   private String motifModification;

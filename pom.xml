@@ -53,15 +53,15 @@
     <spring-data.version>2.1.5.RELEASE</spring-data.version>
     <spring-security.version>5.1.4.RELEASE</spring-security.version>
     <spring-batch.version>4.1.1.RELEASE</spring-batch.version>
-    <hibernate.version>5.4.1.Final</hibernate.version>
+    <hibernate.version>5.4.2.Final</hibernate.version>
     <cxf.version>3.3.1</cxf.version>
     <cglib.version>3.2.10</cglib.version>
     <slf4j.version>1.7.26</slf4j.version>
     <logback.version>1.2.3</logback.version>
     <bootstrap.version>4.3.1</bootstrap.version>
     <jquery.version>3.3.1-2</jquery.version>
-    <popper.version>1.14.6</popper.version>
-    <fontawesome.version>5.7.2</fontawesome.version>
+    <popper.version>1.14.7</popper.version>
+    <fontawesome.version>5.8.1</fontawesome.version>
     <!-- Other properties -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.scm.id>github</project.scm.id> <!-- set username/password in settings.xml -->
@@ -283,7 +283,7 @@
       <dependency>
         <groupId>org.hibernate.validator</groupId>
         <artifactId>hibernate-validator</artifactId>
-        <version>6.0.15.Final</version>
+        <version>6.0.16.Final</version>
       </dependency>
       <dependency>
         <groupId>javax.el</groupId>
@@ -372,6 +372,12 @@
         <scope>test</scope>
       </dependency>
       <dependency>
+        <groupId>org.hamcrest</groupId>
+        <artifactId>hamcrest</artifactId>
+        <version>2.1</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-simple</artifactId>
         <version>${slf4j.version}</version>
@@ -387,7 +393,7 @@
       <dependency>
         <groupId>org.apache.tomcat.embed</groupId>
         <artifactId>tomcat-embed-jasper</artifactId>
-        <version>9.0.16</version>
+        <version>9.0.17</version>
         <scope>provided</scope>
       </dependency>
       <dependency>
@@ -540,7 +546,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <version>3.0.1</version>
+        <version>3.1.0</version>
         <configuration>
           <quiet>true</quiet>
           <doclint>none</doclint>

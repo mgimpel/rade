@@ -110,7 +110,7 @@ public class GeoAdminServiceExternePortImpl implements GeoAdminServiceExterneImp
                 log.error("Could not findAllCommunes, service was null (configuration error)");
                 return Collections.<fr.aesn.rade.ws.aramis.impl.CommuneVO>emptyList();
             }
-            return Entity2VoMapper.communePlusEntity2VoList(communePlusService.getAllCommune(date));
+            return Entity2VoMapper.communePlusEntity2VoList(communePlusService.getAllCommuneValidOnDate(date));
         } catch (java.lang.Exception ex) {
             log.error("Unexpected Exception while processing WebService Request (this should never happen)", ex);
             throw new RuntimeException(ex);

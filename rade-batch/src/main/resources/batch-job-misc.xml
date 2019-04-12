@@ -74,6 +74,7 @@
         class="org.springframework.batch.item.file.FlatFileItemWriter">
     <property name="resource" value="#{jobParameters['outputFile']}"/>
     <property name="encoding" value="windows-1252"/>
+    <property name="lineSeparator" value="&#13;&#10;" /><!--&#13;&#10;=CRLF-->
     <property name="shouldDeleteIfExists" value="true" />
     <property name="lineAggregator">
       <bean class="org.springframework.batch.item.file.transform.DelimitedLineAggregator">

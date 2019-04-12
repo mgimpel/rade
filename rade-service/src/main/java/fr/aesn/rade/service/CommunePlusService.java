@@ -33,7 +33,7 @@ public interface CommunePlusService {
    * @param date the date at which the code was valid
    * @return a List of all the Commune.
    */
-  public List<CommunePlus> getAllCommune(Date date);
+  public List<CommunePlus> getAllCommuneValidOnDate(Date date);
 
   /**
    * Get the Commune with the given code at the given date.
@@ -41,7 +41,7 @@ public interface CommunePlusService {
    * @param date the date at which the code was valid
    * @return the Commune with the given code at the given date.
    */
-  public CommunePlus getCommuneByCode(String code, Date date);
+  public CommunePlus getCommuneByCodeValidOnDate(String code, Date date);
 
   /**
    * Get the Commune with the given code at the given date.
@@ -49,7 +49,7 @@ public interface CommunePlusService {
    * @param date the date at which the code was valid
    * @return the Commune with the given code at the given date.
    */
-  public CommunePlus getCommuneByCode(String code, String date);
+  public CommunePlus getCommuneByCodeValidOnDate(String code, String date);
 
   /**
    * Returns a List of all Commune from the given codeInsee, departement, 
@@ -77,6 +77,6 @@ public interface CommunePlusService {
    * @return the Commune with the given code at the given date, and all it's
    * genealogie.
    */
-  public CommunePlusWithGenealogie getCommuneWithGenealogie(String code,
-                                                            Date date);
+  public CommunePlusWithGenealogie getCommuneValidOnDateWithGenealogie(String code,
+                                                                       Date date);
 }
