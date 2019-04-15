@@ -316,8 +316,8 @@ public class TestCommuneController
   public void testGetResultList() throws Exception {
     CommuneSearchModel searchCommune = new CommuneSearchModel();
     searchCommune.setCommunes(new ArrayList<>());
-    searchCommune.getCommunes().add(communeService.getCommuneWithGenealogie("97402", new Date()));
-    searchCommune.getCommunes().add(communeService.getCommuneWithGenealogie("97401", new Date()));
+    searchCommune.getCommunes().add(communeService.getCommuneValidOnDateWithGenealogie("97402", new Date()));
+    searchCommune.getCommunes().add(communeService.getCommuneValidOnDateWithGenealogie("97401", new Date()));
     mockMvc.perform(get("/referentiel/commune/resultats").locale(locale).flashAttr(CommuneController.COMMUNE_SEARCH_MODEL, searchCommune))
             .andExpect(status().isOk())
             .andExpect(model().attribute(CommuneController.COMMUNE_SEARCH_MODEL, hasProperty("communes", hasSize(2))))
@@ -335,11 +335,11 @@ public class TestCommuneController
 
     CommuneSearchModel communeSearchModel = new CommuneSearchModel();
     communeSearchModel.setCommunes(new ArrayList<>());
-    communeSearchModel.getCommunes().add(communeService.getCommuneWithGenealogie("97401", new Date()));
-    communeSearchModel.getCommunes().add(communeService.getCommuneWithGenealogie("97402", new Date()));
-    communeSearchModel.getCommunes().add(communeService.getCommuneWithGenealogie("97403", new Date()));
-    communeSearchModel.getCommunes().add(communeService.getCommuneWithGenealogie("97404", new Date()));
-    communeSearchModel.getCommunes().add(communeService.getCommuneWithGenealogie("97405", new Date()));
+    communeSearchModel.getCommunes().add(communeService.getCommuneValidOnDateWithGenealogie("97401", new Date()));
+    communeSearchModel.getCommunes().add(communeService.getCommuneValidOnDateWithGenealogie("97402", new Date()));
+    communeSearchModel.getCommunes().add(communeService.getCommuneValidOnDateWithGenealogie("97403", new Date()));
+    communeSearchModel.getCommunes().add(communeService.getCommuneValidOnDateWithGenealogie("97404", new Date()));
+    communeSearchModel.getCommunes().add(communeService.getCommuneValidOnDateWithGenealogie("97405", new Date()));
 
     mockMvc.perform(get("/referentiel/commune/resultats?page=1").locale(locale).flashAttr(CommuneController.COMMUNE_SEARCH_MODEL, communeSearchModel))
             .andExpect(status().isOk())
@@ -398,7 +398,7 @@ public class TestCommuneController
     communeSearchModel.setCodeRegion("10");
     communeSearchModel.setCodeInsee("69100");
     communeSearchModel.setCommunes(new ArrayList<>());
-    communeSearchModel.getCommunes().add(communeService.getCommuneWithGenealogie("97415", new Date()));
+    communeSearchModel.getCommunes().add(communeService.getCommuneValidOnDateWithGenealogie("97415", new Date()));
     communeSearchModel.setDateEffet(sdf.parse("2000-01-01"));
     communeSearchModel.setNomEnrichi("panon");
     mockMvc.perform(post("/referentiel/commune/resultats").param("annuler", "").flashAttr(CommuneController.COMMUNE_SEARCH_MODEL, communeSearchModel))
@@ -498,7 +498,7 @@ public class TestCommuneController
     CommuneSearchModel searchCommune = new CommuneSearchModel();
     searchCommune.setCommunes(new ArrayList<>());
     searchCommune.setCodeInsee("10000");
-    searchCommune.getCommunes().add(communeService.getCommuneWithGenealogie("97402", new Date()));
+    searchCommune.getCommunes().add(communeService.getCommuneValidOnDateWithGenealogie("97402", new Date()));
     mockMvc.perform(post("/referentiel/commune/resultats").locale(locale).param("valider", "").flashAttr(CommuneController.COMMUNE_SEARCH_MODEL, searchCommune))
             .andExpect(status().isOk())
             .andExpect(model().attribute("errorMessage", messageSource.getMessage("communesearch.error.noresult", null, locale)))
@@ -551,17 +551,17 @@ public class TestCommuneController
 
     CommuneSearchModel communeSearchModel = new CommuneSearchModel();
     communeSearchModel.setCommunes(new ArrayList<>());
-    communeSearchModel.getCommunes().add(communeService.getCommuneWithGenealogie("97401", new Date()));
-    communeSearchModel.getCommunes().add(communeService.getCommuneWithGenealogie("97402", new Date()));
-    communeSearchModel.getCommunes().add(communeService.getCommuneWithGenealogie("97403", new Date()));
-    communeSearchModel.getCommunes().add(communeService.getCommuneWithGenealogie("97404", new Date()));
-    communeSearchModel.getCommunes().add(communeService.getCommuneWithGenealogie("97405", new Date()));
-    communeSearchModel.getCommunes().add(communeService.getCommuneWithGenealogie("97406", new Date()));
-    communeSearchModel.getCommunes().add(communeService.getCommuneWithGenealogie("97407", new Date()));
-    communeSearchModel.getCommunes().add(communeService.getCommuneWithGenealogie("97408", new Date()));
-    communeSearchModel.getCommunes().add(communeService.getCommuneWithGenealogie("97409", new Date()));
-    communeSearchModel.getCommunes().add(communeService.getCommuneWithGenealogie("97410", new Date()));
-    communeSearchModel.getCommunes().add(communeService.getCommuneWithGenealogie("97411", new Date()));
+    communeSearchModel.getCommunes().add(communeService.getCommuneValidOnDateWithGenealogie("97401", new Date()));
+    communeSearchModel.getCommunes().add(communeService.getCommuneValidOnDateWithGenealogie("97402", new Date()));
+    communeSearchModel.getCommunes().add(communeService.getCommuneValidOnDateWithGenealogie("97403", new Date()));
+    communeSearchModel.getCommunes().add(communeService.getCommuneValidOnDateWithGenealogie("97404", new Date()));
+    communeSearchModel.getCommunes().add(communeService.getCommuneValidOnDateWithGenealogie("97405", new Date()));
+    communeSearchModel.getCommunes().add(communeService.getCommuneValidOnDateWithGenealogie("97406", new Date()));
+    communeSearchModel.getCommunes().add(communeService.getCommuneValidOnDateWithGenealogie("97407", new Date()));
+    communeSearchModel.getCommunes().add(communeService.getCommuneValidOnDateWithGenealogie("97408", new Date()));
+    communeSearchModel.getCommunes().add(communeService.getCommuneValidOnDateWithGenealogie("97409", new Date()));
+    communeSearchModel.getCommunes().add(communeService.getCommuneValidOnDateWithGenealogie("97410", new Date()));
+    communeSearchModel.getCommunes().add(communeService.getCommuneValidOnDateWithGenealogie("97411", new Date()));
 
     mockMvc.perform(post("/referentiel/commune/resultats?page=2").locale(locale).param("valider", "").flashAttr(CommuneController.COMMUNE_SEARCH_MODEL, communeSearchModel))
             .andExpect(status().isOk())
