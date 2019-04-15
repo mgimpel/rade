@@ -316,19 +316,19 @@ public class TestCommuneJpaDao extends AbstractTestJpaDao {
   public void testFindByDepartementLikeAndNomEnrichiLikeIgnoreCase()
     throws ParseException {
     List<Commune> result;
-    result = jpaDao.findByDepartementLikeAndNomEnrichiLikeIgnoreCase("%", "%");
+    result = jpaDao.findByDepartementLikeAndNomEnrichiLikeIgnoreCaseOrderByNomEnrichiAsc("%", "%");
     assertEquals("Hibernate returned the wrong number of results",
                  639, result.size());
-    result = jpaDao.findByDepartementLikeAndNomEnrichiLikeIgnoreCase("91", "%");
+    result = jpaDao.findByDepartementLikeAndNomEnrichiLikeIgnoreCaseOrderByNomEnrichiAsc("91", "%");
     assertEquals("Hibernate returned the wrong number of results",
                  196, result.size());
-    result = jpaDao.findByDepartementLikeAndNomEnrichiLikeIgnoreCase("91", "%évi%");
+    result = jpaDao.findByDepartementLikeAndNomEnrichiLikeIgnoreCaseOrderByNomEnrichiAsc("91", "%évi%");
     assertEquals("Hibernate returned the wrong number of results",
                  2, result.size());
-    result = jpaDao.findByDepartementLikeAndNomEnrichiLikeIgnoreCase("%", "%éVi%");
+    result = jpaDao.findByDepartementLikeAndNomEnrichiLikeIgnoreCaseOrderByNomEnrichiAsc("%", "%éVi%");
     assertEquals("Hibernate returned the wrong number of results",
                  3, result.size());
-    result = jpaDao.findByDepartementLikeAndNomEnrichiLikeIgnoreCase("91", "%aaa%");
+    result = jpaDao.findByDepartementLikeAndNomEnrichiLikeIgnoreCaseOrderByNomEnrichiAsc("91", "%aaa%");
     assertEquals("Hibernate returned the wrong number of results",
                  0, result.size());
   }

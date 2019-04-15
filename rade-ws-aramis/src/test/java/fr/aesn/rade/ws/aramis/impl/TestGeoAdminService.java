@@ -85,7 +85,7 @@ public class TestGeoAdminService {
                                                communeBuilder("Ambérieux-en-Dombes", "AMBERIEUX-EN-DOMBES", "01005", "06"));
     List<CommunePlus> nocommunes = Collections.<CommunePlus>emptyList();
     Date year2018 = new GregorianCalendar(2018, Calendar.JANUARY, 1).getTime();
-    when(communePlusService.getAllCommune(any())).thenAnswer(invocation -> {
+    when(communePlusService.getAllCommuneValidOnDate(any())).thenAnswer(invocation -> {
       Date date = (Date) invocation.getArguments()[0];
       return date.after(year2018) ? communes : nocommunes;
     });

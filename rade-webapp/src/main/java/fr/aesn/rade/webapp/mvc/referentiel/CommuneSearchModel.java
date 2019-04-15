@@ -23,13 +23,15 @@ import java.util.Date;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
+
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * Model for the Commune Search form and subsequent results.
  * @author sophie.belin
  */
-@Getter @Setter
+@ToString @Getter @Setter
 public class CommuneSearchModel {
   public static final int PAGE_SIZE = 10;
   // Champs requête

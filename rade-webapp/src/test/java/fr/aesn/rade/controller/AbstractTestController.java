@@ -52,8 +52,6 @@ import fr.aesn.rade.persist.model.EntiteAdministrative;
 import fr.aesn.rade.persist.model.Evenement;
 import fr.aesn.rade.persist.tools.AnnotationUtils;
 
-
-
 /**
  * Abstract JUnit Test Class for Spring Controllers,
  * based on Abstract JUnit Test Class for Services

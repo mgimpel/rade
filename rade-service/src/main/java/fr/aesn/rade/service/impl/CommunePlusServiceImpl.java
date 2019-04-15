@@ -33,6 +33,7 @@ import org.springframework.transaction.annotation.Transactional;
 import fr.aesn.rade.common.InvalidArgumentException;
 import fr.aesn.rade.common.modelplus.CommunePlus;
 import fr.aesn.rade.common.modelplus.CommunePlusWithGenealogie;
+import fr.aesn.rade.common.util.DateConversionUtils;
 import fr.aesn.rade.persist.dao.CommuneJpaDao;
 import fr.aesn.rade.persist.dao.CommuneSandreJpaDao;
 import fr.aesn.rade.persist.model.Commune;
@@ -67,7 +68,7 @@ public class CommunePlusServiceImpl
    */
   @Override
   @Transactional(readOnly = true)
-  public List<CommunePlus> getAllCommune(final Date date) {
+  public List<CommunePlus> getAllCommuneValidOnDate(final Date date) {
     log.debug("Commune list requested for Date: date={}", date);
     Date testdate = (date == null ? new Date() : date);
     List<Commune> listInsee = communeJpaDao.findAllValidOnDate(testdate);
@@ -108,7 +109,7 @@ public class CommunePlusServiceImpl
    */
   @Override
   @Transactional(readOnly = true)
-  public CommunePlus getCommuneByCode(final String code, final Date date) {
+  public CommunePlus getCommuneByCodeValidOnDate(final String code, final Date date) {
     log.debug("Commune requested by code and date: code={}, date={}", code, date);
     if (code == null) {
       return null;
@@ -140,11 +141,11 @@ public class CommunePlusServiceImpl
    */
   @Override
   @Transactional(readOnly = true)
-  public CommunePlus getCommuneByCode(final String code, final String date) {
+  public CommunePlus getCommuneByCodeValidOnDate(final String code, final String date) {
     log.debug("Commune requested by code and date: code={}, date={}", code, date);
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     try {
-      return getCommuneByCode(code, sdf.parse(date));
+      return getCommuneByCodeValidOnDate(code, sdf.parse(date));
     } catch (ParseException e) {
       log.warn("Commune requested by code and date: Exception parsing date {}", date, e);
       return null;
@@ -175,7 +176,7 @@ public class CommunePlusServiceImpl
               code, dept, region, bassin, nameLike, date);
     List<CommunePlusWithGenealogie> communesPlus = new ArrayList<>();
     if(code != null && !code.isEmpty()) { // Rechercher par code INSEE (ignorer dept, region, ...)
-      CommunePlusWithGenealogie communeGenealogie = getCommuneWithGenealogie(code, date);
+      CommunePlusWithGenealogie communeGenealogie = getCommuneValidOnDateWithGenealogie(code, date);
       if(communeGenealogie != null) {
         communesPlus.add(communeGenealogie);
       }
@@ -183,22 +184,37 @@ public class CommunePlusServiceImpl
     }
     // Rechercher les communes en fonction du nom, dept, region
     List<Commune> communes = null;
-    Date testdate = (date == null ? new Date() : date);
     String testname = (nameLike == null || nameLike.isEmpty() ? "%" : "%" + nameLike + "%");
     if ((dept == null || dept.isEmpty()) && (region == null || region.isEmpty())) {
       // neither region or departement are given
-      communes = communeJpaDao.findByDepartementLikeAndNomEnrichiLikeIgnoreCaseValidOnDate("%", testname, testdate);
+      communes = (date == null ?
+              communeJpaDao.findByDepartementLikeAndNomEnrichiLikeIgnoreCaseOrderByNomEnrichiAsc("%", testname) :
+              communeJpaDao.findByDepartementLikeAndNomEnrichiLikeIgnoreCaseValidOnDate("%", testname, date));
     } else if ((dept == null || dept.isEmpty()) && (region != null && !region.isEmpty())) {
       // only region is given
-      communes = communeJpaDao.findByRegionLikeAndNomEnrichiLikeIgnoreCaseValidOnDate(region, testname, testdate);
+      communes = (date == null ?
+              communeJpaDao.findByRegionLikeAndNomEnrichiLikeIgnoreCase(region, testname) :
+              communeJpaDao.findByRegionLikeAndNomEnrichiLikeIgnoreCaseValidOnDate(region, testname, date));
     } else {
       // department is given
-      communes = communeJpaDao.findByDepartementLikeAndNomEnrichiLikeIgnoreCaseValidOnDate(dept, testname, testdate);
+      communes = (date == null ?
+              communeJpaDao.findByDepartementLikeAndNomEnrichiLikeIgnoreCaseOrderByNomEnrichiAsc(dept, testname) :
+              communeJpaDao.findByDepartementLikeAndNomEnrichiLikeIgnoreCaseValidOnDate(dept, testname, date));
     }
     // Filter les communes en fonction du bassin et récupérer le genealogie
     CommuneSandre sandre;
     CommunePlus communePlus;
+    Date testdate;
     for(Commune commune : communes) {
+      if (date != null) {
+        testdate = date;
+      } else {
+        // date non défini donc prendre la fin de validité de la commune
+        // (ou la date courante si la commune est toujours valide)
+        testdate = commune.getFinValidite();
+        testdate = (testdate == null ? new Date()
+                                     : Date.from(DateConversionUtils.toZonedDateTime(testdate, null).minusDays(1).toInstant()));
+      }
       sandre = communeSandreJpaDao.findByCodeInseeValidOnDate(commune.getCodeInsee(), testdate);
       communePlus = new CommunePlus(commune.getCodeInsee(), testdate);
       try {
@@ -227,9 +243,9 @@ public class CommunePlusServiceImpl
    */
   @Override
   @Transactional(readOnly = true)
-  public CommunePlusWithGenealogie getCommuneWithGenealogie(final String code,
+  public CommunePlusWithGenealogie getCommuneValidOnDateWithGenealogie(final String code,
                                                             final Date date) {
-    CommunePlus commune = getCommuneByCode(code, date);
+    CommunePlus commune = getCommuneByCodeValidOnDate(code, date);
     if (commune == null) {
       return null;
     }

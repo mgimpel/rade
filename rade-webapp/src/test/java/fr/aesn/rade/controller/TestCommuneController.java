@@ -14,20 +14,17 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
- /* $Id$ */
+/* $Id$ */
 package fr.aesn.rade.controller;
 
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
-
 import javax.servlet.ServletContext;
-
 import org.hamcrest.Matchers;
 import org.hamcrest.collection.IsMapContaining;
 import org.junit.*;
@@ -48,7 +45,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.View;
-
 import fr.aesn.rade.common.util.DateConversionUtils;
 import fr.aesn.rade.service.CommunePlusService;
 import fr.aesn.rade.service.DepartementService;
@@ -173,7 +169,7 @@ public class TestCommuneController
   }
 
   /**
-   * Test getting the Commune Display page.
+   * Test getting the Commune display page.
    * @throws Exception if there was an Exception processing request.
    */
   @Test
@@ -293,7 +289,7 @@ public class TestCommuneController
   }
 
   /**
-   * Test getting the the Search Form page.
+   * Test getting the Search Form page.
    *
    * @throws Exception if there was an Exception processing request.
    */
@@ -330,8 +326,7 @@ public class TestCommuneController
   }
 
   /**
-   * Test getting the Result List with more then 1 Commune adding the page in
-   * URL .
+   * Test getting the Result List with more then 1 Commune adding the page in URL .
    *
    * @throws Exception if there was an Exception processing request.
    */
@@ -529,8 +524,7 @@ public class TestCommuneController
   }
 
   /**
-   * Test postting Submit (POST) the search form with less then 10 Communes(tray
-   * to go in second page) .
+   * Test postting Submit (POST) the search form with less then 10 Communes(tray to go in the second page) .
    *
    * @throws Exception if there was an Exception processing request.
    */
@@ -548,8 +542,7 @@ public class TestCommuneController
   }
 
   /**
-   * Test postting Submit (POST) of the search form more then 10 Communes(tow
-   * Pages) .
+   * Test postting Submit (POST) of the search form more then 10 Communes(tow Pages) .
    *
    * @throws Exception if there was an Exception processing request.
    */

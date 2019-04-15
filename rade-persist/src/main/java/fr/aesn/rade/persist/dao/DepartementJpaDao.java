@@ -39,13 +39,31 @@ public interface DepartementJpaDao
    */
   public List<Departement> findByCodeInsee(String codeInsee);
 
+  /**
+   * Returns a List of all Departement using the given region and departement
+   * name.
+   * @param region the region of the Departement.
+   * @param nameLike a pattern to search for Departements with a name resembling.
+   * @return a List of all Departement matching the given parameters.
+   */
+  public List<Departement> findByRegionLikeAndNomEnrichiLikeIgnoreCaseOrderByNomEnrichiAsc(String region,
+                                                                                           String nameLike);
+
+  /**
+   * Returns a List of all Departement using the given region, departement name
+   * and date.
+   * @param region the region of the Departement.
+   * @param nameLike a pattern to search for Departements with a name resembling.
+   * @param date the date at which the Departements were valid.
+   * @return a List of all Departement matching the given parameters.
+   */
   @Query("SELECT DISTINCT(d) FROM Departement d"
                + " WHERE (d.region LIKE ?1)"
-               + " AND (UPPER(d.nomMajuscule) LIKE UPPER(?2) OR UPPER(d.nomEnrichi) LIKE UPPER(?2))" 
+               + " AND (UPPER(d.nomMajuscule) LIKE UPPER(?2) OR UPPER(d.nomEnrichi) LIKE UPPER(?2))"
                + " AND (d.debutValidite IS NULL OR d.debutValidite <= ?3)"
                + " AND (d.finValidite IS NULL OR d.finValidite > ?3)"
                + " ORDER BY d.nomEnrichi")
-  public List<Departement> findByRegionLikeAndNomEnrichiLikeIgnoreCaseValidOnDate(String region, 
-                                                                                  String nameLike, 
+  public List<Departement> findByRegionLikeAndNomEnrichiLikeIgnoreCaseValidOnDate(String region,
+                                                                                  String nameLike,
                                                                                   Date date);
 }

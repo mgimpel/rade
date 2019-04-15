@@ -34,7 +34,6 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletResponse;
-
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -205,7 +204,7 @@ public class CommuneController {
     Date dateValidite = DateConversionUtils.urlStringToDate(dateParam, new Date());
     log.debug("Display commune: {}", code);
     if (code != null) {
-      CommunePlusWithGenealogie commune = communePlusService.getCommuneWithGenealogie(code, dateValidite);
+      CommunePlusWithGenealogie commune = communePlusService.getCommuneValidOnDateWithGenealogie(code, dateValidite);
       if(commune != null) {
         Departement departement = departementService.getDepartementByCode(commune.getCommunePlus().getDepartement(), dateValidite);
         Region region = regionService.getRegionByCode(departement.getRegion(), dateValidite);
