@@ -182,13 +182,13 @@ public class CommunePlusServiceImpl
       }
       return communesPlus;
     }
-    // Rechercher les communes en fonction du code and date is null
+    // Rechercher les communes en fonction du code quand la date est null
     List<Commune> communes = null;
     String testname = (nameLike == null || nameLike.isEmpty() ? "%" : "%" + nameLike + "%");
     if (code != null  && date == null) {
-        // code is given and date is null
-        communes =   communeJpaDao.findByCodeInsee(code);
-      }
+      // code is given and date is null
+      communes =   communeJpaDao.findByCodeInsee(code);
+    }
     // Rechercher les communes en fonction du nom, dept, region
     else if ((dept == null || dept.isEmpty()) && (region == null || region.isEmpty())) {
       // neither region or departement are given

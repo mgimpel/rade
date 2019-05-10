@@ -35,10 +35,8 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletResponse;
-
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
@@ -156,16 +154,16 @@ public class CommuneController {
     communeSearchModel.setCommunes(communes);
     communeSearchModel.setPage(1);
     if(communes.size() == 1) {
-        Commune commune1 =new Commune();
-        CommunePlusWithGenealogie commune = communes.get(0);
-        commune1.setCodeInsee(commune.getCommunePlus().getCodeInsee());
-        Date testdate =commune.getCommunePlus().getFinValiditeCommuneInsee();
-        testdate = (testdate == null ? new Date()
+      Commune commune1 = new Commune();
+      CommunePlusWithGenealogie commune = communes.get(0);
+      commune1.setCodeInsee(commune.getCommunePlus().getCodeInsee());
+      Date testdate =commune.getCommunePlus().getFinValiditeCommuneInsee();
+      testdate = (testdate == null ? new Date()
                                        : Date.from(DateConversionUtils.toZonedDateTime(testdate, null).minusDays(1).toInstant()));
 
-        return "redirect:/referentiel/commune/"
-               + commune.getCommunePlus().getCodeInsee()
-               + (testdate == null ? "" : "?date=" + DateConversionUtils.toUrlString(testdate));
+      return "redirect:/referentiel/commune/"
+             + commune.getCommunePlus().getCodeInsee()
+             + (testdate == null ? "" : "?date=" + DateConversionUtils.toUrlString(testdate));
     } else {
       return "redirect:/referentiel/commune/resultats?page=1";
     }

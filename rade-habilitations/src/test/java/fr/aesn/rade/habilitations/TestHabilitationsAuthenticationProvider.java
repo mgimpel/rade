@@ -30,7 +30,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.User;
 
 import fr.aesn.rade.habilitations.ws.HabilitationsUtilisateurSrv;
-import org.junit.Ignore;
 
 /**
  * Unit Tests for the Habilitations Authentication Provider.
@@ -50,7 +49,7 @@ public class TestHabilitationsAuthenticationProvider {
     assertTrue(false); // Should never run because exception thrown above
   }
 
-  @Test @Ignore 
+  @Test
   public void testAuthenticationSuccess() throws RemoteException {
     // NB: Authentication is done in the additionalAuthenticationChecks method
     HabilitationsUtilisateurSrv service = mock(HabilitationsUtilisateurSrv.class);
