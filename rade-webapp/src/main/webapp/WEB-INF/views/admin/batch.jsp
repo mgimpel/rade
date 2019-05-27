@@ -25,6 +25,7 @@
 				<p>Les Batchs suivants sont présent:
 				<ul>
 					<li><a href="${pageContext.request.contextPath}/batch/info">Batch Info</a></li>
+					<li><a href="${pageContext.request.contextPath}/batch/historiqueinseeimport">Batch Import Historique INSEE</a></li>
 					<li><a href="${pageContext.request.contextPath}/batch/sandreimport">Batch Import Sandre</a></li>
 					<li><a href="${pageContext.request.contextPath}/batch/delegationimport">Batch Import Délégation</a></li>
 					<li><a href="${pageContext.request.contextPath}/batch/delegationexport">Batch Export Délégation</a></li>

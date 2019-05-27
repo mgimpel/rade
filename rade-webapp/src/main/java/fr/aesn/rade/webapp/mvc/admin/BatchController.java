@@ -24,6 +24,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.ForkJoinPool;
@@ -74,6 +76,10 @@ public class BatchController {
   @Autowired
   @Qualifier("webInfoJob")
   private Job infoJob;
+  /** Batch Import Historique INSEE Job. */
+  @Autowired
+  @Qualifier("importCommuneInseeHistoryJob")
+  private Job importHistoriqueInseeJob;
   /** Batch Import Communes Sandre Job. */
   @Autowired
   @Qualifier("webImportCommuneSandreJob")
@@ -140,6 +146,50 @@ public class BatchController {
       model.addAttribute("params", exec.getJobParameters().getParameters());
       model.addAttribute("status", exec.getExitStatus());
     }
+    return "admin/batchresult";
+  }
+
+  /**
+   * INSEE History Batch Upload mapping.
+   * @param locale locale in which to do the lookup.
+   * @param model MVC model passed to JSP.
+   * @return View for the Batch Upload page
+   */
+  @GetMapping("/historiqueinseeimport")
+  public String importHistoriqueInseeGet(final Locale locale,
+                                         final Model model) {
+    log.debug("Requesting /batch/historiqueinseeimport");
+    model.addAttribute("titre", messageSource.getMessage("batchrequest.title.historiqueinsee", null, locale));
+    model.addAttribute("postpath", "/batch/historiqueinsee");
+    return "admin/batchrequest";
+  }
+
+  /**
+   * Upload file and run INSEE History import batch.
+   * @param locale locale in which to do the lookup.
+   * @param model MVC model passed to JSP.
+   * @param file the HTTP submitted file. 
+   * @return View for the page.
+   * @throws IOException if there was a problem recovering and saving file.
+   */
+  @PostMapping("/historiqueinsee")
+  public String importHistoriqueInseePost(final Locale locale,
+                                          final Model model,
+                                          @RequestParam("file") final MultipartFile file)
+    throws IOException {
+    log.debug("Posting to /batch/historiqueinseeimport");
+    model.addAttribute("titre", messageSource.getMessage("batchresult.title.historiqueinsee", null, locale));
+    Path tmpFile = storeTempFile(file);
+    JobParametersBuilder jobBuilder = new JobParametersBuilder();
+    jobBuilder.addString("inputFile", tmpFile.toUri().toString());
+    jobBuilder.addString("auditAuteur", "WebBatch");
+    jobBuilder.addDate("auditDate", new Date());
+    jobBuilder.addString("auditNote", "Import " + file.getOriginalFilename());
+    jobBuilder.addDate("debutValidite", Date.from(LocalDate.of(1999, 1, 1).atStartOfDay(ZoneId.systemDefault()).toInstant()));
+    model.addAttribute("file", file);
+    model.addAttribute("uri", tmpFile.toUri());
+    runAsynchronousJob(importHistoriqueInseeJob, jobBuilder.toJobParameters());
+    model.addAttribute("message", "For more details see <a href=\"../actuator/logfile\" target=\"_blank\">log file</a>");
     return "admin/batchresult";
   }
 

@@ -28,6 +28,7 @@
          http://www.springframework.org/schema/batch/spring-batch.xsd">
 
   <import resource="classpath*:/**/batch-job-info.xml"/>
+  <import resource="classpath*:/**/batch-job-insee.xml"/>
   <import resource="classpath*:/**/batch-job-sandre.xml"/>
   <import resource="classpath*:/**/batch-job-misc.xml"/>
 
