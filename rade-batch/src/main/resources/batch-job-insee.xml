@@ -150,6 +150,10 @@
   <!-- Tasklets -->
   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
+  <!-- Delete Delegations from JPA Repository Tasklet -->
+  <bean id="deleteAllCommuneTasklet" scope="step"
+        class="fr.aesn.rade.batch.tasks.insee.DeleteAllCommuneTasklet"/>
+
   <!-- Tasklet for Commune History Import -->
   <bean id="historiqueCommuneInseeTasklet" scope="step"
         class="fr.aesn.rade.batch.tasks.insee.HistoriqueCommuneInseeTasklet"/>

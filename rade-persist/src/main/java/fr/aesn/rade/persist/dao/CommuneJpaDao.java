@@ -154,7 +154,6 @@ public interface CommuneJpaDao
   /**
    * Returns a List of all Commune using the given region, commune name and
    * date.
-   * @param codeInsee the code INSEE of the Communes.
    * @param region the region of the Communes.
    * @param nameLike a pattern to search for Communes with a name resembling.
    * @param date the date at which the Communes were valid.

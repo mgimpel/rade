@@ -18,6 +18,9 @@
 package fr.aesn.rade.persist.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
 
 import fr.aesn.rade.persist.model.GenealogieEntiteAdmin;
 
@@ -27,5 +30,30 @@ import fr.aesn.rade.persist.model.GenealogieEntiteAdmin;
  */
 public interface GenealogieEntiteAdminJpaDao
   extends JpaRepository<GenealogieEntiteAdmin, GenealogieEntiteAdmin.ParentEnfant> {
-  // Add new, specific methods here if necessary
+  /**
+   * Delete all Genealogie of any Commune.
+   */
+  @Transactional
+  @Modifying
+  @Query("DELETE FROM GenealogieEntiteAdmin g"
+             + " WHERE g.parentEnfant.parent IN (SELECT c FROM Commune c)")
+  public void deleteAllCommune();
+
+  /**
+   * Delete all Genealogie of any Departements.
+   */
+  @Transactional
+  @Modifying
+  @Query("DELETE FROM GenealogieEntiteAdmin g"
+             + " WHERE g.parentEnfant.parent IN (SELECT d FROM Departement d)")
+  public void deleteAllDepartement();
+
+  /**
+   * Delete all Genealogie of any Region.
+   */
+  @Transactional
+  @Modifying
+  @Query("DELETE FROM GenealogieEntiteAdmin g"
+             + " WHERE g.parentEnfant.parent IN (SELECT r FROM Region r)")
+  public void deleteAllRegion();
 }

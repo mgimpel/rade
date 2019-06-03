@@ -40,7 +40,7 @@ public class CommuneSandreServiceImpl
   @Autowired @Setter
   private CommuneSandreJpaDao communeSandreJpaDao;
 
-    /**
+  /**
    * Delete all Commune Sandre Objects from database.
    */
   @Override

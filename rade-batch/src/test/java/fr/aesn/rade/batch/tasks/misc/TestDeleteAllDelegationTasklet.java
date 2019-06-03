@@ -19,9 +19,6 @@ package fr.aesn.rade.batch.tasks.misc;
 
 import static org.junit.Assert.*;
 
-import java.util.List;
-import java.util.Optional;
-
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -33,13 +30,18 @@ import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
+import org.springframework.batch.core.Step;
+import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
+import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.repository.JobRepository;
+import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.test.JobLauncherTestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.ImportResource;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
@@ -47,27 +49,41 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import fr.aesn.rade.batch.tasks.SpringBatchTestConfiguration;
 import fr.aesn.rade.persist.dao.DelegationJpaDao;
-import fr.aesn.rade.persist.model.Delegation;
 
 /**
  * Test the Delegation Import Job.
  * @author Marc Gimpel (mgimpel@gmail.com)
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-public class TestDelegationImportBatch {
+public class TestDeleteAllDelegationTasklet {
   /** Static Spring Configuration. */
   @Configuration
-  @ImportResource(locations = "classpath*:batch-job-misc.xml")
   protected static class Config extends SpringBatchTestConfiguration {
+    @Autowired
+    private JobBuilderFactory jobs;
+    @Autowired
+    private StepBuilderFactory steps;
+    @Bean
+    protected Job deleteAllDelegationJob(@Qualifier("deleteAllDelegationStep") Step step) {
+      return jobs.get("deleteAllDelegationJob").start(step).build();
+    }
+    @Bean
+    protected Step deleteAllDelegationStep(@Qualifier("deleteAllDelegationTasklet") Tasklet tasklet) {
+      return steps.get("deleteAllDelegationStep").tasklet(tasklet).build();
+    }
+    @Bean
+    protected Tasklet deleteAllDelegationTasklet() {
+      return new DeleteAllDelegationTasklet();
+    }
   }
   /** In Memory Derby Database Instance. */
   protected static EmbeddedDatabase db;
+  /** DAO to be tested. */
+  @Autowired
+  private DelegationJpaDao jpaDao;
   /** Spring Context. */
   @Autowired
   protected ApplicationContext context;
-  /** JPA DAO used to check data imported by Batch. */
-  @Autowired
-  protected DelegationJpaDao delegationJpaDao;
   /** JobLauncherTestUtils for JUnit to test Batch Jobs. */
   protected JobLauncherTestUtils jobLauncherTestUtils;
 
@@ -82,6 +98,7 @@ public class TestDelegationImportBatch {
         .setScriptEncoding("UTF-8")
         .setName("testdb")
         .addScript("db/sql/create-tables.sql")
+        .addScript("db/sql/insert-Delegation.sql")
         .build();
   }
 
@@ -101,7 +118,7 @@ public class TestDelegationImportBatch {
     jobLauncherTestUtils = new JobLauncherTestUtils();
     jobLauncherTestUtils.setJobRepository(context.getBean("jobRepository", JobRepository.class));
     jobLauncherTestUtils.setJobLauncher(context.getBean("jobLauncher", JobLauncher.class));
-    jobLauncherTestUtils.setJob(context.getBean("importDelegationJob", Job.class));
+    jobLauncherTestUtils.setJob(context.getBean("deleteAllDelegationJob", Job.class));
   }
 
   /**
@@ -112,62 +129,17 @@ public class TestDelegationImportBatch {
   }
 
   /**
-   * Test that the job exists.
-   */
-  @Test
-  public void testJobExists() {
-    assertNotNull("The job was not found",
-                  context.getBean("importDelegationJob", Job.class));
-  }
-
-  /**
    * Test the Batch Job execution.
    * @throws Exception exception launching job
    */
   @Test
-  public void testImportDelegationJob() throws Exception {
+  public void testDeleteAllDelegationJob() throws Exception {
+    assertEquals(7, jpaDao.count());
     JobParametersBuilder jobBuilder = new JobParametersBuilder();
-    jobBuilder.addString("inputFile", "classpath:batchfiles/misc/delegation.csv");
     JobParameters jobParameters = jobBuilder.toJobParameters();
     JobExecution jobExecution = jobLauncherTestUtils.launchJob(jobParameters);
     assertEquals("Batch Failed to complete",
                  BatchStatus.COMPLETED, jobExecution.getStatus());
-    List<Delegation> list = delegationJpaDao.findAll();
-    assertEquals("Batch imported the wrong number of lines",
-                 7, list.size());
-    Optional<Delegation> opt = delegationJpaDao.findById("SIEGE");
-    assertTrue("Batch didn't import SIEGE", opt.isPresent());
-    Delegation delegation = opt.get();
-    assertNotNull("The batch imported SIEGE is null", delegation);
-    assertEquals("Hibernate returned a Delegation, but the ID doesn't match",
-                 "SIEGE", delegation.getCode());
-    assertEquals("Hibernate returned a Delegation, but the Libelle doesn't match",
-                 "SIEGE DFIR", delegation.getLibelle());
-    assertEquals("Hibernate returned a Delegation, but the Acheminement doesn't match",
-                 "Nanterre Cedex", delegation.getAcheminement());
-    assertEquals("Hibernate returned a Delegation, but the Addresse1 doesn't match",
-                 "Agence de l'eau Seine-Normandie", delegation.getAdresse1());
-    assertEquals("Hibernate returned a Delegation, but the Addresse2 doesn't match",
-                 "Siège DFIR", delegation.getAdresse2());
-    assertEquals("Hibernate returned a Delegation, but the Addresse3 doesn't match",
-                 "51, rue Salvador Allende", delegation.getAdresse3());
-    assertEquals("Hibernate returned a Delegation, but the Addresse4 doesn't match",
-                 "", delegation.getAdresse4());
-    assertEquals("Hibernate returned a Delegation, but the Addresse5 doesn't match",
-                 "Nanterre", delegation.getAdresse5());
-    assertEquals("Hibernate returned a Delegation, but the Code Postal doesn't match",
-                 "92027", delegation.getCodePostal());
-    assertEquals("Hibernate returned a Delegation, but the E-mail doesn't match",
-                 "xxx", delegation.getEmail());
-    assertEquals("Hibernate returned a Delegation, but the Fax doesn't match",
-                 "01 41 20 16 09", delegation.getFax());
-    assertEquals("Hibernate returned a Delegation, but the Site Web doesn't match",
-                 "http://www.eau-seine-normandie.fr/", delegation.getSiteWeb());
-    assertEquals("Hibernate returned a Delegation, but the Telephone doesn't match",
-                 "01 41 20 16 00", delegation.getTelephone());
-    assertEquals("Hibernate returned a Delegation, but the Telephone2 doesn't match",
-                 "", delegation.getTelephone2());
-    assertEquals("Hibernate returned a Delegation, but the Telephone3 doesn't match",
-                 "", delegation.getTelephone3());
+    assertEquals(0, jpaDao.count());
   }
 }

@@ -76,6 +76,10 @@ public class BatchController {
   @Autowired
   @Qualifier("webInfoJob")
   private Job infoJob;
+  /** Batch Import Commune INSEE Job. */
+  @Autowired
+  @Qualifier("webImportCommuneInseeJob")
+  private Job importCommuneInseeJob;
   /** Batch Import Historique INSEE Job. */
   @Autowired
   @Qualifier("importCommuneInseeHistoryJob")
@@ -155,6 +159,49 @@ public class BatchController {
    * @param model MVC model passed to JSP.
    * @return View for the Batch Upload page
    */
+  @GetMapping("/communeinseeimport")
+  public String importCommuneInseeGet(final Locale locale,
+                                      final Model model) {
+    log.debug("Requesting /batch/communeinseeimport");
+    model.addAttribute("titre", messageSource.getMessage("batchrequest.title.communeinsee", null, locale));
+    model.addAttribute("postpath", "/batch/communeinsee");
+    return "admin/batchrequest";
+  }
+
+  /**
+   * Upload file and run INSEE History import batch.
+   * @param locale locale in which to do the lookup.
+   * @param model MVC model passed to JSP.
+   * @param file the HTTP submitted file. 
+   * @return View for the page.
+   * @throws IOException if there was a problem recovering and saving file.
+   */
+  @PostMapping("/communeinseeimport")
+  public String importCommuneInseePost(final Locale locale,
+                                       final Model model,
+                                       @RequestParam("file") final MultipartFile file)
+    throws IOException {
+    log.debug("Posting to /batch/communeinseeimport");
+    model.addAttribute("titre", messageSource.getMessage("batchresult.title.communeinsee", null, locale));
+    Path tmpFile = storeTempFile(file);
+    JobParametersBuilder jobBuilder = new JobParametersBuilder();
+    jobBuilder.addString("inputFile", tmpFile.toUri().toString());
+    jobBuilder.addString("auditAuteur", "WebBatch");
+    jobBuilder.addDate("auditDate", new Date());
+    jobBuilder.addString("auditNote", "Import " + file.getOriginalFilename());
+    model.addAttribute("file", file);
+    model.addAttribute("uri", tmpFile.toUri());
+    runAsynchronousJob(importCommuneInseeJob, jobBuilder.toJobParameters());
+    model.addAttribute("message", "For more details see <a href=\"../actuator/logfile\" target=\"_blank\">log file</a>");
+    return "admin/batchresult";
+  }
+
+  /**
+   * INSEE History Batch Upload mapping.
+   * @param locale locale in which to do the lookup.
+   * @param model MVC model passed to JSP.
+   * @return View for the Batch Upload page
+   */
   @GetMapping("/historiqueinseeimport")
   public String importHistoriqueInseeGet(final Locale locale,
                                          final Model model) {
@@ -172,7 +219,7 @@ public class BatchController {
    * @return View for the page.
    * @throws IOException if there was a problem recovering and saving file.
    */
-  @PostMapping("/historiqueinsee")
+  @PostMapping("/historiqueinseeimport")
   public String importHistoriqueInseePost(final Locale locale,
                                           final Model model,
                                           @RequestParam("file") final MultipartFile file)
@@ -199,7 +246,7 @@ public class BatchController {
    * @param model MVC model passed to JSP.
    * @return View for the Batch Upload page
    */
-  @GetMapping("/sandre")
+  @GetMapping("/sandreimport")
   public String importSandreGet(final Locale locale,
                                 final Model model) {
     log.debug("Requesting /batch/sandreimport");
@@ -216,7 +263,7 @@ public class BatchController {
    * @return View for the page.
    * @throws IOException if there was a problem recovering and saving file.
    */
-  @PostMapping("/sandre")
+  @PostMapping("/sandreimport")
   public String importSandrePost(final Locale locale,
                                  final Model model,
                                  @RequestParam("file") final MultipartFile file)
@@ -242,7 +289,7 @@ public class BatchController {
    * @param model MVC model passed to JSP.
    * @return View for the Batch Upload page
    */
-  @GetMapping("/delegation")
+  @GetMapping("/delegationimport")
   public String importDelegationGet(final Locale locale,
                                     final Model model) {
     log.debug("Requesting /batch/delegationimport");
@@ -259,7 +306,7 @@ public class BatchController {
    * @return View for the page.
    * @throws IOException if there was a problem recovering and saving file.
    */
-  @PostMapping("/delegation")
+  @PostMapping("/delegationimport")
   public String importDelegationPost(final Locale locale,
                                      final Model model,
                                      @RequestParam("file") final MultipartFile file)
@@ -305,6 +352,7 @@ public class BatchController {
          "Content-Disposition : inline" will show viewable types (images/text/pdf/...) in the browser
           while others(e.g zip) will be directly downloaded. */
       response.setHeader("Content-Disposition", "attachment; filename=\"delegations.csv\"");
+      response.setHeader("Content-type", "text/csv; charset=windows-1252");
       response.setContentLength((int)Files.size(tmpFile));
       try (OutputStream out = response.getOutputStream()) {
         Files.copy(tmpFile, out);

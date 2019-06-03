@@ -211,12 +211,14 @@ public class DepartementServiceImpl
   }
 
   /**
-   * 
-   * @param code
-   * @param region
-   * @param nameLike
-   * @param date
-   * @return
+   * Return a list of departments with the given code or with the given name
+   * and region criteria, at the given date.
+   * @param code the Departement code.
+   * @param region the Region code.
+   * @param nameLike name pattern.
+   * @param date the date at which the code was valid
+   * @return list of departments with the given code or with the given name
+   * and region criteria, at the given date.
    */
   public List<DepartementWithGenealogie> getDepartementByCriteria(final String code,
                                                                   final String region,

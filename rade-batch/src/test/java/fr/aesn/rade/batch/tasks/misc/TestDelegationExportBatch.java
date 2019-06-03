@@ -20,6 +20,7 @@ package fr.aesn.rade.batch.tasks.misc;
 import static org.junit.Assert.*;
 
 import java.io.File;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -77,7 +78,7 @@ public class TestDelegationExportBatch {
     // create temporary database for Hibernate
     db = new EmbeddedDatabaseBuilder()
         .setType(EmbeddedDatabaseType.DERBY)
-        .setScriptEncoding("windows-1252")
+        .setScriptEncoding("UTF-8")
         .setName("testdb")
         .addScript("db/sql/create-tables.sql")
         .addScript("db/sql/insert-Delegation.sql")
@@ -142,8 +143,8 @@ public class TestDelegationExportBatch {
     assertEquals("Batch Failed to complete",
                  BatchStatus.COMPLETED, jobExecution.getStatus());
     assertTrue("Batch export file does not exist", Files.exists(tmpFile));
-    assertEquals("Batch export file is wrong size", 1975, Files.size(tmpFile));
-    try (Stream<String> lines = Files.lines(tmpFile)) {
+    assertEquals("Batch export file is wrong size", 1959, Files.size(tmpFile));
+    try (Stream<String> lines = Files.lines(tmpFile, Charset.forName("windows-1252"))) {
       assertEquals("Batch export should have 8 lines (header + 7 delegations)",
                    8, lines.count());
     }
