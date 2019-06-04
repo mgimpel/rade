@@ -29,7 +29,6 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.Font;
@@ -100,7 +99,6 @@ public class ExportExcel
       Row row = sheet.createRow(i+2);
       CommunePlusWithGenealogie commune = list.get(i);
       row.createCell(0).setCellValue(commune.getCommunePlus().getCodeInsee());
-      row.getCell(0).setCellType(CellType.STRING);
       row.createCell(1).setCellValue(commune.getCommunePlus().getNomEnrichi());
       if(commune.getCommunePlus().getDebutValiditeCommuneInsee()!= null){
         row.createCell(2).setCellValue(commune.getCommunePlus().getDebutValiditeCommuneInsee());

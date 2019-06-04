@@ -233,7 +233,7 @@ public class BatchController {
     jobBuilder.addString("auditAuteur", "WebBatch");
     jobBuilder.addDate("auditDate", new Date());
     jobBuilder.addString("auditNote", "Import " + file.getOriginalFilename());
-    jobBuilder.addDate("debutValidite", Date.from(LocalDate.of(1999, 1, 1).atStartOfDay(ZoneId.systemDefault()).toInstant()));
+    jobBuilder.addDate("debutValidite", Date.from(LocalDate.of(1999, 1, 2).atStartOfDay(ZoneId.systemDefault()).toInstant()));
     model.addAttribute("file", file);
     model.addAttribute("uri", tmpFile.toUri());
     runAsynchronousJob(importHistoriqueInseeJob, jobBuilder.toJobParameters());
