@@ -164,7 +164,7 @@ public class BatchController {
                                       final Model model) {
     log.debug("Requesting /batch/communeinseeimport");
     model.addAttribute("titre", messageSource.getMessage("batchrequest.title.communeinsee", null, locale));
-    model.addAttribute("postpath", "/batch/communeinsee");
+    model.addAttribute("postpath", "/batch/communeinseeimport");
     return "admin/batchrequest";
   }
 
@@ -189,6 +189,7 @@ public class BatchController {
     jobBuilder.addString("auditAuteur", "WebBatch");
     jobBuilder.addDate("auditDate", new Date());
     jobBuilder.addString("auditNote", "Import " + file.getOriginalFilename());
+    jobBuilder.addDate("debutValidite", Date.from(LocalDate.of(1999, 1, 1).atStartOfDay(ZoneId.systemDefault()).toInstant()));
     model.addAttribute("file", file);
     model.addAttribute("uri", tmpFile.toUri());
     runAsynchronousJob(importCommuneInseeJob, jobBuilder.toJobParameters());
@@ -207,7 +208,7 @@ public class BatchController {
                                          final Model model) {
     log.debug("Requesting /batch/historiqueinseeimport");
     model.addAttribute("titre", messageSource.getMessage("batchrequest.title.historiqueinsee", null, locale));
-    model.addAttribute("postpath", "/batch/historiqueinsee");
+    model.addAttribute("postpath", "/batch/historiqueinseeimport");
     return "admin/batchrequest";
   }
 
@@ -251,7 +252,7 @@ public class BatchController {
                                 final Model model) {
     log.debug("Requesting /batch/sandreimport");
     model.addAttribute("titre", messageSource.getMessage("batchrequest.title.sandre", null, locale));
-    model.addAttribute("postpath", "/batch/sandre");
+    model.addAttribute("postpath", "/batch/sandreimport");
     return "admin/batchrequest";
   }
 
@@ -294,7 +295,7 @@ public class BatchController {
                                     final Model model) {
     log.debug("Requesting /batch/delegationimport");
     model.addAttribute("titre", messageSource.getMessage("batchrequest.title.delegation", null, locale));
-    model.addAttribute("postpath", "/batch/delegation");
+    model.addAttribute("postpath", "/batch/delegationimport");
     return "admin/batchrequest";
   }
 

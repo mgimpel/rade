@@ -89,7 +89,7 @@ public class Audit implements Serializable {
   @PrePersist
   protected void onCreate() {
     if (date == null) {
-        date = new Date();
+      date = new Date();
     }
   }
 }
