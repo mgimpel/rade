@@ -71,13 +71,16 @@
     <batch:step id="webImportCommuneInseeStep1" next="webImportCommuneInseeStep2">
       <batch:tasklet ref="deleteAllCommuneTasklet"/>
     </batch:step>
-    <batch:step id="webImportCommuneInseeStep2">
+    <batch:step id="webImportCommuneInseeStep2" next="webImportCommuneInseeStep3">
       <batch:tasklet>
         <batch:chunk reader="communeSimpleItemReader"
                      processor="communeSimpleItemProcessor"
                      writer="jpaItemWriter"
                      commit-interval="100"/>
       </batch:tasklet>
+    </batch:step>
+    <batch:step id="webImportCommuneInseeStep3">
+      <batch:tasklet ref="deleteFileTasklet"/>
     </batch:step>
   </batch:job>
 
