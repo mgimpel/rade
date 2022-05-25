@@ -48,7 +48,7 @@
     <timestamp>${maven.build.timestamp}</timestamp>
     <!-- Major dependency versions to ensure coherence among subprojects -->
     <java.target>1.8</java.target>
-    <spring.version>5.1.7.RELEASE</spring.version>
+    <spring.version>5.2.22.RELEASE</spring.version>
     <spring-boot.version>2.1.5.RELEASE</spring-boot.version>
     <spring-data.version>2.1.8.RELEASE</spring-data.version>
     <spring-security.version>5.1.5.RELEASE</spring-security.version>
